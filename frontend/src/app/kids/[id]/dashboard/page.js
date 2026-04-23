@@ -1,0 +1,1 @@
+import KidsDashboard from "../../../../react_pages/kids/KidsDashboard"; export default function Page() { return <KidsDashboard />; }

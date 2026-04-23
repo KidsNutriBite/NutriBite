@@ -1,0 +1,1 @@
+import DoctorAccess from "../../../react_pages/parent/DoctorAccess"; export default function Page() { return <DoctorAccess />; }

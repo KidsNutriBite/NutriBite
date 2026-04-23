@@ -1,0 +1,1 @@
+import ResourcesLibrary from "../../../react_pages/parent/ResourcesLibrary"; export default function Page() { return <ResourcesLibrary />; }

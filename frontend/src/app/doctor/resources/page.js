@@ -1,0 +1,1 @@
+import DoctorResources from "../../../react_pages/doctor/DoctorResources"; export default function Page() { return <DoctorResources />; }

@@ -1,0 +1,1 @@
+import PediatricianDirectory from "../../../react_pages/parent/Directory"; export default function Page() { return <PediatricianDirectory />; }

@@ -1,0 +1,1 @@
+import BookAppointment from "../../../../react_pages/parent/BookAppointment"; export default function Page() { return <BookAppointment />; }

@@ -1,0 +1,1 @@
+import DoctorAnalytics from "../../../react_pages/doctor/DoctorAnalytics"; export default function Page() { return <DoctorAnalytics />; }
