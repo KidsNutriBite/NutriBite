@@ -1,0 +1,27 @@
+{
+  "name": "nutrikid-mern",
+  "version": "1.0.0",
+  "description": "Doctor-Guided Pediatric Nutrition Platform",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "server": "cd backend && npm run dev",
+    "client": "cd frontend && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "keywords": [
+    "mern",
+    "nutrition",
+    "pediatric",
+    "health"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "eslint": "^9.0.0",
+    "prettier": "^3.2.5"
+  }
+}
