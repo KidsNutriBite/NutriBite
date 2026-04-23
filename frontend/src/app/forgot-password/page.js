@@ -1,0 +1,1 @@
+import ForgotPassword from "../../react_pages/auth/ForgotPassword"; export default function Page() { return <ForgotPassword />; }

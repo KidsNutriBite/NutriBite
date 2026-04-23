@@ -1,0 +1,1 @@
+import ParentLayout from "../../layouts/ParentLayout"; export default function Layout({children}) { return <ParentLayout>{children}</ParentLayout>; }

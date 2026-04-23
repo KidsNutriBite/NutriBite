@@ -1,0 +1,1 @@
+import Register from "../../react_pages/auth/Register"; export default function Page() { return <Register />; }
