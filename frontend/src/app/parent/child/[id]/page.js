@@ -1,0 +1,1 @@
+import ChildDetails from "../../../../react_pages/parent/ChildDetails"; export default function Page() { return <ChildDetails />; }

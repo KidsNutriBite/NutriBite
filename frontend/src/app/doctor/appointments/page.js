@@ -1,0 +1,1 @@
+import DoctorConsultations from "../../../react_pages/doctor/DoctorConsultations"; export default function Page() { return <DoctorConsultations />; }

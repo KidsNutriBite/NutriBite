@@ -1,0 +1,1 @@
+import DoctorDashboard from "../../../react_pages/doctor/DoctorDashboard"; export default function Page() { return <DoctorDashboard />; }

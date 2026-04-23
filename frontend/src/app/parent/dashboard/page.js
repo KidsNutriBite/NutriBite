@@ -1,0 +1,1 @@
+import ParentDashboard from "../../../react_pages/parent/ParentDashboard"; export default function Page() { return <ParentDashboard />; }

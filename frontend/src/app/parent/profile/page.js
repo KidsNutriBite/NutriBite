@@ -1,0 +1,1 @@
+import ParentProfile from "../../../react_pages/parent/ParentProfile"; export default function Page() { return <ParentProfile />; }
