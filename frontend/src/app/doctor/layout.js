@@ -1,0 +1,1 @@
+import DoctorLayout from "../../layouts/DoctorLayout"; export default function Layout({children}) { return <DoctorLayout>{children}</DoctorLayout>; }

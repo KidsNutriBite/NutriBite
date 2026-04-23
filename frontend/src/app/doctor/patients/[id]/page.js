@@ -1,0 +1,1 @@
+import PatientDetails from "../../../../react_pages/doctor/PatientDetails"; export default function Page() { return <PatientDetails />; }

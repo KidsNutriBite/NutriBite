@@ -1,0 +1,1 @@
+import ResetPassword from "../../react_pages/auth/ResetPassword"; export default function Page() { return <ResetPassword />; }
