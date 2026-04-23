@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+torch
+transformers
+sentence-transformers
+faiss-cpu
+accelerate
+huggingface_hub
+numpy
+pydantic
+google-genai
