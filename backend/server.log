@@ -1,0 +1,13 @@
+Starting server...
+Server running in development mode on port 5000
+Starting server...
+Server running in development mode on port 5000
+Starting server...
+Server running in development mode on port 5000
+Starting server...
+Server running in development mode on port 5000
+DB Connection Failed: connect ECONNREFUSED 127.0.0.1:27017
+DB Connection Failed: connect ECONNREFUSED 127.0.0.1:27017
+DB Connection Failed: connect ECONNREFUSED 127.0.0.1:27017
+DB Connection Failed: querySrv ETIMEOUT _mongodb._tcp.cluster0.qf9utna.mongodb.net
+DB Connection Failed: querySrv ETIMEOUT _mongodb._tcp.cluster0.qf9utna.mongodb.net
