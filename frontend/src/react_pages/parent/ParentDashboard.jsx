@@ -157,36 +157,76 @@ const ParentDashboard = () => {
             {/* 90-Day Growth Update Reminder Banner */}
             {!loading && (() => {
                 const overdueProfiles = profiles.filter(p => getDaysSinceUpdate(p) >= 90);
-                if (overdueProfiles.length === 0) return null;
+                const approachingProfiles = profiles.filter(p => {
+                    const days = getDaysSinceUpdate(p);
+                    return days >= 85 && days < 90;
+                });
+
+                if (overdueProfiles.length === 0 && approachingProfiles.length === 0) return null;
+
                 return (
-                    <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="mb-8 bg-amber-50 dark:bg-amber-900/20 border border-amber-300 dark:border-amber-700 rounded-2xl p-5 flex items-start gap-4 shadow-sm"
-                    >
-                        <div className="bg-amber-100 dark:bg-amber-800/40 p-3 rounded-xl flex-shrink-0">
-                            <span className="material-symbols-outlined text-amber-600 dark:text-amber-400 text-2xl">update</span>
-                        </div>
-                        <div className="flex-1">
-                            <h4 className="text-amber-900 dark:text-amber-200 font-bold text-base mb-1">
-                                Growth Stats Update Required
-                            </h4>
-                            <p className="text-amber-700 dark:text-amber-400 text-sm">
-                                The following {overdueProfiles.length > 1 ? 'children need' : 'child needs'} a growth update (height & weight) — it's been over 90 days:
-                            </p>
-                            <div className="mt-2 flex flex-wrap gap-2">
-                                {overdueProfiles.map(p => (
-                                    <button
-                                        key={p._id}
-                                        onClick={() => navigate(`/parent/child/${p._id}`)}
-                                        className="bg-amber-200 dark:bg-amber-800 text-amber-900 dark:text-amber-100 px-3 py-1 rounded-full text-xs font-bold hover:bg-amber-300 dark:hover:bg-amber-700 transition-colors"
-                                    >
-                                        {p.name} ({getDaysSinceUpdate(p)} days)
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-                    </motion.div>
+                    <div className="mb-8 space-y-4">
+                        {overdueProfiles.length > 0 && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="bg-amber-50 dark:bg-amber-900/20 border border-amber-300 dark:border-amber-700 rounded-2xl p-5 flex items-start gap-4 shadow-sm"
+                            >
+                                <div className="bg-amber-100 dark:bg-amber-800/40 p-3 rounded-xl flex-shrink-0">
+                                    <span className="material-symbols-outlined text-amber-600 dark:text-amber-400 text-2xl">update</span>
+                                </div>
+                                <div className="flex-1">
+                                    <h4 className="text-amber-900 dark:text-amber-200 font-bold text-base mb-1">
+                                        Growth Stats Update Required
+                                    </h4>
+                                    <p className="text-amber-700 dark:text-amber-400 text-sm">
+                                        The following {overdueProfiles.length > 1 ? 'children need' : 'child needs'} a growth update (height & weight) — it's been over 90 days:
+                                    </p>
+                                    <div className="mt-2 flex flex-wrap gap-2">
+                                        {overdueProfiles.map(p => (
+                                            <button
+                                                key={p._id}
+                                                onClick={() => navigate(`/parent/child/${p._id}`)}
+                                                className="bg-amber-200 dark:bg-amber-800 text-amber-900 dark:text-amber-100 px-3 py-1 rounded-full text-xs font-bold hover:bg-amber-300 dark:hover:bg-amber-700 transition-colors"
+                                            >
+                                                {p.name} ({getDaysSinceUpdate(p)} days)
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
+                        {approachingProfiles.length > 0 && (
+                            <motion.div
+                                initial={{ opacity: 0, y: -10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="bg-orange-50 dark:bg-orange-900/20 border border-orange-300 dark:border-orange-700 rounded-2xl p-5 flex items-start gap-4 shadow-sm"
+                            >
+                                <div className="bg-orange-100 dark:bg-orange-800/40 p-3 rounded-xl flex-shrink-0">
+                                    <span className="material-symbols-outlined text-orange-600 dark:text-orange-400 text-2xl">schedule</span>
+                                </div>
+                                <div className="flex-1">
+                                    <h4 className="text-orange-900 dark:text-orange-200 font-bold text-base mb-1">
+                                        Upcoming Growth Update
+                                    </h4>
+                                    <p className="text-orange-700 dark:text-orange-400 text-sm">
+                                        Reminder: Growth updates are due soon for:
+                                    </p>
+                                    <div className="mt-2 flex flex-wrap gap-2">
+                                        {approachingProfiles.map(p => (
+                                            <button
+                                                key={p._id}
+                                                onClick={() => navigate(`/parent/child/${p._id}`)}
+                                                className="bg-orange-200 dark:bg-orange-800 text-orange-900 dark:text-orange-100 px-3 py-1 rounded-full text-xs font-bold hover:bg-orange-300 dark:hover:bg-orange-700 transition-colors"
+                                            >
+                                                {p.name} ({90 - getDaysSinceUpdate(p)} days left)
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
+                    </div>
                 );
             })()}
 
