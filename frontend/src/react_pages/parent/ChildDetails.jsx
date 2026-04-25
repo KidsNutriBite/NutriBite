@@ -269,6 +269,20 @@ const ChildDetails = () => {
                             </div>
                         </div>
                     );
+                } else if (daysSinceRecord >= 85) {
+                    const daysLeft = 90 - daysSinceRecord;
+                    return (
+                        <div className="bg-orange-50 border-l-4 border-orange-500 p-4 rounded-r-lg shadow-sm flex items-start gap-4">
+                            <span className="material-symbols-outlined text-orange-500 mt-0.5">schedule</span>
+                            <div className="flex-1">
+                                <h4 className="text-orange-800 font-bold mb-1">Upcoming Growth Update</h4>
+                                <p className="text-orange-700 text-sm">
+                                    Reminder: {daysLeft} {daysLeft === 1 ? 'day' : 'days'} left to update {profile.name}’s growth details. 
+                                    Please <button onClick={() => { setActiveTab('growth'); setIsGrowthModalOpen(true); }} className="font-bold underline hover:text-orange-800">update their height and weight</button> soon.
+                                </p>
+                            </div>
+                        </div>
+                    );
                 }
                 return null;
             })()}

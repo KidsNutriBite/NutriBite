@@ -202,7 +202,7 @@ const GrowthTimeline = ({ data, profile, onDelete }) => {
                         </div>
                     </div>
                     {/* Waist (conditional) */}
-                    {hasWaist && latest.waistCircumference && (
+                    {hasWaist && latest.waistCircumference != null && (
                         <div className="bg-indigo-50 p-5 rounded-2xl border border-indigo-100 shadow-sm flex items-center gap-4">
                             <div className="text-3xl">📐</div>
                             <div>
@@ -234,6 +234,11 @@ const GrowthTimeline = ({ data, profile, onDelete }) => {
                             <Tooltip content={<CustomTooltip />} />
                             <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '12px' }} />
 
+                            {/* Height line */}
+                            <Line yAxisId="left" type="monotone" dataKey="height" stroke="#3b82f6" strokeWidth={3}
+                                dot={{ r: 4, strokeWidth: 2, fill: '#fff', stroke: '#3b82f6' }}
+                                activeDot={{ r: 6, strokeWidth: 0, fill: '#3b82f6' }} name="Height (cm)" />
+
                             {/* Weight line */}
                             <Line yAxisId="left" type="monotone" dataKey="weight" stroke="#10b981" strokeWidth={3}
                                 dot={{ r: 4, strokeWidth: 2, fill: '#fff', stroke: '#10b981' }}
@@ -249,6 +254,7 @@ const GrowthTimeline = ({ data, profile, onDelete }) => {
                             {hasWaist && (
                                 <Line yAxisId="left" type="monotone" dataKey="waistCircumference" stroke="#6366f1" strokeWidth={2.5}
                                     strokeDasharray="8 3"
+                                    connectNulls={true}
                                     dot={{ r: 4, strokeWidth: 2, fill: '#fff', stroke: '#6366f1' }}
                                     activeDot={{ r: 6, strokeWidth: 0, fill: '#6366f1' }} name="Waist (cm)" />
                             )}
