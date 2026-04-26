@@ -259,6 +259,43 @@ const ChildDetails = () => {
                 </div>
             </div>
 
+            {/* Pediatrician Escalation Banner */}
+            {(() => {
+                const latestRecord = growthRecords[growthRecords.length - 1];
+                let alertMessage = null;
+                
+                if (latestRecord) {
+                    if (latestRecord.riskStatus === 'obese') {
+                        alertMessage = "BMI category indicates Obese.";
+                    } else if (latestRecord.riskStatus === 'underweight') {
+                        alertMessage = "BMI category indicates Severely Underweight.";
+                    }
+                }
+                
+                // Mock condition for severe nutrient deficiency 
+                // (could be derived from nutritionTrends or meals if implemented, using average calories check as fallback)
+                if (!alertMessage && stats.avgCal > 0 && stats.avgCal < 800 && history.length > 5) {
+                    alertMessage = "Severe nutrient deficiency detected over multiple days.";
+                }
+
+                if (alertMessage) {
+                    return (
+                        <div className="bg-red-50 border border-red-200 rounded-2xl p-4 shadow-sm flex items-start gap-4">
+                            <div className="bg-red-100 text-red-500 rounded-full w-10 h-10 flex items-center justify-center shrink-0">
+                                <span className="material-symbols-outlined">warning</span>
+                            </div>
+                            <div className="flex-1">
+                                <h4 className="text-red-800 font-bold mb-1">Consult Pediatrician Immediately</h4>
+                                <p className="text-red-600 text-sm">
+                                    {alertMessage} This is an automated safety alert. Please schedule a checkup for professional medical advice.
+                                </p>
+                            </div>
+                        </div>
+                    );
+                }
+                return null;
+            })()}
+
             {/* 90-Day Growth Reminder Banner */}
             {(() => {
                 const latestRecord = growthRecords[growthRecords.length - 1];
