@@ -59,6 +59,10 @@ const TipCard = ({ tip, childName }) => {
                             >
                                 <div className="mt-4 text-sm text-gray-500 leading-relaxed bg-gray-50 p-4 rounded-xl">
                                     {explanation}
+                                    <div className="mt-3 pt-3 border-t border-gray-200 text-xs text-gray-400 font-medium">
+                                        <p>Based on standard pediatric nutrition guidelines (ICMR/WHO inspired).</p>
+                                        <p>Last reviewed by doctor: Not yet reviewed</p>
+                                    </div>
                                 </div>
                             </motion.div>
                         )}

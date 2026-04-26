@@ -171,6 +171,11 @@ const NutritionGaps = ({ profile, meals }) => {
                                     </div>
                                 )}
                             </div>
+
+                            <div className="mt-6 pt-4 border-t border-indigo-100/50 flex flex-col md:flex-row justify-between items-center gap-2 text-xs text-indigo-400 font-medium">
+                                <p>Based on standard pediatric nutrition guidelines (ICMR/WHO inspired).</p>
+                                <p>Last reviewed by doctor: Not yet reviewed</p>
+                            </div>
                         </motion.div>
                     )}
                 </AnimatePresence>
