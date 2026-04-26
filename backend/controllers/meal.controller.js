@@ -40,14 +40,37 @@ export const logMeal = asyncHandler(async (req, res) => {
         dailyLog[mealType] = [...dailyLog[mealType], ...parsedFoodItems];
     }
 
-    // Calculate Completed Meals Count (Simple logic: if array has items, it counts)
+    // Calculate Completed Meals Count
     let count = 0;
     if (dailyLog.breakfast && dailyLog.breakfast.length > 0) count++;
+    if (dailyLog.morningSnack && dailyLog.morningSnack.length > 0) count++;
     if (dailyLog.lunch && dailyLog.lunch.length > 0) count++;
-    if (dailyLog.snacks && dailyLog.snacks.length > 0) count++;
+    if (dailyLog.afternoonSnack && dailyLog.afternoonSnack.length > 0) count++;
     if (dailyLog.dinner && dailyLog.dinner.length > 0) count++;
+    if (dailyLog.eveningSnack && dailyLog.eveningSnack.length > 0) count++;
 
     dailyLog.completedMealsCount = count;
+    dailyLog.lastMealAt = new Date();
+
+    // Handle Image Upload
+    if (req.files && req.files.length > 0) {
+        const file = req.files[0];
+        const imageUrl = `/uploads/${file.filename}`;
+        
+        // Ensure images object exists
+        if (!dailyLog.images) {
+            dailyLog.images = {
+                breakfast: '',
+                morningSnack: '',
+                lunch: '',
+                afternoonSnack: '',
+                dinner: '',
+                eveningSnack: ''
+            };
+        }
+        
+        dailyLog.images[mealType] = imageUrl;
+    }
 
     await dailyLog.save();
 
@@ -79,7 +102,15 @@ export const getMealsByDate = asyncHandler(async (req, res) => {
 
     if (!log) {
         // Return empty structure for frontend to render "empty" state
-        return res.status(200).json(new ApiResponse(200, { date, breakfast: [], lunch: [], snacks: [], dinner: [] }, "No logs found (Empty)"));
+        return res.status(200).json(new ApiResponse(200, { 
+            date, 
+            breakfast: [], 
+            morningSnack: [],
+            lunch: [], 
+            afternoonSnack: [],
+            dinner: [],
+            eveningSnack: []
+        }, "No logs found (Empty)"));
     }
 
     res.status(200).json(new ApiResponse(200, log, "Daily meals fetched"));
@@ -102,4 +133,45 @@ export const deleteFoodItem = asyncHandler(async (req, res) => {
     }
 
     res.status(200).json(new ApiResponse(200, log, "Item removed"));
+});
+
+// @desc    Get the time since the last meal
+// @route   GET /api/meals/last-meal/:id
+// @access  Private
+export const getLastMealTime = asyncHandler(async (req, res) => {
+    const { id } = req.params; // Profile ID
+
+    const lastLog = await MealLog.findOne({ profileId: id, lastMealAt: { $exists: true } })
+        .sort({ lastMealAt: -1 });
+
+    if (!lastLog || !lastLog.lastMealAt) {
+        return res.status(200).json(new ApiResponse(200, { 
+            lastMealAt: null, 
+            timeGap: "No meals logged yet" 
+        }, "No meal logs found"));
+    }
+
+    const lastMealTime = new Date(lastLog.lastMealAt);
+    const now = new Date();
+    const diffInMs = now - lastMealTime;
+    
+    const diffInMins = Math.floor(diffInMs / (1000 * 60));
+    const diffInHours = Math.floor(diffInMins / 60);
+    const diffInDays = Math.floor(diffInHours / 24);
+
+    let timeGap = "";
+    if (diffInDays > 0) {
+        timeGap = `Last meal: ${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+    } else if (diffInHours > 0) {
+        timeGap = `Last meal: ${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+    } else if (diffInMins > 0) {
+        timeGap = `Last meal: ${diffInMins} minute${diffInMins > 1 ? 's' : ''} ago`;
+    } else {
+        timeGap = "Last meal: just now";
+    }
+
+    res.status(200).json(new ApiResponse(200, { 
+        lastMealAt: lastLog.lastMealAt, 
+        timeGap 
+    }, "Last meal time fetched"));
 });

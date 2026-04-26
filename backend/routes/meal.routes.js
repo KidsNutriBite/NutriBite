@@ -1,5 +1,6 @@
 import express from 'express';
-import { logMeal, getMealHistory, deleteFoodItem, getMealsByDate } from '../controllers/meal.controller.js';
+import path from 'path';
+import { logMeal, getMealHistory, deleteFoodItem, getMealsByDate, getLastMealTime } from '../controllers/meal.controller.js';
 import { protect } from '../middlewares/auth.middleware.js';
 import { authorize } from '../middlewares/role.middleware.js';
 import { checkProfileOwnership } from '../middlewares/ownership.middleware.js';
@@ -20,7 +21,17 @@ const checkBodyOwnership = async (req, res, next) => {
 };
 
 const router = express.Router();
-const upload = multer({ storage: multer.memoryStorage() });
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage });
 
 router.use(protect);
 
@@ -32,6 +43,9 @@ router.get('/history/:id', checkProfileOwnership, getMealHistory);
 
 // GET SPECIFIC DATE
 router.get('/by-date/:id/:date', checkProfileOwnership, getMealsByDate);
+
+// GET LAST MEAL TIME
+router.get('/last-meal/:id', checkProfileOwnership, getLastMealTime);
 
 // DELETE ITEM (Needs body logic to check ownership first, or trust parent role + log ownership check inside controller)
 // Ideally pass profileId for ownership check
