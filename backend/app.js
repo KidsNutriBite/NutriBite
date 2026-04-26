@@ -22,6 +22,7 @@ import parentRoutes from './routes/parent.routes.js';
 import notificationRoutes from './routes/notification.routes.js';
 import growthRoutes from './routes/growth.routes.js'; // New import
 import escalationRoutes from './routes/escalation.routes.js';
+import feedbackRoutes from './routes/feedback.routes.js';
 // error middleware import placeholder
 
 // Initialize App
@@ -56,6 +57,7 @@ app.use('/api/hospitals', hospitalRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/growth', growthRoutes); // New route
 app.use('/api/escalations', escalationRoutes);
+app.use('/api/feedback', feedbackRoutes);
 
 // Health Check
 app.get('/', (req, res) => {
