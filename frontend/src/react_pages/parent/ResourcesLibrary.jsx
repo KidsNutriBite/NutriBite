@@ -4,6 +4,7 @@ import GuideCard from '../../components/resources/GuideCard';
 import RecipeCard from '../../components/resources/RecipeCard';
 import TipCard from '../../components/resources/TipCard';
 import ResourceModal from '../../components/resources/ResourceModal';
+import PortionGuide from '../../components/resources/PortionGuide';
 import { toast } from 'react-hot-toast';
 
 const ResourcesLibrary = () => {
@@ -143,6 +144,11 @@ const ResourcesLibrary = () => {
                     ))}
                 </div>
             </div>
+            
+            {/* Portion Education Guide */}
+            <section className="mb-8">
+                <PortionGuide />
+            </section>
 
             {/* 2. Indian Nutrition Guides */}
             <section>
