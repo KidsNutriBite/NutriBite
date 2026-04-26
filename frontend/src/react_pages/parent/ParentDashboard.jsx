@@ -379,7 +379,12 @@ const ParentDashboard = () => {
             </div>
 
             {/* Modal for Adding Child */}
-            <Modal isOpen={isAddModalOpen} onClose={() => setIsAddModalOpen(false)} title="Add New Child Profile">
+            <Modal
+                isOpen={isAddModalOpen}
+                onClose={() => setIsAddModalOpen(false)}
+                title="Add New Child Profile"
+                maxWidth="max-w-3xl"
+            >
                 <AddProfileForm
                     onSuccess={() => {
                         setIsAddModalOpen(false);

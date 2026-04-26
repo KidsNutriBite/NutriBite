@@ -57,7 +57,9 @@ export const createProfile = asyncHandler(async (req, res) => {
         },
         profileImage: profileImageUrl,
         medicalReports: medicalReportUrls,
-        dietaryPreferences: req.body.dietaryPreferences || []
+        dietaryPreferences: req.body.dietaryPreferences || [],
+        usageReason: req.body.usageReason,
+        goals: req.body.goals || []
     };
 
     // 3. Create Profile (Skipping validation for brevity since manual casting does checks implicitly or fails at DB level)
