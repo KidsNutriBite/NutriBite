@@ -16,7 +16,7 @@ import UpdateGrowthModal from '../../components/growth/UpdateGrowthModal'; // Im
 import NutritionGaps from '../../components/parent/NutritionGaps'; // Import Component
 import DailyMealCard from '../../components/meal/DailyMealCard';
 import DateTimeline from '../../components/meal/DateTimeline';
-import { getMealsByDate, getMealHistory } from '../../api/meal.api'; // Updated imports
+import { getMealsByDate, getMealHistory, getLastMealTime } from '../../api/meal.api'; // Updated imports
 
 const ChildDetails = () => {
     const { id } = useParams();
@@ -44,14 +44,15 @@ const ChildDetails = () => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const [profileRes, historyRes, dailyRes, chartRes, prescRes, growthRes, nutritionRes] = await Promise.all([
+            const [profileRes, historyRes, dailyRes, chartRes, prescRes, growthRes, nutritionRes, lastMealRes] = await Promise.all([
                 getProfile(id),
                 getMealHistory(id),
                 getMealsByDate(id, selectedDate),
                 getMealFrequency(id),
                 getPrescriptions(id),
                 getGrowthHistory(id),
-                getNutritionTrends(id)
+                getNutritionTrends(id),
+                getLastMealTime(id)
             ]);
             setProfile(profileRes.data || profileRes);
             // historyRes.data.logs might be the array, depends on API struct
@@ -74,6 +75,8 @@ const ChildDetails = () => {
             setPrescriptions(prescRes.data || prescRes || []);
             setGrowthRecords(growthRes.data || growthRes || []);
             setNutritionTrends(nutritionRes.data || nutritionRes || []);
+            setLastMealStatus(lastMealRes.data || lastMealRes);
+
         } catch (error) {
             console.error(error);
             // navigate('/parent/dashboard'); // Don't redirect on error to allow retry or partial load
@@ -86,6 +89,7 @@ const ChildDetails = () => {
     const [dailyLog, setDailyLog] = useState(null);
     const [history, setHistory] = useState([]);
     const [streak, setStreak] = useState(0);
+    const [lastMealStatus, setLastMealStatus] = useState(null);
 
     useEffect(() => {
         if (id) fetchData();
@@ -218,6 +222,12 @@ const ChildDetails = () => {
                         <div className="flex flex-col md:flex-row md:items-center gap-3 mb-2">
                             <h1 className="text-4xl font-black text-gray-900">{profile.name}</h1>
                             <span className="px-3 py-1 bg-green-100 text-green-700 font-bold text-xs uppercase tracking-wider rounded-full self-center md:self-auto">Healthy</span>
+                            {lastMealStatus?.timeGap && (
+                                <span className="px-3 py-1 bg-indigo-50 text-indigo-600 font-bold text-xs uppercase tracking-wider rounded-full self-center md:self-auto flex items-center gap-1">
+                                    <span className="material-symbols-outlined text-[14px]">schedule</span>
+                                    {lastMealStatus.timeGap}
+                                </span>
+                            )}
                         </div>
 
                         <p className="text-gray-500 font-medium mb-6">Level {profile.level || 1} Explorer • {profile.xp || 0} XP</p>
@@ -340,7 +350,7 @@ const ChildDetails = () => {
                                     </div>
 
                                     {/* Stats Row */}
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                                         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center group hover:border-indigo-100 transition-colors">
                                             <div className="w-12 h-12 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                                                 <span className="material-symbols-outlined">restaurant</span>
@@ -365,17 +375,6 @@ const ChildDetails = () => {
                                             <p className="text-3xl font-black text-gray-800 flex items-end gap-1">
                                                 {stats.water}<span className="text-lg font-bold text-gray-400 mb-1">L</span>
                                             </p>
-                                        </div>
-
-                                        <div
-                                            onClick={() => setActiveTab('growth')}
-                                            className="bg-indigo-600 p-6 rounded-2xl shadow-lg shadow-indigo-200 text-white flex flex-col items-center text-center cursor-pointer hover:bg-indigo-700 transition-all transform hover:scale-105"
-                                        >
-                                            <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mb-3 backdrop-blur-sm">
-                                                <span className="material-symbols-outlined">monitor_weight</span>
-                                            </div>
-                                            <p className="text-indigo-200 font-bold text-xs uppercase tracking-wider mb-1">Current BMI</p>
-                                            <p className="text-3xl font-black">{growthRecords.length > 0 ? growthRecords[growthRecords.length - 1].bmi : 'N/A'}</p>
                                         </div>
                                     </div>
 

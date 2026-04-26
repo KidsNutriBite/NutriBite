@@ -6,17 +6,29 @@ import { logMeal } from '../../api/meal.api';
 import { FOOD_DATABASE, QUICK_ADDS } from '../../data/foodDatabase'; // Import comprehensive DB
 
 const MealLogForm = ({ profileId, initialData, onSuccess, onCancel }) => {
-    const [formData, setFormData] = useState({
-        mealType: initialData?.mealType || 'breakfast',
-        date: initialData?.date || new Date().toISOString().split('T')[0],
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false }),
-        notes: ''
+    const [formData, setFormData] = useState(() => {
+        const mType = initialData?.mealType || 'breakfast';
+        const defaultTimes = {
+            breakfast: '08:00',
+            morningSnack: '11:00',
+            lunch: '13:00',
+            afternoonSnack: '16:00',
+            dinner: '20:00',
+            eveningSnack: '18:00'
+        };
+        return {
+            mealType: mType,
+            date: initialData?.date || new Date().toISOString().split('T')[0],
+            time: defaultTimes[mType] || '08:00',
+            notes: ''
+        };
     });
 
     const [selectedFoods, setSelectedFoods] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
     const [photo, setPhoto] = useState(null);
+    const [preview, setPreview] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
@@ -31,7 +43,17 @@ const MealLogForm = ({ profileId, initialData, onSuccess, onCancel }) => {
     }, [searchQuery]);
 
     const addFood = (food) => {
-        setSelectedFoods([...selectedFoods, { ...food, id: Date.now() }]);
+        const match = food.qty.match(/^([\d.-]+)\s*(.*)$/);
+        const amount = match ? parseFloat(match[1]) : 1;
+        const unit = match ? match[2] : food.qty;
+
+        setSelectedFoods([...selectedFoods, { 
+            ...food, 
+            id: Date.now(),
+            amount: amount,
+            unit: unit,
+            baseAmount: amount
+        }]);
         setSearchQuery('');
         setSearchResults([]);
     };
@@ -40,19 +62,37 @@ const MealLogForm = ({ profileId, initialData, onSuccess, onCancel }) => {
         setSelectedFoods(selectedFoods.filter(f => f.id !== id));
     };
 
+    const updateAmount = (id, delta) => {
+        setSelectedFoods(selectedFoods.map(f => {
+            if (f.id === id) {
+                const newAmount = Math.max(0, f.amount + delta);
+                return { ...f, amount: newAmount };
+            }
+            return f;
+        }));
+    };
+
     // Calculate Totals
     const nutrients = useMemo(() => {
-        return selectedFoods.reduce((acc, item) => ({
-            calories: acc.calories + item.cal,
-            protein: acc.protein + item.p,
-            carbs: acc.carbs + item.c,
-            fat: acc.fat + item.f
-        }), { calories: 0, protein: 0, carbs: 0, fat: 0 });
+        return selectedFoods.reduce((acc, item) => {
+            const factor = item.baseAmount ? (item.amount / item.baseAmount) : 1;
+            return {
+                calories: acc.calories + (item.cal * factor || 0),
+                protein: acc.protein + (item.p * factor || 0),
+                carbs: acc.carbs + (item.c * factor || 0),
+                fat: acc.fat + (item.f * factor || 0),
+                fiber: acc.fiber + (item.fib * factor || 0),
+                water: acc.water + (item.w * factor || 0),
+                vitamins: [...new Set([...acc.vitamins.split(', '), ...(item.vit?.split(', ') || [])])].filter(Boolean).join(', ')
+            };
+        }, { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0, water: 0, vitamins: '' });
     }, [selectedFoods]);
 
     const handleFileChange = (e) => {
-        if (e.target.files[0]) {
-            setPhoto(e.target.files[0]);
+        const file = e.target.files[0];
+        if (file) {
+            setPhoto(file);
+            setPreview(URL.createObjectURL(file));
         }
     };
 
@@ -78,7 +118,10 @@ const MealLogForm = ({ profileId, initialData, onSuccess, onCancel }) => {
                 calories: f.cal,
                 protein: f.p,
                 carbs: f.c,
-                fats: f.f
+                fats: f.f,
+                fiber: f.fib || 0,
+                water: f.w || 0,
+                vitamins: f.vit || ''
             }));
             data.append('foodItems', JSON.stringify(foodItemsPayload));
             data.append('nutrients', JSON.stringify(nutrients));
@@ -121,17 +164,29 @@ const MealLogForm = ({ profileId, initialData, onSuccess, onCancel }) => {
                 {/* Meal Type Selectors */}
                 <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-2">Meal Type</label>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                    <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
                         {[
-                            { id: 'breakfast', label: 'Breakfast', icon: 'sunny' },
+                            { id: 'breakfast', label: 'Breakfast', icon: 'wb_twilight' },
+                            { id: 'morningSnack', label: 'Morning Snack', icon: 'coffee' },
                             { id: 'lunch', label: 'Lunch', icon: 'light_mode' },
-                            { id: 'dinner', label: 'Dinner', icon: 'bedtime' },
-                            { id: 'snack', label: 'Snack', icon: 'cookie' }
+                            { id: 'afternoonSnack', label: 'Afternoon Snack', icon: 'wb_sunny' },
+                            { id: 'eveningSnack', label: 'Evening Snack', icon: 'partly_cloudy_day' },
+                            { id: 'dinner', label: 'Dinner', icon: 'bedtime' }
                         ].map((type) => (
                             <button
                                 key={type.id}
                                 type="button"
-                                onClick={() => setFormData({ ...formData, mealType: type.id })}
+                                onClick={() => {
+                                    const defaultTimes = { 
+                                        breakfast: '08:00', 
+                                        morningSnack: '11:00', 
+                                        lunch: '13:00', 
+                                        afternoonSnack: '16:00', 
+                                        eveningSnack: '18:00', 
+                                        dinner: '20:00' 
+                                    };
+                                    setFormData({ ...formData, mealType: type.id, time: defaultTimes[type.id] || formData.time });
+                                }}
                                 className={`flex flex-col items-center justify-center p-3 rounded-xl border-2 transition-all ${formData.mealType === type.id ? 'border-primary bg-primary/5 text-primary' : 'border-gray-100 bg-gray-50 text-gray-500 hover:bg-gray-100'}`}
                             >
                                 <span className="material-symbols-outlined mb-1">{type.icon}</span>
@@ -233,7 +288,30 @@ const MealLogForm = ({ profileId, initialData, onSuccess, onCancel }) => {
                                         <p className="font-bold text-gray-800">{item.name}</p>
                                         {item.tag && <span className="text-[10px] px-2 py-0.5 bg-green-50 text-green-700 rounded-full font-bold uppercase">{item.tag}</span>}
                                     </div>
-                                    <p className="text-xs text-gray-500">{item.qty}</p>
+                                    <div className="flex items-center gap-3 mt-1">
+                                        <div className="flex items-center bg-gray-50 border border-gray-100 rounded-lg p-0.5">
+                                            <button 
+                                                type="button"
+                                                onClick={() => updateAmount(item.id, - (item.unit === 'g' ? 10 : 1))}
+                                                className="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-primary hover:bg-white rounded transition"
+                                            >
+                                                <span className="material-symbols-outlined text-sm">remove</span>
+                                            </button>
+                                            <span className="text-xs font-black text-gray-700 min-w-[50px] text-center">
+                                                {item.amount}{item.unit}
+                                            </span>
+                                            <button 
+                                                type="button"
+                                                onClick={() => updateAmount(item.id, (item.unit === 'g' ? 10 : 1))}
+                                                className="w-6 h-6 flex items-center justify-center text-gray-500 hover:text-primary hover:bg-white rounded transition"
+                                            >
+                                                <span className="material-symbols-outlined text-sm">add</span>
+                                            </button>
+                                        </div>
+                                        <span className="text-[10px] text-gray-400 font-bold uppercase">
+                                            {Math.round(item.cal * (item.amount / item.baseAmount))} kcal
+                                        </span>
+                                    </div>
                                 </div>
                                 <button onClick={() => removeFood(item.id)} className="text-gray-400 hover:text-red-500 p-2">
                                     <span className="material-symbols-outlined">close</span>
@@ -246,20 +324,47 @@ const MealLogForm = ({ profileId, initialData, onSuccess, onCancel }) => {
                 {/* Photo Upload */}
                 <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-1">Meal Photo (Optional)</label>
-                    <div className="border-2 border-dashed border-gray-200 rounded-xl p-8 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-gray-50 transition-colors relative">
-                        <input type="file" accept="image/*" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer" />
-                        {photo ? (
-                            <div className="relative w-full">
-                                <p className="text-sm font-bold text-gray-800 mb-1">{photo.name}</p>
-                                <p className="text-xs text-green-600">Photo selected</p>
+                    <div className="border-2 border-dashed border-gray-200 rounded-xl p-4 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-gray-50 transition-colors relative min-h-[160px] overflow-hidden">
+                        <input type="file" accept="image/*" onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer z-20" />
+                        
+                        {preview ? (
+                            <div className="relative w-full h-full min-h-[140px]">
+                                <img src={preview} alt="Meal Preview" className="w-full h-32 object-cover rounded-lg" />
+                                <div className="absolute top-2 right-2 flex gap-2">
+                                    <button 
+                                        type="button"
+                                        onClick={(e) => { e.stopPropagation(); setPhoto(null); setPreview(null); }}
+                                        className="bg-red-500 text-white p-1.5 rounded-full shadow-lg z-30 hover:scale-110 transition"
+                                    >
+                                        <span className="material-symbols-outlined text-sm">delete</span>
+                                    </button>
+                                </div>
+                                <div className="mt-2 flex items-center justify-center gap-2 text-xs font-bold text-green-600">
+                                    <span className="material-symbols-outlined text-[14px]">check_circle</span>
+                                    Ready to upload: {photo.name}
+                                </div>
                             </div>
                         ) : (
-                            <>
-                                <span className="material-symbols-outlined text-gray-300 text-4xl mb-2">add_a_photo</span>
-                                <p className="text-sm text-gray-500">Drag and drop or <span className="text-primary font-bold">browse files</span></p>
-                                <p className="text-xs text-gray-400 mt-1">Supports JPG, PNG up to 5MB</p>
-                            </>
+                            <div className="py-4">
+                                <span className="material-symbols-outlined text-gray-300 text-5xl mb-2">add_a_photo</span>
+                                <p className="text-sm text-gray-500 font-bold">Tap to capture or upload meal</p>
+                                <p className="text-xs text-gray-400 mt-1 uppercase tracking-tighter">JPG, PNG up to 5MB</p>
+                            </div>
                         )}
+                    </div>
+                </div>
+
+                {/* Portion Size Help */}
+                <div className="bg-orange-50 dark:bg-orange-900/10 p-4 rounded-xl border border-orange-100 dark:border-orange-800/30">
+                    <div className="flex items-center gap-2 mb-2">
+                        <span className="material-symbols-outlined text-orange-600 text-sm">info</span>
+                        <p className="text-xs font-bold text-orange-800 dark:text-orange-300 uppercase tracking-wider">Portion Size Help</p>
+                    </div>
+                    <div className="grid grid-cols-2 gap-x-4 gap-y-1">
+                        <p className="text-[11px] text-orange-700 dark:text-orange-400 font-medium">100g Rice ≈ 1 cup</p>
+                        <p className="text-[11px] text-orange-700 dark:text-orange-400 font-medium">1 Glass Milk ≈ 250ml</p>
+                        <p className="text-[11px] text-orange-700 dark:text-orange-400 font-medium">1 Bowl Dal ≈ 150g</p>
+                        <p className="text-[11px] text-orange-700 dark:text-orange-400 font-medium">1 Fistful Veg ≈ 80g</p>
                     </div>
                 </div>
 
@@ -317,16 +422,18 @@ const MealLogForm = ({ profileId, initialData, onSuccess, onCancel }) => {
                     {/* Progress Bars */}
                     <div className="space-y-4">
                         {[
-                            { label: 'PROTEIN', val: nutrients.protein, max: 50, color: 'bg-blue-500', barBg: 'bg-blue-100' },
-                            { label: 'CARBS', val: nutrients.carbs, max: 100, color: 'bg-yellow-400', barBg: 'bg-yellow-100' },
-                            { label: 'FATS', val: nutrients.fat, max: 40, color: 'bg-green-500', barBg: 'bg-green-100' },
+                            { label: 'PROTEIN', val: nutrients.protein, max: 50, color: 'bg-blue-500', barBg: 'bg-blue-100', unit: 'g' },
+                            { label: 'CARBS', val: nutrients.carbs, max: 100, color: 'bg-yellow-400', barBg: 'bg-yellow-100', unit: 'g' },
+                            { label: 'FATS', val: nutrients.fat, max: 40, color: 'bg-green-500', barBg: 'bg-green-100', unit: 'g' },
+                            { label: 'FIBER', val: Math.round(nutrients.fiber), max: 25, color: 'bg-orange-500', barBg: 'bg-orange-100', unit: 'g' },
+                            { label: 'WATER', val: nutrients.water, max: 2000, color: 'bg-cyan-500', barBg: 'bg-cyan-100', unit: 'ml' },
                         ].map((metric) => (
                             <div key={metric.label}>
-                                <div className="flex justify-between text-xs font-bold text-gray-500 mb-1.5">
+                                <div className="flex justify-between text-[10px] font-bold text-gray-500 mb-1">
                                     <span>{metric.label}</span>
-                                    <span>{metric.val}g <span className="text-gray-300">/ {metric.max}g</span></span>
+                                    <span>{metric.val}{metric.unit} <span className="text-gray-300">/ {metric.max}{metric.unit}</span></span>
                                 </div>
-                                <div className={`h-2.5 ${metric.barBg} rounded-full overflow-hidden`}>
+                                <div className={`h-2 ${metric.barBg} rounded-full overflow-hidden`}>
                                     <div
                                         className={`h-full ${metric.color} rounded-full transition-all duration-500`}
                                         style={{ width: `${Math.min((metric.val / metric.max) * 100, 100)}%` }}
@@ -336,14 +443,92 @@ const MealLogForm = ({ profileId, initialData, onSuccess, onCancel }) => {
                         ))}
                     </div>
 
-                    {/* Tip Box */}
-                    <div className="mt-6 p-4 bg-yellow-50 rounded-xl border border-yellow-100 flex gap-3">
-                        <span className="material-symbols-outlined text-yellow-600">lightbulb</span>
-                        <div>
-                            <p className="text-xs font-bold text-yellow-800 mb-1">NutriTip: Moderate Sugar</p>
-                            <p className="text-[11px] text-yellow-700 leading-relaxed">The blueberries add natural sugar. Keep afternoon snacks low-sugar to avoid energy crashes.</p>
+                    {/* Vitamins List */}
+                    {nutrients.vitamins && (
+                        <div className="mt-4 flex flex-wrap gap-1.5">
+                            {nutrients.vitamins.split(', ').map((vit, idx) => (
+                                <span key={idx} className="text-[9px] font-black bg-purple-50 text-purple-600 px-1.5 py-0.5 rounded uppercase border border-purple-100">
+                                    {vit}
+                                </span>
+                            ))}
                         </div>
-                    </div>
+                    )}
+
+                    {/* Dynamic Meal Feedback */}
+                    {(() => {
+                        const feedbacks = [];
+                        const hasVeg = selectedFoods.some(f => 
+                            f.tag?.toLowerCase().includes('veg') || 
+                            f.tag?.toLowerCase().includes('green') || 
+                            f.tag?.toLowerCase().includes('vitamin') ||
+                            ['spinach', 'palak', 'methi', 'bhindi', 'gobi', 'carrot', 'beans', 'peas', 'lauki', 'tinda'].some(v => f.name.toLowerCase().includes(v))
+                        );
+                        const hasProtein = selectedFoods.some(f => 
+                            f.tag?.toLowerCase().includes('protein') || 
+                            f.p > 8 ||
+                            ['dal', 'paneer', 'egg', 'chicken', 'fish', 'mutton', 'soya', 'chole', 'rajma'].some(p => f.name.toLowerCase().includes(p))
+                        );
+                        const hasFruit = selectedFoods.some(f => 
+                            f.tag?.toLowerCase().includes('fruit') || 
+                            ['banana', 'apple', 'orange', 'mango', 'papaya', 'grapes', 'guava', 'melon'].some(fruit => f.name.toLowerCase().includes(fruit))
+                        );
+                        
+                        if (selectedFoods.length > 0) {
+                            if (!hasVeg && formData.mealType !== 'snack') {
+                                feedbacks.push({
+                                    title: "Veggie Suggestion",
+                                    text: "Add vegetables like spinach or carrot to boost fiber and vitamins.",
+                                    icon: "eco",
+                                    color: "orange"
+                                });
+                            }
+                            if (!hasProtein) {
+                                feedbacks.push({
+                                    title: "Protein Tip",
+                                    text: "Add a protein source like Dal, Paneer, or Egg for better growth.",
+                                    icon: "fitness_center",
+                                    color: "blue"
+                                });
+                            }
+                            if (formData.mealType === 'snack' && !hasFruit) {
+                                feedbacks.push({
+                                    title: "Snack Idea",
+                                    text: "Fresh fruits like Banana or Apple are healthier snack choices!",
+                                    icon: "nutrition",
+                                    color: "green"
+                                });
+                            }
+                        }
+
+                        if (feedbacks.length === 0) {
+                            return (
+                                <div className="mt-6 p-4 bg-blue-50 rounded-xl border border-blue-100 flex gap-3">
+                                    <span className="material-symbols-outlined text-blue-600">verified</span>
+                                    <div>
+                                        <p className="text-xs font-bold text-blue-800 mb-1">Looks Good!</p>
+                                        <p className="text-[11px] text-blue-700 leading-relaxed">This meal selection looks balanced and nutritious.</p>
+                                    </div>
+                                </div>
+                            );
+                        }
+
+                        const topFeedback = feedbacks[0];
+                        const colorClasses = {
+                            orange: { bg: 'bg-orange-50', border: 'border-orange-100', icon: 'text-orange-600', title: 'text-orange-800', text: 'text-orange-700' },
+                            blue: { bg: 'bg-blue-50', border: 'border-blue-100', icon: 'text-blue-600', title: 'text-blue-800', text: 'text-blue-700' },
+                            green: { bg: 'bg-green-50', border: 'border-green-100', icon: 'text-green-600', title: 'text-green-800', text: 'text-green-700' }
+                        }[topFeedback.color];
+
+                        return (
+                            <div className={`mt-6 p-4 ${colorClasses.bg} rounded-xl border ${colorClasses.border} flex gap-3 transition-all animate-in fade-in slide-in-from-bottom-2`}>
+                                <span className={`material-symbols-outlined ${colorClasses.icon}`}>{topFeedback.icon}</span>
+                                <div>
+                                    <p className={`text-xs font-bold ${colorClasses.title} mb-1`}>{topFeedback.title}</p>
+                                    <p className={`text-[11px] ${colorClasses.text} leading-relaxed`}>{topFeedback.text}</p>
+                                </div>
+                            </div>
+                        );
+                    })()}
                 </div>
 
                 {/* Actions */}

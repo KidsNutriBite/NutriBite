@@ -3,9 +3,11 @@ import { motion } from 'framer-motion';
 
 const DailyMealCard = ({ date, log, onAdd, onEdit }) => {
     const mealTypes = [
-        { id: 'breakfast', label: 'Breakfast', icon: 'sunny', time: '8:00 AM' },
+        { id: 'breakfast', label: 'Breakfast', icon: 'wb_twilight', time: '8:00 AM' },
+        { id: 'morningSnack', label: 'Morning Snack', icon: 'coffee', time: '11:00 AM' },
         { id: 'lunch', label: 'Lunch', icon: 'light_mode', time: '1:00 PM' },
-        { id: 'snacks', label: 'Snacks', icon: 'cookie', time: '4:00 PM' },
+        { id: 'afternoonSnack', label: 'Afternoon Snack', icon: 'wb_sunny', time: '4:00 PM' },
+        { id: 'eveningSnack', label: 'Evening Snack', icon: 'partly_cloudy_day', time: '6:00 PM' },
         { id: 'dinner', label: 'Dinner', icon: 'bedtime', time: '8:00 PM' }
     ];
 
