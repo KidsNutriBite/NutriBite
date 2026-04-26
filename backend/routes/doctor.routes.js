@@ -35,4 +35,10 @@ router.get('/patients/:id', checkDoctorAccess, getPatientDetails);
 router.post('/patients/:id/request-full-access', checkDoctorAccess, requestFullAccess);
 router.patch('/patients/:id/notes', checkDoctorAccess, updatePatientNotes);
 
+// Doctor Dashboard Child Route
+router.get('/child/:childId', authorize('doctor'), (req, res, next) => {
+    req.params.id = req.params.childId;
+    next();
+}, checkDoctorAccess, getPatientDetails);
+
 export default router;
