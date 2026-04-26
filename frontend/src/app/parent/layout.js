@@ -1,1 +1,10 @@
-import ParentLayout from "../../layouts/ParentLayout"; export default function Layout({children}) { return <ParentLayout>{children}</ParentLayout>; }
+import ParentLayout from "../../layouts/ParentLayout"; 
+import { ProfileProvider } from "../../context/ProfileContext";
+
+export default function Layout({children}) { 
+    return (
+        <ProfileProvider>
+            <ParentLayout>{children}</ParentLayout>
+        </ProfileProvider>
+    ); 
+}
