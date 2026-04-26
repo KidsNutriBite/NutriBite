@@ -26,3 +26,9 @@ export const deleteFoodItem = async (logId, mealType, itemId) => {
     });
     return response.data;
 };
+
+// GET LAST MEAL TIME
+export const getLastMealTime = async (profileId) => {
+    const response = await api.get(`/meals/last-meal/${profileId}`);
+    return response.data;
+};

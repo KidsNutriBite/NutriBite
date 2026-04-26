@@ -7,6 +7,9 @@ const foodItemSchema = new mongoose.Schema({
     protein: { type: Number, default: 0 },
     carbs: { type: Number, default: 0 },
     fats: { type: Number, default: 0 },
+    fiber: { type: Number, default: 0 },
+    water: { type: Number, default: 0 },
+    vitamins: { type: String, default: '' },
     notes: String,
     photoUrl: String
 }, { _id: true }); // Keep _id for identifying specific items if needed
@@ -24,18 +27,33 @@ const dailyMealLogSchema = new mongoose.Schema(
             index: true
         },
         breakfast: [foodItemSchema],
+        morningSnack: [foodItemSchema],
         lunch: [foodItemSchema],
-        snacks: [foodItemSchema],
+        afternoonSnack: [foodItemSchema],
         dinner: [foodItemSchema],
+        eveningSnack: [foodItemSchema],
 
         completedMealsCount: {
             type: Number,
             default: 0,
-            max: 4
+            max: 6
         },
 
         // Metadata for streak tracking
-        isStreakCounted: { type: Boolean, default: false }
+        isStreakCounted: { type: Boolean, default: false },
+
+        // Time tracking
+        lastMealAt: { type: Date },
+
+        // Meal Images
+        images: {
+            breakfast: String,
+            morningSnack: String,
+            lunch: String,
+            afternoonSnack: String,
+            dinner: String,
+            eveningSnack: String
+        }
     },
     { timestamps: true }
 );
