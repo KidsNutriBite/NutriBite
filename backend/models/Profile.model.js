@@ -46,6 +46,13 @@ const profileSchema = new mongoose.Schema(
             type: [String], // e.g., 'vegetarian', 'nut-free'
             default: [],
         },
+        usageReason: {
+            type: String, // e.g., 'Track growth', 'Improve habits'
+        },
+        goals: {
+            type: [String], // e.g., 'Improve immunity', 'Healthy weight'
+            default: [],
+        },
         avatar: {
             type: String,
             required: true, // Mandatory avatar for UI/Kids Mode

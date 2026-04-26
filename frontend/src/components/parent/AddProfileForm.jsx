@@ -1,7 +1,7 @@
 "use client";
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { createProfile } from '../../api/profile.api';
-import axios from 'axios';
 
 const AddProfileForm = ({ onSuccess, onCancel }) => {
     const [step, setStep] = useState(1);
@@ -20,6 +20,8 @@ const AddProfileForm = ({ onSuccess, onCancel }) => {
         state: '',
         healthConditions: [], // Multi-select
         otherCondition: '',
+        usageReason: '',
+        goals: [],
     });
 
     const calculateAge = (dobString) => {
@@ -105,16 +107,20 @@ const AddProfileForm = ({ onSuccess, onCancel }) => {
             if (!formData.city.trim()) return "City is required";
             if (!formData.state.trim()) return "State is required";
         }
+        if (currentStep === 4) {
+            if (!formData.usageReason) return "usageReason_missing";
+            if (formData.goals.length === 0) return "goals_missing";
+        }
         return null;
+    };
+
+    const isStepValid = (s) => {
+        return !validateStep(s);
     };
 
     const nextStep = () => {
         const validationError = validateStep(step);
-        if (validationError) {
-            setError(validationError);
-            return;
-        }
-        setError('');
+        if (validationError) return;
         setStep(s => s + 1);
     };
 
@@ -125,11 +131,14 @@ const AddProfileForm = ({ onSuccess, onCancel }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const validationError = validateStep(3); // Validate last step before submit
-        if (validationError) {
-            setError(validationError);
+        
+        // Prevent submission if not on the final step
+        if (step < 4) {
+            nextStep();
             return;
         }
+
+        if (!isStepValid(4)) return;
 
         setLoading(true);
         setError('');
@@ -148,6 +157,8 @@ const AddProfileForm = ({ onSuccess, onCancel }) => {
             data.append('avatar', formData.avatar);
             data.append('city', formData.city);
             data.append('state', formData.state);
+            data.append('usageReason', formData.usageReason);
+            formData.goals.forEach(goal => data.append('goals[]', goal));
 
             // Health Conditions Logic
             formData.healthConditions.forEach(cond => {
@@ -164,13 +175,7 @@ const AddProfileForm = ({ onSuccess, onCancel }) => {
             if (profileImage) data.append('profileImage', profileImage);
             medicalDocs.forEach(doc => data.append('medicalReports', doc));
 
-            const token = localStorage.getItem('token');
-            await axios.post('http://localhost:5000/api/profiles', data, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${token}`
-                }
-            });
+            await createProfile(data);
 
             onSuccess();
         } catch (err) {
@@ -186,19 +191,14 @@ const AddProfileForm = ({ onSuccess, onCancel }) => {
             {/* Step Indicator */}
             <div className="flex justify-between mb-8 relative">
                 <div className="absolute top-1/2 left-0 w-full h-1 bg-gray-200 -z-10"></div>
-                {[1, 2, 3].map(i => (
+                {[1, 2, 3, 4].map(i => (
                     <div key={i} className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm bg-white border-2 transition-colors ${step >= i ? 'border-primary text-primary' : 'border-gray-300 text-gray-400'}`}>
                         {i}
                     </div>
                 ))}
             </div>
 
-            {error && (
-                <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm border border-red-100 flex items-center gap-2">
-                    <span className="material-symbols-outlined text-lg">error</span>
-                    {error}
-                </div>
-            )}
+
 
             {/* Step 1: Basic Info */}
             {step === 1 && (
@@ -426,6 +426,67 @@ const AddProfileForm = ({ onSuccess, onCancel }) => {
                 </div>
             )}
 
+            {/* Step 4: Questionnaire */}
+            {step === 4 && (
+                <div className="space-y-6 animate-in slide-in-from-right fade-in duration-300">
+                    <div>
+                        <h3 className="text-lg font-bold text-gray-800 mb-1">One last thing!</h3>
+                        <p className="text-sm text-gray-500">Help us personalize {formData.name || "your child"}'s experience.</p>
+                    </div>
+
+                    <div className="space-y-4">
+                        <label className="block text-sm font-semibold text-gray-700">Why are you using NutriBite? <span className="text-red-500">*</span></label>
+                        <div className="grid grid-cols-1 gap-2">
+                            {[
+                                "Improve daily nutrition habits",
+                                "Track growth and development",
+                                "Manage a health condition",
+                                "Get expert meal suggestions",
+                                "Just exploring"
+                            ].map(reason => (
+                                <button
+                                    key={reason}
+                                    type="button"
+                                    onClick={() => setFormData({ ...formData, usageReason: reason })}
+                                    className={`text-left px-4 py-3 rounded-xl border-2 transition-all text-sm ${formData.usageReason === reason ? 'border-primary bg-primary/5 text-primary font-bold shadow-sm' : 'border-gray-100 bg-gray-50 text-gray-600 hover:bg-gray-100'}`}
+                                >
+                                    {reason}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="space-y-4 pt-2">
+                        <label className="block text-sm font-semibold text-gray-700">What are your primary goals? (Select multiple) <span className="text-red-500">*</span></label>
+                        <div className="flex flex-wrap gap-2">
+                            {[
+                                "💪 Improve Immunity",
+                                "⚖️ Healthy Weight",
+                                "🧠 Better Concentration",
+                                "⚡ Higher Energy",
+                                "🦷 Bone & Teeth Health",
+                                "🍎 Diversify Diet"
+                            ].map(goal => (
+                                <button
+                                    key={goal}
+                                    type="button"
+                                    onClick={() => {
+                                        const exists = formData.goals.includes(goal);
+                                        setFormData({
+                                            ...formData,
+                                            goals: exists ? formData.goals.filter(g => g !== goal) : [...formData.goals, goal]
+                                        });
+                                    }}
+                                    className={`px-4 py-2 rounded-full border-2 transition-all text-sm ${formData.goals.includes(goal) ? 'border-primary bg-primary/5 text-primary font-bold' : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'}`}
+                                >
+                                    {goal}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Navigation Buttons */}
             <div className="flex justify-between pt-6 border-t border-gray-100 mt-4">
                 {step > 1 ? (
@@ -446,19 +507,20 @@ const AddProfileForm = ({ onSuccess, onCancel }) => {
                     </button>
                 )}
 
-                {step < 3 ? (
+                {step < 4 ? (
                     <button
                         type="button"
                         onClick={nextStep}
-                        className="px-8 py-2.5 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 shadow-md hover:shadow-lg transition-all"
+                        disabled={!isStepValid(step)}
+                        className={`px-8 py-2.5 text-white font-bold rounded-xl shadow-md transition-all ${isStepValid(step) ? 'bg-primary hover:bg-primary/90 hover:shadow-lg' : 'bg-gray-300 cursor-not-allowed opacity-70'}`}
                     >
                         Next
                     </button>
                 ) : (
                     <button
                         type="submit"
-                        disabled={loading}
-                        className={`px-8 py-2.5 bg-primary text-white font-bold rounded-xl hover:bg-primary/90 shadow-md hover:shadow-lg transition-all ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                        disabled={loading || !isStepValid(4)}
+                        className={`px-8 py-2.5 text-white font-bold rounded-xl shadow-md transition-all ${isStepValid(4) ? 'bg-primary hover:bg-primary/90 hover:shadow-lg' : 'bg-gray-300 cursor-not-allowed opacity-70'} ${loading ? 'opacity-70 cursor-not-allowed' : ''}`}
                     >
                         {loading ? 'Creating Profile...' : 'Complete Setup'}
                     </button>
