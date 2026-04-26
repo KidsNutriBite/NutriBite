@@ -245,17 +245,24 @@ const ChildDetails = () => {
                         </div>
                     </div>
 
-                    <div className="mt-4 md:mt-0">
-                        <button
-                            onClick={() => navigate(`/kids/${profile._id}/dashboard`)}
-                            className="bg-gradient-to-r from-blue-400 to-green-500 text-white font-black py-4 px-8 rounded-2xl shadow-lg shadow-blue-200 transform hover:scale-105 transition-all flex items-center gap-3 border-2 border-white/20"
-                        >
-                            <div>
-                                <div className="text-xs font-bold opacity-90 uppercase tracking-wider">Switch to</div>
-                                <div className="text-lg leading-none">Kids Mode</div>
-                            </div>
-                        </button>
-                    </div>
+                        <div className="flex flex-col gap-3">
+                            <button
+                                onClick={() => navigate(`/kids/${profile._id}/dashboard`)}
+                                className="bg-gradient-to-r from-blue-400 to-green-500 text-white font-black py-4 px-8 rounded-2xl shadow-lg shadow-blue-200 transform hover:scale-105 transition-all flex items-center gap-3 border-2 border-white/20"
+                            >
+                                <div>
+                                    <div className="text-xs font-bold opacity-90 uppercase tracking-wider">Switch to</div>
+                                    <div className="text-lg leading-none">Kids Mode</div>
+                                </div>
+                            </button>
+                            <button
+                                onClick={() => navigate(`/nutrition-analysis/${profile._id}`)}
+                                className="bg-white text-indigo-600 font-black py-3 px-8 rounded-2xl shadow-md border-2 border-indigo-50 hover:bg-indigo-50 transform hover:scale-105 transition-all flex items-center justify-center gap-2"
+                            >
+                                <span className="text-lg">🍎</span>
+                                <span>Nutrition Insights</span>
+                            </button>
+                        </div>
                 </div>
             </div>
 
