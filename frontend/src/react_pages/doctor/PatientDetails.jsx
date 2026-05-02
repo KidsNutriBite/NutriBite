@@ -6,6 +6,7 @@ import { getPatientDetails, requestFullAccess } from '../../api/doctor.api';
 import { getMealFrequency, getPrescriptions, createPrescription } from '../../api/analytics.api';
 import MealFrequencyChart from '../../components/charts/MealFrequencyChart';
 import toast from 'react-hot-toast';
+import api from '../../api/axios';
 
 const PatientDetails = () => {
     const { id } = useParams();
@@ -31,11 +32,11 @@ const PatientDetails = () => {
     const fetchAllData = async () => {
         try {
             setLoading(true);
-            const detailRes = await getPatientDetails(id);
-            setProfile(detailRes.data.profile);
-            setMeals(detailRes.data.meals || []);
-            setStatus(detailRes.data.status);
-            setMessage(detailRes.data.message || '');
+            const detailRes = await api.get(`/doctor/child/${id}`);
+            setProfile(detailRes.data.data.profile);
+            setMeals(detailRes.data.data.meals || []);
+            setStatus(detailRes.data.data.status);
+            setMessage(detailRes.data.data.message || '');
 
             if (detailRes.data.status === 'active') {
                 const chartRes = await getMealFrequency(id);
@@ -119,6 +120,10 @@ const PatientDetails = () => {
                 <div className="flex-1 text-center md:text-left">
                     <div className="flex flex-col md:flex-row md:items-center gap-3 mb-2">
                         <h1 className="text-3xl font-black text-gray-900">{profile.name}</h1>
+                        <span className="px-3 py-1 bg-blue-100 text-blue-700 font-bold text-[10px] uppercase tracking-wider rounded-full flex items-center gap-1 w-fit mx-auto md:mx-0">
+                            <span className="material-symbols-outlined text-sm">visibility</span>
+                            Doctor View Mode (Read-Only)
+                        </span>
                         {status === 'restricted' && (
                             <span className="px-3 py-1 bg-amber-200 text-amber-800 font-bold text-[10px] uppercase tracking-wider rounded-full flex items-center gap-1 w-fit mx-auto md:mx-0">
                                 <span className="material-symbols-outlined text-sm">lock</span>

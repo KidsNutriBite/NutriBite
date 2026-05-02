@@ -268,19 +268,63 @@ const ChildDetails = () => {
                         </div>
                     </div>
 
-                    <div className="mt-4 md:mt-0">
-                        <button
-                            onClick={() => navigate(`/kids/${profile._id}/dashboard`)}
-                            className="bg-gradient-to-r from-blue-400 to-green-500 text-white font-black py-4 px-8 rounded-2xl shadow-lg shadow-blue-200 transform hover:scale-105 transition-all flex items-center gap-3 border-2 border-white/20"
-                        >
-                            <div>
-                                <div className="text-xs font-bold opacity-90 uppercase tracking-wider">Switch to</div>
-                                <div className="text-lg leading-none">Kids Mode</div>
-                            </div>
-                        </button>
-                    </div>
+                        <div className="flex flex-col gap-3">
+                            <button
+                                onClick={() => navigate(`/kids/${profile._id}/dashboard`)}
+                                className="bg-gradient-to-r from-blue-400 to-green-500 text-white font-black py-4 px-8 rounded-2xl shadow-lg shadow-blue-200 transform hover:scale-105 transition-all flex items-center gap-3 border-2 border-white/20"
+                            >
+                                <div>
+                                    <div className="text-xs font-bold opacity-90 uppercase tracking-wider">Switch to</div>
+                                    <div className="text-lg leading-none">Kids Mode</div>
+                                </div>
+                            </button>
+                            <button
+                                onClick={() => navigate(`/nutrition-analysis/${profile._id}`)}
+                                className="bg-white text-indigo-600 font-black py-3 px-8 rounded-2xl shadow-md border-2 border-indigo-50 hover:bg-indigo-50 transform hover:scale-105 transition-all flex items-center justify-center gap-2"
+                            >
+                                <span className="text-lg">🍎</span>
+                                <span>Nutrition Insights</span>
+                            </button>
+                        </div>
                 </div>
             </div>
+
+            {/* Pediatrician Escalation Banner */}
+            {(() => {
+                const latestRecord = growthRecords[growthRecords.length - 1];
+                let alertMessage = null;
+                
+                if (latestRecord) {
+                    if (latestRecord.riskStatus === 'obese') {
+                        alertMessage = "BMI category indicates Obese.";
+                    } else if (latestRecord.riskStatus === 'underweight') {
+                        alertMessage = "BMI category indicates Severely Underweight.";
+                    }
+                }
+                
+                // Mock condition for severe nutrient deficiency 
+                // (could be derived from nutritionTrends or meals if implemented, using average calories check as fallback)
+                if (!alertMessage && stats.avgCal > 0 && stats.avgCal < 800 && history.length > 5) {
+                    alertMessage = "Severe nutrient deficiency detected over multiple days.";
+                }
+
+                if (alertMessage) {
+                    return (
+                        <div className="bg-red-50 border border-red-200 rounded-2xl p-4 shadow-sm flex items-start gap-4">
+                            <div className="bg-red-100 text-red-500 rounded-full w-10 h-10 flex items-center justify-center shrink-0">
+                                <span className="material-symbols-outlined">warning</span>
+                            </div>
+                            <div className="flex-1">
+                                <h4 className="text-red-800 font-bold mb-1">Consult Pediatrician Immediately</h4>
+                                <p className="text-red-600 text-sm">
+                                    {alertMessage} This is an automated safety alert. Please schedule a checkup for professional medical advice.
+                                </p>
+                            </div>
+                        </div>
+                    );
+                }
+                return null;
+            })()}
 
             {/* 90-Day Growth Reminder Banner */}
             {(() => {
