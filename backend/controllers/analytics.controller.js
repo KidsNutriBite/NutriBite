@@ -56,8 +56,10 @@ export const getNutritionTrends = asyncHandler(async (req, res) => {
     const trends = logs.map(log => {
         const allItems = [
             ...(log.breakfast || []),
+            ...(log.morningSnack || []),
             ...(log.lunch || []),
-            ...(log.snacks || []),
+            ...(log.afternoonSnack || []),
+            ...(log.eveningSnack || []),
             ...(log.dinner || []),
         ];
 
