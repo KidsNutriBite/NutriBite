@@ -6,7 +6,9 @@ import { getProfileById as getProfile } from '../../api/profile.api';
 import { logMeal, deleteFoodItem } from '../../api/meal.api';
 import { getMealFrequency, getPrescriptions, getNutritionTrends } from '../../api/analytics.api';
 import { getGrowthHistory, deleteGrowthRecord } from '../../api/growth.api'; // Import API
+import { getSleepHistory, getSleepByDate } from '../../api/sleep.api';
 import MealLogForm from '../../components/parent/MealLogForm';
+import SleepLogForm from '../../components/parent/SleepLogForm';
 import Modal from '../../components/common/Modal';
 import MealFrequencyChart from '../../components/charts/MealFrequencyChart';
 import NutritionTrendsChart from '../../components/charts/NutritionTrendsChart';
@@ -27,6 +29,7 @@ const ChildDetails = () => {
     const [profile, setProfile] = useState(null);
     const [meals, setMeals] = useState([]);
     const [growthRecords, setGrowthRecords] = useState([]); // Growth State
+    const [sleepHistory, setSleepHistory] = useState([]);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('overview');
 
@@ -44,7 +47,7 @@ const ChildDetails = () => {
     const fetchData = async () => {
         try {
             setLoading(true);
-            const [profileRes, historyRes, dailyRes, chartRes, prescRes, growthRes, nutritionRes, lastMealRes] = await Promise.all([
+            const [profileRes, historyRes, dailyRes, chartRes, prescRes, growthRes, nutritionRes, lastMealRes, sleepHistoryRes, sleepDayRes] = await Promise.all([
                 getProfile(id),
                 getMealHistory(id),
                 getMealsByDate(id, selectedDate),
@@ -52,7 +55,9 @@ const ChildDetails = () => {
                 getPrescriptions(id),
                 getGrowthHistory(id),
                 getNutritionTrends(id),
-                getLastMealTime(id)
+                getLastMealTime(id),
+                getSleepHistory(id),
+                getSleepByDate(id, selectedDate)
             ]);
             setProfile(profileRes.data || profileRes);
             // historyRes.data.logs might be the array, depends on API struct
@@ -76,6 +81,8 @@ const ChildDetails = () => {
             setGrowthRecords(growthRes.data || growthRes || []);
             setNutritionTrends(nutritionRes.data || nutritionRes || []);
             setLastMealStatus(lastMealRes.data || lastMealRes);
+            setSleepHistory(sleepHistoryRes.data || sleepHistoryRes || []);
+            setSleepLog(sleepDayRes.data || sleepDayRes);
 
         } catch (error) {
             console.error(error);
@@ -90,6 +97,7 @@ const ChildDetails = () => {
     const [history, setHistory] = useState([]);
     const [streak, setStreak] = useState(0);
     const [lastMealStatus, setLastMealStatus] = useState(null);
+    const [sleepLog, setSleepLog] = useState(null);
 
     useEffect(() => {
         if (id) fetchData();
@@ -186,6 +194,20 @@ const ChildDetails = () => {
         return { meals: meals.length, avgCal, water: (waterToday / 1000).toFixed(1), streak };
     }, [meals]);
 
+    const sleepSummary = useMemo(() => {
+        const hours = sleepLog?.totalSleepHours || 0;
+        if (!sleepLog) {
+            return { status: 'No data', tone: 'bg-gray-50 text-gray-500 border-gray-100', message: 'No sleep log for the selected day.' };
+        }
+        if (hours < 8) {
+            return { status: 'Poor Sleep', tone: 'bg-red-50 text-red-600 border-red-100', message: 'Child is not getting enough sleep' };
+        }
+        if (hours <= 10) {
+            return { status: 'Healthy', tone: 'bg-green-50 text-green-600 border-green-100', message: 'Sleep pattern is healthy' };
+        }
+        return { status: 'Oversleep', tone: 'bg-amber-50 text-amber-600 border-amber-100', message: 'Child is oversleeping' };
+    }, [sleepLog]);
+
     if (loading) return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div></div>;
     if (!profile) return null;
 
@@ -193,6 +215,7 @@ const ChildDetails = () => {
         { id: 'overview', label: 'Overview & Logs', icon: '📊' },
         { id: 'growth', label: 'Growth Timeline', icon: '📏' }, // New Tab
         { id: 'analytics', label: 'Nutrition Trends', icon: '📈' },
+        { id: 'sleep', label: 'Sleep Tracking', icon: '😴' },
         { id: 'prescriptions', label: 'Checkup History', icon: '🩺' },
     ];
 
@@ -394,7 +417,7 @@ const ChildDetails = () => {
                                     </div>
 
                                     {/* Stats Row */}
-                                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
                                         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center group hover:border-indigo-100 transition-colors">
                                             <div className="w-12 h-12 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                                                 <span className="material-symbols-outlined">restaurant</span>
@@ -419,6 +442,15 @@ const ChildDetails = () => {
                                             <p className="text-3xl font-black text-gray-800 flex items-end gap-1">
                                                 {stats.water}<span className="text-lg font-bold text-gray-400 mb-1">L</span>
                                             </p>
+                                        </div>
+
+                                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center group hover:border-indigo-100 transition-colors">
+                                            <div className={`w-12 h-12 rounded-full flex items-center justify-center mb-3 group-hover:scale-110 transition-transform ${sleepSummary.tone.split(' ')[0]}`}>
+                                                <span className="material-symbols-outlined">bedtime</span>
+                                            </div>
+                                            <p className="text-gray-400 font-bold text-xs uppercase tracking-wider mb-1">Sleep</p>
+                                            <p className="text-3xl font-black text-gray-800">{sleepLog?.totalSleepHours ? `${sleepLog.totalSleepHours}h` : '--'}</p>
+                                            <p className="text-xs font-bold text-gray-500 mt-1">{sleepSummary.status}</p>
                                         </div>
                                     </div>
 
@@ -493,6 +525,53 @@ const ChildDetails = () => {
                                     data={nutritionTrends}
                                     mealFrequencyData={chartData}
                                 />
+                            )}
+
+                            {activeTab === 'sleep' && (
+                                <div className="space-y-6">
+                                    <div className="flex justify-between items-center">
+                                        <h2 className="text-2xl font-bold text-gray-900">Sleep Tracking</h2>
+                                    </div>
+
+                                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                                        <h3 className="font-bold text-gray-900 mb-4">Log Sleep</h3>
+                                        <SleepLogForm
+                                            profileId={id}
+                                            initialData={{
+                                                date: selectedDate,
+                                                sleepTime: sleepLog?.sleepTime || '21:00',
+                                                wakeUpTime: sleepLog?.wakeUpTime || '06:00',
+                                                notes: sleepLog?.notes || '',
+                                            }}
+                                            onSuccess={fetchData}
+                                            showCancel={false}
+                                        />
+                                    </div>
+
+                                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                                        <h3 className="font-bold text-gray-900 mb-4">Recent Sleep Logs</h3>
+                                        {sleepHistory.length === 0 ? (
+                                            <p className="text-sm text-gray-500">No sleep logs found yet.</p>
+                                        ) : (
+                                            <div className="space-y-3">
+                                                {sleepHistory.slice(0, 7).map((entry) => (
+                                                    <div key={entry._id} className="flex items-center justify-between p-3 rounded-xl bg-gray-50">
+                                                        <div>
+                                                            <p className="font-bold text-gray-800">{entry.date}</p>
+                                                            <p className="text-xs text-gray-500">{entry.sleepTime} - {entry.wakeUpTime}</p>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <p className="font-black text-gray-900">{entry.totalSleepHours} hrs</p>
+                                                            <p className={`text-xs font-bold ${entry.status === 'healthy' ? 'text-green-600' : entry.status === 'poor' ? 'text-red-600' : 'text-amber-600'}`}>
+                                                                {entry.status === 'healthy' ? 'Healthy' : entry.status === 'poor' ? 'Poor Sleep' : 'Oversleep'}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
                             )}
 
                             {activeTab === 'prescriptions' && (
