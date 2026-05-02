@@ -1,9 +1,9 @@
 "use client";
 import { useState, useEffect, useMemo } from 'react';
 import axios from 'axios'; // Import axios directly for FormData if needed, or use api instance
-// Assuming logMeal is imported correctly
 import { logMeal } from '../../api/meal.api';
 import { FOOD_DATABASE, QUICK_ADDS } from '../../data/foodDatabase'; // Import comprehensive DB
+import { useProfile } from '../../context/ProfileContext';
 
 const MealLogForm = ({ profileId, initialData, onSuccess, onCancel }) => {
     const [formData, setFormData] = useState(() => {
@@ -31,6 +31,10 @@ const MealLogForm = ({ profileId, initialData, onSuccess, onCancel }) => {
     const [preview, setPreview] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [applyToAll, setApplyToAll] = useState(false);
+    
+    // Get profiles for combined meal planning
+    const { profiles } = useProfile();
 
     // Search Logic
     useEffect(() => {
@@ -104,13 +108,6 @@ const MealLogForm = ({ profileId, initialData, onSuccess, onCancel }) => {
         try {
             if (selectedFoods.length === 0) throw new Error("Please add at least one food item.");
 
-            const data = new FormData();
-            data.append('profileId', profileId);
-            data.append('date', formData.date);
-            data.append('time', formData.time);
-            data.append('mealType', formData.mealType);
-            data.append('notes', formData.notes);
-
             // Serialize
             const foodItemsPayload = selectedFoods.map(f => ({
                 name: f.name,
@@ -123,23 +120,27 @@ const MealLogForm = ({ profileId, initialData, onSuccess, onCancel }) => {
                 water: f.w || 0,
                 vitamins: f.vit || ''
             }));
-            data.append('foodItems', JSON.stringify(foodItemsPayload));
-            data.append('nutrients', JSON.stringify(nutrients));
 
-            if (photo) data.append('photo', photo);
+            // Target profiles to log meal for
+            const targetProfileIds = applyToAll && profiles?.length > 0 
+                ? profiles.map(p => p._id) 
+                : [profileId];
 
-            // Directly using axios/api wrapper expected to handle FormData if Content-Type is set or auto-detected
-            // The `logMeal` function in api/meal.api needs to handle this.
-            // If `logMeal` is just `api.post('/meals', data)`, it works.
+            // Log meal for each target profile
+            for (const targetId of targetProfileIds) {
+                const data = new FormData();
+                data.append('profileId', targetId);
+                data.append('date', formData.date);
+                data.append('time', formData.time);
+                data.append('mealType', formData.mealType);
+                data.append('notes', formData.notes);
+                data.append('foodItems', JSON.stringify(foodItemsPayload));
+                data.append('nutrients', JSON.stringify(nutrients));
 
-            // Note: Ensure `logMeal` passes the FormData directly. 
-            // Since we imported `logMeal`, let's just use it.
+                if (photo) data.append('photo', photo);
 
-            // IMPORTANT: If logMeal wraps data in { ...data }, FormData breaks.
-            // I'll call axios directly here to be safe given missing context of `logMeal` impl details
-            // OR assuming `logMeal` handles it.
-            // Let's assume logMeal handles it or we update it.
-            await logMeal(data);
+                await logMeal(data);
+            }
 
             onSuccess();
         } catch (err) {
@@ -378,6 +379,20 @@ const MealLogForm = ({ profileId, initialData, onSuccess, onCancel }) => {
                         className="w-full border border-gray-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-primary/20 outline-none resize-none"
                         rows="2"
                     />
+                </div>
+
+                {/* Combined Meal Planning Toggle (UI Only) */}
+                <div className="flex items-center gap-3 p-4 bg-blue-50/50 rounded-xl border border-blue-100">
+                    <input
+                        type="checkbox"
+                        id="applyToAll"
+                        checked={applyToAll}
+                        onChange={(e) => setApplyToAll(e.target.checked)}
+                        className="w-5 h-5 text-primary rounded border-gray-300 focus:ring-primary"
+                    />
+                    <label htmlFor="applyToAll" className="text-sm font-bold text-blue-900 cursor-pointer">
+                        Apply same meal plan to all children
+                    </label>
                 </div>
             </div>
 

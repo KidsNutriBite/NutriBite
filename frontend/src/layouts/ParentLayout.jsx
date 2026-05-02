@@ -6,6 +6,8 @@ import { useState, useEffect, useRef } from 'react';
 import api from '../api/axios';
 import useAuth from '../hooks/useAuth';
 import { toast } from 'react-hot-toast';
+import { useProfile } from '../context/ProfileContext';
+import FeedbackModal from '../components/parent/FeedbackModal';
 
 const ParentLayout = ({ children }) => {
     const { logout, user } = useAuth();
@@ -15,9 +17,13 @@ const ParentLayout = ({ children }) => {
     const [unreadCount, setUnreadCount] = useState(0);
     const [showNotifDropdown, setShowNotifDropdown] = useState(false);
     const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+    const [showChildDropdown, setShowChildDropdown] = useState(false);
+    const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+    const { profiles, selectedProfileId, selectedProfile, changeProfile } = useProfile();
 
     const notifRef = useRef(null);
     const profileRef = useRef(null);
+    const childRef = useRef(null);
 
     // Close dropdowns on click outside
     useEffect(() => {
@@ -27,6 +33,9 @@ const ParentLayout = ({ children }) => {
             }
             if (profileRef.current && !profileRef.current.contains(event.target)) {
                 setShowProfileDropdown(false);
+            }
+            if (childRef.current && !childRef.current.contains(event.target)) {
+                setShowChildDropdown(false);
             }
         };
         document.addEventListener('mousedown', handleClickOutside);
@@ -131,6 +140,61 @@ const ParentLayout = ({ children }) => {
                 </nav>
 
                 <div className="flex items-center gap-4">
+                    {/* Multi-Child Selector */}
+                    {profiles && profiles.length > 0 && (
+                        <div className="relative hidden md:block" ref={childRef}>
+                            <button
+                                onClick={() => setShowChildDropdown(!showChildDropdown)}
+                                className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 px-3 py-1.5 rounded-full transition-colors border border-slate-200 dark:border-slate-700 shadow-sm"
+                            >
+                                {selectedProfile?.profileImage ? (
+                                    <img src={selectedProfile.profileImage} alt="" className="w-6 h-6 rounded-full object-cover" />
+                                ) : (
+                                    <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs">
+                                        {selectedProfile?.avatar === 'lion' ? '🦁' : '👶'}
+                                    </div>
+                                )}
+                                <span className="text-sm font-bold text-slate-700 dark:text-slate-300 max-w-[100px] truncate">
+                                    {selectedProfile?.name || 'Select Child'}
+                                </span>
+                                <span className="material-symbols-outlined text-sm text-slate-400">expand_more</span>
+                            </button>
+
+                            {showChildDropdown && (
+                                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden z-50">
+                                    <div className="p-2 border-b border-slate-100 dark:border-slate-700">
+                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider px-2 py-1">Switch Profile</p>
+                                    </div>
+                                    <div className="max-h-60 overflow-y-auto p-1">
+                                        {profiles.map(p => (
+                                            <button
+                                                key={p._id}
+                                                onClick={() => {
+                                                    changeProfile(p._id);
+                                                    setShowChildDropdown(false);
+                                                    // Optional: If on child details, navigate to new child
+                                                    if (pathname.includes('/parent/child/')) {
+                                                        navigate(`/parent/child/${p._id}`);
+                                                    }
+                                                }}
+                                                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-left ${selectedProfileId === p._id ? 'bg-primary/10 text-primary font-bold' : 'hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium'}`}
+                                            >
+                                                {p.profileImage ? (
+                                                    <img src={p.profileImage} alt="" className="w-6 h-6 rounded-full object-cover" />
+                                                ) : (
+                                                    <div className="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-600 flex items-center justify-center text-xs">
+                                                        👶
+                                                    </div>
+                                                )}
+                                                <span className="truncate">{p.name}</span>
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
                     {/* Notification Bell */}
                     <div className="relative" ref={notifRef}>
                         <button
@@ -276,9 +340,27 @@ const ParentLayout = ({ children }) => {
                 </div>
             )}
 
-            <main className="max-w-[1200px] mx-auto w-full px-6 py-8">
+            <main className="max-w-[1200px] mx-auto w-full px-6 py-8 pb-24">
                 {children}
             </main>
+
+            {/* Persistent Medical Disclaimer & Feedback Button */}
+            <div className="fixed bottom-0 left-0 w-full z-40 bg-slate-900 text-slate-300 py-2 border-t border-slate-800 text-center px-4 flex flex-col md:flex-row justify-center items-center gap-2 md:gap-6 backdrop-blur-md bg-opacity-95 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+                <p className="text-xs font-medium tracking-wide flex items-center justify-center gap-1.5">
+                    <span className="material-symbols-outlined text-[14px] text-amber-500">warning</span>
+                    <strong className="text-white">Disclaimer:</strong> This is not a substitute for medical advice. Always consult a pediatrician.
+                </p>
+                
+                <button 
+                    onClick={() => setIsFeedbackOpen(true)}
+                    className="md:absolute md:right-6 bg-primary hover:bg-blue-600 text-white px-4 py-1.5 rounded-full text-xs font-bold transition-colors shadow-lg shadow-blue-500/20 flex items-center gap-1.5 border border-blue-400/50"
+                >
+                    <span className="material-symbols-outlined text-[14px]">rate_review</span>
+                    Feedback
+                </button>
+            </div>
+
+            <FeedbackModal isOpen={isFeedbackOpen} onClose={() => setIsFeedbackOpen(false)} />
         </div>
     );
 };
