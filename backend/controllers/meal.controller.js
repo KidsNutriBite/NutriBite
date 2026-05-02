@@ -14,6 +14,17 @@ export const logMeal = asyncHandler(async (req, res) => {
         throw new Error("Missing required fields: profileId, date, mealType, foodItems");
     }
 
+    // Normalize date format to YYYY-MM-DD
+    let normalizedDate = date;
+    if (date.includes('-') && date.length === 10) {
+        // Check if it's DD-MM-YYYY format
+        const parts = date.split('-');
+        if (parts[0].length === 2 && parts[2].length === 4) {
+            // It's DD-MM-YYYY, convert to YYYY-MM-DD
+            normalizedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+        }
+    }
+
     // Parse foodItems if string (FormData)
     let parsedFoodItems = foodItems;
     if (typeof foodItems === 'string') {
@@ -25,18 +36,25 @@ export const logMeal = asyncHandler(async (req, res) => {
     }
 
     // Check if a log exists for this date
-    let dailyLog = await MealLog.findOne({ profileId, date });
+    let dailyLog = await MealLog.findOne({ profileId, date: normalizedDate });
 
     if (!dailyLog) {
-        // Create new daily log
+        // Create new daily log with all meal types initialized
         dailyLog = new MealLog({
             profileId,
-            date,
-            [mealType]: parsedFoodItems
+            date: normalizedDate,
+            breakfast: mealType === 'breakfast' ? parsedFoodItems : [],
+            morningSnack: mealType === 'morningSnack' ? parsedFoodItems : [],
+            lunch: mealType === 'lunch' ? parsedFoodItems : [],
+            afternoonSnack: mealType === 'afternoonSnack' ? parsedFoodItems : [],
+            dinner: mealType === 'dinner' ? parsedFoodItems : [],
+            eveningSnack: mealType === 'eveningSnack' ? parsedFoodItems : []
         });
     } else {
-        // Update existing log
-        // We append to the existing list for that meal type
+        // Update existing log - ensure meal type field exists
+        if (!dailyLog[mealType]) {
+            dailyLog[mealType] = [];
+        }
         dailyLog[mealType] = [...dailyLog[mealType], ...parsedFoodItems];
     }
 
