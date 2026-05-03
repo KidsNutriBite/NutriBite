@@ -14,11 +14,11 @@ import MealFrequencyChart from '../../components/charts/MealFrequencyChart';
 import NutritionTrendsChart from '../../components/charts/NutritionTrendsChart';
 import TipCard from '../../components/common/TipCard';
 import GrowthTimeline from '../../components/growth/GrowthTimeline'; // Import Component
-import UpdateGrowthModal from '../../components/growth/UpdateGrowthModal'; // Import Component
-import NutritionGaps from '../../components/parent/NutritionGaps'; // Import Component
+import InteractiveGrowthTracker from '../../components/growth/InteractiveGrowthTracker'; // Import Component
 import DailyMealCard from '../../components/meal/DailyMealCard';
 import DateTimeline from '../../components/meal/DateTimeline';
 import { getMealsByDate, getMealHistory, getLastMealTime } from '../../api/meal.api'; // Updated imports
+import ActivityTracking from '../../components/parent/ActivityTracking'; // Import Component
 
 const ChildDetails = () => {
     const { id } = useParams();
@@ -216,11 +216,13 @@ const ChildDetails = () => {
         { id: 'growth', label: 'Growth Timeline', icon: '📏' }, // New Tab
         { id: 'analytics', label: 'Nutrition Trends', icon: '📈' },
         { id: 'sleep', label: 'Sleep Tracking', icon: '😴' },
+        { id: 'activity', label: 'Activity Tracking', icon: '🏃‍♂️' },
         { id: 'prescriptions', label: 'Checkup History', icon: '🩺' },
     ];
 
     return (
-        <div className="space-y-8">
+        <>
+            <div className={`space-y-8 ${isGrowthModalOpen ? 'print:hidden' : ''}`}>
             {/* Header / Profile Summary */}
             <div className="glass-panel p-8 rounded-[2rem] relative overflow-hidden">
                 <div className="blob-bg top-0 right-0 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2"></div>
@@ -454,10 +456,7 @@ const ChildDetails = () => {
                                         </div>
                                     </div>
 
-                                    {/* Nutrition Gaps AI Detector */}
-                                    <div className="w-full">
-                                        <NutritionGaps profile={profile} meals={meals} />
-                                    </div>
+
 
                                     {/* Date Timeline & Meal Card */}
                                     <div>
@@ -574,6 +573,13 @@ const ChildDetails = () => {
                                 </div>
                             )}
 
+                            {activeTab === 'activity' && (
+                                <ActivityTracking 
+                                    profileId={id} 
+                                    selectedDate={selectedDate} 
+                                />
+                            )}
+
                             {activeTab === 'prescriptions' && (
                                 <div className="space-y-6">
                                     <h2 className="text-2xl font-bold text-gray-900">Checkup History</h2>
@@ -618,6 +624,7 @@ const ChildDetails = () => {
                     </AnimatePresence>
                 </div>
             </div>
+            </div>
 
             {/* Log Meal Modal */}
             <Modal
@@ -634,14 +641,16 @@ const ChildDetails = () => {
                 />
             </Modal>
 
-            {/* Update Growth Modal */}
-            <UpdateGrowthModal
+            {/* Interactive Growth Tracker Dashboard Modal */}
+            <InteractiveGrowthTracker
                 isOpen={isGrowthModalOpen}
                 onClose={() => setIsGrowthModalOpen(false)}
                 childId={id}
+                profile={profile}
+                growthHistory={growthRecords}
                 onChanged={refreshGrowth}
             />
-        </div >
+        </>
     );
 };
 
