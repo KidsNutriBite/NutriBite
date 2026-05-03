@@ -14,7 +14,7 @@ const profileSchema = new mongoose.Schema(
         },
         dob: {
             type: Date,
-            required: true,
+            required: false,
         },
         age: {
             type: Number,
@@ -35,7 +35,7 @@ const profileSchema = new mongoose.Schema(
         },
         waistCircumference: {
             type: Number, // in cm
-            required: true,
+            required: false,
         },
         activityLevel: {
             type: String,

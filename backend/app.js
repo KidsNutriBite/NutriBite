@@ -24,7 +24,8 @@ import growthRoutes from './routes/growth.routes.js'; // New import
 import escalationRoutes from './routes/escalation.routes.js';
 import nutritionTrendsRoutes from './routes/nutritionTrends.routes.js';
 import sleepRoutes from './routes/sleep.routes.js';
-// error middleware import placeholder
+import activityRoutes from './routes/activity.routes.js';
+import nutritionRoutes from './routes/nutrition.routes.js'; // New import
 
 // Initialize App
 const app = express();
@@ -60,6 +61,8 @@ app.use('/api/growth', growthRoutes); // New route
 app.use('/api/escalations', escalationRoutes);
 app.use('/api/nutrition-trends', nutritionTrendsRoutes);
 app.use('/api/sleep', sleepRoutes);
+app.use('/api/activity', activityRoutes);
+app.use('/api/nutrition-analysis', nutritionRoutes); // Mount nutrition routes
 
 // Health Check
 app.get('/', (req, res) => {
