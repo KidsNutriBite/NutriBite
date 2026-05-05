@@ -6,6 +6,85 @@ import { getNutritionAnalysis } from '@/api/nutrition.api';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 
+const getNutrientIcon = (nutrient) => {
+    switch(nutrient?.toLowerCase()) {
+        case 'iron': return '🩸';
+        case 'protein': return '🥩';
+        case 'calories': return '🔥';
+        case 'carbs': return '🍞';
+        case 'fats': return '🥑';
+        case 'vitamind': return '☀️';
+        default: return '✨';
+    }
+};
+
+const GroceryCard = ({ item }) => {
+    const [expanded, setExpanded] = useState(false);
+
+    return (
+        <motion.div 
+            whileHover={{ y: -4 }}
+            className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 flex flex-col h-full shadow-xl shadow-black/5 hover:bg-white/20 transition-all duration-300"
+        >
+            <div className="flex items-start justify-between mb-4 gap-2">
+                <div className="flex-1">
+                    <h3 className="text-2xl font-bold text-white mb-3">{item.food}</h3>
+                    <div className="flex flex-wrap gap-2">
+                        {item.nutrients.map((n, i) => (
+                            <span key={i} className="px-3 py-1 bg-indigo-500/50 border border-indigo-300/30 rounded-full text-xs font-bold text-white uppercase tracking-wider flex items-center gap-1 shadow-sm">
+                                {getNutrientIcon(n)} {n}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+                <div className="w-12 h-12 bg-white/20 rounded-2xl flex items-center justify-center text-2xl shadow-inner shrink-0 rotate-3">
+                    {getNutrientIcon(item.nutrients[0])}
+                </div>
+            </div>
+            
+            <div className="mt-auto pt-4">
+                <p className="text-indigo-50 text-sm font-medium leading-relaxed bg-black/10 p-4 rounded-2xl border border-white/5">
+                    {item.explanations[0]}
+                </p>
+                
+                {item.explanations.length > 1 && (
+                    <div className="mt-2 space-y-2">
+                        {item.explanations.slice(1).map((exp, i) => (
+                            <p key={i} className="text-indigo-50 text-sm font-medium leading-relaxed bg-black/10 p-4 rounded-2xl border border-white/5">
+                                {exp}
+                            </p>
+                        ))}
+                    </div>
+                )}
+                
+                <button 
+                    onClick={() => setExpanded(!expanded)}
+                    className="mt-4 text-xs font-bold text-white/70 hover:text-white flex items-center gap-1 transition-colors uppercase tracking-widest w-full justify-center py-2 rounded-xl hover:bg-white/5"
+                >
+                    {expanded ? 'Hide Details ↑' : 'Learn More ↓'}
+                </button>
+                
+                <AnimatePresence>
+                    {expanded && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="overflow-hidden"
+                        >
+                            <div className="pt-4 mt-2 border-t border-white/10">
+                                <p className="text-xs text-indigo-100 leading-relaxed">
+                                    Adding <strong className="text-white">{item.food}</strong> to your child's meals directly targets their low {item.nutrients.join(' and ')} levels. This recommendation is specifically tailored to bridge the nutritional gaps detected in their recent meal logs.
+                                </p>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
+        </motion.div>
+    );
+};
+
 export default function NutritionAnalysisPage() {
     const { profileId } = useParams();
     const router = useRouter();
@@ -51,6 +130,31 @@ export default function NutritionAnalysisPage() {
         if (score >= 70) return 'bg-amber-50';
         return 'bg-rose-50';
     };
+
+    let groceryItems = [];
+    if (analysis && analysis.suggestions) {
+        let explanationIndex = 0;
+        analysis.suggestions.forEach(suggestion => {
+            suggestion.suggestedFoods.forEach(food => {
+                const explanation = analysis.explanations[explanationIndex] || `Great source of ${suggestion.nutrient}.`;
+                explanationIndex++;
+                
+                const existing = groceryItems.find(item => item.food === food);
+                if (existing) {
+                    if (!existing.nutrients.includes(suggestion.nutrient)) {
+                        existing.nutrients.push(suggestion.nutrient);
+                        existing.explanations.push(explanation);
+                    }
+                } else {
+                    groceryItems.push({
+                        food,
+                        nutrients: [suggestion.nutrient],
+                        explanations: [explanation]
+                    });
+                }
+            });
+        });
+    }
 
     return (
         <div className="min-h-screen bg-[#F8FAFC] py-12 px-4 sm:px-6 lg:px-8">
@@ -185,43 +289,33 @@ export default function NutritionAnalysisPage() {
                             </div>
 
                             {/* Grocery List Card */}
-                            <div className="md:col-span-3 bg-indigo-600 p-8 rounded-3xl shadow-2xl shadow-indigo-200 text-white">
+                            <div className="md:col-span-3 bg-gradient-to-br from-indigo-600 to-purple-700 p-8 rounded-3xl shadow-2xl shadow-indigo-200 text-white">
                                 <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
                                     <div>
-                                        <h2 className="text-3xl font-black mb-1 italic">Smart Grocery List 🛒</h2>
-                                        <p className="text-indigo-100 opacity-80">Deterministic suggestions based on detected nutritional gaps.</p>
+                                        <h2 className="text-3xl font-black mb-2 italic">Smart Grocery List 🛒</h2>
+                                        <p className="text-indigo-100 opacity-90 text-lg">Personalized, item-by-item recommendations addressing your child's specific nutritional gaps.</p>
                                     </div>
                                     <button 
                                         onClick={() => window.print()}
-                                        className="bg-white text-indigo-600 px-6 py-3 rounded-2xl font-bold hover:bg-indigo-50 transition-colors shadow-lg"
+                                        className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white px-6 py-3 rounded-2xl font-bold transition-all shadow-lg flex items-center gap-2"
                                     >
-                                        Print List
+                                        <span>🖨️</span> Print List
                                     </button>
                                 </div>
 
-                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                                    {analysis.groceryList.map((item, idx) => (
-                                        <motion.div 
-                                            key={idx}
-                                            whileHover={{ scale: 1.05 }}
-                                            className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 flex items-center gap-3"
-                                        >
-                                            <div className="w-2 h-2 bg-emerald-400 rounded-full"></div>
-                                            <span className="font-bold tracking-tight">{item}</span>
-                                        </motion.div>
-                                    ))}
-                                </div>
-
-                                <div className="mt-10 pt-10 border-t border-white/10">
-                                    <h4 className="text-xs font-black uppercase tracking-[0.2em] mb-6 opacity-60">Why these items?</h4>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        {analysis.explanations.slice(0, 6).map((exp, idx) => (
-                                            <p key={idx} className="text-sm text-indigo-100 flex items-start gap-2 italic">
-                                                <span className="opacity-40">"</span> {exp} <span className="opacity-40">"</span>
-                                            </p>
+                                {groceryItems.length > 0 ? (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        {groceryItems.map((item, idx) => (
+                                            <GroceryCard key={idx} item={item} />
                                         ))}
                                     </div>
-                                </div>
+                                ) : (
+                                    <div className="text-center py-12 bg-white/5 rounded-3xl border border-white/10">
+                                        <span className="text-5xl block mb-4">🌟</span>
+                                        <h3 className="text-xl font-bold text-white mb-2">Diet Looks Great!</h3>
+                                        <p className="text-indigo-200">No special grocery recommendations needed at this time.</p>
+                                    </div>
+                                )}
                             </div>
                         </motion.div>
                     )}
