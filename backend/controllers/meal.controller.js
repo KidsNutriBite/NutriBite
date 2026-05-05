@@ -8,8 +8,11 @@ import ApiResponse from '../utils/apiResponse.js';
 export const logMeal = asyncHandler(async (req, res) => {
     const { profileId, date, mealType, foodItems, notes } = req.body;
 
+    console.log(`[logMeal] Received request for profileId: ${profileId}, mealType: ${mealType}`);
+
     // Validate Input
     if (!profileId || !date || !mealType || !foodItems) {
+        console.error("[logMeal] Missing fields:", { profileId, date, mealType, hasFoodItems: !!foodItems });
         res.status(400);
         throw new Error("Missing required fields: profileId, date, mealType, foodItems");
     }
