@@ -16,6 +16,6 @@ export const getActivityHistory = async (profileId) => {
 };
 
 export const deleteActivity = async (profileId, logId, activityId) => {
-    const response = await axiosInstance.delete(`/activity/${profileId}/${logId}/${activityId}`);
+    const response = await api.delete(`/activity/${profileId}/${logId}/${activityId}`);
     return response.data;
 };
