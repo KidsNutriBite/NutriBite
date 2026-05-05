@@ -122,12 +122,31 @@ const MealLogForm = ({ profileId, initialData, onSuccess, onCancel }) => {
             }));
 
             // Target profiles to log meal for
-            const targetProfileIds = applyToAll && profiles?.length > 0 
-                ? profiles.map(p => p._id) 
-                : [profileId];
+            let targetProfileIds = [profileId];
+            
+            if (applyToAll) {
+                try {
+                    // Force fetch profiles to ensure we have the latest list of all children
+                    const { default: api } = await import('../../api/axios');
+                    const res = await api.get('/profiles');
+                    const fetchedProfiles = Array.isArray(res.data) ? res.data : res.data?.data || [];
+                    if (fetchedProfiles.length > 0) {
+                        targetProfileIds = fetchedProfiles.map(p => p._id?.toString() || p.id?.toString());
+                    } else if (profiles?.length > 0) {
+                        targetProfileIds = profiles.map(p => p._id?.toString() || p.id?.toString());
+                    }
+                } catch (err) {
+                    console.error("Failed to fetch profiles for applyToAll", err);
+                    if (profiles?.length > 0) {
+                        targetProfileIds = profiles.map(p => p._id?.toString() || p.id?.toString());
+                    }
+                }
+            }
 
-            // Log meal for each target profile
-            for (const targetId of targetProfileIds) {
+            console.log("Logging meal for target profiles:", targetProfileIds);
+
+            // Log meal for each target profile concurrently
+            await Promise.all(targetProfileIds.map(async (targetId) => {
                 const data = new FormData();
                 data.append('profileId', targetId);
                 data.append('date', formData.date);
@@ -140,7 +159,7 @@ const MealLogForm = ({ profileId, initialData, onSuccess, onCancel }) => {
                 if (photo) data.append('photo', photo);
 
                 await logMeal(data);
-            }
+            }));
 
             onSuccess();
         } catch (err) {
