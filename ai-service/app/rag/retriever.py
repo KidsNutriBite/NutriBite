@@ -122,8 +122,32 @@ def get_retriever():
 
 def retrieve_rag_chunks(query: str, top_k: int = 5) -> List[str]:
     retriever = get_retriever()
-    results = retriever.query(query, top_k=top_k)
-    return [doc.get("text", "") for doc in results]
+    # Dynamic top_k based on query length (more context for longer queries)
+    dynamic_k = max(4, min(top_k, len(query.split()) + 2))
+    
+    results = retriever.query(query, top_k=dynamic_k * 2) # Fetch extra for deduplication
+    
+    # Deduplication and reranking heuristic
+    unique_chunks = []
+    seen_texts = set()
+    
+    for doc in results:
+        text = doc.get("text", "").strip()
+        # Simple exact match or subset deduplication
+        is_duplicate = False
+        for seen in seen_texts:
+            if text in seen or seen in text:
+                is_duplicate = True
+                break
+                
+        if not is_duplicate and text:
+            unique_chunks.append(text)
+            seen_texts.add(text)
+            
+        if len(unique_chunks) >= dynamic_k:
+            break
+            
+    return unique_chunks
 
 def add_rag_chunk(text: str, metadata: Dict[str, Any]) -> str:
     global _tfidf_instance
