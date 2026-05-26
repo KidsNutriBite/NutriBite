@@ -5,7 +5,6 @@ import ChatHeader from './ChatHeader';
 import WelcomeHero from './WelcomeHero';
 import ChatMessage from './ChatMessage';
 import ChatComposer from './ChatComposer';
-import { getMyProfiles } from '../../../api/profile.api';
 
 const TypingIndicator = () => (
     <div style={{ display: 'flex', alignItems: 'flex-end', gap: '8px' }}>
@@ -35,17 +34,12 @@ const TypingIndicator = () => (
     </div>
 );
 
-const NutriGuideChat = ({ onBack }) => {
+const NutriGuideChat = ({ onBack, profiles = [] }) => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const [loadingStep, setLoadingStep] = useState(0);
-
-    // Dynamic child profiles state
-    const [profiles, setProfiles] = useState([]);
-    const [profilesLoading, setProfilesLoading] = useState(true);
-    const [profilesError, setProfilesError] = useState(null);
-    const [activeChild, setActiveChild] = useState(null); // full profile object
+    const [activeChild, setActiveChild] = useState(null);
 
     const messagesEndRef = useRef(null);
 
@@ -54,24 +48,6 @@ const NutriGuideChat = ({ onBack }) => {
     }, []);
 
     useEffect(scrollToBottom, [messages, isTyping, scrollToBottom]);
-
-    // Fetch profiles from real backend on mount
-    const fetchProfiles = useCallback(async () => {
-        setProfilesLoading(true);
-        setProfilesError(null);
-        try {
-            const data = await getMyProfiles();
-            // Normalize: API may return array directly or wrapped in { profiles: [] }
-            setProfiles(Array.isArray(data) ? data : (data.profiles ?? []));
-        } catch (err) {
-            console.error('Failed to load profiles:', err);
-            setProfilesError('Couldn\'t load profiles');
-        } finally {
-            setProfilesLoading(false);
-        }
-    }, []);
-
-    useEffect(() => { fetchProfiles(); }, [fetchProfiles]);
 
     const handleSend = useCallback(async (text) => {
         const msgText = (typeof text === 'string' ? text : input).trim();
@@ -189,9 +165,8 @@ const NutriGuideChat = ({ onBack }) => {
                 className="nutri-chat-root"
                 style={{
                     display: 'flex', flexDirection: 'column',
-                    height: '620px', maxWidth: '680px', width: '100%', margin: '0 auto',
-                    background: '#FFFFFF', border: '0.5px solid rgba(0,0,0,0.1)',
-                    borderRadius: '12px', overflow: 'hidden'
+                    width: '100%', height: '100%',
+                    background: '#FFFFFF'
                 }}
             >
                 <ChatHeader onBack={onBack} />
@@ -251,9 +226,6 @@ const NutriGuideChat = ({ onBack }) => {
                     setInput={setInput}
                     handleSend={handleSend}
                     profiles={profiles}
-                    profilesLoading={profilesLoading}
-                    profilesError={profilesError}
-                    onRetryProfiles={fetchProfiles}
                     activeChild={activeChild}
                     setActiveChild={setActiveChild}
                 />
