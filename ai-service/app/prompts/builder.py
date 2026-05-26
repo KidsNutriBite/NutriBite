@@ -5,7 +5,8 @@ def build_chatbot_prompt(
     profile: Dict[str, Any],
     rag_context: List[str],
     planner_output: Dict[str, Any],
-    is_kids_mode: bool = False
+    is_kids_mode: bool = False,
+    history: List[Dict[str, str]] = None
 ) -> str:
     """
     Constructs highly structured, safe context-aware prompt.
@@ -26,21 +27,20 @@ def build_chatbot_prompt(
         "- NEVER recommend foods blocked due to allergy conflicts or condition constraints.\n\n"
         "RESPONSE FORMAT (MANDATORY):\n"
         "Your response MUST follow this exact structure (except for Kids Mode):\n\n"
-        "A. QUICK ANSWER\n"
-        "(2-5 concise bullet points max)\n\n"
-        "B. PERSONALIZED PLAN\n"
-        "Short actionable guidance based on the numerical truth.\n\n"
+        "### Quick Answer\n"
+        "(2-5 concise bullet points max, summarizing the most important advice)\n\n"
+        "### Personalized Plan\n"
+        "Short actionable guidance based on the numerical truth. (Use bullet points)\n\n"
         "|||DETAILED|||\n\n"
-        "C. WHY THIS WORKS\n"
+        "### Why This Works\n"
         "Detailed explanation of nutritional reasoning, calorie explanation, age suitability, and safety considerations.\n\n"
-        "D. VERIFIED SOURCES\n"
+        "### Verified Sources\n"
         "List the retrieved sources explicitly like this:\n"
-        "Sources:\n"
-        "[1] Pediatric Nutrition Guidelines\n"
-        "[2] NutriBite Verified Knowledge Base\n"
-        "[3] Retrieved Profile Context\n\n"
-        "E. SAFETY DISCLAIMER\n"
-        "(If medically relevant)\n\n"
+        "- [1] Pediatric Nutrition Guidelines\n"
+        "- [2] NutriBite Verified Knowledge Base\n"
+        "- [3] Retrieved Profile Context\n\n"
+        "### Safety Notice\n"
+        "(If medically relevant, include a safety notice. Otherwise omit this section.)\n\n"
         "Do NOT start with giant emotional introductions. Be direct and professional."
     )
 
@@ -94,6 +94,18 @@ def build_chatbot_prompt(
     for meal, details in planner_output.get("diet_plan", {}).items():
         meal_lines.append(f"- {meal.upper()}: {details.get('description')} ({details.get('calories_kcal')} kcal, {details.get('protein_g')}g protein)")
     planner_str += "\n".join(meal_lines)
+    
+    # Format history
+    history_section = ""
+    if history:
+        # Keep last 5 messages to avoid blowing up context window
+        recent_history = history[-5:]
+        history_lines = []
+        for msg in recent_history:
+            role = msg.get("role", "user")
+            content = msg.get("content", "")
+            history_lines.append(f"{role.upper()}: {content}")
+        history_section = "\n".join(history_lines)
 
     prompt = f"""SYSTEM:
 {system_instructions}
@@ -117,6 +129,11 @@ STRUCTURED NUMERICAL TRUTH (PLANNER OUTPUT):
 
 SEMANTIC KNOWLEDGE CONTEXT (RAG GUIDELINES):
 {rag_section if rag_section else 'No specific RAG guidelines retrieved.'}
+
+--------------------------------
+
+CONVERSATION HISTORY:
+{history_section if history else 'No previous conversation context.'}
 
 --------------------------------
 
