@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import api from '../api/axios';
 import useAuth from '../hooks/useAuth';
+import { useTheme } from '../context/ThemeContext';
 
 const DoctorLayout = ({ children }) => {
     const { logout, user } = useAuth();
@@ -20,6 +21,8 @@ const DoctorLayout = ({ children }) => {
 
     const notifRef = useRef(null);
     const profileRef = useRef(null);
+    const { theme, toggleTheme } = useTheme();
+
 
     // Close dropdowns on click outside
     useEffect(() => {
@@ -128,6 +131,17 @@ const DoctorLayout = ({ children }) => {
                 </nav>
 
                 <div className="flex items-center gap-4">
+                    {/* Theme Toggle Button */}
+                    <button
+                        onClick={toggleTheme}
+                        className="flex items-center justify-center rounded-full h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-primary/10 transition-all active:scale-95"
+                        aria-label="Toggle Theme"
+                    >
+                        <span className="material-symbols-outlined text-xl">
+                            {theme === 'light' ? 'dark_mode' : 'light_mode'}
+                        </span>
+                    </button>
+
                     {/* Notification Bell */}
                     <div className="relative" ref={notifRef}>
                         <button

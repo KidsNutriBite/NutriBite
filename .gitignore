@@ -34,3 +34,5 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+ai-service/venv/
+ai-service/__pycache__/

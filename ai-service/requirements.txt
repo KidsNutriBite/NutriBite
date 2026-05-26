@@ -1,0 +1,11 @@
+fastapi==0.110.0
+uvicorn==0.28.0
+transformers==4.38.2
+torch==2.2.1
+sentence-transformers==2.5.1
+faiss-cpu==1.8.0
+pymongo==4.6.2
+python-dotenv==1.0.1
+bitsandbytes==0.43.0
+accelerate==0.27.2
+pydantic==2.6.3

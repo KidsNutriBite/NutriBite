@@ -82,6 +82,34 @@ const profileSchema = new mongoose.Schema(
             type: String, // Doctor's notes
             default: ''
         },
+        level: {
+            type: Number,
+            default: 1
+        },
+        currentXP: {
+            type: Number,
+            default: 0
+        },
+        streakCount: {
+            type: Number,
+            default: 0
+        },
+        lastMealLoggedAt: {
+            type: Date,
+            default: null
+        },
+        dailyLogsCount: {
+            type: Number,
+            default: 0
+        },
+        lastLogResetAt: {
+            type: Date,
+            default: Date.now
+        },
+        equippedCompanion: {
+            type: String,
+            default: 'Captain Milk'
+        }
     },
     { timestamps: true }
 );
