@@ -112,7 +112,7 @@ const ProfileRow = ({ profile, onSelect }) => {
 // ─── Main ChatComposer ────────────────────────────────────────────────────────
 const ChatComposer = ({
     input, setInput, handleSend,
-    profiles, profilesLoading, profilesError, onRetryProfiles,
+    profiles = [],
     activeChild, setActiveChild
 }) => {
     const [showPicker, setShowPicker] = useState(false);
@@ -218,32 +218,8 @@ const ChatComposer = ({
                         Child profiles
                     </div>
 
-                    {/* Loading skeletons */}
-                    {profilesLoading && (
-                        <div>
-                            <SkeletonRow /><SkeletonRow /><SkeletonRow />
-                        </div>
-                    )}
-
-                    {/* Error state */}
-                    {!profilesLoading && profilesError && (
-                        <div style={{ padding: '16px 14px', textAlign: 'center' }}>
-                            <p style={{ fontSize: '13px', color: '#B91C1C', margin: '0 0 6px' }}>{profilesError}</p>
-                            <button
-                                onClick={onRetryProfiles}
-                                style={{
-                                    fontSize: '12px', fontWeight: 600, color: '#7F77DD',
-                                    background: 'none', border: 'none', cursor: 'pointer',
-                                    textDecoration: 'underline', fontFamily: 'inherit'
-                                }}
-                            >
-                                Try again
-                            </button>
-                        </div>
-                    )}
-
-                    {/* Empty state */}
-                    {!profilesLoading && !profilesError && profiles.length === 0 && (
+                    {/* Empty state — no profiles yet on this account */}
+                    {profiles.length === 0 && (
                         <div style={{ padding: '20px 14px', textAlign: 'center' }}>
                             <p style={{ fontSize: '13px', color: 'var(--text-secondary)', margin: '0 0 4px', fontWeight: 500 }}>No child profiles yet</p>
                             <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: '0 0 12px' }}>Add a child from your dashboard</p>
@@ -261,7 +237,7 @@ const ChatComposer = ({
                     )}
 
                     {/* Profile list */}
-                    {!profilesLoading && !profilesError && profiles.length > 0 && (
+                    {profiles.length > 0 && (
                         <div style={{ maxHeight: '220px', overflowY: 'auto' }}>
                             {profiles.map(p => (
                                 <ProfileRow
