@@ -213,9 +213,14 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
                             <span className="material-symbols-outlined">smart_toy</span>
                         </div>
                         <div>
-                            <h2 className="text-lg font-bold text-slate-800 dark:text-white leading-tight">NutriGuide AI</h2>
+                            <div className="flex items-center gap-2">
+                                <h2 className="text-lg font-bold text-slate-800 dark:text-white leading-tight">NutriGuide AI</h2>
+                                <span className="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 border border-emerald-200">
+                                    <span className="material-symbols-outlined text-[10px]">verified</span> Verified
+                                </span>
+                            </div>
                             <p className="text-xs text-slate-500 font-medium">
-                                {selectedChild ? `Advising for: ${selectedChild.name}` : "General Advice Mode"}
+                                {selectedChild ? `Pediatric Assistant for: ${selectedChild.name}` : "General Pediatric Advice Mode"}
                             </p>
                         </div>
                     </div>
