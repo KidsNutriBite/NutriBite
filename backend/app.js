@@ -30,7 +30,28 @@ import nutritionRoutes from './routes/nutrition.routes.js'; // New import
 // Initialize App
 const app = express();
 
-// Middleware
+// Simple In-Memory Rate Limiter to protect all API endpoints
+const clients = new Map();
+const rateLimiter = (req, res, next) => {
+    const ip = req.ip || req.headers['x-forwarded-for'] || 'unknown';
+    const now = Date.now();
+    const windowMs = 60 * 1000;
+    const maxRequests = 100;
+
+    let requests = clients.get(ip) || [];
+    requests = requests.filter(t => now - t < windowMs);
+    
+    if (requests.length >= maxRequests) {
+        return res.status(429).json({ message: "Too many requests from this IP, please try again after a minute." });
+    }
+    
+    requests.push(now);
+    clients.set(ip, requests);
+    next();
+};
+
+// Apply Rate Limiter and JSON parsing
+app.use('/api', rateLimiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());

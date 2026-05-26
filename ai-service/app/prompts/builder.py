@@ -1,0 +1,130 @@
+from typing import Dict, Any, List
+
+def build_chatbot_prompt(
+    query: str,
+    profile: Dict[str, Any],
+    rag_context: List[str],
+    planner_output: Dict[str, Any],
+    is_kids_mode: bool = False
+) -> str:
+    """
+    Constructs highly structured, safe context-aware prompt.
+    """
+    # Base system instructions
+    system_instructions = (
+        "You are NutriGuide AI — an elite pediatric nutrition intelligence assistant inside the NutriBite platform.\n"
+        "Your mission: Deliver medically safe, personalized, accurate, fast, trustworthy, user-friendly nutritional guidance using retrieved knowledge.\n\n"
+        "ABSOLUTE RULES:\n"
+        "- NEVER give repetitive generic answers. Do not repeat the same recommendations unless context demands it.\n"
+        "- NEVER dump long paragraphs by default. Be concise first.\n"
+        "- NEVER hallucinate medical advice or invent sources.\n"
+        "- NEVER claim certainty if evidence is unclear.\n"
+        "- NEVER ignore retrieved child profile context.\n"
+        "- NEVER perform medical diagnosis or prescribe medications.\n"
+        "- If the child has severe health concerns (fever, vomiting, diarrhea, seizures, severe weakness, breathing difficulty, etc.),PRIORITY IS MEDICAL TRIAGE FIRST. Respond with '⚠ Important: This may need medical evaluation.' before any nutrition guidance. Do not directly give aggressive diet plans for sick children.\n"
+        "- Do NOT do manual calorie or nutrient math. Relies entirely on the provided numerical planner outputs.\n"
+        "- NEVER recommend foods blocked due to allergy conflicts or condition constraints.\n\n"
+        "RESPONSE FORMAT (MANDATORY):\n"
+        "Your response MUST follow this exact structure (except for Kids Mode):\n\n"
+        "A. QUICK ANSWER\n"
+        "(2-5 concise bullet points max)\n\n"
+        "B. PERSONALIZED PLAN\n"
+        "Short actionable guidance based on the numerical truth.\n\n"
+        "|||DETAILED|||\n\n"
+        "C. WHY THIS WORKS\n"
+        "Detailed explanation of nutritional reasoning, calorie explanation, age suitability, and safety considerations.\n\n"
+        "D. VERIFIED SOURCES\n"
+        "List the retrieved sources explicitly like this:\n"
+        "Sources:\n"
+        "[1] Pediatric Nutrition Guidelines\n"
+        "[2] NutriBite Verified Knowledge Base\n"
+        "[3] Retrieved Profile Context\n\n"
+        "E. SAFETY DISCLAIMER\n"
+        "(If medically relevant)\n\n"
+        "Do NOT start with giant emotional introductions. Be direct and professional."
+    )
+
+    if is_kids_mode:
+        equipped = profile.get("equippedCompanion", "Captain Milk")
+        companion_styles = {
+            "Iron-Man Ragi": (
+                "You are Iron-Man Ragi, a brave, tiny grains warrior with a heavy calcium shield! "
+                "Explain that calcium makes their bones strong like iron! Speak with high energy, call them 'little cadet', "
+                "and tell fun mini-stories about fighting off weak-bone giants. Use: 🌾🛡️💪."
+            ),
+            "Captain Milk": (
+                "You are Captain Milk, the muscle-armor commander! Your shield builds speed and super strength. "
+                "Tell the kid that milk compiles muscle bricks so they can jump higher than mountains. Speak like a captain, "
+                "use terms like 'Superstar', and emphasize: 🥛🏆⚡."
+            ),
+            "Sprout-Shield": (
+                "You are Sprout-Shield, the ultimate green tummy defender! Your Moong-Sprouts suit builds cell forcefields. "
+                "Explain that eating green foods launches tiny green defense shield-bots inside their stomach to sweep away bad bugs. "
+                "Speak gently, be friendly, and use: 🥦🛡️💚."
+            )
+        }
+        equipped_style = companion_styles.get(equipped, companion_styles["Captain Milk"])
+        
+        system_instructions += (
+            f"\nKIDS MODE INSTRUCTIONS:\n"
+            f"- {equipped_style}\n"
+            f"- Keep answers extremely simple, warm, energetic, and engaging.\n"
+            f"- Use fun food emojis (🥕, 🍎, 🥦, 🍌, 🍳, 🌾, 🥛).\n"
+            f"- Use storytelling to explain why good foods are healthy (e.g., carrots giving night-vision, spinach giving super muscles).\n"
+            f"- Strictly avoid technical calorie/protein percentages, clinical targets, or medical terms. Keep it fully gamified, fun, and motivational!"
+        )
+        
+    rag_section = "\n".join([f"- {chunk}" for chunk in rag_context])
+    
+    # Format planner output for prompt
+    planner_cal = planner_output.get("nutritional_validation", {}).get("planned_calories_kcal", 0)
+    target_cal = planner_output.get("nutritional_validation", {}).get("target_calories_kcal", 0)
+    planner_prot = planner_output.get("nutritional_validation", {}).get("planned_protein_g", 0)
+    target_prot = planner_output.get("nutritional_validation", {}).get("target_protein_g", 0)
+    
+    planner_str = (
+        f"Calorie Target: {target_cal} kcal | Planned: {planner_cal} kcal\n"
+        f"Protein Target: {target_prot} g | Planned: {planner_prot} g\n"
+        f"Blocked Allergenic Foods: {', '.join(planner_output.get('blocked_foods_allergy', []))}\n"
+        f"Condition Filtered Out Tags: {', '.join(planner_output.get('planner_filtered_out', []))}\n"
+    )
+    
+    # Format meals
+    meal_lines = []
+    for meal, details in planner_output.get("diet_plan", {}).items():
+        meal_lines.append(f"- {meal.upper()}: {details.get('description')} ({details.get('calories_kcal')} kcal, {details.get('protein_g')}g protein)")
+    planner_str += "\n".join(meal_lines)
+
+    prompt = f"""SYSTEM:
+{system_instructions}
+
+--------------------------------
+
+CHILD PROFILE:
+Age: {profile.get('age', 'N/A')} years
+Goal: {profile.get('goal', 'healthy_maintain')}
+Condition: {profile.get('condition', 'None')}
+Diet Type: {profile.get('diet_type', 'veg')}
+Region: {profile.get('region', 'south_india')}
+Allergies: {', '.join(profile.get('allergies', [])) if profile.get('allergies') else 'None'}
+
+--------------------------------
+
+STRUCTURED NUMERICAL TRUTH (PLANNER OUTPUT):
+{planner_str}
+
+--------------------------------
+
+SEMANTIC KNOWLEDGE CONTEXT (RAG GUIDELINES):
+{rag_section if rag_section else 'No specific RAG guidelines retrieved.'}
+
+--------------------------------
+
+USER QUERY:
+{query}
+
+--------------------------------
+
+Generate your safe, personalized pediatric nutrition response:
+"""
+    return prompt
