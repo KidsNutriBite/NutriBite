@@ -418,7 +418,7 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
     );
 };
 
-const DetailsSection = ({ content, formatText, renderSections, detailSections }) => {
+const DetailsSection = ({ content, formatText, renderSections, detailSections = [] }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
