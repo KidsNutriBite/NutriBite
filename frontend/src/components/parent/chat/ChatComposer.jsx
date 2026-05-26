@@ -1,209 +1,217 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useRef, useEffect } from 'react';
 
-const ChatComposer = ({ 
-    input, 
-    setInput, 
-    handleSend, 
-    profiles, 
-    selectedChild, 
-    setSelectedChild 
-}) => {
-    const [showMentions, setShowMentions] = useState(false);
-    const [voiceState, setVoiceState] = useState('idle'); // idle, listening, paused
-    const recognitionRef = useRef(null);
+const MicIcon = () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/>
+    </svg>
+);
+
+const SendIcon = () => (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>
+    </svg>
+);
+
+const ChatComposer = ({ input, setInput, handleSend, profiles = [], selectedProfile, setSelectedProfile }) => {
+    const [isListening, setIsListening] = useState(false);
     const textareaRef = useRef(null);
+    const recognitionRef = useRef(null);
+    const MAX_CHARS = 500;
+    const charCount = input.length;
+    const isOverLimit = charCount > 420;
 
-    // Initialize Speech Recognition
     useEffect(() => {
         if (typeof window !== 'undefined' && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            recognitionRef.current = new SpeechRecognition();
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognitionRef.current = new SR();
             recognitionRef.current.continuous = true;
             recognitionRef.current.interimResults = true;
-            
-            recognitionRef.current.onresult = (event) => {
-                let currentTranscript = '';
-                for (let i = event.resultIndex; i < event.results.length; i++) {
-                    const transcript = event.results[i][0].transcript;
-                    if (event.results[i].isFinal) {
-                        setInput((prev) => prev + transcript + ' ');
-                    } else {
-                        currentTranscript += transcript;
-                    }
+            recognitionRef.current.onresult = (e) => {
+                for (let i = e.resultIndex; i < e.results.length; i++) {
+                    if (e.results[i].isFinal) setInput(p => p + e.results[i][0].transcript + ' ');
                 }
             };
-            
-            recognitionRef.current.onerror = (event) => {
-                console.error('Speech recognition error', event.error);
-                setVoiceState('idle');
-            };
-            
-            recognitionRef.current.onend = () => {
-                setVoiceState(prev => prev === 'paused' ? 'paused' : 'idle');
-            };
+            recognitionRef.current.onerror = () => setIsListening(false);
+            recognitionRef.current.onend = () => setIsListening(false);
         }
     }, [setInput]);
 
-    const toggleListening = () => {
-        if (voiceState === 'listening') {
+    const toggleMic = () => {
+        if (isListening) {
             recognitionRef.current?.stop();
-            setVoiceState('paused');
+            setIsListening(false);
         } else {
-            try {
-                recognitionRef.current?.start();
-                setVoiceState('listening');
-            } catch(e) {
-                setVoiceState('listening');
-            }
-        }
-    };
-    
-    const stopListening = () => {
-        recognitionRef.current?.stop();
-        setVoiceState('idle');
-    };
-
-    // Auto-expand textarea helper
-    const expandTextarea = () => {
-        if (textareaRef.current) {
-            textareaRef.current.style.height = 'auto';
-            textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 150)}px`;
+            try { recognitionRef.current?.start(); setIsListening(true); } catch {}
         }
     };
 
-    // Handle input change & mentions
-    const handleInputChange = (e) => {
-        const val = e.target.value;
-        setInput(val);
-        if (val.trim().endsWith('@')) {
-            setShowMentions(true);
-        } else {
-            setShowMentions(false);
-        }
-        expandTextarea();
+    const autoResize = () => {
+        const el = textareaRef.current;
+        if (!el) return;
+        el.style.height = 'auto';
+        const lineHeight = 22;
+        const maxLines = 3;
+        el.style.height = `${Math.min(el.scrollHeight, lineHeight * maxLines + 16)}px`;
+    };
+
+    const handleChange = (e) => {
+        if (e.target.value.length > MAX_CHARS) return;
+        setInput(e.target.value);
+        autoResize();
     };
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
-            onSubmit();
+            onSend();
         }
     };
 
-    const selectChild = (child) => {
-        const newInput = input.replace(/@$/, `@${child.name} `);
-        setInput(newInput);
-        setSelectedChild(child);
-        setShowMentions(false);
-        expandTextarea();
-    };
-
-    const onSubmit = () => {
+    const onSend = () => {
         if (!input.trim()) return;
         handleSend(input);
-        setInput('');
-        if (textareaRef.current) {
-            textareaRef.current.style.height = 'auto'; // reset height
-        }
+        if (textareaRef.current) textareaRef.current.style.height = 'auto';
     };
 
     return (
-        <div className="p-4 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 max-w-5xl mx-auto w-full relative">
-            {/* Mentions Popup */}
-            <AnimatePresence>
-                {showMentions && profiles?.length > 0 && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        className="absolute bottom-full left-4 mb-2 w-64 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden z-20"
-                    >
-                        <div className="bg-slate-50 dark:bg-slate-900/50 px-4 py-2 border-b border-slate-100 dark:border-slate-700">
-                            <span className="text-xs font-bold text-slate-500 uppercase">Select Child Profile</span>
-                        </div>
-                        <div className="max-h-48 overflow-y-auto">
-                            {profiles.map(profile => (
-                                <button
-                                    key={profile._id}
-                                    type="button"
-                                    onClick={() => selectChild(profile)}
-                                    className="w-full text-left px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700 flex items-center gap-3 transition-colors"
-                                >
-                                    <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-lg">
-                                        {profile.avatar === 'lion' ? '🦁' : '👶'}
-                                    </div>
-                                    <div>
-                                        <p className="text-sm font-bold text-slate-800 dark:text-white">{profile.name}</p>
-                                        <p className="text-[10px] text-slate-500">{profile.age} years • {profile.conditions?.length ? 'Has conditions' : 'Healthy'}</p>
-                                    </div>
-                                </button>
-                            ))}
-                        </div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+        <div style={{
+            background: '#FFFFFF',
+            borderTop: '0.5px solid rgba(0,0,0,0.08)',
+            padding: '10px 16px 14px',
+            flexShrink: 0
+        }}>
+            {/* Child profile selector pills */}
+            {profiles.length > 0 && (
+                <div style={{ display: 'flex', gap: '6px', marginBottom: '10px', overflowX: 'auto', paddingBottom: '2px' }}>
+                    {profiles.map(p => {
+                        const active = p.id === selectedProfile?.id || p.name === selectedProfile?.name;
+                        return (
+                            <button
+                                key={p.id ?? p._id ?? p.name}
+                                onClick={() => setSelectedProfile(p)}
+                                style={{
+                                    padding: '4px 11px',
+                                    borderRadius: '99px',
+                                    border: active ? '1px solid #7F77DD' : '0.5px solid rgba(0,0,0,0.1)',
+                                    background: active ? '#EEEDFE' : 'transparent',
+                                    color: active ? '#5B52C8' : 'var(--text-secondary)',
+                                    fontSize: '12px',
+                                    fontWeight: active ? 600 : 400,
+                                    cursor: 'pointer',
+                                    whiteSpace: 'nowrap',
+                                    fontFamily: 'inherit',
+                                    transition: 'all 0.15s'
+                                }}
+                            >
+                                {p.name}{p.age ? `, ${p.age}y` : ''}
+                            </button>
+                        );
+                    })}
+                </div>
+            )}
 
-            {/* Voice Controls Tooltip */}
-            <AnimatePresence>
-                {voiceState !== 'idle' && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 10 }}
-                        className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 bg-slate-900 dark:bg-slate-800 text-white px-4 py-2 rounded-full shadow-xl flex items-center gap-3 z-30 border border-slate-700"
-                    >
-                        <div className="flex items-center gap-2">
-                            {voiceState === 'listening' ? (
-                                <>
-                                    <div className="w-2 h-2 bg-rose-500 rounded-full animate-pulse"></div>
-                                    <span className="text-sm font-medium">Listening...</span>
-                                </>
-                            ) : (
-                                <>
-                                    <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
-                                    <span className="text-sm font-medium">Paused</span>
-                                </>
-                            )}
-                        </div>
-                        <div className="h-4 w-px bg-slate-700 mx-1"></div>
-                        <button onClick={stopListening} type="button" className="text-xs font-bold text-slate-300 hover:text-white transition-colors">
-                            Cancel
-                        </button>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            {/* Main input pill */}
+            <div
+                className="nutri-input-wrap"
+                style={{
+                    display: 'flex',
+                    alignItems: 'flex-end',
+                    gap: '8px',
+                    background: '#F3F4F6',
+                    border: '1px solid transparent',
+                    borderRadius: '14px',
+                    padding: '8px 10px 8px 14px',
+                    transition: 'border-color 0.2s, box-shadow 0.2s'
+                }}
+            >
+                <textarea
+                    ref={textareaRef}
+                    value={input}
+                    onChange={handleChange}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Ask about nutrition, meals, or growth…"
+                    rows={1}
+                    style={{
+                        flex: 1,
+                        background: 'transparent',
+                        border: 'none',
+                        outline: 'none',
+                        resize: 'none',
+                        fontSize: '13.5px',
+                        color: 'var(--text-primary)',
+                        fontFamily: 'inherit',
+                        lineHeight: '22px',
+                        minHeight: '22px',
+                        maxHeight: '82px',
+                        overflowY: 'auto',
+                        padding: 0
+                    }}
+                />
 
-            <form onSubmit={(e) => { e.preventDefault(); onSubmit(); }} className="relative flex gap-3 items-end">
+                {/* Mic */}
                 <button
                     type="button"
-                    onClick={toggleListening}
-                    className={`w-12 h-12 flex items-center justify-center rounded-xl transition-colors shrink-0 mb-0 ${voiceState === 'listening' ? 'bg-rose-100 text-rose-500 animate-pulse' : voiceState === 'paused' ? 'bg-amber-100 text-amber-600' : 'bg-slate-100 dark:bg-slate-700 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-600'}`}
+                    onClick={toggleMic}
+                    style={{
+                        background: isListening ? '#EEEDFE' : 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        color: isListening ? '#7F77DD' : '#9CA3AF',
+                        padding: '5px',
+                        borderRadius: '8px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        transition: 'all 0.15s'
+                    }}
+                    aria-label={isListening ? 'Stop listening' : 'Start voice input'}
                 >
-                    <span className="material-symbols-outlined">{voiceState === 'listening' ? 'pause' : 'mic'}</span>
+                    <MicIcon />
                 </button>
-                <div className="flex-1 relative">
-                    <textarea
-                        ref={textareaRef}
-                        value={input}
-                        onChange={handleInputChange}
-                        onKeyDown={handleKeyDown}
-                        placeholder="Ask about nutrition (Type '@' to select child)..."
-                        className="w-full min-h-[48px] max-h-[150px] py-3 pl-4 pr-12 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all font-medium text-slate-700 dark:text-slate-200 placeholder:text-slate-400 resize-none custom-scrollbar"
-                        rows={1}
-                    />
-                    <button
-                        type="submit"
-                        disabled={!input.trim()}
-                        className="absolute right-2 bottom-1.5 p-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:bg-slate-300 disabled:cursor-not-allowed transition-colors shadow-md shadow-indigo-500/20"
-                    >
-                        <span className="material-symbols-outlined text-lg">send</span>
-                    </button>
-                </div>
-            </form>
-            <p className="text-center text-[10px] text-slate-400 mt-2">
-                NutriGuide AI can make mistakes. Consider checking important information.
-            </p>
+
+                {/* Send button */}
+                <button
+                    type="button"
+                    className="nutri-send-btn"
+                    onClick={onSend}
+                    disabled={!input.trim()}
+                    style={{
+                        width: '34px',
+                        height: '34px',
+                        borderRadius: '50%',
+                        border: 'none',
+                        background: input.trim() ? '#7F77DD' : '#D1D5DB',
+                        cursor: input.trim() ? 'pointer' : 'not-allowed',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexShrink: 0,
+                        transition: 'background 0.15s, transform 0.1s'
+                    }}
+                    aria-label="Send message"
+                >
+                    <SendIcon />
+                </button>
+            </div>
+
+            {/* Bottom hints row */}
+            <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginTop: '6px',
+                paddingLeft: '2px',
+                paddingRight: '2px'
+            }}>
+                <span style={{ fontSize: '11px', color: '#9CA3AF' }}>
+                    Type <code style={{ fontFamily: 'monospace', background: '#F3F4F6', padding: '0 3px', borderRadius: '3px' }}>@</code> to mention a child profile
+                </span>
+                <span style={{ fontSize: '11px', color: isOverLimit ? '#F59E0B' : '#9CA3AF', fontVariantNumeric: 'tabular-nums' }}>
+                    {charCount} / {MAX_CHARS}
+                </span>
+            </div>
         </div>
     );
 };

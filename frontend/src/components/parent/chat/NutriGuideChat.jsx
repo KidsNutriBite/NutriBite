@@ -1,105 +1,107 @@
 "use client";
 
-import { useState, useRef, useEffect } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import ChatHeader from './ChatHeader';
 import WelcomeHero from './WelcomeHero';
 import ChatMessage from './ChatMessage';
 import ChatComposer from './ChatComposer';
 
-// TypingIndicator — inline since it's small
-const TypingIndicator = ({ loadingStep }) => (
-    <div className="flex justify-start">
-        <div className="flex items-end gap-3">
-            <div className="w-8 h-8 rounded-full bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800 flex items-center justify-center shrink-0 shadow-sm">
-                <span className="material-symbols-outlined text-sm text-indigo-500 animate-pulse">smart_toy</span>
-            </div>
-            <div className="bg-white dark:bg-slate-800 px-5 py-3.5 rounded-2xl rounded-bl-none shadow-sm border border-slate-200 dark:border-slate-700 flex items-center gap-4">
-                <div className="flex gap-1.5">
-                    <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
-                    <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
-                    <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
-                </div>
-                <span className="text-xs font-medium text-slate-500 dark:text-slate-400 italic">
-                    {loadingStep === 0 && "Analyzing profile..."}
-                    {loadingStep === 1 && "Retrieving knowledge base..."}
-                    {loadingStep === 2 && "Synthesizing response..."}
-                </span>
-            </div>
+const TypingIndicator = () => (
+    <div className="flex items-end gap-2">
+        <div className="w-7 h-7 rounded-full bg-[#7F77DD] flex items-center justify-center shrink-0">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                <rect x="3" y="11" width="18" height="10" rx="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                <circle cx="12" cy="16" r="1" fill="white" stroke="none"/>
+            </svg>
+        </div>
+        <div style={{
+            background: '#fff',
+            border: '0.5px solid #E5E7EB',
+            borderRadius: '12px 12px 12px 4px',
+            padding: '12px 16px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '5px'
+        }}>
+            {[0, 1, 2].map(i => (
+                <span key={i} style={{
+                    display: 'block',
+                    width: '6px',
+                    height: '6px',
+                    borderRadius: '50%',
+                    background: '#7F77DD',
+                    animation: `bounce 1.2s ease-in-out infinite`,
+                    animationDelay: `${i * 0.2}s`
+                }} />
+            ))}
         </div>
     </div>
 );
 
+const DEFAULT_PROFILES = [
+    { id: 'general', name: 'General', age: null },
+];
+
 const NutriGuideChat = ({ onBack, profiles = [] }) => {
-    const [messages, setMessages] = useState([
-        {
-            id: 1,
-            sender: 'ai',
-            text: "Hello! I'm your NutriGuide Assistant. How can I help you with your family's nutrition today? Type '@' to select a specific child profile for personalized advice!",
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        }
-    ]);
+    const allProfiles = profiles.length > 0
+        ? [...profiles, { id: 'general', name: 'General', age: null }]
+        : DEFAULT_PROFILES;
+
+    const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const [loadingStep, setLoadingStep] = useState(0);
-    const [selectedChild, setSelectedChild] = useState(null);
+    const [selectedProfile, setSelectedProfile] = useState(allProfiles[allProfiles.length - 1]);
     const messagesEndRef = useRef(null);
 
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
+    const scrollToBottom = useCallback(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, []);
 
-    useEffect(scrollToBottom, [messages, isTyping]);
+    useEffect(scrollToBottom, [messages, isTyping, scrollToBottom]);
 
-    const handleSend = async (text) => {
-        const msgText = text || input;
-        if (!msgText.trim()) return;
+    const handleSend = useCallback(async (text) => {
+        const msgText = (text ?? input).trim();
+        if (!msgText) return;
 
-        const newMsg = {
+        const userMsg = {
             id: Date.now(),
             sender: 'user',
             text: msgText,
             time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
         };
 
-        setMessages(prev => [...prev, newMsg]);
+        setMessages(prev => [...prev, userMsg]);
         setInput('');
         setIsTyping(true);
         setLoadingStep(0);
 
-        const loadingInterval = setInterval(() => {
-            setLoadingStep(prev => (prev < 2 ? prev + 1 : prev));
-        }, 1500);
+        const interval = setInterval(() => setLoadingStep(p => p < 2 ? p + 1 : p), 1500);
 
         try {
-            const profileData = selectedChild ? {
-                age: `${selectedChild.age} years`,
-                weight: selectedChild.weight ? `${selectedChild.weight}` : "Unknown",
-                conditions: selectedChild.allergies?.join(", ") || "None",
-                prescription: "None"
-            } : {
-                age: "5 years",
-                weight: "18kg",
-                conditions: "None",
-                prescription: "None"
-            };
+            const profileData = selectedProfile.id !== 'general' ? {
+                age: `${selectedProfile.age} years`,
+                weight: selectedProfile.weight ?? 'Unknown',
+                conditions: selectedProfile.allergies?.join(', ') ?? 'None',
+                prescription: 'None'
+            } : { age: '5 years', weight: '18kg', conditions: 'None', prescription: 'None' };
 
-            const response = await fetch('http://127.0.0.1:8000/ask', {
+            const res = await fetch('http://127.0.0.1:8000/ask', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     question: msgText,
-                    history: messages.map(msg => ({
-                        role: msg.sender === 'user' ? 'user' : 'model',
-                        content: msg.text
+                    history: messages.map(m => ({
+                        role: m.sender === 'user' ? 'user' : 'model',
+                        content: m.text
                     })),
                     ...profileData
-                }),
+                })
             });
 
-            if (!response.ok) throw new Error('Network response was not ok');
-
-            const data = await response.json();
+            if (!res.ok) throw new Error('API error');
+            const data = await res.json();
 
             setMessages(prev => [...prev, {
                 id: Date.now() + 1,
@@ -107,83 +109,107 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
                 text: data.answer,
                 time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             }]);
-
-        } catch (error) {
-            console.error("AI Error:", error);
+        } catch {
             setMessages(prev => [...prev, {
                 id: Date.now() + 1,
                 sender: 'ai',
-                text: "I'm having trouble connecting to the nutrition database right now. Please ensure the AI backend is running and try again.",
+                text: "I'm having trouble connecting right now. Please make sure the AI backend is running and try again.",
                 time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             }]);
         } finally {
-            clearInterval(loadingInterval);
+            clearInterval(interval);
             setIsTyping(false);
         }
-    };
+    }, [input, messages, selectedProfile]);
 
-    const handleSuggestionClick = (topic) => {
-        setInput(topic);
-    };
-
-    // Show welcome hero only when it's the initial state (only the AI greeting exists)
-    const showWelcome = messages.length === 1 && messages[0].sender === 'ai';
+    const showWelcome = messages.length === 0;
 
     return (
-        <div className="flex flex-col h-full bg-slate-50 dark:bg-slate-900">
-            {/* Sticky Header */}
-            <ChatHeader onBack={onBack} selectedChild={selectedChild} />
+        <>
+            <style>{`
+                @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+                @keyframes bounce {
+                    0%, 80%, 100% { transform: translateY(0); }
+                    40% { transform: translateY(-6px); }
+                }
+                .nutri-chat-root * {
+                    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+                    box-sizing: border-box;
+                }
+                .nutri-chat-root {
+                    --purple: #7F77DD;
+                    --purple-light: #EEEDFE;
+                    --green-online: #1D9E75;
+                    --text-primary: #1A1A2E;
+                    --text-secondary: #6B7280;
+                    --text-muted: #9CA3AF;
+                    --border: rgba(0,0,0,0.08);
+                    --bg-page: #F7F8FA;
+                    --bg-white: #FFFFFF;
+                }
+                .nutri-scroll::-webkit-scrollbar { width: 4px; }
+                .nutri-scroll::-webkit-scrollbar-track { background: transparent; }
+                .nutri-scroll::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 99px; }
+                .nutri-send-btn:active { transform: scale(0.94); }
+                .nutri-chip:hover { border-color: var(--purple) !important; background: var(--purple-light) !important; }
+                .nutri-input-wrap:focus-within { 
+                    border-color: var(--purple) !important;
+                    box-shadow: 0 0 0 3px rgba(127,119,221,0.15) !important;
+                }
+            `}</style>
+            <div
+                className="nutri-chat-root"
+                style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    height: '620px',
+                    maxWidth: '680px',
+                    width: '100%',
+                    margin: '0 auto',
+                    background: '#FFFFFF',
+                    border: '0.5px solid rgba(0,0,0,0.1)',
+                    borderRadius: '12px',
+                    overflow: 'hidden'
+                }}
+            >
+                <ChatHeader onBack={onBack} />
 
-            {/* Chat Area */}
-            <div className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar bg-slate-50 dark:bg-slate-900/50">
-                <div className="max-w-3xl mx-auto w-full">
+                {/* Chat body */}
+                <div
+                    className="nutri-scroll"
+                    style={{
+                        flex: 1,
+                        overflowY: 'auto',
+                        background: 'var(--bg-page)',
+                        padding: showWelcome ? '24px 20px' : '16px 20px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '12px'
+                    }}
+                >
                     {showWelcome ? (
-                        <WelcomeHero handleSuggestionClick={handleSuggestionClick} />
+                        <WelcomeHero onChipClick={handleSend} />
                     ) : (
-                        <div className="space-y-6">
-                            {messages.map((msg) => (
-                                <ChatMessage
-                                    key={msg.id}
-                                    msg={msg}
-                                    handleSend={handleSend}
-                                />
+                        <>
+                            {messages.map(msg => (
+                                <ChatMessage key={msg.id} msg={msg} />
                             ))}
-
-                            {isTyping && <TypingIndicator loadingStep={loadingStep} />}
-                        </div>
+                            {isTyping && <TypingIndicator />}
+                        </>
                     )}
-
-                    <div ref={messagesEndRef}></div>
+                    <div ref={messagesEndRef} />
                 </div>
+
+                <ChatComposer
+                    input={input}
+                    setInput={setInput}
+                    handleSend={handleSend}
+                    profiles={allProfiles}
+                    selectedProfile={selectedProfile}
+                    setSelectedProfile={setSelectedProfile}
+                />
             </div>
-
-            {/* Quick Suggestion Chips — shown only before first message */}
-            <AnimatePresence>
-                {!showWelcome && !input && messages.length < 4 && (
-                    <div className="px-4 pb-2 flex gap-2 overflow-x-auto custom-scrollbar bg-white dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700 pt-3">
-                        {["Healthy snacks 🍎", "Meal plan 📅", "Fever foods 🤒", "Hydration 💧"].map((topic, i) => (
-                            <button
-                                key={i}
-                                onClick={() => handleSuggestionClick(topic.replace(/\s*[^\w\s].*/g, '').trim())}
-                                className="bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 hover:border-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 text-slate-600 dark:text-slate-300 text-xs font-medium px-4 py-2 rounded-full whitespace-nowrap transition-all flex-shrink-0"
-                            >
-                                {topic}
-                            </button>
-                        ))}
-                    </div>
-                )}
-            </AnimatePresence>
-
-            {/* Composer */}
-            <ChatComposer
-                input={input}
-                setInput={setInput}
-                handleSend={handleSend}
-                profiles={profiles}
-                selectedChild={selectedChild}
-                setSelectedChild={setSelectedChild}
-            />
-        </div>
+        </>
     );
 };
 
