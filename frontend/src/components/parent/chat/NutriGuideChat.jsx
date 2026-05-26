@@ -349,7 +349,7 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
     );
 };
 
-const DetailsSection = ({ content, formatText }) => {
+const DetailsSection = ({ content, formatText, renderSections, detailSections }) => {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -374,7 +374,7 @@ const DetailsSection = ({ content, formatText }) => {
                             <span className="material-symbols-outlined text-sm">close</span>
                         </button>
                     </div>
-                    {formatText(content)}
+                    {detailSections.length > 0 ? renderSections(detailSections) : formatText(content)}
                 </motion.div>
             )}
         </div>
