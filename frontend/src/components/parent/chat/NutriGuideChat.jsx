@@ -17,9 +17,10 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
     const [loadingStep, setLoadingStep] = useState(0);
     const [showMentions, setShowMentions] = useState(false);
     const [selectedChild, setSelectedChild] = useState(null);
-    const [isListening, setIsListening] = useState(false);
+    const [voiceState, setVoiceState] = useState('idle'); // idle, listening, paused
     const messagesEndRef = useRef(null);
     const recognitionRef = useRef(null);
+    const textareaRef = useRef(null);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -49,26 +50,35 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
             
             recognitionRef.current.onerror = (event) => {
                 console.error('Speech recognition error', event.error);
-                setIsListening(false);
+                setVoiceState('idle');
             };
             
             recognitionRef.current.onend = () => {
-                setIsListening(false);
+                setVoiceState(prev => prev === 'paused' ? 'paused' : 'idle');
             };
         }
     }, []);
 
     const toggleListening = () => {
-        if (isListening) {
+        if (voiceState === 'listening') {
             recognitionRef.current?.stop();
-            setIsListening(false);
+            setVoiceState('paused');
         } else {
-            recognitionRef.current?.start();
-            setIsListening(true);
+            try {
+                recognitionRef.current?.start();
+                setVoiceState('listening');
+            } catch(e) {
+                setVoiceState('listening');
+            }
         }
     };
+    
+    const stopListening = () => {
+        recognitionRef.current?.stop();
+        setVoiceState('idle');
+    };
 
-    // Handle Input Change for Mentions
+    // Handle Input Change for Mentions and Auto-Expand
     const handleInputChange = (e) => {
         const val = e.target.value;
         setInput(val);
@@ -76,6 +86,19 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
             setShowMentions(true);
         } else {
             setShowMentions(false);
+        }
+        
+        // Auto-expand textarea
+        if (textareaRef.current) {
+            textareaRef.current.style.height = 'auto';
+            textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 150)}px`;
+        }
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSend();
         }
     };
 
@@ -101,6 +124,9 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
         setInput('');
         setIsTyping(true);
         setLoadingStep(0);
+        if (textareaRef.current) {
+            textareaRef.current.style.height = 'auto';
+        }
 
         const loadingInterval = setInterval(() => {
             setLoadingStep(prev => (prev < 2 ? prev + 1 : prev));
@@ -165,9 +191,22 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
 
     const suggestedTopics = [
         "Meal ideas for picky eaters",
-        "How much protein does a 5yo need?",
-        "Healthy snack alternatives"
+        "Weight gain foods",
+        "Weekly meal plan",
+        "Foods during fever",
+        "Hydration help",
+        "Immunity boosting foods"
     ];
+
+    const handleSuggestionClick = (topic) => {
+        setInput(topic);
+        if (textareaRef.current) {
+            setTimeout(() => {
+                textareaRef.current.style.height = 'auto';
+                textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 150)}px`;
+            }, 0);
+        }
+    };
 
     // Enhanced Markdown Renderer
     const renderContent = (text) => {
@@ -265,12 +304,22 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
                         <div>
                             <div className="flex items-center gap-2">
                                 <h2 className="text-lg font-bold text-slate-800 dark:text-white leading-tight">NutriGuide AI</h2>
-                                <span className="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 border border-emerald-200">
-                                    <span className="material-symbols-outlined text-[10px]">verified</span> Verified
+                                <span className="bg-emerald-100 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 border border-emerald-200 shadow-sm">
+                                    <span className="material-symbols-outlined text-[10px]">health_and_safety</span> Safety Checked
                                 </span>
                             </div>
-                            <p className="text-xs text-slate-500 font-medium">
-                                {selectedChild ? `Pediatric Assistant for: ${selectedChild.name}` : "General Pediatric Advice Mode"}
+                            <p className="text-xs text-slate-500 font-medium mt-0.5 flex items-center gap-1.5">
+                                {selectedChild ? (
+                                    <>
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                        Active Profile: {selectedChild.name} &bull; Age {selectedChild.age} &bull; {selectedChild.conditions?.length ? selectedChild.conditions.join(', ') : 'Healthy'}
+                                    </>
+                                ) : (
+                                    <>
+                                        <span className="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                                        General Pediatric Advice Mode
+                                    </>
+                                )}
                             </p>
                         </div>
                     </div>
@@ -301,7 +350,41 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
                                         }`}>
                                         {msg.sender === 'ai' ? renderContent(msg.text) : msg.text}
                                     </div>
-                                    <div className={`text-[10px] font-medium text-slate-400 mt-1 ${msg.sender === 'user' ? 'text-right' : 'text-left'}`}>
+                                    
+                                    {/* Toolbar for AI messages */}
+                                    {msg.sender === 'ai' && (
+                                        <div className="flex items-center gap-2 mt-2 ml-2">
+                                            <button 
+                                                onClick={() => navigator.clipboard.writeText(msg.text)}
+                                                className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded-lg transition-colors flex items-center justify-center"
+                                                title="Copy"
+                                            >
+                                                <span className="material-symbols-outlined text-[16px]">content_copy</span>
+                                            </button>
+                                            <button 
+                                                onClick={() => handleSend("Can you explain this in a different way?")}
+                                                className="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded-lg transition-colors flex items-center justify-center"
+                                                title="Explain More"
+                                            >
+                                                <span className="material-symbols-outlined text-[16px]">psychology</span>
+                                            </button>
+                                            <div className="w-px h-3 bg-slate-300 dark:bg-slate-600 mx-1"></div>
+                                            <button 
+                                                className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded-lg transition-colors flex items-center justify-center"
+                                                title="Helpful"
+                                            >
+                                                <span className="material-symbols-outlined text-[16px]">thumb_up</span>
+                                            </button>
+                                            <button 
+                                                className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/30 rounded-lg transition-colors flex items-center justify-center"
+                                                title="Not Helpful"
+                                            >
+                                                <span className="material-symbols-outlined text-[16px]">thumb_down</span>
+                                            </button>
+                                        </div>
+                                    )}
+
+                                    <div className={`text-[10px] font-medium text-slate-400 mt-1 ${msg.sender === 'user' ? 'text-right' : 'text-left ml-2'}`}>
                                         {msg.time}
                                     </div>
                                 </div>
@@ -340,8 +423,8 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
                     {suggestedTopics.map((topic, i) => (
                         <button
                             key={i}
-                            onClick={() => handleSend(topic)}
-                            className="bg-white dark:bg-slate-800 border border-indigo-100 dark:border-indigo-900/30 hover:border-indigo-300 text-indigo-600 dark:text-indigo-400 text-xs md:text-sm px-4 py-2 rounded-full whitespace-nowrap shadow-sm transition-colors"
+                            onClick={() => handleSuggestionClick(topic)}
+                            className="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-indigo-300 hover:bg-indigo-50 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs px-4 py-2 rounded-full whitespace-nowrap shadow-sm transition-all"
                         >
                             {topic}
                         </button>
@@ -385,26 +468,58 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
                     )}
                 </AnimatePresence>
 
-                <form onSubmit={(e) => { e.preventDefault(); handleSend(); }} className="relative flex gap-3">
+                {/* Voice Controls Tooltip */}
+                <AnimatePresence>
+                    {voiceState !== 'idle' && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 10 }}
+                            className="absolute bottom-full left-1/2 -translate-x-1/2 mb-4 bg-slate-900 dark:bg-slate-800 text-white px-4 py-2 rounded-full shadow-xl flex items-center gap-3 z-30 border border-slate-700"
+                        >
+                            <div className="flex items-center gap-2">
+                                {voiceState === 'listening' ? (
+                                    <>
+                                        <div className="w-2 h-2 bg-rose-500 rounded-full animate-pulse"></div>
+                                        <span className="text-sm font-medium">Listening...</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
+                                        <span className="text-sm font-medium">Paused</span>
+                                    </>
+                                )}
+                            </div>
+                            <div className="h-4 w-px bg-slate-700 mx-1"></div>
+                            <button onClick={stopListening} className="text-xs font-bold text-slate-300 hover:text-white transition-colors">
+                                Cancel
+                            </button>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                <form onSubmit={(e) => { e.preventDefault(); handleSend(); }} className="relative flex gap-3 items-end">
                     <button
                         type="button"
                         onClick={toggleListening}
-                        className={`w-12 h-12 flex items-center justify-center rounded-xl transition-colors shrink-0 ${isListening ? 'bg-rose-100 text-rose-500 animate-pulse' : 'bg-slate-100 dark:bg-slate-700 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-600'}`}
+                        className={`w-12 h-12 flex items-center justify-center rounded-xl transition-colors shrink-0 mb-0 ${voiceState === 'listening' ? 'bg-rose-100 text-rose-500 animate-pulse' : voiceState === 'paused' ? 'bg-amber-100 text-amber-600' : 'bg-slate-100 dark:bg-slate-700 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-600'}`}
                     >
-                        <span className="material-symbols-outlined">{isListening ? 'mic' : 'mic_none'}</span>
+                        <span className="material-symbols-outlined">{voiceState === 'listening' ? 'pause' : 'mic'}</span>
                     </button>
                     <div className="flex-1 relative">
-                        <input
-                            type="text"
+                        <textarea
+                            ref={textareaRef}
                             value={input}
                             onChange={handleInputChange}
+                            onKeyDown={handleKeyDown}
                             placeholder="Ask about nutrition (Type '@' to select child)..."
-                            className="w-full h-12 pl-4 pr-12 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all font-medium text-slate-700 dark:text-slate-200 placeholder:text-slate-400"
+                            className="w-full min-h-[48px] max-h-[150px] py-3 pl-4 pr-12 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all font-medium text-slate-700 dark:text-slate-200 placeholder:text-slate-400 resize-none custom-scrollbar"
+                            rows={1}
                         />
                         <button
                             type="submit"
                             disabled={!input.trim()}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 p-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:bg-slate-300 disabled:cursor-not-allowed transition-colors shadow-md shadow-indigo-500/20"
+                            className="absolute right-2 bottom-1.5 p-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:bg-slate-300 disabled:cursor-not-allowed transition-colors shadow-md shadow-indigo-500/20"
                         >
                             <span className="material-symbols-outlined text-lg">send</span>
                         </button>
