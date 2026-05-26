@@ -78,6 +78,7 @@ class UserProfile(BaseModel):
 
 class ChatQuery(BaseModel):
     query: str = Field(..., description="User's query")
+    history: List[Dict[str, str]] = Field(default_factory=list, description="Conversation history")
     profile: Optional[UserProfile] = Field(None, description="Associated child profile")
 
 class DietPlanRequest(BaseModel):
@@ -225,7 +226,14 @@ async def ask_endpoint(payload: AskRequest):
         planner_output = generate_personalized_diet_plan(profile, instructions=payload.question)
         
         # 5. Build prompt
-        prompt = build_chatbot_prompt(payload.question, profile, rag_context, planner_output, is_kids_mode=is_kids)
+        prompt = build_chatbot_prompt(
+            query=payload.question, 
+            profile=profile, 
+            rag_context=rag_context, 
+            planner_output=planner_output, 
+            is_kids_mode=is_kids,
+            history=payload.history
+        )
         
         # 6. Run dual LLM comparative benchmark
         comparison = run_comparative_benchmark(
@@ -285,7 +293,14 @@ async def chat_endpoint(payload: ChatQuery):
         planner_output = generate_personalized_diet_plan(profile_dict, instructions=payload.query)
         
         # 3. Prompt Builder
-        prompt = build_chatbot_prompt(payload.query, profile_dict, rag_context, planner_output, is_kids_mode=False)
+        prompt = build_chatbot_prompt(
+            query=payload.query, 
+            profile=profile_dict, 
+            rag_context=rag_context, 
+            planner_output=planner_output, 
+            is_kids_mode=False,
+            history=payload.history
+        )
         
         # 4. LLM Generation
         comparison = run_comparative_benchmark(
