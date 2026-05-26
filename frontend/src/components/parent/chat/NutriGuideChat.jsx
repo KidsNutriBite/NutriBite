@@ -16,9 +16,6 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
     const [isTyping, setIsTyping] = useState(false);
     const [showMentions, setShowMentions] = useState(false);
     const [selectedChild, setSelectedChild] = useState(null);
-    const [isTyping, setIsTyping] = useState(false);
-    const [showMentions, setShowMentions] = useState(false);
-    const [selectedChild, setSelectedChild] = useState(null);
     const [isListening, setIsListening] = useState(false);
     const messagesEndRef = useRef(null);
     const recognitionRef = useRef(null);
@@ -241,18 +238,6 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
 
                 {detailedAnswer && (
                     <DetailsSection content={detailedAnswer} formatText={formatText} />
-                )}
-            </div>
-        );
-    };
-
-    return (
-        <div className="flex flex-col h-full bg-slate-50 dark:bg-slate-900 border-none rounded-none shadow-none">
-            {/* Header */}
-            <header className="bg-white dark:bg-slate-800 px-6 py-4 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between shrink-0 shadow-sm z-10 sticky top-0">
-                <div className="flex items-center gap-4">
-                    <button onClick={onBack} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg transition-colors text-slate-500 dark:text-slate-400">
-                        <span className="material-symbols-outlined">arrow_back</span>
                     </button>
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-lg">
