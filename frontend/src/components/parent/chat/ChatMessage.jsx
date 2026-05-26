@@ -1,179 +1,143 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
 
-const DetailsSection = ({ content, formatText, detailSections = [] }) => {
-    const [isOpen, setIsOpen] = useState(false);
+const BotIcon = () => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="11" width="18" height="10" rx="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        <circle cx="9" cy="16" r="1" fill="white" stroke="none"/>
+        <circle cx="15" cy="16" r="1" fill="white" stroke="none"/>
+    </svg>
+);
 
+const parseMarkdown = (text) => {
+    if (!text) return null;
+    return text.split('\n').map((line, i) => {
+        const t = line.trim();
+        if (!t) return <div key={i} style={{ height: '6px' }} />;
+        if (t.startsWith('### ')) return <p key={i} style={{ fontWeight: 700, fontSize: '13px', color: '#7F77DD', margin: '8px 0 2px' }}>{t.slice(4)}</p>;
+        if (t.startsWith('## ')) return <p key={i} style={{ fontWeight: 700, fontSize: '14px', margin: '10px 0 4px' }}>{t.slice(3)}</p>;
+        if (t === '---') return <hr key={i} style={{ border: 'none', borderTop: '0.5px solid rgba(0,0,0,0.1)', margin: '8px 0' }} />;
+        if (t.startsWith('- ') || t.startsWith('* ')) {
+            const content = t.slice(2);
+            return (
+                <div key={i} style={{ display: 'flex', gap: '6px', marginBottom: '3px' }}>
+                    <span style={{ color: '#7F77DD', marginTop: '1px' }}>•</span>
+                    <span style={{ flex: 1 }}>{parseBold(content)}</span>
+                </div>
+            );
+        }
+        if (/^\d+\.\s/.test(t)) {
+            const num = t.match(/^(\d+)\./)[1];
+            const content = t.replace(/^\d+\.\s/, '');
+            return (
+                <div key={i} style={{ display: 'flex', gap: '6px', marginBottom: '3px' }}>
+                    <span style={{ color: '#7F77DD', fontWeight: 600, fontSize: '11px', minWidth: '14px' }}>{num}.</span>
+                    <span style={{ flex: 1 }}>{parseBold(content)}</span>
+                </div>
+            );
+        }
+        return <p key={i} style={{ margin: '0 0 4px', lineHeight: 1.6 }}>{parseBold(line)}</p>;
+    });
+};
+
+const parseBold = (text) => {
+    const parts = text.split(/(\*\*[^*]+\*\*)/g);
+    return parts.map((p, i) =>
+        p.startsWith('**') && p.endsWith('**')
+            ? <strong key={i} style={{ fontWeight: 600 }}>{p.slice(2, -2)}</strong>
+            : p
+    );
+};
+
+const DetailsAccordion = ({ content }) => {
+    const [open, setOpen] = useState(false);
     return (
-        <div className="mt-4 border-t border-slate-100 dark:border-slate-700 pt-2">
-            {!isOpen ? (
+        <div style={{ marginTop: '10px', borderTop: '0.5px solid rgba(0,0,0,0.08)', paddingTop: '8px' }}>
+            {!open ? (
                 <button
-                    onClick={() => setIsOpen(true)}
-                    className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 text-xs font-bold hover:underline"
+                    onClick={() => setOpen(true)}
+                    style={{
+                        background: 'none', border: 'none', cursor: 'pointer',
+                        fontSize: '12px', fontWeight: 600, color: '#7F77DD',
+                        display: 'flex', alignItems: 'center', gap: '4px', padding: 0,
+                        fontFamily: 'inherit'
+                    }}
                 >
-                    <span className="material-symbols-outlined text-sm">auto_awesome</span>
-                    View Detailed Explanation
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#7F77DD" strokeWidth="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                    View detailed explanation
                 </button>
             ) : (
-                <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    className="bg-slate-50 dark:bg-slate-900/50 rounded-xl p-4 mt-2 text-sm text-slate-600 dark:text-slate-300 space-y-2 border border-slate-100 dark:border-slate-700"
-                >
-                    <div className="flex justify-between items-center mb-2">
-                        <span className="text-xs font-bold uppercase text-slate-400 tracking-wider">Detailed Analysis</span>
-                        <button onClick={() => setIsOpen(false)} className="text-slate-400 hover:text-slate-600">
-                            <span className="material-symbols-outlined text-sm">close</span>
-                        </button>
+                <div style={{ background: '#F7F8FA', borderRadius: '8px', padding: '12px', marginTop: '6px', fontSize: '12.5px', color: 'var(--text-secondary)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                        <span style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#9CA3AF' }}>Detailed analysis</span>
+                        <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF', padding: 0, fontFamily: 'inherit' }}>✕</button>
                     </div>
-                    {detailSections.length > 0 ? content : formatText(content)}
-                </motion.div>
+                    {parseMarkdown(content)}
+                </div>
             )}
         </div>
     );
 };
 
-const ChatMessage = ({ msg, handleSend }) => {
-    // Enhanced Markdown Renderer
-    const renderContent = (text) => {
-        if (!text) return null;
-        
-        const parts = text.split('|||DETAILED|||');
-        const shortAnswer = parts[0];
-        const detailedAnswer = parts.length > 1 ? parts[1] : null;
-
-        const formatText = (str) => {
-            if (!str) return null;
-            return str.split('\n').map((line, i) => {
-                const trimmed = line.trim();
-                if (!trimmed) return <div key={i} className="h-2" />; // Spacer for empty lines
-
-                // Headers
-                if (trimmed.startsWith('### ')) return <h3 key={i} className="text-base font-bold text-indigo-700 dark:text-indigo-400 mt-3 mb-1">{trimmed.replace('### ', '')}</h3>;
-                if (trimmed.startsWith('## ')) return <h2 key={i} className="text-lg font-bold text-slate-800 dark:text-white mt-4 mb-2">{trimmed.replace('## ', '')}</h2>;
-
-                // Horizontal Rule
-                if (trimmed === '---' || trimmed === '***') return <hr key={i} className="my-3 border-slate-200 dark:border-slate-700" />;
-
-                // List items (Unordered)
-                if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
-                    return (
-                        <div key={i} className="flex gap-2 ml-2 mb-1">
-                            <span className="text-indigo-500">•</span>
-                            <span className="text-slate-700 dark:text-slate-300 flex-1">{parseInline(trimmed.substring(2))}</span>
-                        </div>
-                    );
-                }
-
-                // List items (Ordered)
-                if (/^\d+\.\s/.test(trimmed)) {
-                    const content = trimmed.replace(/^\d+\.\s/, '');
-                    return (
-                        <div key={i} className="flex gap-2 ml-2 mb-1">
-                            <span className="font-bold text-indigo-500 text-xs mt-1">{trimmed.split('.')[0]}.</span>
-                            <span className="text-slate-700 dark:text-slate-300 flex-1">{parseInline(content)}</span>
-                        </div>
-                    );
-                }
-
-                // Standard Paragraph
-                return (
-                    <p key={i} className="mb-1 text-slate-700 dark:text-slate-200 leading-relaxed">
-                        {parseInline(line)}
-                    </p>
-                );
-            });
-        };
-
-        const parseInline = (text) => {
-            const parts = text.split(/(\*\*.*?\*\*)/g);
-            return parts.map((part, j) => {
-                if (part.startsWith('**') && part.endsWith('**')) {
-                    return <strong key={j} className="font-bold text-slate-900 dark:text-white">{part.slice(2, -2)}</strong>;
-                }
-                const italicParts = part.split(/(\*.*?\*)/g);
-                return italicParts.map((subPart, k) => {
-                    if (subPart.startsWith('*') && subPart.endsWith('*') && subPart.length > 2) {
-                        return <em key={`${j}-${k}`} className="italic text-slate-600 dark:text-slate-400">{subPart.slice(1, -1)}</em>;
-                    }
-                    return subPart;
-                });
-            });
-        };
-
-        return (
-            <div className="space-y-1">
-                <div className="text-slate-800 dark:text-slate-200">
-                    {formatText(shortAnswer)}
-                </div>
-
-                {detailedAnswer && (
-                    <DetailsSection content={detailedAnswer} formatText={formatText} />
-                )}
-            </div>
-        );
-    };
+const ChatMessage = ({ msg }) => {
+    const isUser = msg.sender === 'user';
+    const parts = msg.text?.split('|||DETAILED|||') ?? [msg.text];
+    const shortText = parts[0];
+    const detailText = parts[1];
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-        >
-            <div className={`flex items-end gap-3 max-w-[90%] md:max-w-[75%] ${msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: isUser ? 'flex-end' : 'flex-start', gap: '4px' }}>
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: '8px', maxWidth: '80%', flexDirection: isUser ? 'row-reverse' : 'row' }}>
                 {/* Avatar */}
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs shrink-0 shadow-sm border ${msg.sender === 'user' ? 'bg-indigo-100 text-indigo-600 border-indigo-200' : 'bg-white dark:bg-slate-800 text-purple-600 border-slate-200 dark:border-slate-700'}`}>
-                    <span className="material-symbols-outlined text-sm">{msg.sender === 'user' ? 'person' : 'smart_toy'}</span>
+                <div style={{
+                    width: '28px',
+                    height: '28px',
+                    borderRadius: '50%',
+                    background: isUser ? '#EEEDFE' : '#7F77DD',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0
+                }}>
+                    {isUser ? (
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7F77DD" strokeWidth="2" strokeLinecap="round">
+                            <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.58-7 8-7s8 3 8 7"/>
+                        </svg>
+                    ) : <BotIcon />}
                 </div>
 
                 {/* Bubble */}
-                <div>
-                    <div className={`px-5 py-3.5 rounded-2xl shadow-sm text-sm md:text-base leading-relaxed ${msg.sender === 'user'
-                        ? 'bg-indigo-600 text-white rounded-br-none'
-                        : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-bl-none'
-                        }`}>
-                        {msg.sender === 'ai' ? renderContent(msg.text) : msg.text}
-                    </div>
-                    
-                    {/* Toolbar for AI messages */}
-                    {msg.sender === 'ai' && (
-                        <div className="flex items-center gap-2 mt-2 ml-2">
-                            <button 
-                                onClick={() => navigator.clipboard.writeText(msg.text)}
-                                className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded-lg transition-colors flex items-center justify-center"
-                                title="Copy"
-                            >
-                                <span className="material-symbols-outlined text-[16px]">content_copy</span>
-                            </button>
-                            <button 
-                                onClick={() => handleSend("Can you explain this in a different way?")}
-                                className="p-1.5 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded-lg transition-colors flex items-center justify-center"
-                                title="Explain More"
-                            >
-                                <span className="material-symbols-outlined text-[16px]">psychology</span>
-                            </button>
-                            <div className="w-px h-3 bg-slate-300 dark:bg-slate-600 mx-1"></div>
-                            <button 
-                                className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded-lg transition-colors flex items-center justify-center"
-                                title="Helpful"
-                            >
-                                <span className="material-symbols-outlined text-[16px]">thumb_up</span>
-                            </button>
-                            <button 
-                                className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-900/30 rounded-lg transition-colors flex items-center justify-center"
-                                title="Not Helpful"
-                            >
-                                <span className="material-symbols-outlined text-[16px]">thumb_down</span>
-                            </button>
-                        </div>
+                <div style={{
+                    padding: '10px 14px',
+                    borderRadius: isUser ? '12px 4px 12px 12px' : '4px 12px 12px 12px',
+                    background: isUser ? '#7F77DD' : '#FFFFFF',
+                    border: isUser ? 'none' : '0.5px solid rgba(0,0,0,0.1)',
+                    fontSize: '13.5px',
+                    lineHeight: 1.6,
+                    color: isUser ? '#FFFFFF' : 'var(--text-primary)',
+                    maxWidth: '100%'
+                }}>
+                    {isUser ? (
+                        <span>{msg.text}</span>
+                    ) : (
+                        <>
+                            {parseMarkdown(shortText)}
+                            {detailText && <DetailsAccordion content={detailText} />}
+                        </>
                     )}
-
-                    <div className={`text-[10px] font-medium text-slate-400 mt-1 ${msg.sender === 'user' ? 'text-right' : 'text-left ml-2'}`}>
-                        {msg.time}
-                    </div>
                 </div>
             </div>
-        </motion.div>
+
+            {/* Timestamp */}
+            <span style={{
+                fontSize: '11px',
+                color: 'var(--text-muted)',
+                paddingLeft: isUser ? '0' : '36px',
+                paddingRight: isUser ? '36px' : '0'
+            }}>
+                {msg.time}
+            </span>
+        </div>
     );
 };
 
