@@ -14,6 +14,7 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
     ]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
+    const [loadingStep, setLoadingStep] = useState(0);
     const [showMentions, setShowMentions] = useState(false);
     const [selectedChild, setSelectedChild] = useState(null);
     const [isListening, setIsListening] = useState(false);
@@ -99,6 +100,11 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
         setMessages(prev => [...prev, newMsg]);
         setInput('');
         setIsTyping(true);
+        setLoadingStep(0);
+
+        const loadingInterval = setInterval(() => {
+            setLoadingStep(prev => (prev < 2 ? prev + 1 : prev));
+        }, 1500);
 
         try {
             // Use selected child data or defaults
@@ -147,11 +153,12 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
             const errorMsg = {
                 id: Date.now() + 1,
                 sender: 'ai',
-                text: "I'm having trouble connecting to the nutrition database right now. Please ensure the AI backend is running.",
+                text: "I'm having trouble connecting to the nutrition database right now. Please ensure the AI backend is running and try again.",
                 time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
             };
             setMessages(prev => [...prev, errorMsg]);
         } finally {
+            clearInterval(loadingInterval);
             setIsTyping(false);
         }
     };
@@ -293,13 +300,20 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
                     {isTyping && (
                         <div className="flex justify-start">
                             <div className="flex items-end gap-3">
-                                <div className="w-8 h-8 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center shrink-0">
-                                    <span className="material-symbols-outlined text-sm text-purple-600">smart_toy</span>
+                                <div className="w-8 h-8 rounded-full bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-100 dark:border-indigo-800 flex items-center justify-center shrink-0 shadow-sm">
+                                    <span className="material-symbols-outlined text-sm text-indigo-500 animate-pulse">smart_toy</span>
                                 </div>
-                                <div className="bg-white dark:bg-slate-800 px-4 py-3 rounded-2xl rounded-bl-none shadow-sm border border-slate-200 dark:border-slate-700 flex gap-1">
-                                    <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce"></div>
-                                    <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce delay-75"></div>
-                                    <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce delay-150"></div>
+                                <div className="bg-white dark:bg-slate-800 px-5 py-3.5 rounded-2xl rounded-bl-none shadow-sm border border-slate-200 dark:border-slate-700 flex items-center gap-4">
+                                    <div className="flex gap-1.5">
+                                        <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce"></div>
+                                        <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce delay-75"></div>
+                                        <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full animate-bounce delay-150"></div>
+                                    </div>
+                                    <span className="text-xs font-medium text-slate-500 dark:text-slate-400 italic">
+                                        {loadingStep === 0 && "Analyzing profile..."}
+                                        {loadingStep === 1 && "Retrieving knowledge base..."}
+                                        {loadingStep === 2 && "Synthesizing response..."}
+                                    </span>
                                 </div>
                             </div>
                         </div>
