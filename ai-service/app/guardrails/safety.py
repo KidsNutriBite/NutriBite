@@ -6,7 +6,7 @@ EMERGENCY_KEYWORDS = [
     "unconscious", "passed out", "fainted",
     "severe dehydration", "not peeing", "lethargic",
     "very high fever", "convulsions", "seizure",
-    "poison", "swallowed coin", "choking"
+    "poison", "swallow", "soap", "choking"
 ]
 
 def check_emergency_escalation(query: str) -> str:
@@ -38,7 +38,7 @@ def validate_kids_mode_message(message: str) -> str:
         if f" {k}" in f" {msg_lower}" or f"{k} " in f"{msg_lower}":
             return (
                 "I'm your Food Buddy, and I love talking about yummy, crunchy fruits and strong-veggies! 🥦🍎 "
-                "For health, growing, or medical questions, it's best to ask your parents or a friendly doctor. "
+                "For health, growing, or medical questions, you must ask a grown-up or a friendly doctor immediately. "
                 "Let's talk about what super-veg you ate today instead! 🦸‍♂️"
             )
     return ""
