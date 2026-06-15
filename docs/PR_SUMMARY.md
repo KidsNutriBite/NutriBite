@@ -32,3 +32,12 @@ This PR overhauls the NutriGuide chatbot architecture and user experience to del
 
 ## Commits
 This PR encapsulates 11 atomic commits covering foundational setup, core UI restructuring, UX enhancements, AI prompt tuning, and retrieval optimization.
+
+
+
+
+
+
+
+
+
