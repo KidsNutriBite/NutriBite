@@ -6,14 +6,16 @@ def build_chatbot_prompt(
     rag_context: List[str],
     planner_output: Dict[str, Any],
     is_kids_mode: bool = False,
-    history: List[Dict[str, str]] = None
+    history: List[Dict[str, str]] = None,
+    intent: str = "general_question"
 ) -> str:
     """
     Constructs highly structured, safe context-aware prompt.
     """
     # Base system instructions
     system_instructions = (
-        "You are NutriGuide AI — an elite pediatric nutrition intelligence assistant inside the NutriBite platform.\n"
+        f"You are NutriGuide AI — an elite pediatric nutrition intelligence assistant inside the NutriBite platform.\n"
+        f"DETECTED USER INTENT: '{intent}'. You MUST tailor your top-level guidance specifically to this intent.\n"
         "Your mission: Deliver medically safe, personalized, accurate, fast, trustworthy, user-friendly nutritional guidance using retrieved knowledge.\n\n"
         "ABSOLUTE RULES:\n"
         "- NEVER give repetitive generic answers. Do not repeat the same recommendations unless context demands it.\n"
@@ -65,13 +67,30 @@ def build_chatbot_prompt(
         }
         equipped_style = companion_styles.get(equipped, companion_styles["Captain Milk"])
         
-        system_instructions += (
-            f"\nKIDS MODE INSTRUCTIONS:\n"
-            f"- {equipped_style}\n"
-            f"- Keep answers extremely simple, warm, energetic, and engaging.\n"
-            f"- Use fun food emojis (🥕, 🍎, 🥦, 🍌, 🍳, 🌾, 🥛).\n"
-            f"- Use storytelling to explain why good foods are healthy (e.g., carrots giving night-vision, spinach giving super muscles).\n"
-            f"- Strictly avoid technical calorie/protein percentages, clinical targets, or medical terms. Keep it fully gamified, fun, and motivational!"
+        system_instructions = (
+            "You are a kid-friendly pediatric nutrition intelligence assistant inside the NutriBite platform. "
+            f"Specifically: {equipped_style}\n\n"
+            "CRITICAL: You MUST strictly return your response in a valid JSON object. Do not include any markdown fences (like ```json ... ```) or conversational text outside the JSON. Return only the JSON content itself.\n"
+            "JSON OBJECT STRUCTURE TO GENERATE:\n"
+            "{\n"
+            '  "fun_response": "A fun, simple, exciting, emotionally positive, highly engaging, and playful answer tailored to the child. Use storytelling and emojis. E.g. \\"Milk helps build strong superhero bones!\\"",\n'
+            '  "scientific_explanation": "An educational, scientific, intelligent, and real explanation of the biology and chemistry behind the food. Avoid sounding childish. E.g. \\"Milk contains calcium and phosphorus, which are essential for bone mineralization and skeletal development.\\"",\n'
+            '  "nutrition_facts": [\n'
+            '    {"nutrient": "Calcium", "function": "Mineral that forms the crystal structure of bone tissue", "organ": "Skeletal System"}\n'
+            '  ],\n'
+            '  "did_you_know": "A mind-blowing, fun, scientifically interesting fact that sparks their curiosity. Avoid childish tone here.",\n'
+            '  "xp_reward": 10,\n'
+            '  "badge_unlock": "Name of badge if they completed a major curiosity milestone (e.g. \\"Calcium Commander\\" or \\"Hydration Hero\\"), otherwise empty string",\n'
+            '  "learning_category": "One of: proteins | carbohydrates | fats | vitamins | minerals | hydration | digestion | immunity | muscles",\n'
+            '  "difficulty_level": "One of: beginner | intermediate | advanced",\n'
+            '  "related_game": "One of: plate_builder | monster_battle | lab_simulator | adventure_map",\n'
+            '  "encouragement_message": "A warm, supportive, and energetic message encouraging them to explore healthy eating.",\n'
+            '  "safety_flags": []\n'
+            "}\n\n"
+            "STRICT GUIDELINES FOR THE SCIENTIFIC LAYER:\n"
+            "- Explain WHAT nutrient exists, WHY the body needs it, WHICH systems or organs use it, and HOW it supports their natural growth.\n"
+            "- Avoid technical jargon overkill but use correct biological terms (e.g. 'calcium', 'metabolism', 'digestion', 'erythrocytes', 'amino acids', 'cellular energy').\n"
+            "- Do not sound childish in the scientific_explanation or did_you_know sections. Speak like a friendly scientist talking to an inquisitive student!"
         )
         
     rag_section = "\n".join([f"- {chunk}" for chunk in rag_context])
