@@ -3,8 +3,6 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 
-import heroIllustration from '../assets/pediatrician-home-service-smiling-woman-doctor-sitting-with-baby-girl-bed-checkup_726520-3200.jpg';
-
 const LandingPage = () => {
     return (
         <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 selection:bg-primary/30">
@@ -70,9 +68,29 @@ const LandingPage = () => {
                                 <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Trusted by over <span className="text-slate-900 dark:text-white font-bold">2,500+</span> families and doctors worldwide.</p>
                             </div>
                         </div>
-                        <div className="relative lg:w-1/2">
-                            <div className="relative z-10 w-full transform hover:-rotate-1 transition-transform duration-500">
-                                <img className="aspect-[4/3] w-full rounded-2xl object-cover shadow-lg" alt="Illustration of a friendly pediatrician talking to a child holding an apple" src={heroIllustration.src} />
+                        <div className="relative lg:w-1/2 flex items-center justify-center">
+                            <div className="relative z-10 w-full aspect-[4/3] rounded-2xl bg-gradient-to-tr from-primary/10 to-accent-green/10 dark:from-primary/20 dark:to-accent-green/20 border border-slate-200/50 dark:border-slate-800 shadow-xl overflow-hidden flex flex-col items-center justify-center p-8 text-center gap-6">
+                                {/* Floating decorative shapes */}
+                                <div className="absolute top-10 left-10 w-20 h-20 bg-primary/10 rounded-full blur-xl animate-pulse"></div>
+                                <div className="absolute bottom-10 right-10 w-28 h-28 bg-accent-green/10 rounded-full blur-xl animate-pulse delay-1000"></div>
+                                
+                                <div className="z-10 flex h-20 w-20 items-center justify-center rounded-3xl bg-primary text-white shadow-xl shadow-primary/30">
+                                    <span className="material-symbols-outlined text-4xl">child_care</span>
+                                </div>
+                                <div className="z-10 space-y-2 max-w-sm">
+                                    <h3 className="text-2xl font-black text-slate-800 dark:text-white">NutriKid Dashboard</h3>
+                                    <p className="text-slate-600 dark:text-slate-400 text-sm">Empowering families with playful, science-backed nutrition guidance and real-time pediatrician access.</p>
+                                </div>
+                                <div className="z-10 flex gap-3 flex-wrap justify-center">
+                                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white dark:bg-slate-800 px-3 py-1 text-xs font-semibold text-slate-600 dark:text-slate-300 border border-slate-100 dark:border-slate-700 shadow-sm">
+                                        <span className="h-2 w-2 rounded-full bg-emerald-500 animate-ping"></span>
+                                        Active Tracking
+                                    </span>
+                                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white dark:bg-slate-800 px-3 py-1 text-xs font-semibold text-slate-600 dark:text-slate-300 border border-slate-100 dark:border-slate-700 shadow-sm">
+                                        <span className="material-symbols-outlined text-xs text-primary">health_and_safety</span>
+                                        Doctor Verified
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>

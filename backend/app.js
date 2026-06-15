@@ -26,11 +26,38 @@ import nutritionTrendsRoutes from './routes/nutritionTrends.routes.js';
 import sleepRoutes from './routes/sleep.routes.js';
 import activityRoutes from './routes/activity.routes.js';
 import nutritionRoutes from './routes/nutrition.routes.js'; // New import
+import twinRoutes from './routes/twin.routes.js';
+import { correlationMiddleware, requestLatencyLogger } from './utils/otel.js';
 
 // Initialize App
 const app = express();
 
-// Middleware
+// Simple In-Memory Rate Limiter to protect all API endpoints
+const clients = new Map();
+const rateLimiter = (req, res, next) => {
+    const ip = req.ip || req.headers['x-forwarded-for'] || 'unknown';
+    const now = Date.now();
+    const windowMs = 60 * 1000;
+    const maxRequests = 100;
+
+    let requests = clients.get(ip) || [];
+    requests = requests.filter(t => now - t < windowMs);
+    
+    if (requests.length >= maxRequests) {
+        return res.status(429).json({ message: "Too many requests from this IP, please try again after a minute." });
+    }
+    
+    requests.push(now);
+    clients.set(ip, requests);
+    next();
+};
+
+// Apply Correlation IDs and Latency telemetry
+app.use(correlationMiddleware);
+app.use(requestLatencyLogger);
+
+// Apply Rate Limiter and JSON parsing
+app.use('/api', rateLimiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -63,6 +90,7 @@ app.use('/api/nutrition-trends', nutritionTrendsRoutes);
 app.use('/api/sleep', sleepRoutes);
 app.use('/api/activity', activityRoutes);
 app.use('/api/nutrition-analysis', nutritionRoutes); // Mount nutrition routes
+app.use('/api/twin', twinRoutes);
 
 // Health Check
 app.get('/', (req, res) => {

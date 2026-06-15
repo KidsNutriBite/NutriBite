@@ -19,6 +19,7 @@ import DailyMealCard from '../../components/meal/DailyMealCard';
 import DateTimeline from '../../components/meal/DateTimeline';
 import { getMealsByDate, getMealHistory, getLastMealTime } from '../../api/meal.api'; // Updated imports
 import ActivityTracking from '../../components/parent/ActivityTracking'; // Import Component
+import DigitalTwinView from '../../components/parent/DigitalTwinView';
 
 const ChildDetails = () => {
     const { id } = useParams();
@@ -213,6 +214,7 @@ const ChildDetails = () => {
 
     const tabs = [
         { id: 'overview', label: 'Overview & Logs', icon: '📊' },
+        { id: 'twin', label: 'Digital Twin', icon: '🤖' },
         { id: 'growth', label: 'Growth Timeline', icon: '📏' }, // New Tab
         { id: 'analytics', label: 'Nutrition Trends', icon: '📈' },
         { id: 'sleep', label: 'Sleep Tracking', icon: '😴' },
@@ -502,6 +504,10 @@ const ChildDetails = () => {
                                         />
                                     </div>
                                 </div>
+                            )}
+
+                            {activeTab === 'twin' && (
+                                <DigitalTwinView profileId={id} profile={profile} />
                             )}
 
                             {activeTab === 'growth' && (

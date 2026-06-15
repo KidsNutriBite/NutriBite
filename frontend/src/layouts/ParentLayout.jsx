@@ -8,6 +8,7 @@ import useAuth from '../hooks/useAuth';
 import { toast } from 'react-hot-toast';
 import { useProfile } from '../context/ProfileContext';
 import FeedbackModal from '../components/parent/FeedbackModal';
+import { useTheme } from '../context/ThemeContext';
 
 const ParentLayout = ({ children }) => {
     const { logout, user } = useAuth();
@@ -19,7 +20,21 @@ const ParentLayout = ({ children }) => {
     const [showProfileDropdown, setShowProfileDropdown] = useState(false);
     const [showChildDropdown, setShowChildDropdown] = useState(false);
     const [isFeedbackOpen, setIsFeedbackOpen] = useState(false);
+    const [showDisclaimer, setShowDisclaimer] = useState(true);
     const { profiles, selectedProfileId, selectedProfile, changeProfile } = useProfile();
+    const { theme, toggleTheme } = useTheme();
+
+    useEffect(() => {
+        if (sessionStorage.getItem('disclaimerClosed') === 'true') {
+            setShowDisclaimer(false);
+        }
+    }, []);
+
+    const handleCloseDisclaimer = () => {
+        setShowDisclaimer(false);
+        sessionStorage.setItem('disclaimerClosed', 'true');
+    };
+
 
     const notifRef = useRef(null);
     const profileRef = useRef(null);
@@ -195,6 +210,17 @@ const ParentLayout = ({ children }) => {
                         </div>
                     )}
 
+                    {/* Theme Toggle Button */}
+                    <button
+                        onClick={toggleTheme}
+                        className="flex items-center justify-center rounded-full h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-primary/10 transition-all active:scale-95"
+                        aria-label="Toggle Theme"
+                    >
+                        <span className="material-symbols-outlined text-xl">
+                            {theme === 'light' ? 'dark_mode' : 'light_mode'}
+                        </span>
+                    </button>
+
                     {/* Notification Bell */}
                     <div className="relative" ref={notifRef}>
                         <button
@@ -345,20 +371,32 @@ const ParentLayout = ({ children }) => {
             </main>
 
             {/* Persistent Medical Disclaimer & Feedback Button */}
-            <div className="fixed bottom-0 left-0 w-full z-40 bg-slate-900 text-slate-300 py-2 border-t border-slate-800 text-center px-4 flex flex-col md:flex-row justify-center items-center gap-2 md:gap-6 backdrop-blur-md bg-opacity-95 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
-                <p className="text-xs font-medium tracking-wide flex items-center justify-center gap-1.5">
-                    <span className="material-symbols-outlined text-[14px] text-amber-500">warning</span>
-                    <strong className="text-white">Disclaimer:</strong> This is not a substitute for medical advice. Always consult a pediatrician.
-                </p>
-                
-                <button 
-                    onClick={() => setIsFeedbackOpen(true)}
-                    className="md:absolute md:right-6 bg-primary hover:bg-blue-600 text-white px-4 py-1.5 rounded-full text-xs font-bold transition-colors shadow-lg shadow-blue-500/20 flex items-center gap-1.5 border border-blue-400/50"
-                >
-                    <span className="material-symbols-outlined text-[14px]">rate_review</span>
-                    Feedback
-                </button>
-            </div>
+            {showDisclaimer && (
+                <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 w-[90%] md:w-auto min-w-[320px] bg-white/90 dark:bg-slate-900/90 text-slate-700 dark:text-slate-300 py-3 px-4 md:px-6 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-[0_8px_30px_rgb(0,0,0,0.12)] dark:shadow-[0_8px_30px_rgba(0,0,0,0.4)] backdrop-blur-xl flex flex-col md:flex-row justify-between items-center gap-3 md:gap-6 transition-all duration-300 animate-in slide-in-from-bottom-8">
+                    <p className="text-[13px] font-medium tracking-wide flex items-center justify-center gap-2">
+                        <span className="material-symbols-outlined text-[18px] text-amber-500 drop-shadow-sm">warning</span>
+                        <span className="dark:text-slate-200"><strong className="text-slate-900 dark:text-white font-bold">Disclaimer:</strong> Not a substitute for medical advice. Always consult a pediatrician.</span>
+                    </p>
+                    
+                    <div className="flex items-center gap-3">
+                        <button 
+                            onClick={() => setIsFeedbackOpen(true)}
+                            className="bg-primary/10 text-primary hover:bg-primary hover:text-white px-4 py-1.5 rounded-full text-xs font-bold transition-all flex items-center gap-1.5 border border-primary/20 hover:shadow-md"
+                        >
+                            <span className="material-symbols-outlined text-[14px]">rate_review</span>
+                            Feedback
+                        </button>
+                        <div className="w-[1px] h-4 bg-slate-300 dark:bg-slate-600"></div>
+                        <button 
+                            onClick={handleCloseDisclaimer}
+                            className="p-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors shrink-0 flex items-center justify-center"
+                            aria-label="Close disclaimer"
+                        >
+                            <span className="material-symbols-outlined text-[18px]">close</span>
+                        </button>
+                    </div>
+                </div>
+            )}
 
             <FeedbackModal isOpen={isFeedbackOpen} onClose={() => setIsFeedbackOpen(false)} />
         </div>

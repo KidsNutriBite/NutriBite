@@ -2,15 +2,24 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const FoodBuddyChatInterface = ({ onBack, profile }) => {
-    const [messages, setMessages] = useState([
-        {
-            id: 1,
-            sender: 'buddy',
-            text: "Hi there, superstar! I'm feeling extra crunchy today! 🥦 Have you eaten any colorful fruits or veggies yet? They give you super powers!",
-            time: '10:05 AM'
+const FoodBuddyChatInterface = ({ onBack, profile, stats }) => {
+    const getWelcomeMessage = (companion) => {
+        if (companion === "Iron-Man Ragi") {
+            return "Hi little cadet! 🌾 Shield Commander Iron-Man Ragi here! Ready to build super bone armor today? 🛡️ What healthy grain fuels your shield?";
         }
-    ]);
+        if (companion === "Sprout-Shield") {
+            return "Hello friend! 🥦 Tummy defender Sprout-Shield reporting! Ready to launch friendly green tummy defense shield-bots today? 💚 Let's log some green fuel!";
+        }
+        return "Hi superstar! 🥛 Captain Milk here! Ready to build strong muscle bricks so you can jump higher than mountains? ⚡ Let's log some healthy fuel!";
+    };
+
+    const getCompanionEmoji = (name) => {
+        if (name === "Iron-Man Ragi") return "🌾";
+        if (name === "Captain Milk") return "🥛";
+        return "🥦";
+    };
+
+    const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const messagesEndRef = useRef(null);
@@ -18,6 +27,19 @@ const FoodBuddyChatInterface = ({ onBack, profile }) => {
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
+
+    useEffect(() => {
+        if (profile) {
+            setMessages([
+                {
+                    id: 1,
+                    sender: 'buddy',
+                    text: getWelcomeMessage(profile.equippedCompanion),
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                }
+            ]);
+        }
+    }, [profile]);
 
     useEffect(scrollToBottom, [messages, isTyping]);
 
@@ -48,12 +70,12 @@ const FoodBuddyChatInterface = ({ onBack, profile }) => {
                         role: msg.sender === 'me' ? 'user' : 'model',
                         content: msg.text
                     })),
-                    // Use profile data if available, otherwise defaults
                     age: profile?.age ? `${profile.age} years` : "5 years",
                     weight: profile?.weight ? `${profile.weight}kg` : "20kg",
                     conditions: profile?.allergies?.join(", ") || "None",
                     prescription: "None",
-                    audience: "kid"
+                    audience: "kid",
+                    equippedCompanion: profile?.equippedCompanion || "Captain Milk"
                 }),
             });
 
@@ -99,12 +121,12 @@ const FoodBuddyChatInterface = ({ onBack, profile }) => {
                     </button>
                     <div className="relative">
                         <div className="w-12 h-12 bg-green-100 rounded-full border-2 border-white shadow-sm flex items-center justify-center text-2xl overflow-hidden">
-                            🥦
+                            {getCompanionEmoji(profile?.equippedCompanion)}
                         </div>
                         <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
                     </div>
                     <div>
-                        <h1 className="text-lg font-black text-slate-800">Food Buddy</h1>
+                        <h1 className="text-lg font-black text-slate-800">{profile?.equippedCompanion || "Food Buddy"}</h1>
                         <p className="text-xs font-bold text-slate-400 italic">"I love snacks! Ask me anything!"</p>
                     </div>
                 </div>
@@ -113,7 +135,7 @@ const FoodBuddyChatInterface = ({ onBack, profile }) => {
                         <span className="material-symbols-outlined text-slate-500">volume_up</span>
                     </div>
                     <div className="bg-blue-50 px-3 py-1.5 rounded-full text-blue-600 font-black text-sm flex items-center gap-1">
-                        <span className="material-symbols-outlined text-sm">star</span> 42 Points
+                        <span className="material-symbols-outlined text-sm">star</span> {stats?.currentXP || 0} XP (Lvl {stats?.level || 1})
                     </div>
                 </div>
             </header>
@@ -137,7 +159,7 @@ const FoodBuddyChatInterface = ({ onBack, profile }) => {
                         <div className={`flex items-end gap-3 max-w-[80%] md:max-w-[60%] ${msg.sender === 'me' ? 'flex-row-reverse' : 'flex-row'}`}>
                             {/* Avatar */}
                             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm shrink-0 shadow-sm border border-white ${msg.sender === 'me' ? 'bg-blue-100' : 'bg-green-100'}`}>
-                                {msg.sender === 'me' ? (profile?.avatar === 'lion' ? '🦁' : '👤') : '🥦'}
+                                {msg.sender === 'me' ? (profile?.avatar === 'lion' ? '🦁' : '👤') : getCompanionEmoji(profile?.equippedCompanion)}
                             </div>
 
                             {/* Bubble */}
