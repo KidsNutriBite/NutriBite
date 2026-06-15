@@ -1,24 +1,42 @@
-# System Architecture
+# 🏗️ NutriBite AI: Core System Architecture
 
-## Overview
-NutriKid is a monolithic MERN stack application organized in a monorepo structure.
+This document describes the layered, production-grade foundation architecture of the NutriBite AI microservice (`ai-service-v2`).
 
-## Layers
+---
 
-1.  **Frontend (Client)**
-    *   **Tech**: React, Vite, Tailwind.
-    *   **Responsibility**: UI/UX, State Management (Context API), API consumption (Axios).
-    *   **Security**: JWT storage (localStorage/HttpOnly cookie), route protection.
+## Targeted Architecture Layers
 
-2.  **Backend (API)**
-    *   **Tech**: Node.js, Express.
-    *   **Responsibility**: Business logic, standard REST API endpoints, Validation (Zod), Authentication/Authorization.
-    *   **Security**: Helmet, CORS, Rate Limiting (future), JWT verification.
+```
+             Frontend (Parent/Kid/Doctor Apps)
+                       ↓ (REST + WebSocket)
+          FastAPI Gateway + Unified ASGI Middleware
+                       ↓
+[Layer 1] Security Gates (Injection Shielding)
+                       ↓
+[Layer 2] Safety Guardrails (Emergency Triage / Bedtime Lockout)
+                       ↓
+[Layer 3] Hybrid RAG Pipeline (BM25 Lexical + FAISS Semantic + Cross-Encoder Reranking)
+                       ↓
+[Layer 4] Deterministic Planner (Nutrition Calculators & Allergy Blocks)
+                       ↓
+[Layer 5] Prompt Management Layer (Declarative Prompt Assembly)
+                       ↓
+[Layer 6] Centralized Model Router (Ollama Mistral Primary -> Gemini Fallback)
+                       ↓
+[Layer 7] Unified Logging & Tracing Service (Execution Span Profiling)
+                       ↓
+             Unified Response Schema Payload
+```
 
-3.  **Database**
-    *   **Tech**: MongoDB.
-    *   **Models**: Mongoose schemas with strict typing and validation.
+---
 
-## Data Flow
-1.  Client sends request -> Middleware (Cors, Auth) -> Controller -> Service -> Database.
-2.  Database responds -> Service processes data -> Controller formats response -> Client receives JSON.
+## Layer Descriptions
+
+1. **FastAPI Gateway**: Serves as the high-throughput entrypoint. Exposes standard routes with rate-limiting, Request ID logging, and JWT authentication middleware.
+2. **Security Gates**: Active shield scanning queries for prompt injection, boundary override bypasses, and jailbreak commands. Intercepts threats before LLM dispatch.
+3. **Safety Guardrails**: Analyzes pediatric medical emergency keywords for doctor triage escalation and handles kids bedtime lockouts.
+4. **Hybrid RAG Pipeline**: Implements high-recall BM25 combined with semantic dense FAISS indices. Fuses candidates using Reciprocal Rank Fusion (RRF) and passes them to a Cross-Encoder reranker.
+5. **Deterministic Planner**: An algorithmic decision engine performing calorie targets math, regional preference matching, and severe allergy exclusions. Never relies on LLM calculations.
+6. **Prompt Management**: Compiles declarative prompts dynamically based on child profile inputs, retrieved chunks, and structured planner outputs.
+7. **Model Router**: Centralized dispatcher handling local Ollama Mistral inference with automated API failovers to Google Gemini and static deterministic experts.
+8. **Logging & Tracing**: Profiles latencies, generation durations, RAG indices matching, and confidence ratings across spans, printing clean trace logs.
