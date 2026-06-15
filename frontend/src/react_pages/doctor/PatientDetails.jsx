@@ -7,6 +7,7 @@ import { getMealFrequency, getPrescriptions, createPrescription } from '../../ap
 import MealFrequencyChart from '../../components/charts/MealFrequencyChart';
 import toast from 'react-hot-toast';
 import api from '../../api/axios';
+import DoctorTwinView from '../../components/doctor/DoctorTwinView';
 
 const PatientDetails = () => {
     const { id } = useParams();
@@ -90,6 +91,7 @@ const PatientDetails = () => {
 
     const tabs = status === 'active' ? [
         { id: 'overview', label: 'Clinical Overview', icon: '📊' },
+        { id: 'twin', label: 'Digital Twin View', icon: '🤖' },
         { id: 'analytics', label: 'Nutrition & Growth', icon: '📈' },
         { id: 'prescriptions', label: 'Prescriptions', icon: '📝' },
     ] : [
@@ -234,7 +236,7 @@ const PatientDetails = () => {
                                                                 {meal.mealType === 'Breakfast' ? '🍳' : meal.mealType === 'Lunch' ? '🥗' : '🍲'}
                                                             </div>
                                                             <div>
-                                                                <p className="font-bold text-gray-900">{meal.foodItems.map(f => f.name).join(', ')}</p>
+                                                                <p className="font-bold text-gray-900">{(meal.foodItems || meal.items || []).map(f => f?.name || f?.foodName || 'Unknown').join(', ') || 'Meal logged'}</p>
                                                                 <p className="text-xs text-gray-500">{new Date(meal.date).toLocaleDateString()} • {meal.mealType}</p>
                                                             </div>
                                                         </div>
@@ -247,6 +249,10 @@ const PatientDetails = () => {
                                         )}
                                     </div>
                                 </div>
+                            )}
+
+                            {activeTab === 'twin' && status === 'active' && (
+                                <DoctorTwinView profileId={id} profile={profile} />
                             )}
 
                             {activeTab === 'analytics' && status === 'active' && (
