@@ -435,6 +435,39 @@ async def twin_analyze_endpoint(payload: TwinAnalysisRequest):
             detail=f"Error running twin analysis: {str(e)}"
         )
 
+
+# ── Growth Velocity Engine ──────────────────────────────────────────────────────
+
+class GrowthVelocityRequest(BaseModel):
+    profile: Dict[str, Any] = Field(..., description="Child profile (age, gender, ageInMonths, name)")
+    growth_records: List[Dict[str, Any]] = Field(..., description="List of GrowthRecord documents sorted by timestamp")
+
+@app.post("/growth/velocity", response_model=Dict[str, Any])
+async def growth_velocity_endpoint(payload: GrowthVelocityRequest):
+    """
+    Growth Velocity Monitor Engine.
+
+    Computes velocity metrics (height/weight/BMI per month), percentile drift,
+    stability score, risk score, AI insights, and recommendations using
+    WHO reference data. No LLM required — pure deterministic computation.
+
+    Used by: GET /api/doctor/patients/:id/growth-velocity (Express backend)
+    """
+    try:
+        from app.planner.growth_velocity_engine import compute_growth_velocity
+        result = compute_growth_velocity(
+            records=payload.growth_records,
+            profile=payload.profile,
+        )
+        return result
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error computing growth velocity: {str(e)}"
+        )
+
+
+
 @app.post("/analyze", response_model=Dict[str, Any])
 @app.post("/analyze-meal", response_model=Dict[str, Any])
 async def analyze_meal_endpoint(payload: MealAnalysisRequest):
