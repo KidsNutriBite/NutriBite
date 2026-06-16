@@ -141,7 +141,35 @@ export const getPatientDetails = async (doctorId, profileId) => {
         };
     }
 
-    const meals = await MealLog.find({ profileId }).sort({ date: -1 }).limit(50);
+    const logs = await MealLog.find({ profileId }).sort({ date: -1 }).limit(30);
+    const meals = [];
+    logs.forEach(log => {
+        const slots = ['breakfast', 'morningSnack', 'lunch', 'afternoonSnack', 'dinner', 'eveningSnack'];
+        slots.forEach(slot => {
+            const items = log[slot] || [];
+            if (items.length > 0) {
+                const totalCalories = items.reduce((sum, item) => sum + (item.calories || 0), 0);
+                
+                let displayType = slot.charAt(0).toUpperCase() + slot.slice(1);
+                if (displayType === 'MorningSnack') displayType = 'Morning Snack';
+                if (displayType === 'AfternoonSnack') displayType = 'Afternoon Snack';
+                if (displayType === 'EveningSnack') displayType = 'Evening Snack';
+
+                meals.push({
+                    _id: `${log._id}_${slot}`,
+                    date: log.date,
+                    mealType: displayType,
+                    foodItems: items.map(item => ({
+                        name: item.name,
+                        calories: item.calories
+                    })),
+                    nutrients: {
+                        calories: totalCalories
+                    }
+                });
+            }
+        });
+    });
 
     return {
         profile,

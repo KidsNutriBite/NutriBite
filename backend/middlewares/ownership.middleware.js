@@ -21,8 +21,23 @@ export const checkProfileOwnership = asyncHandler(async (req, res, next) => {
         throw new Error('Profile not found');
     }
 
-    // Strict check: Profile's parentId must match User's ID
-    if (profile.parentId.toString() !== req.user._id.toString()) {
+    // Allow if Parent owns the profile, OR if Doctor has ACTIVE access
+    const isParent = profile.parentId.toString() === req.user._id.toString();
+    
+    let isAuthorizedDoctor = false;
+    if (req.user.role === 'doctor') {
+        const DoctorAccess = (await import('../models/DoctorAccess.model.js')).default;
+        const access = await DoctorAccess.findOne({
+            doctorId: req.user._id,
+            profileId: profileId,
+            status: 'active'
+        });
+        if (access) {
+            isAuthorizedDoctor = true;
+        }
+    }
+
+    if (!isParent && !isAuthorizedDoctor) {
         res.status(403);
         throw new Error('Not authorized to access this profile');
     }
