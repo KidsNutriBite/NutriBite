@@ -174,3 +174,118 @@ export const updateHealthNotes = async (doctorId, profileId, note) => {
 
     return profile;
 };
+
+/**
+ * Compute growth velocity analysis for a patient
+ * Calls FastAPI /growth/velocity with the child's GrowthRecords
+ */
+export const getGrowthVelocity = async (doctorId, profileId) => {
+    // 1. Validate active access (doctors with restricted access cannot see clinical data)
+    const access = await DoctorAccess.findOne({
+        doctorId,
+        profileId,
+        status: 'active'
+    });
+    if (!access) throw new Error('Active access required to view Growth Velocity data');
+
+    // 2. Fetch child profile
+    const profile = await Profile.findById(profileId);
+    if (!profile) throw new Error('Profile not found');
+
+    // 3. Fetch all growth records sorted ascending
+    const GrowthRecord = (await import('../models/GrowthRecord.model.js')).default;
+    const records = await GrowthRecord.find({ childId: profileId })
+        .sort({ timestamp: 1 })
+        .lean();
+
+    if (records.length === 0) {
+        return {
+            profileId,
+            insufficientData: true,
+            recordCount: 0,
+            insufficientDataReason: 'No growth records found for this child. Add measurements to enable velocity analysis.',
+            insights: ['No growth records have been logged yet. Please record height and weight measurements to begin velocity tracking.'],
+            recommendations: ['Start by recording a baseline measurement, then follow up monthly.'],
+            velocityMetrics: {},
+            velocityTimeline: [],
+            growthTimeline: [],
+            riskIndicators: [],
+            stabilityScore: 0,
+            riskScore: 0,
+            percentileDrift: { direction: 'STABLE', magnitude: 0 },
+        };
+    }
+
+    // 4. Build profile payload for FastAPI
+    const profilePayload = {
+        _id: profile._id.toString(),
+        name: profile.name,
+        age: profile.age,
+        gender: profile.gender || 'male',
+        ageInMonths: profile.dob
+            ? Math.floor((Date.now() - new Date(profile.dob).getTime()) / (1000 * 60 * 60 * 24 * 30.44))
+            : profile.age * 12,
+        height: profile.height,
+        weight: profile.weight,
+    };
+
+    // 5. Call FastAPI growth velocity engine
+    const AI_URL = process.env.AI_SERVICE_URL || 'http://localhost:8000';
+    try {
+        const response = await fetch(`${AI_URL}/growth/velocity`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                profile: profilePayload,
+                growth_records: records.map(r => ({
+                    ...r,
+                    _id: r._id.toString(),
+                    childId: r.childId.toString(),
+                    recordedByUserId: r.recordedByUserId.toString(),
+                    timestamp: r.timestamp instanceof Date ? r.timestamp.toISOString() : r.timestamp,
+                })),
+            }),
+            signal: AbortSignal.timeout(15000), // 15s timeout
+        });
+
+        if (!response.ok) {
+            const errText = await response.text();
+            throw new Error(`FastAPI error: ${response.status} — ${errText}`);
+        }
+
+        const velocityData = await response.json();
+
+        // 6. Enrich with record metadata (doctor-verified flags)
+        velocityData.verifiedRecordCount = records.filter(r => r.verified).length;
+        velocityData.totalRecordCount = records.length;
+        velocityData.childName = profile.name;
+
+        return velocityData;
+    } catch (fetchError) {
+        // Graceful degradation: return raw records without AI analysis
+        console.error('[GrowthVelocity] FastAPI call failed:', fetchError.message);
+        return {
+            profileId,
+            computedAt: new Date().toISOString(),
+            recordCount: records.length,
+            childName: profile.name,
+            fastApiUnavailable: true,
+            growthTimeline: records.map(r => ({
+                date: new Date(r.timestamp).toISOString().split('T')[0],
+                height: r.height,
+                weight: r.weight,
+                bmi: r.bmi,
+                percentile: r.percentile,
+            })),
+            velocityMetrics: {},
+            velocityTimeline: [],
+            insights: ['Growth velocity engine temporarily unavailable. Raw growth data displayed below.'],
+            recommendations: ['Retry in a few moments or check AI service status.'],
+            riskIndicators: [],
+            stabilityScore: null,
+            riskScore: null,
+            percentileDrift: { direction: 'STABLE', magnitude: 0 },
+        };
+    }
+};
+
