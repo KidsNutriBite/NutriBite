@@ -7,7 +7,8 @@ import {
     requestAccess as requestAccessService,
     getMyPatients as getMyPatientsService,
     getPatientDetails as getPatientDetailsService,
-    updateHealthNotes as updateHealthNotesService
+    updateHealthNotes as updateHealthNotesService,
+    getGrowthVelocity as getGrowthVelocityService
 } from '../services/doctor.service.js';
 
 // @desc    Find nearby pediatricians (Public/Parent)
@@ -174,4 +175,12 @@ export const requestFullAccess = asyncHandler(async (req, res) => {
     await access.save();
 
     res.status(200).json(new ApiResponse(200, null, 'Full access request sent to parent'));
+});
+
+// @desc    Get growth velocity analysis for a patient
+// @route   GET /api/doctor/patients/:id/growth-velocity
+// @access  Private (Doctor — Active Access Only)
+export const getGrowthVelocityData = asyncHandler(async (req, res) => {
+    const data = await getGrowthVelocityService(req.user._id, req.params.id);
+    res.status(200).json(new ApiResponse(200, data));
 });

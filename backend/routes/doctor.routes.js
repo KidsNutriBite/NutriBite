@@ -8,7 +8,8 @@ import {
     getDoctorProfile,
     updateDoctorProfile,
     getAllDoctors,
-    requestFullAccess
+    requestFullAccess,
+    getGrowthVelocityData
 } from '../controllers/doctor.controller.js';
 import { protect } from '../middlewares/auth.middleware.js';
 import { authorize } from '../middlewares/role.middleware.js';
@@ -34,6 +35,7 @@ router.get('/patients', getMyPatients);
 router.get('/patients/:id', checkDoctorAccess, getPatientDetails);
 router.post('/patients/:id/request-full-access', checkDoctorAccess, requestFullAccess);
 router.patch('/patients/:id/notes', checkDoctorAccess, updatePatientNotes);
+router.get('/patients/:id/growth-velocity', checkDoctorAccess, getGrowthVelocityData);
 
 // Doctor Dashboard Child Route
 router.get('/child/:childId', authorize('doctor'), (req, res, next) => {
