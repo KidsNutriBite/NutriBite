@@ -36,3 +36,9 @@ export const resolveEscalation = async (id) => {
     const response = await api.post(`/escalations/${id}/resolve`);
     return response.data;
 };
+
+export const getGrowthVelocity = async (profileId) => {
+    const response = await api.get(`/doctor/patients/${profileId}/growth-velocity`);
+    return response.data;
+};
+
