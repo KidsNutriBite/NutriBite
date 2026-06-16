@@ -8,6 +8,8 @@ import MealFrequencyChart from '../../components/charts/MealFrequencyChart';
 import toast from 'react-hot-toast';
 import api from '../../api/axios';
 import DoctorTwinView from '../../components/doctor/DoctorTwinView';
+import GrowthVelocityCenter from '../../components/doctor/GrowthVelocityCenter';
+import { getGrowthVelocity } from '../../api/doctor.api';
 
 const PatientDetails = () => {
     const { id } = useParams();
@@ -20,6 +22,10 @@ const PatientDetails = () => {
     // Analytics Data
     const [chartData, setChartData] = useState([]);
     const [prescriptions, setPrescriptions] = useState([]);
+
+    // Growth Velocity
+    const [growthVelocityData, setGrowthVelocityData] = useState(null);
+    const [growthVelocityLoading, setGrowthVelocityLoading] = useState(false);
 
     // Form State
     const [newPrescription, setNewPrescription] = useState({ title: '', instructions: '' });
@@ -45,6 +51,13 @@ const PatientDetails = () => {
 
                 const prescRes = await getPrescriptions(id);
                 setPrescriptions(prescRes.data);
+
+                // Fetch growth velocity (non-blocking — loads separately)
+                setGrowthVelocityLoading(true);
+                getGrowthVelocity(id)
+                    .then(res => setGrowthVelocityData(res.data))
+                    .catch(err => console.error('Growth velocity fetch failed:', err))
+                    .finally(() => setGrowthVelocityLoading(false));
             }
         } catch (error) {
             console.error(error);
@@ -90,10 +103,11 @@ const PatientDetails = () => {
     if (!profile) return null;
 
     const tabs = status === 'active' ? [
-        { id: 'overview', label: 'Clinical Overview', icon: '📊' },
-        { id: 'twin', label: 'Digital Twin View', icon: '🤖' },
-        { id: 'analytics', label: 'Nutrition & Growth', icon: '📈' },
-        { id: 'prescriptions', label: 'Prescriptions', icon: '📝' },
+        { id: 'overview',        label: 'Clinical Overview',    icon: '📊' },
+        { id: 'growth-velocity', label: 'Growth Velocity',      icon: '📈' },
+        { id: 'twin',            label: 'Digital Twin View',    icon: '🤖' },
+        { id: 'analytics',       label: 'Nutrition & Growth',   icon: '🥗' },
+        { id: 'prescriptions',   label: 'Prescriptions',        icon: '📝' },
     ] : [
         { id: 'consultation', label: 'Consultation', icon: '💬' },
         { id: 'prescriptions', label: 'Initial Advice', icon: '📝' },
@@ -253,6 +267,14 @@ const PatientDetails = () => {
 
                             {activeTab === 'twin' && status === 'active' && (
                                 <DoctorTwinView profileId={id} profile={profile} />
+                            )}
+
+                            {activeTab === 'growth-velocity' && status === 'active' && (
+                                <GrowthVelocityCenter
+                                    data={growthVelocityData}
+                                    profile={profile}
+                                    loading={growthVelocityLoading}
+                                />
                             )}
 
                             {activeTab === 'analytics' && status === 'active' && (
