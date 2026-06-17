@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { logActivity, getDailyActivity, deleteActivity } from '../../api/activity.api';
+import React, { useState, useEffect, useMemo } from 'react';
+import { logActivity, getDailyActivity, deleteActivity, getActivityHistory } from '../../api/activity.api';
 
 const activityTypesList = [
     'Playing', 'Outdoor Play', 'Sports', 'Walking', 'Cycling', 
@@ -9,6 +9,7 @@ const activityTypesList = [
 
 const ActivityTracking = ({ profileId, selectedDate, onActivityUpdate }) => {
     const [activityLog, setActivityLog] = useState(null);
+    const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [formData, setFormData] = useState({ type: 'Playing', duration: 30, notes: '' });
@@ -16,8 +17,12 @@ const ActivityTracking = ({ profileId, selectedDate, onActivityUpdate }) => {
     const fetchActivity = async () => {
         try {
             setLoading(true);
-            const res = await getDailyActivity(profileId, selectedDate);
-            setActivityLog(res.data);
+            const [dailyRes, historyRes] = await Promise.all([
+                getDailyActivity(profileId, selectedDate),
+                getActivityHistory(profileId)
+            ]);
+            setActivityLog(dailyRes.data);
+            setHistory(historyRes.data || []);
             if (onActivityUpdate) onActivityUpdate();
         } catch (error) {
             console.error("Failed to fetch activity", error);
@@ -25,6 +30,47 @@ const ActivityTracking = ({ profileId, selectedDate, onActivityUpdate }) => {
             setLoading(false);
         }
     };
+
+    // Calculate physical activity streak (days with > 0 minutes)
+    const activityStreak = useMemo(() => {
+        if (!history || history.length === 0) return 0;
+        
+        const activeDates = history
+            .filter(entry => entry.totalDuration > 0)
+            .map(entry => entry.date);
+        const uniqueDays = new Set(activeDates);
+        
+        let streak = 0;
+        let checkDate = new Date();
+        const checkDateStr = checkDate.toISOString().split('T')[0];
+
+        let hasToday = uniqueDays.has(checkDateStr);
+        let d = new Date(checkDate);
+
+        if (!hasToday) {
+            // Check yesterday
+            d.setDate(d.getDate() - 1);
+            const yesterdayStr = d.toISOString().split('T')[0];
+            if (uniqueDays.has(yesterdayStr)) {
+                hasToday = true;
+            }
+        }
+
+        if (hasToday) {
+            let currentCheck = new Date(d);
+            while (true) {
+                const dateStr = currentCheck.toISOString().split('T')[0];
+                if (uniqueDays.has(dateStr)) {
+                    streak++;
+                    currentCheck.setDate(currentCheck.getDate() - 1);
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return streak;
+    }, [history]);
 
     useEffect(() => {
         if (profileId && selectedDate) {
@@ -67,7 +113,13 @@ const ActivityTracking = ({ profileId, selectedDate, onActivityUpdate }) => {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-gray-900">Daily Activity Tracker</h2>
+                <div className="flex items-center gap-3">
+                    <h2 className="text-2xl font-bold text-gray-900">Daily Activity Tracker</h2>
+                    {/* Activity Streak Badge */}
+                    <div className="flex items-center gap-1.5 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 px-3.5 py-1.5 rounded-2xl text-xs font-bold border border-blue-100 dark:border-blue-800/50 shadow-sm animate-pulse">
+                        <span>🔥</span> {activityStreak} Day Streak
+                    </div>
+                </div>
                 <button 
                     onClick={() => setIsFormOpen(!isFormOpen)}
                     className="bg-primary text-white px-4 py-2 rounded-xl font-bold hover:bg-blue-600 transition"

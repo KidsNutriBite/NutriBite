@@ -21,6 +21,13 @@ import { getMealsByDate, getMealHistory, getLastMealTime } from '../../api/meal.
 import ActivityTracking from '../../components/parent/ActivityTracking'; // Import Component
 import DigitalTwinView from '../../components/parent/DigitalTwinView';
 
+const getLocalDateString = (d = new Date()) => {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
 const ChildDetails = () => {
     const { id } = useParams();
     const router = useRouter();
@@ -40,7 +47,7 @@ const ChildDetails = () => {
     const [prescriptions, setPrescriptions] = useState([]);
 
     const [isLogModalOpen, setIsLogModalOpen] = useState(false);
-    const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+    const [selectedDate, setSelectedDate] = useState(getLocalDateString());
     const [modalInitialData, setModalInitialData] = useState(null);
 
     const [isGrowthModalOpen, setIsGrowthModalOpen] = useState(false); // Growth Modal State
@@ -100,6 +107,155 @@ const ChildDetails = () => {
     const [lastMealStatus, setLastMealStatus] = useState(null);
     const [sleepLog, setSleepLog] = useState(null);
 
+    // Sleep streak calculator
+    const sleepStreak = useMemo(() => {
+        if (!sleepHistory || sleepHistory.length === 0) return 0;
+        
+        // Find dates that have logs and filter them
+        const loggedDates = sleepHistory.map(entry => (entry.date || '').split('T')[0]);
+        const uniqueDays = new Set(loggedDates);
+        
+        let streak = 0;
+        let checkDate = new Date();
+        const checkDateStr = getLocalDateString(checkDate);
+
+        let hasToday = uniqueDays.has(checkDateStr);
+        let d = new Date(checkDate);
+
+        if (!hasToday) {
+            // Check yesterday
+            d.setDate(d.getDate() - 1);
+            const yesterdayStr = getLocalDateString(d);
+            if (uniqueDays.has(yesterdayStr)) {
+                hasToday = true;
+            }
+        }
+
+        if (hasToday) {
+            let currentCheck = new Date(d);
+            while (true) {
+                const dateStr = getLocalDateString(currentCheck);
+                if (uniqueDays.has(dateStr)) {
+                    streak++;
+                    currentCheck.setDate(currentCheck.getDate() - 1);
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return streak;
+    }, [sleepHistory]);
+
+    // Checkup history countdown timer calculator
+    const checkupTimer = useMemo(() => {
+        if (!prescriptions || prescriptions.length === 0) return null;
+        
+        // Find the latest prescription/checkup
+        const latest = prescriptions[0];
+        const createdDate = new Date(latest.createdAt || latest.date || Date.now());
+        const daysInterval = latest.nextCheckupDays || 90;
+        
+        const targetDate = new Date(createdDate.getTime() + daysInterval * 24 * 60 * 60 * 1000);
+        const today = new Date();
+        const diffTime = targetDate - today;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        return {
+            daysLeft: diffDays,
+            targetDate: targetDate.toLocaleDateString(),
+            isDue: diffDays <= 0,
+            daysInterval
+        };
+    }, [prescriptions]);
+
+    // Water streak calculator (target: >= 1.5L water per day)
+    const waterStreak = useMemo(() => {
+        if (!meals || meals.length === 0) return 0;
+
+        const getDailyWater = (m) => {
+            const slots = ['breakfast', 'morningSnack', 'lunch', 'afternoonSnack', 'dinner', 'eveningSnack'];
+            return slots.reduce((total, slot) => {
+                const items = m[slot] || [];
+                return total + items.reduce((sum, item) => sum + (item.water || 0), 0);
+            }, 0);
+        };
+
+        const getLogDateStr = (dateVal) => {
+            if (!dateVal) return '';
+            return typeof dateVal === 'string' ? dateVal.split('T')[0] : new Date(dateVal).toISOString().split('T')[0];
+        };
+
+        // Find dates that met the water target (>= 1500ml)
+        const targetMetDates = new Set(
+            meals
+                .filter(m => getDailyWater(m) >= 1500)
+                .map(m => getLogDateStr(m.date))
+        );
+
+        let streak = 0;
+        let checkDate = new Date();
+        const checkDateStr = getLocalDateString(checkDate);
+
+        let hasToday = targetMetDates.has(checkDateStr);
+        let d = new Date(checkDate);
+
+        if (!hasToday) {
+            // Check yesterday
+            d.setDate(d.getDate() - 1);
+            const yesterdayStr = getLocalDateString(d);
+            if (targetMetDates.has(yesterdayStr)) {
+                hasToday = true;
+            }
+        }
+
+        if (hasToday) {
+            let currentCheck = new Date(d);
+            while (true) {
+                const dateStr = getLocalDateString(currentCheck);
+                if (targetMetDates.has(dateStr)) {
+                    streak++;
+                    currentCheck.setDate(currentCheck.getDate() - 1);
+                } else {
+                    break;
+                }
+            }
+        }
+
+        return streak;
+    }, [meals]);
+
+    const handleQuickAddWater = async () => {
+        try {
+            const todayStr = getLocalDateString();
+            const mealType = 'morningSnack';
+            
+            const waterItem = {
+                name: "Water",
+                quantity: "1 glass (250ml)",
+                calories: 0,
+                protein: 0,
+                carbs: 0,
+                fats: 0,
+                fiber: 0,
+                water: 250,
+                vitamins: ""
+            };
+
+            const data = new FormData();
+            data.append('profileId', id);
+            data.append('date', todayStr);
+            data.append('mealType', mealType);
+            data.append('foodItems', JSON.stringify([waterItem]));
+            data.append('nutrients', JSON.stringify({ calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0, water: 250 }));
+
+            await logMeal(data);
+            fetchData();
+        } catch (err) {
+            console.error("Failed to quick log water", err);
+        }
+    };
+
     useEffect(() => {
         if (id) fetchData();
     }, [id, selectedDate]);
@@ -142,25 +298,46 @@ const ChildDetails = () => {
 
     // Analytics Calculations
     const stats = useMemo(() => {
-        const todayStr = new Date().toISOString().split('T')[0];
+        const todayStr = getLocalDateString();
 
         if (!meals || meals.length === 0) return { meals: 0, avgCal: 0, water: 0, streak: 0 };
 
-        const uniqueDays = new Set(meals.map(m => new Date(m.date).toISOString().split('T')[0]));
+        const getLogDateStr = (dateVal) => {
+            if (!dateVal) return '';
+            return typeof dateVal === 'string' ? dateVal.split('T')[0] : new Date(dateVal).toISOString().split('T')[0];
+        };
+
+        const uniqueDays = new Set(meals.map(m => getLogDateStr(m.date)));
+
+        const getDailyCals = (m) => {
+            const slots = ['breakfast', 'morningSnack', 'lunch', 'afternoonSnack', 'dinner', 'eveningSnack'];
+            return slots.reduce((total, slot) => {
+                const items = m[slot] || [];
+                return total + items.reduce((sum, item) => sum + (item.calories || 0), 0);
+            }, 0);
+        };
+
+        const getDailyWater = (m) => {
+            const slots = ['breakfast', 'morningSnack', 'lunch', 'afternoonSnack', 'dinner', 'eveningSnack'];
+            return slots.reduce((total, slot) => {
+                const items = m[slot] || [];
+                return total + items.reduce((sum, item) => sum + (item.water || 0), 0);
+            }, 0);
+        };
 
         // Avg Calories (Daily Average)
-        const totalCals = meals.reduce((acc, m) => acc + (m.nutrients?.calories || 0), 0);
+        const totalCals = meals.reduce((acc, m) => acc + getDailyCals(m), 0);
         const avgCal = uniqueDays.size > 0 ? Math.round(totalCals / uniqueDays.size) : 0;
 
         // Water (Today)
         const waterToday = meals
-            .filter(m => new Date(m.date).toISOString().split('T')[0] === todayStr)
-            .reduce((acc, m) => acc + (m.waterIntake || 0), 0);
+            .filter(m => getLogDateStr(m.date) === todayStr)
+            .reduce((acc, m) => acc + getDailyWater(m), 0);
 
         // Streak Calculation
         let streak = 0;
         let checkDate = new Date();
-        const checkDateStr = checkDate.toISOString().split('T')[0];
+        const checkDateStr = getLocalDateString(checkDate);
 
         let hasToday = uniqueDays.has(checkDateStr);
         let d = new Date(checkDate);
@@ -168,21 +345,16 @@ const ChildDetails = () => {
         if (!hasToday) {
             // Check yesterday
             d.setDate(d.getDate() - 1);
-            const yesterdayStr = d.toISOString().split('T')[0];
+            const yesterdayStr = getLocalDateString(d);
             if (uniqueDays.has(yesterdayStr)) {
                 hasToday = true;
             }
         }
 
         if (hasToday) {
-            // Reset date to start checking backwards
             let currentCheck = new Date(d);
-            // If we started from yesterday, currentCheck is yesterday. 
-            // If we started from today, currentCheck is today.
-
-            // Loop backwards
             while (true) {
-                const dateStr = currentCheck.toISOString().split('T')[0];
+                const dateStr = getLocalDateString(currentCheck);
                 if (uniqueDays.has(dateStr)) {
                     streak++;
                     currentCheck.setDate(currentCheck.getDate() - 1);
@@ -196,10 +368,10 @@ const ChildDetails = () => {
     }, [meals]);
 
     const sleepSummary = useMemo(() => {
-        const hours = sleepLog?.totalSleepHours || 0;
-        if (!sleepLog) {
+        if (!sleepLog || !sleepLog.sleepTime) {
             return { status: 'No data', tone: 'bg-gray-50 text-gray-500 border-gray-100', message: 'No sleep log for the selected day.' };
         }
+        const hours = sleepLog.totalSleepHours || 0;
         if (hours < 8) {
             return { status: 'Poor Sleep', tone: 'bg-red-50 text-red-600 border-red-100', message: 'Child is not getting enough sleep' };
         }
@@ -378,8 +550,8 @@ const ChildDetails = () => {
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
                             className={`w-full text-left px-6 py-4 rounded-xl font-bold transition-all flex items-center gap-4 ${activeTab === tab.id
-                                ? 'bg-white text-primary shadow-md border border-gray-50'
-                                : 'text-gray-500 hover:bg-white/60 hover:text-gray-900'
+                                ? 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 shadow-md border border-slate-200/80 dark:border-slate-700'
+                                : 'bg-slate-100/70 dark:bg-slate-800/40 text-slate-600 dark:text-slate-300 hover:bg-slate-200/80 dark:hover:bg-slate-800/80 border border-slate-200/40 dark:border-slate-700/20'
                                 }`}
                         >
                             <span className="text-xl">{tab.icon}</span>
@@ -399,6 +571,21 @@ const ChildDetails = () => {
                         </div>
                         <div className="w-full bg-blue-200 h-2 rounded-full mt-4 overflow-hidden">
                             <div className="bg-blue-500 h-full rounded-full transition-all duration-500" style={{ width: `${Math.min((stats.streak / 5) * 100, 100)}%` }}></div>
+                        </div>
+                    </div>
+
+                    {/* Hydration Streak Widget */}
+                    <div className="mt-4 bg-cyan-50 rounded-2xl p-6 border border-cyan-100 hidden lg:block">
+                        <h4 className="font-bold text-cyan-900 mb-4">Hydration Streak</h4>
+                        <div className="flex justify-between items-end">
+                            <div className="space-y-1">
+                                <div className="text-3xl font-black text-cyan-600">{waterStreak} Days</div>
+                                <div className="text-xs text-cyan-400 font-bold uppercase">Target: 1.5L / Day</div>
+                            </div>
+                            <div className="text-4xl">💧</div>
+                        </div>
+                        <div className="w-full bg-cyan-200 h-2 rounded-full mt-4 overflow-hidden">
+                            <div className="bg-cyan-500 h-full rounded-full transition-all duration-500" style={{ width: `${Math.min((waterStreak / 5) * 100, 100)}%` }}></div>
                         </div>
                     </div>
                 </div>
@@ -438,7 +625,7 @@ const ChildDetails = () => {
                                             <p className="text-3xl font-black text-gray-800">{stats.avgCal}</p>
                                         </div>
 
-                                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center group hover:border-indigo-100 transition-colors">
+                                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center group hover:border-indigo-100 transition-colors relative">
                                             <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                                                 <span className="material-symbols-outlined">water_drop</span>
                                             </div>
@@ -446,6 +633,12 @@ const ChildDetails = () => {
                                             <p className="text-3xl font-black text-gray-800 flex items-end gap-1">
                                                 {stats.water}<span className="text-lg font-bold text-gray-400 mb-1">L</span>
                                             </p>
+                                            <button 
+                                                onClick={handleQuickAddWater}
+                                                className="mt-3 text-[10px] bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded-full font-black flex items-center gap-1 transition-all"
+                                            >
+                                                <span>+ 250ml Glass</span>
+                                            </button>
                                         </div>
 
                                         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center group hover:border-indigo-100 transition-colors">
@@ -453,7 +646,7 @@ const ChildDetails = () => {
                                                 <span className="material-symbols-outlined">bedtime</span>
                                             </div>
                                             <p className="text-gray-400 font-bold text-xs uppercase tracking-wider mb-1">Sleep</p>
-                                            <p className="text-3xl font-black text-gray-800">{sleepLog?.totalSleepHours ? `${sleepLog.totalSleepHours}h` : '--'}</p>
+                                            <p className="text-3xl font-black text-gray-800">{sleepLog?.sleepTime ? `${sleepLog.totalSleepHours}h` : '--'}</p>
                                             <p className="text-xs font-bold text-gray-500 mt-1">{sleepSummary.status}</p>
                                         </div>
                                     </div>
@@ -465,8 +658,13 @@ const ChildDetails = () => {
                                         <div className="flex justify-between items-center mb-4">
                                             <h2 className="text-2xl font-bold text-gray-900">Daily Log</h2>
                                             {/* Streak Badge Small */}
-                                            <div className="flex items-center gap-1 bg-orange-50 text-orange-600 px-3 py-1 rounded-full text-xs font-bold border border-orange-100">
-                                                <span>🔥</span> {streak} Day Streak
+                                            <div className="flex items-center gap-2">
+                                                <div className="flex items-center gap-1 bg-cyan-50 text-cyan-600 px-3 py-1 rounded-full text-xs font-bold border border-cyan-100">
+                                                    <span>💧</span> {waterStreak} Day Hydration Streak
+                                                </div>
+                                                <div className="flex items-center gap-1 bg-orange-50 text-orange-600 px-3 py-1 rounded-full text-xs font-bold border border-orange-100">
+                                                    <span>🔥</span> {streak} Day Streak
+                                                </div>
                                             </div>
                                         </div>
 
@@ -475,11 +673,9 @@ const ChildDetails = () => {
                                             dates={Array.from({ length: 14 }).map((_, i) => {
                                                 const d = new Date();
                                                 d.setDate(d.getDate() - i);
-                                                const dStr = d.toISOString().split('T')[0];
+                                                const dStr = getLocalDateString(d);
                                                 // Find completion count in history
-                                                const log = history.find(h => h.date.split('T')[0] === dStr);
-                                                // If backend returns date as string YYYY-MM-DD
-                                                // const log = history.find(h => h.date === dStr);
+                                                const log = history.find(h => (h.date || '').split('T')[0] === dStr);
                                                 return {
                                                     date: dStr,
                                                     completedCount: log ? log.completedMealsCount : 0
@@ -532,10 +728,14 @@ const ChildDetails = () => {
                                 />
                             )}
 
-                            {activeTab === 'sleep' && (
+                             {activeTab === 'sleep' && (
                                 <div className="space-y-6">
                                     <div className="flex justify-between items-center">
                                         <h2 className="text-2xl font-bold text-gray-900">Sleep Tracking</h2>
+                                        {/* Sleep Streak Badge */}
+                                        <div className="flex items-center gap-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 px-4 py-2 rounded-2xl text-sm font-bold border border-indigo-100 dark:border-indigo-800/50 shadow-sm animate-pulse">
+                                            <span>🔥</span> {sleepStreak} Day Sleep Streak
+                                        </div>
                                     </div>
 
                                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
@@ -586,9 +786,37 @@ const ChildDetails = () => {
                                 />
                             )}
 
-                            {activeTab === 'prescriptions' && (
+                             {activeTab === 'prescriptions' && (
                                 <div className="space-y-6">
-                                    <h2 className="text-2xl font-bold text-gray-900">Checkup History</h2>
+                                    <div className="flex justify-between items-center">
+                                        <h2 className="text-2xl font-bold text-gray-900">Checkup History</h2>
+                                    </div>
+
+                                    {checkupTimer && (
+                                        <div className={`p-6 rounded-3xl border flex flex-col md:flex-row items-center justify-between gap-4 relative overflow-hidden shadow-sm ${checkupTimer.isDue ? 'bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-900/50 text-red-900 dark:text-red-200' : 'bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-900/50 dark:to-indigo-950/30 border-indigo-100 dark:border-indigo-900/50 text-indigo-900 dark:text-indigo-200'}`}>
+                                            <div className="flex items-center gap-4 relative z-10">
+                                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-2xl ${checkupTimer.isDue ? 'bg-red-100 dark:bg-red-900/40 text-red-600 dark:text-red-400' : 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400'}`}>
+                                                    🩺
+                                                </div>
+                                                <div>
+                                                    <h3 className="font-extrabold text-lg">Next Pediatrician Checkup</h3>
+                                                    <p className="text-sm opacity-90">
+                                                        {checkupTimer.isDue 
+                                                            ? `A routine checkup is due now! (Scheduled every ${checkupTimer.daysInterval} days)` 
+                                                            : `Still ${checkupTimer.daysLeft} days left for next checkup (Target: ${checkupTimer.targetDate})`
+                                                        }
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            {!checkupTimer.isDue && (
+                                                <div className="px-5 py-2.5 bg-white dark:bg-slate-800 rounded-xl shadow-sm text-center border border-indigo-100 dark:border-indigo-900/50 shrink-0">
+                                                    <p className="text-xs font-bold text-indigo-400 dark:text-indigo-300 uppercase tracking-widest leading-none mb-1">Countdown</p>
+                                                    <p className="text-xl font-black text-indigo-600 dark:text-indigo-400 leading-none">{checkupTimer.daysLeft} Days</p>
+                                                </div>
+                                            )}
+                                        </div>
+                                    )}
+
                                     {prescriptions.length === 0 ? (
                                         <div className="bg-white rounded-2xl p-10 text-center border-2 border-dashed border-gray-200">
                                             <p className="text-gray-500 font-medium">No past checkups found.</p>
