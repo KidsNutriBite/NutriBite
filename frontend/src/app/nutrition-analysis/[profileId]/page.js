@@ -18,7 +18,7 @@ const getNutrientIcon = (nutrient) => {
     }
 };
 
-const GroceryCard = ({ item }) => {
+const GroceryCard = ({ item, isInCart, onCartToggle }) => {
     const [expanded, setExpanded] = useState(false);
 
     return (
@@ -57,12 +57,25 @@ const GroceryCard = ({ item }) => {
                     </div>
                 )}
                 
-                <button 
-                    onClick={() => setExpanded(!expanded)}
-                    className="mt-4 text-xs font-bold text-white/70 hover:text-white flex items-center gap-1 transition-colors uppercase tracking-widest w-full justify-center py-2 rounded-xl hover:bg-white/5"
-                >
-                    {expanded ? 'Hide Details ↑' : 'Learn More ↓'}
-                </button>
+                <div className="flex gap-2 mt-4">
+                    <button 
+                        onClick={() => setExpanded(!expanded)}
+                        className="flex-1 text-xs font-bold text-white/70 hover:text-white flex items-center gap-1 transition-colors uppercase tracking-widest justify-center py-3 rounded-xl bg-white/5 hover:bg-white/10"
+                    >
+                        {expanded ? 'Hide Details ↑' : 'Learn More ↓'}
+                    </button>
+                    
+                    <button
+                        onClick={onCartToggle}
+                        className={`flex-1 text-xs font-bold px-4 py-3 rounded-xl flex items-center justify-center gap-1 transition-all uppercase tracking-widest ${
+                            isInCart 
+                            ? 'bg-rose-500/80 hover:bg-rose-600 border border-rose-400/30 text-white' 
+                            : 'bg-white text-indigo-700 hover:bg-indigo-50 font-black shadow-md'
+                        }`}
+                    >
+                        <span>{isInCart ? '🗑️ Remove' : '🛒 Add to Cart'}</span>
+                    </button>
+                </div>
                 
                 <AnimatePresence>
                     {expanded && (
@@ -91,6 +104,36 @@ export default function NutritionAnalysisPage() {
     const [loading, setLoading] = useState(true);
     const [analysis, setAnalysis] = useState(null);
     const [sunlight, setSunlight] = useState(15);
+    const [cart, setCart] = useState([]);
+
+    const toggleCart = (item) => {
+        setCart(prev => {
+            const exists = prev.find(c => c.food === item.food);
+            if (exists) {
+                return prev.filter(c => c.food !== item.food);
+            } else {
+                return [...prev, item];
+            }
+        });
+    };
+
+    const downloadCart = () => {
+        if (cart.length === 0) {
+            toast.error("Your cart is empty!");
+            return;
+        }
+        const titleStr = `NUTRITION INSIGHTS - GROCERY CART LIST\nGenerated on: ${new Date().toLocaleDateString()}\n\n`;
+        const content = titleStr + cart.map((item, idx) => `${idx + 1}. ${item.food}\n   Target nutrients: ${item.nutrients.join(', ')}\n   Details: ${item.explanations[0]}`).join('\n\n');
+        
+        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `nutribite-grocery-cart-${profileId}.txt`;
+        link.click();
+        URL.revokeObjectURL(url);
+        toast.success("Grocery list downloaded successfully!");
+    };
 
     const fetchAnalysis = async () => {
         try {
@@ -295,18 +338,17 @@ export default function NutritionAnalysisPage() {
                                         <h2 className="text-3xl font-black mb-2 italic">Smart Grocery List 🛒</h2>
                                         <p className="text-indigo-100 opacity-90 text-lg">Personalized, item-by-item recommendations addressing your child's specific nutritional gaps.</p>
                                     </div>
-                                    <button 
-                                        onClick={() => window.print()}
-                                        className="bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white px-6 py-3 rounded-2xl font-bold transition-all shadow-lg flex items-center gap-2"
-                                    >
-                                        <span>🖨️</span> Print List
-                                    </button>
                                 </div>
 
                                 {groceryItems.length > 0 ? (
                                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                                         {groceryItems.map((item, idx) => (
-                                            <GroceryCard key={idx} item={item} />
+                                            <GroceryCard 
+                                                key={idx} 
+                                                item={item} 
+                                                isInCart={cart.some(c => c.food === item.food)}
+                                                onCartToggle={() => toggleCart(item)}
+                                            />
                                         ))}
                                     </div>
                                 ) : (
@@ -314,6 +356,66 @@ export default function NutritionAnalysisPage() {
                                         <span className="text-5xl block mb-4">🌟</span>
                                         <h3 className="text-xl font-bold text-white mb-2">Diet Looks Great!</h3>
                                         <p className="text-indigo-200">No special grocery recommendations needed at this time.</p>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Shopping Cart Container (Vibrant and Premium) */}
+                            <div className="md:col-span-3 bg-white p-8 rounded-3xl shadow-xl border border-slate-200/50 dark:bg-slate-900 dark:border-slate-800">
+                                <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4 border-b border-slate-100 dark:border-slate-800 pb-4">
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-3xl">🛒</span>
+                                        <div>
+                                            <h2 className="text-2xl font-black text-slate-800 dark:text-white">Your Shopping Cart</h2>
+                                            <p className="text-slate-500 text-sm font-medium">{cart.length} {cart.length === 1 ? 'item' : 'items'} selected to buy</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        {cart.length > 0 && (
+                                            <>
+                                                <button
+                                                    onClick={() => setCart([])}
+                                                    className="px-5 py-2.5 bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold rounded-xl transition-all text-sm border border-slate-200 dark:border-slate-700"
+                                                >
+                                                    Clear Cart
+                                                </button>
+                                                <button 
+                                                    onClick={downloadCart}
+                                                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-indigo-500/20 flex items-center gap-2 text-sm"
+                                                >
+                                                    <span>📥</span> Download List (.txt)
+                                                </button>
+                                            </>
+                                        )}
+                                    </div>
+                                </div>
+
+                                {cart.length > 0 ? (
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                        {cart.map((item, idx) => (
+                                            <div key={idx} className="bg-slate-50 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800 p-5 rounded-2xl flex items-center justify-between gap-2 shadow-sm">
+                                                <div>
+                                                    <p className="font-bold text-slate-900 dark:text-white text-base leading-tight mb-1">{item.food}</p>
+                                                    <div className="flex flex-wrap gap-1">
+                                                        {item.nutrients.map((n, i) => (
+                                                            <span key={i} className="text-[10px] bg-indigo-50 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 font-extrabold uppercase px-1.5 py-0.5 rounded">
+                                                                {n}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                                <button
+                                                    onClick={() => toggleCart(item)}
+                                                    className="w-8 h-8 rounded-full bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/40 text-rose-500 hover:text-rose-600 flex items-center justify-center transition-colors shrink-0"
+                                                >
+                                                    <span className="material-symbols-outlined text-lg leading-none">close</span>
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className="text-center py-10 bg-slate-50 dark:bg-slate-800/20 rounded-2xl border-2 border-dashed border-slate-200 dark:border-slate-800">
+                                        <p className="text-slate-400 font-semibold italic text-sm">Your cart is empty. Add items from the Smart Grocery List above!</p>
                                     </div>
                                 )}
                             </div>

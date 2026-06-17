@@ -1,4 +1,5 @@
 export const FOOD_DATABASE = [
+    { name: 'Water', qty: '1 glass (250ml)', cal: 0, p: 0, c: 0, f: 0, w: 250, tag: 'Hydration' },
     // --- STAPLES & GRAINS ---
     { name: 'Roti / Chapati (Whole Wheat)', qty: '1 medium', cal: 104, p: 3, c: 22, f: 0.5, tag: 'Whole Wheat' },
     { name: 'Plain Rice (White)', qty: '1 bowl', cal: 200, p: 4, c: 44, f: 0.5, tag: 'Carbs' },
@@ -75,22 +76,22 @@ export const FOOD_DATABASE = [
     { name: 'Mango', qty: '1 medium', cal: 150, p: 1, c: 35, f: 0.5, tag: 'King of Fruits' },
     { name: 'Papaya', qty: '1 bowl', cal: 50, p: 1, c: 13, f: 0, tag: 'Digestion' },
     { name: 'Grapes', qty: '1 cup', cal: 62, p: 0.6, c: 16, f: 0.3, tag: 'Antioxidant' },
-    { name: 'Watermelon', qty: '1 slice', cal: 45, p: 1, c: 11, f: 0, tag: 'Hydrating' },
+    { name: 'Watermelon', qty: '1 slice', cal: 45, p: 1, c: 11, f: 0, w: 150, tag: 'Hydration' },
     { name: 'Guava', qty: '1 medium', cal: 40, p: 2, c: 10, f: 0, tag: 'Vit C' },
     { name: 'Pomegranate', qty: '1 cup', cal: 83, p: 1.7, c: 19, f: 1, tag: 'Iron' },
     { name: 'Chickoo (Sapota)', qty: '1 medium', cal: 83, p: 0.4, c: 20, f: 1, tag: 'Energy' },
 
     // --- DAIRY & BEVERAGES ---
-    { name: 'Milk (Cow)', qty: '1 glass', cal: 150, p: 8, c: 12, f: 8, tag: 'Calcium' },
-    { name: 'Buffalo Milk', qty: '1 glass', cal: 230, p: 9, c: 12, f: 16, tag: 'Rich' },
-    { name: 'Curd / Yogurt', qty: '1 cup', cal: 100, p: 5, c: 6, f: 6, tag: 'Probiotic' },
-    { name: 'Lassi (Sweet)', qty: '1 glass', cal: 250, p: 6, c: 35, f: 8, tag: 'Sweet' },
-    { name: 'Chaas (Buttermilk)', qty: '1 glass', cal: 40, p: 2, c: 3, f: 2, tag: 'Cooling' },
-    { name: 'Paneer (Raw)', qty: '100g', cal: 265, p: 18, c: 1, f: 20, tag: 'Protein' },
-    { name: 'Cheese Slice', qty: '1 slice', cal: 110, p: 6, c: 1, f: 9, tag: 'Calcium' },
-    { name: 'Tea (Chai)', qty: '1 cup', cal: 60, p: 2, c: 8, f: 2, tag: 'Caffeine' },
-    { name: 'Coffee', qty: '1 cup', cal: 80, p: 2, c: 10, f: 3, tag: 'Caffeine' },
-    { name: 'Bournvita/Horlicks Milk', qty: '1 glass', cal: 180, p: 8, c: 25, f: 6, tag: 'Kids' },
+    { name: 'Milk (Cow)', qty: '1 glass', cal: 150, p: 8, c: 12, f: 8, w: 240, tag: 'Calcium' },
+    { name: 'Buffalo Milk', qty: '1 glass', cal: 230, p: 9, c: 12, f: 16, w: 220, tag: 'Rich' },
+    { name: 'Curd / Yogurt', qty: '1 cup', cal: 100, p: 5, c: 6, f: 6, w: 100, tag: 'Probiotic' },
+    { name: 'Lassi (Sweet)', qty: '1 glass', cal: 250, p: 6, c: 35, f: 8, w: 200, tag: 'Sweet' },
+    { name: 'Chaas (Buttermilk)', qty: '1 glass', cal: 40, p: 2, c: 3, f: 2, w: 240, tag: 'Cooling' },
+    { name: 'Paneer (Raw)', qty: '100g', cal: 265, p: 18, c: 1, f: 20, w: 0, tag: 'Protein' },
+    { name: 'Cheese Slice', qty: '1 slice', cal: 110, p: 6, c: 1, f: 9, w: 0, tag: 'Calcium' },
+    { name: 'Tea (Chai)', qty: '1 cup', cal: 60, p: 2, c: 8, f: 2, w: 150, tag: 'Caffeine' },
+    { name: 'Coffee', qty: '1 cup', cal: 80, p: 2, c: 10, f: 3, w: 150, tag: 'Caffeine' },
+    { name: 'Bournvita/Horlicks Milk', qty: '1 glass', cal: 180, p: 8, c: 25, f: 6, w: 240, tag: 'Kids' },
 
     // --- SNACKS & FAST FOOD ---
     { name: 'Samosa', qty: '1 piece', cal: 250, p: 4, c: 25, f: 15, tag: 'Fried' },
@@ -115,6 +116,7 @@ export const FOOD_DATABASE = [
 ];
 
 export const QUICK_ADDS = [
+    { name: 'Water', icon: '💧', label: 'Water' },
     { name: 'Milk (Cow)', icon: '🥛', label: 'Milk' },
     { name: 'Roti / Chapati (Whole Wheat)', icon: '🫓', label: 'Roti' },
     { name: 'Dal (Yellow/Toor)', icon: '🍲', label: 'Dal' },
