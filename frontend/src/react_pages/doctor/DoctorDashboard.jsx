@@ -176,6 +176,7 @@ const DoctorDashboard = () => {
                                 <tr className="bg-gray-50 border-b border-gray-100">
                                     <th className="px-8 py-5 text-xs font-bold text-gray-400 uppercase tracking-wider">Patient Name</th>
                                     <th className="px-8 py-5 text-xs font-bold text-gray-400 uppercase tracking-wider">Demographics</th>
+                                    <th className="px-8 py-5 text-xs font-bold text-gray-400 uppercase tracking-wider">Last Checkup</th>
                                     <th className="px-8 py-5 text-xs font-bold text-gray-400 uppercase tracking-wider">Status</th>
                                     <th className="px-8 py-5 text-xs font-bold text-gray-400 uppercase tracking-wider text-right">Actions</th>
                                 </tr>
@@ -209,6 +210,14 @@ const DoctorDashboard = () => {
                                             </div>
                                             <div className="text-xs text-gray-400 mt-1">
                                                 {profile.height}cm • {profile.weight}kg
+                                            </div>
+                                        </td>
+                                        <td className="px-8 py-5">
+                                            <div className="text-sm font-semibold text-slate-600">
+                                                {profile.lastCheckupDate 
+                                                    ? new Date(profile.lastCheckupDate).toLocaleDateString()
+                                                    : 'No past checkups'
+                                                }
                                             </div>
                                         </td>
                                         <td className="px-8 py-5">

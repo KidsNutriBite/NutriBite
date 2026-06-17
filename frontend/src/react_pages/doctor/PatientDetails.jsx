@@ -28,7 +28,7 @@ const PatientDetails = () => {
     const [growthVelocityLoading, setGrowthVelocityLoading] = useState(false);
 
     // Form State
-    const [newPrescription, setNewPrescription] = useState({ title: '', instructions: '' });
+    const [newPrescription, setNewPrescription] = useState({ title: '', instructions: '', nextCheckupDays: 90 });
     const [loading, setLoading] = useState(true);
 
     // Request Modal State
@@ -45,7 +45,7 @@ const PatientDetails = () => {
             setStatus(detailRes.data.data.status);
             setMessage(detailRes.data.data.message || '');
 
-            if (detailRes.data.status === 'active') {
+            if (detailRes.data.data && detailRes.data.data.status === 'active') {
                 const chartRes = await getMealFrequency(id);
                 setChartData(chartRes.data);
 
@@ -75,7 +75,7 @@ const PatientDetails = () => {
         e.preventDefault();
         try {
             await createPrescription({ profileId: id, ...newPrescription });
-            setNewPrescription({ title: '', instructions: '' });
+            setNewPrescription({ title: '', instructions: '', nextCheckupDays: 90 });
             const prescRes = await getPrescriptions(id);
             setPrescriptions(prescRes.data);
             toast.success('Prescription sent!');
@@ -186,8 +186,8 @@ const PatientDetails = () => {
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
                             className={`w-full text-left px-6 py-4 rounded-xl font-bold transition-all flex items-center gap-4 ${activeTab === tab.id
-                                ? status === 'pending' ? 'bg-amber-500 text-white shadow-lg shadow-amber-200' : 'bg-primary text-white shadow-lg shadow-blue-200'
-                                : 'bg-white text-gray-500 hover:bg-gray-50 hover:text-gray-900 border border-transparent hover:border-gray-200'
+                                ? 'bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 shadow-md border border-slate-200/80 dark:border-slate-700'
+                                : 'bg-slate-100/70 dark:bg-slate-800/40 text-slate-600 dark:text-slate-300 hover:bg-slate-200/80 dark:hover:bg-slate-800/80 border border-slate-200/40 dark:border-slate-700/20'
                                 }`}
                         >
                             <span className="text-xl">{tab.icon}</span>
@@ -310,13 +310,26 @@ const PatientDetails = () => {
                                         <h3 className="text-xl font-bold text-gray-900 mb-6">Create {status === 'active' ? 'Prescription' : 'Initial Advice'}</h3>
                                         <form onSubmit={handlePrescribe} className="space-y-4">
                                             <div>
-                                                <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Summary / Diagnosis</label>
+                                                <label className="block text-xs font-bold text-gray-400 dark:text-gray-300 uppercase tracking-widest mb-2">Summary / Diagnosis</label>
                                                 <input
                                                     type="text"
-                                                    className="w-full border-2 border-gray-100 bg-gray-50 rounded-2xl px-5 py-4 focus:border-primary focus:bg-white focus:outline-none transition-all font-medium text-sm"
+                                                    className="w-full border-2 border-gray-100 dark:border-slate-800 bg-gray-50 dark:bg-slate-800/50 rounded-2xl px-5 py-4 focus:border-primary focus:bg-white dark:focus:bg-slate-900 focus:outline-none transition-all font-medium text-sm dark:text-white"
                                                     placeholder="e.g. Iron deficiency observation"
                                                     value={newPrescription.title}
                                                     onChange={e => setNewPrescription({ ...newPrescription, title: e.target.value })}
+                                                    required
+                                                />
+                                            </div>
+                                            <div>
+                                                <label className="block text-xs font-bold text-gray-400 dark:text-gray-300 uppercase tracking-widest mb-2">Days to Next Checkup</label>
+                                                <input
+                                                    type="number"
+                                                    min="1"
+                                                    max="365"
+                                                    className="w-full border-2 border-gray-100 dark:border-slate-800 bg-gray-50 dark:bg-slate-800/50 rounded-2xl px-5 py-4 focus:border-primary focus:bg-white dark:focus:bg-slate-900 focus:outline-none transition-all font-medium text-sm dark:text-white"
+                                                    placeholder="e.g. 90"
+                                                    value={newPrescription.nextCheckupDays || ''}
+                                                    onChange={e => setNewPrescription({ ...newPrescription, nextCheckupDays: parseInt(e.target.value) || 0 })}
                                                     required
                                                 />
                                             </div>
