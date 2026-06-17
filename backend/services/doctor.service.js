@@ -57,11 +57,22 @@ export const getMyPatients = async (doctorId) => {
         doctorId,
         status: { $in: ['active', 'restricted'] }
     }).populate('profileId');
-    return accesses.map(a => ({
-        ...a.profileId.toObject(),
-        accessStatus: a.status,
-        accessId: a._id
-    })).filter(p => p !== null && p._id);
+    const Prescription = (await import('../models/Prescription.model.js')).default;
+    
+    const results = await Promise.all(accesses.map(async (a) => {
+        if (!a.profileId) return null;
+        const profileObj = a.profileId.toObject();
+        const lastCheckup = await Prescription.findOne({ profileId: profileObj._id })
+            .sort({ date: -1 })
+            .lean();
+        return {
+            ...profileObj,
+            accessStatus: a.status,
+            accessId: a._id,
+            lastCheckupDate: lastCheckup ? lastCheckup.date : null
+        };
+    }));
+    return results.filter(p => p !== null && p._id);
 };
 
 /**

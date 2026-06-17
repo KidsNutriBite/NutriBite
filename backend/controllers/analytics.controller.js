@@ -13,19 +13,19 @@ export const getMealFrequency = asyncHandler(async (req, res) => {
     // Calculate date 7 days ago
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-    sevenDaysAgo.setHours(0, 0, 0, 0);
+    const sevenDaysAgoStr = sevenDaysAgo.toISOString().split('T')[0];
 
     const data = await MealLog.aggregate([
         {
             $match: {
                 profileId: new mongoose.Types.ObjectId(profileId),
-                date: { $gte: sevenDaysAgo }
+                date: { $gte: sevenDaysAgoStr }
             }
         },
         {
             $group: {
-                _id: { $dateToString: { format: "%Y-%m-%d", date: "$date" } },
-                count: { $sum: 1 }
+                _id: "$date",
+                count: { $sum: { $ifNull: ["$completedMealsCount", 1] } }
             }
         },
         { $sort: { _id: 1 } } // Sort by date ascending
@@ -86,7 +86,7 @@ export const getNutritionTrends = asyncHandler(async (req, res) => {
 // @route   POST /api/prescriptions
 // @access  Private (Doctor)
 export const createPrescription = asyncHandler(async (req, res) => {
-    const { profileId, title, instructions, diagnosis, notes } = req.body;
+    const { profileId, title, instructions, diagnosis, notes, nextCheckupDays } = req.body;
 
     if (!profileId || !title || !instructions) {
         res.status(400);
@@ -101,7 +101,8 @@ export const createPrescription = asyncHandler(async (req, res) => {
         title,
         diagnosis: diagnosis || '',
         notes: notes || '',
-        instructions
+        instructions,
+        nextCheckupDays: Number(nextCheckupDays) || 90
     });
 
     res.status(201).json(new ApiResponse(201, prescription, 'Prescription created'));

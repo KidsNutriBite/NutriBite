@@ -29,6 +29,10 @@ const prescriptionSchema = new mongoose.Schema(
             type: String,
             required: [true, 'Instructions are required'],
         },
+        nextCheckupDays: {
+            type: Number,
+            default: 90,
+        },
         date: {
             type: Date,
             default: Date.now,
