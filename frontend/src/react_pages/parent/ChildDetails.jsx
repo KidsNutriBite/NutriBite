@@ -63,9 +63,9 @@ const ChildDetails = () => {
 
     const [isGrowthModalOpen, setIsGrowthModalOpen] = useState(false); // Growth Modal State
 
-    const fetchData = async () => {
+    const fetchData = async (silent = false) => {
         try {
-            setLoading(true);
+            if (!silent) setLoading(true);
             const [profileRes, historyRes, dailyRes, chartRes, prescRes, growthRes, nutritionRes, lastMealRes, sleepHistoryRes, sleepDayRes] = await Promise.all([
                 getProfile(id),
                 getMealHistory(id),
@@ -87,10 +87,6 @@ const ChildDetails = () => {
             // Actually, let's keep "meals" as the DAILY log object for the selected date
             // And maybe a separate "history" state for timeline dots?
 
-            // Correction: Previous code used `meals` as a list of recent logs.
-            // New design: `meals` should probably be the daily log object for `DailyMealCard`.
-            // Let's create `dailyLog` state.
-
             setDailyLog(dailyRes.data || dailyRes);
             setHistory(histData.logs || []);
             setStreak(histData.streak || 0);
@@ -107,7 +103,7 @@ const ChildDetails = () => {
             console.error(error);
             // navigate('/parent/dashboard'); // Don't redirect on error to allow retry or partial load
         } finally {
-            setLoading(false);
+            if (!silent) setLoading(false);
         }
     };
 
@@ -719,7 +715,7 @@ const ChildDetails = () => {
                                 <div className="space-y-12">
                                     <ProfileInfoAndReports 
                                         profile={profile} 
-                                        onUpdate={fetchData} 
+                                        onUpdate={() => fetchData(true)} 
                                     />
                                     <div className="border-t pt-8">
                                         <div className="mb-6 text-center md:text-left">

@@ -234,16 +234,16 @@ const MyChildren = () => {
         fetchChildren();
     }, []);
 
-    const fetchChildren = async () => {
+    const fetchChildren = async (silent = false) => {
         try {
-            setLoading(true);
+            if (!silent) setLoading(true);
             const res = await getMyProfiles();
             setProfiles(Array.isArray(res) ? res : res.data || []);
         } catch (error) {
             console.error('Error fetching children profiles:', error);
             toast.error('Failed to load children profiles');
         } finally {
-            setLoading(false);
+            if (!silent) setLoading(false);
         }
     };
 
@@ -670,7 +670,7 @@ const MyChildren = () => {
                     <ProfileInfoAndReports
                         profile={selectedChild}
                         onUpdate={() => {
-                            fetchChildren();
+                            fetchChildren(true);
                         }}
                     />
                 )}
