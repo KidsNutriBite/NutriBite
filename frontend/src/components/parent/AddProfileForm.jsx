@@ -143,6 +143,25 @@ const AddProfileForm = ({ onSuccess, onCancel }) => {
         });
     };
 
+    const handlePrimaryGoalToggle = (id) => {
+        setFormData(prev => {
+            const current = prev.goals.primary
+                ? prev.goals.primary.split(',').map(s => s.trim()).filter(Boolean)
+                : [];
+            const exists = current.includes(id);
+            const updated = exists
+                ? current.filter(x => x !== id)
+                : [...current, id];
+            return {
+                ...prev,
+                goals: {
+                    ...prev.goals,
+                    primary: updated.join(', ')
+                }
+            };
+        });
+    };
+
     const handleProfileImageChange = (e) => {
         const file = e.target.files[0];
         if (!file) return;
@@ -218,6 +237,14 @@ const AddProfileForm = ({ onSuccess, onCancel }) => {
         if (currentStep === 7) {
             if (!formData.goals.primary) return "Primary goal is required";
         }
+        if (currentStep === 8) {
+            if (selectedLikes.length === 0 && !customLikedText.trim()) {
+                return "Please select or enter at least one food like (favorite food)";
+            }
+            if (selectedDislikes.length === 0 && !customDislikedText.trim()) {
+                return "Please select or enter at least one food dislike (aversion)";
+            }
+        }
         return null;
     };
 
@@ -244,6 +271,12 @@ const AddProfileForm = ({ onSuccess, onCancel }) => {
 
         if (step < 8) {
             nextStep();
+            return;
+        }
+
+        const validationError = validateStep(8);
+        if (validationError) {
+            toast.error(validationError);
             return;
         }
 
@@ -957,16 +990,21 @@ const AddProfileForm = ({ onSuccess, onCancel }) => {
                     <div className="space-y-3">
                         <label className="block text-sm font-bold text-slate-700 dark:text-slate-200">What is your Primary Goal? <span className="text-red-500">*</span></label>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                            {goalsList.map(g => (
-                                <button
-                                    key={g}
-                                    type="button"
-                                    onClick={() => setFormData({ ...formData, goals: { ...formData.goals, primary: g } })}
-                                    className={`px-4 py-3 rounded-xl border-2 text-xs font-bold text-center transition-all ${formData.goals.primary === g ? 'border-primary bg-primary/5 text-primary shadow-sm' : 'border-slate-100 dark:border-slate-800 text-slate-650 hover:bg-slate-50 dark:hover:bg-slate-850'}`}
-                                >
-                                    {g}
-                                </button>
-                            ))}
+                            {goalsList.map(g => {
+                                const isSelected = formData.goals.primary
+                                    ? formData.goals.primary.split(',').map(s => s.trim()).includes(g)
+                                    : false;
+                                return (
+                                    <button
+                                        key={g}
+                                        type="button"
+                                        onClick={() => handlePrimaryGoalToggle(g)}
+                                        className={`px-4 py-3 rounded-xl border-2 text-xs font-bold text-center transition-all ${isSelected ? 'border-primary bg-primary/5 text-primary shadow-sm' : 'border-slate-100 dark:border-slate-800 text-slate-650 hover:bg-slate-50 dark:hover:bg-slate-850'}`}
+                                    >
+                                        {g}
+                                    </button>
+                                );
+                            })}
                         </div>
                     </div>
 
