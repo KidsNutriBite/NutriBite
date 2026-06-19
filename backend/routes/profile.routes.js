@@ -4,7 +4,8 @@ import {
     getMyProfiles,
     getProfileById,
     updateProfile,
-    deleteProfile
+    deleteProfile,
+    reanalyzeProfile
 } from '../controllers/profile.controller.js';
 import { protect } from '../middlewares/auth.middleware.js';
 import { authorize } from '../middlewares/role.middleware.js';
@@ -19,6 +20,8 @@ router.use(authorize('parent', 'doctor')); // Generally accessible, but specific
 
 router.post('/', authorize('parent'), upload.any(), createProfile);
 router.get('/', authorize('parent'), getMyProfiles); // Doctors use a different route to see patients
+
+router.post('/:id/reanalyze', authorize('parent'), checkProfileOwnership, reanalyzeProfile);
 
 router.route('/:id')
     .get(checkProfileOwnership, getProfileById)
