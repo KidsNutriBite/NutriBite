@@ -77,14 +77,8 @@ const ProfileInfoAndReports = ({ profile, onUpdate }) => {
     const [selectedDislikes, setSelectedDislikes] = useState([]);
     const [customDislikedText, setCustomDislikedText] = useState('');
 
-    // Notes State
-    const [notes, setNotes] = useState(profile.parentNotes || '');
-    const [isSavingNotes, setIsSavingNotes] = useState(false);
-
     useEffect(() => {
         if (!profile) return;
-        
-        setNotes(profile.parentNotes || '');
         
         if (!isEditingBasic) {
             setBasicForm({
@@ -193,20 +187,7 @@ const ProfileInfoAndReports = ({ profile, onUpdate }) => {
         setNewProfileImagePreview(URL.createObjectURL(file));
     };
 
-    const handleNotesSave = async () => {
-        setIsSavingNotes(true);
-        try {
-            const formData = new FormData();
-            formData.append('data', JSON.stringify({ parentNotes: notes }));
-            await updateProfile(profile._id, formData);
-            toast.success('Notes updated successfully');
-            onUpdate();
-        } catch (error) {
-            toast.error(error.message || 'Failed to update notes');
-        } finally {
-            setIsSavingNotes(false);
-        }
-    };
+
 
     const saveBasicInfo = async () => {
         // Validation checks
@@ -438,55 +419,6 @@ const ProfileInfoAndReports = ({ profile, onUpdate }) => {
 
     return (
         <div className="space-y-8">
-            {/* Notes & Summary widgets */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Notes Text Area */}
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 md:col-span-2 flex flex-col justify-between">
-                    <div>
-                        <h3 className="text-lg font-black text-gray-900 mb-2">Parent Notes & Observations</h3>
-                        <p className="text-gray-400 text-xs font-bold mb-4 uppercase">PERSONAL REFLECTIONS & AD HOC SYMPTOMS</p>
-                        <textarea
-                            value={notes}
-                            onChange={(e) => setNotes(e.target.value)}
-                            placeholder="Jot down dietary exceptions, recent behavioral mood shifts, or home symptom diaries..."
-                            className="w-full h-32 p-3 text-sm border rounded-xl bg-gray-50 focus:ring-2 focus:ring-primary/20 outline-none resize-none font-medium text-gray-700"
-                        />
-                    </div>
-                    <div className="flex justify-end mt-4">
-                        <button
-                            onClick={handleNotesSave}
-                            disabled={isSavingNotes || notes === profile.parentNotes}
-                            className="px-6 py-2.5 bg-primary text-white font-extrabold text-sm rounded-xl shadow hover:bg-blue-600 transition disabled:opacity-50"
-                        >
-                            {isSavingNotes ? 'Saving...' : 'Save Notes'}
-                        </button>
-                    </div>
-                </div>
-
-                {/* Audit Information Logs */}
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <h3 className="text-lg font-black text-gray-900 mb-2">Audit logs</h3>
-                        <p className="text-gray-400 text-xs font-bold mb-4 uppercase">PROFILE CHANGE AUDIT TRAIL</p>
-                        <div className="space-y-3 max-h-36 overflow-y-auto pr-1">
-                            {!profile.changeHistory || profile.changeHistory.length === 0 ? (
-                                <p className="text-xs text-gray-400 font-bold italic">No updates audited yet.</p>
-                            ) : (
-                                profile.changeHistory.slice().reverse().map((h, i) => (
-                                    <div key={i} className="text-xs border-l-2 border-primary/40 pl-3 py-0.5">
-                                        <p className="text-gray-500 font-bold">
-                                            {new Date(h.updatedAt).toLocaleString()}
-                                        </p>
-                                        <p className="text-gray-700 font-semibold leading-relaxed">
-                                            Changed: <span className="text-indigo-600 font-bold">{h.fieldsChanged?.join(', ')}</span>
-                                        </p>
-                                    </div>
-                                ))
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             {/* Section 1: Basic Info & Physical Stats */}
             <div className="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-gray-100">
