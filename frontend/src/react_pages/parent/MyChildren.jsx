@@ -7,6 +7,7 @@ import { getMyProfiles, deleteProfile } from '../../api/profile.api';
 import Modal from '../../components/common/Modal';
 import AddProfileForm from '../../components/parent/AddProfileForm';
 import ProfileInfoAndReports from '../../components/parent/ProfileInfoAndReports';
+import WellnessInsightsModal from '../../components/parent/WellnessInsightsModal';
 import { toast } from 'react-hot-toast';
 
 // Modern Premium Inline SVG Icons
@@ -203,6 +204,31 @@ const MyChildren = () => {
     const [loading, setLoading] = useState(true);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [selectedChildId, setSelectedChildId] = useState(null);
+    const [insightsProfile, setInsightsProfile] = useState(null);
+
+    const calculateCompletion = (child) => {
+        let score = 0;
+        const fields = [
+            child.name,
+            child.dob,
+            child.gender,
+            child.bloodGroup,
+            child.height,
+            child.weight,
+            child.waistCircumference,
+            child.location?.city,
+            child.goals?.primary,
+            child.preferences?.favoriteFoods,
+            child.preferences?.dislikedFoods,
+            child.preferences?.sleepDuration
+        ];
+        fields.forEach(f => {
+            if (f !== undefined && f !== null && f !== '') {
+                score += 1;
+            }
+        });
+        return Math.round((score / fields.length) * 100);
+    };
 
     useEffect(() => {
         fetchChildren();
@@ -336,6 +362,7 @@ const MyChildren = () => {
                         {profiles.map((child) => {
                             const healthConditionsCount = child.healthConditions?.length || 0;
                             const wellnessScore = child.wellnessAnalysis?.score || 100;
+                            const completion = calculateCompletion(child);
                             
                             // Select left accent border color based on wellness score
                             let wellnessBorder = 'border-l-[5px] border-l-emerald-500';
@@ -405,6 +432,26 @@ const MyChildren = () => {
                                             </div>
 
                                             <RadialScore score={wellnessScore} />
+                                        </div>
+
+                                        {/* Profile Completion Indicator */}
+                                        <div className="space-y-1.5 p-3.5 bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                                            <div className="flex justify-between text-[10px] font-bold text-slate-500 uppercase tracking-wider leading-none">
+                                                <span>Profile Completion</span>
+                                                <span className={completion === 100 ? 'text-emerald-500' : 'text-amber-500'}>{completion}%</span>
+                                            </div>
+                                            <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+                                                <div 
+                                                    className={`h-full rounded-full transition-all duration-500 ${completion === 100 ? 'bg-emerald-500' : 'bg-amber-500'}`}
+                                                    style={{ width: `${completion}%` }}
+                                                ></div>
+                                            </div>
+                                            {completion < 100 && (
+                                                <p className="text-[9px] text-amber-600 dark:text-amber-400 font-extrabold flex items-start gap-1 mt-1 leading-normal">
+                                                    <span className="shrink-0 mt-0.5">⚠️</span> 
+                                                    <span>Profile incomplete. Click "Edit Info" to fill in food preferences and habits.</span>
+                                                </p>
+                                            )}
                                         </div>
 
                                         {/* Birth & Medical Indicators */}
@@ -521,19 +568,19 @@ const MyChildren = () => {
                                             <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs">
                                                 <div className="flex items-center justify-between font-bold text-slate-600 dark:text-slate-300 min-w-0">
                                                     <span className="text-slate-400 flex items-center"><SportsIcon /> Sports:</span>
-                                                    <span className="truncate max-w-[80px] font-extrabold text-[11px]">{child.sportsActivityLevel || 'Moderate'}</span>
+                                                    <span className="truncate max-w-[80px] font-extrabold text-[11px]">{child.sportsActivityLevel || '--'}</span>
                                                 </div>
                                                 <div className="flex items-center justify-between font-bold text-slate-600 dark:text-slate-300">
                                                     <span className="text-slate-400 flex items-center"><SleepIcon /> Sleep:</span>
-                                                    <span className="font-extrabold text-[11px]">{child.preferences?.sleepDuration || 8}h ({child.preferences?.sleepQuality || 'Avg'})</span>
+                                                    <span className="font-extrabold text-[11px]">{child.preferences?.sleepDuration ? `${child.preferences.sleepDuration}h` : '--'} ({child.preferences?.sleepQuality || '--'})</span>
                                                 </div>
                                                 <div className="flex items-center justify-between font-bold text-slate-600 dark:text-slate-300">
                                                     <span className="text-slate-400 flex items-center"><HydrationIcon /> Water:</span>
-                                                    <span className="font-extrabold text-[11px]">{child.preferences?.waterIntake || 1000} ml</span>
+                                                    <span className="font-extrabold text-[11px]">{child.preferences?.waterIntake ? `${child.preferences.waterIntake} ml` : '--'}</span>
                                                 </div>
                                                 <div className="flex items-center justify-between font-bold text-slate-600 dark:text-slate-300">
                                                     <span className="text-slate-400 flex items-center"><ScreenIcon /> Screen:</span>
-                                                    <span className="font-extrabold text-[11px]">{child.preferences?.screenTime || 1} h/day</span>
+                                                    <span className="font-extrabold text-[11px]">{child.preferences?.screenTime !== undefined && child.preferences?.screenTime !== null && child.preferences?.screenTime !== '' ? `${child.preferences.screenTime} h/day` : '--'}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -604,9 +651,9 @@ const MyChildren = () => {
                 maxWidth="max-w-[95%] md:max-w-[65vw]"
             >
                 <AddProfileForm
-                    onSuccess={() => {
+                    onSuccess={(created) => {
                         setIsAddModalOpen(false);
-                        fetchChildren();
+                        setInsightsProfile(created);
                     }}
                     onCancel={() => setIsAddModalOpen(false)}
                 />
@@ -628,6 +675,20 @@ const MyChildren = () => {
                     />
                 )}
             </Modal>
+
+            {/* Wellness Insights Modal Sibling */}
+            <AnimatePresence>
+                {insightsProfile && (
+                    <WellnessInsightsModal
+                        profile={insightsProfile}
+                        onClose={() => {
+                            setInsightsProfile(null);
+                            fetchChildren();
+                            router.push('/pricing');
+                        }}
+                    />
+                )}
+            </AnimatePresence>
         </div>
     );
 };

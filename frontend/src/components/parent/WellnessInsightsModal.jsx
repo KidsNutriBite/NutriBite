@@ -18,13 +18,13 @@ const WellnessInsightsModal = ({ profile, onClose }) => {
     };
 
     return (
-        <div className="fixed inset-0 z-[999] overflow-y-auto bg-slate-900/80 backdrop-blur-xl flex justify-center py-10 px-4">
+        <div className="fixed inset-0 z-[999] overflow-y-auto bg-slate-900/80 backdrop-blur-xl flex justify-center items-start md:items-center py-6 md:py-10 px-4">
             <motion.div
                 initial={{ opacity: 0, scale: 0.95, y: 30 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: 30 }}
                 transition={{ type: "spring", duration: 0.5 }}
-                className="bg-white dark:bg-slate-900 rounded-[2.5rem] shadow-2xl border border-gray-100 dark:border-slate-800 w-full max-w-4xl p-6 md:p-10 space-y-8 my-auto relative overflow-hidden"
+                className="bg-white dark:bg-slate-900 rounded-3xl md:rounded-[2.5rem] shadow-2xl border border-gray-100 dark:border-slate-800 w-full max-w-4xl p-4 sm:p-6 md:p-10 space-y-8 my-4 md:my-auto relative overflow-hidden"
             >
                 {/* Visual blob decorations for modern design */}
                 <div className="absolute top-0 left-0 w-80 h-80 bg-red-100/30 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2 -z-10"></div>

@@ -5,15 +5,11 @@ import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createProfile } from '../../api/profile.api';
 import toast from 'react-hot-toast';
-import WellnessInsightsModal from './WellnessInsightsModal';
-
 const AddProfileForm = ({ onSuccess, onCancel }) => {
     const router = useRouter();
     const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [showInsightsModal, setShowInsightsModal] = useState(false);
-    const [createdProfile, setCreatedProfile] = useState(null);
 
     const [selectedLikes, setSelectedLikes] = useState([]);
     const [customLikedText, setCustomLikedText] = useState('');
@@ -345,8 +341,7 @@ const AddProfileForm = ({ onSuccess, onCancel }) => {
             const created = res.data || res;
             
             toast.success("Child Profile created successfully!");
-            setCreatedProfile(created);
-            setShowInsightsModal(true);
+            if (onSuccess) onSuccess(created);
         } catch (err) {
             console.error(err);
             setError(err.response?.data?.message || 'Failed to create child profile');
@@ -368,18 +363,6 @@ const AddProfileForm = ({ onSuccess, onCancel }) => {
         "Improve Nutrition", "Track Growth", "Weight Management", 
         "Manage Medical Condition", "Improve Immunity", "Get Doctor Guidance", "General Wellness"
     ];
-
-    if (showInsightsModal && createdProfile) {
-        return (
-            <WellnessInsightsModal 
-                profile={createdProfile} 
-                onClose={() => {
-                    if (onSuccess) onSuccess();
-                    router.push('/pricing');
-                }} 
-            />
-        );
-    }
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
