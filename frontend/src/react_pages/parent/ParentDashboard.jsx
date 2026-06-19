@@ -401,10 +401,14 @@ const ParentDashboard = () => {
                 {insightsProfile && (
                     <WellnessInsightsModal
                         profile={insightsProfile}
-                        onClose={() => {
+                        onClose={(targetPath) => {
                             setInsightsProfile(null);
                             fetchData();
-                            router.push('/pricing');
+                            if (targetPath) {
+                                router.push(targetPath);
+                            } else {
+                                router.push('/pricing');
+                            }
                         }}
                     />
                 )}

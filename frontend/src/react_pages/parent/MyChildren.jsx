@@ -681,10 +681,14 @@ const MyChildren = () => {
                 {insightsProfile && (
                     <WellnessInsightsModal
                         profile={insightsProfile}
-                        onClose={() => {
+                        onClose={(targetPath) => {
                             setInsightsProfile(null);
                             fetchChildren();
-                            router.push('/pricing');
+                            if (targetPath) {
+                                router.push(targetPath);
+                            } else {
+                                router.push('/pricing');
+                            }
                         }}
                     />
                 )}
