@@ -234,16 +234,16 @@ export const updateProfile = asyncHandler(async (req, res) => {
 
     // 3. Compare changes to build Audit Log / changeHistory
     const fieldsChanged = [];
-    if (valData.name && valData.name !== existingProfile.name) fieldsChanged.push('Name');
-    if (valData.dob && new Date(valData.dob).getTime() !== new Date(existingProfile.dob).getTime()) fieldsChanged.push('Date of Birth');
-    if (valData.gender && valData.gender !== existingProfile.gender) fieldsChanged.push('Gender');
-    if (valData.bloodGroup && valData.bloodGroup !== existingProfile.bloodGroup) fieldsChanged.push('Blood Group');
-    if (valData.height && Number(valData.height) !== existingProfile.height) fieldsChanged.push('Height');
-    if (valData.weight && Number(valData.weight) !== existingProfile.weight) fieldsChanged.push('Weight');
-    if (valData.waistCircumference && Number(valData.waistCircumference) !== existingProfile.waistCircumference) fieldsChanged.push('Waist Circumference');
-    if (valData.sportsActivityLevel && valData.sportsActivityLevel !== existingProfile.sportsActivityLevel) fieldsChanged.push('Sports Activity Level');
-    if (valData.prematureBirth && (valData.prematureBirth.isPremature !== existingProfile.prematureBirth?.isPremature || valData.prematureBirth.weeksPremature !== existingProfile.prematureBirth?.weeksPremature)) fieldsChanged.push('Premature Birth Info');
-    if (valData.parentNotes && valData.parentNotes !== existingProfile.parentNotes) fieldsChanged.push('Parent Notes');
+    if (valData.name !== undefined && valData.name !== existingProfile.name) fieldsChanged.push('Name');
+    if (valData.dob !== undefined && new Date(valData.dob).getTime() !== new Date(existingProfile.dob).getTime()) fieldsChanged.push('Date of Birth');
+    if (valData.gender !== undefined && valData.gender !== existingProfile.gender) fieldsChanged.push('Gender');
+    if (valData.bloodGroup !== undefined && valData.bloodGroup !== existingProfile.bloodGroup) fieldsChanged.push('Blood Group');
+    if (valData.height !== undefined && Number(valData.height) !== existingProfile.height) fieldsChanged.push('Height');
+    if (valData.weight !== undefined && Number(valData.weight) !== existingProfile.weight) fieldsChanged.push('Weight');
+    if (valData.waistCircumference !== undefined && Number(valData.waistCircumference) !== existingProfile.waistCircumference) fieldsChanged.push('Waist Circumference');
+    if (valData.sportsActivityLevel !== undefined && valData.sportsActivityLevel !== existingProfile.sportsActivityLevel) fieldsChanged.push('Sports Activity Level');
+    if (valData.prematureBirth !== undefined && (valData.prematureBirth.isPremature !== existingProfile.prematureBirth?.isPremature || valData.prematureBirth.weeksPremature !== existingProfile.prematureBirth?.weeksPremature)) fieldsChanged.push('Premature Birth Info');
+    if (valData.parentNotes !== undefined && valData.parentNotes !== existingProfile.parentNotes) fieldsChanged.push('Parent Notes');
 
     // Preferences checking
     if (valData.preferences) {
@@ -299,6 +299,10 @@ export const updateProfile = asyncHandler(async (req, res) => {
                 reportActivity = 'updated';
                 emailAction = 'Medical Report Updated';
             }
+        }
+
+        if (reportActivity) {
+            fieldsChanged.push('Medical Reports');
         }
 
         // Reconstruct reports

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { updateProfile } from '../../api/profile.api';
 import toast from 'react-hot-toast';
 
@@ -80,6 +80,87 @@ const ProfileInfoAndReports = ({ profile, onUpdate }) => {
     // Notes State
     const [notes, setNotes] = useState(profile.parentNotes || '');
     const [isSavingNotes, setIsSavingNotes] = useState(false);
+
+    useEffect(() => {
+        if (!profile) return;
+        
+        setNotes(profile.parentNotes || '');
+        
+        if (!isEditingBasic) {
+            setBasicForm({
+                name: profile.name || '',
+                dob: profile.dob ? new Date(profile.dob).toISOString().split('T')[0] : '',
+                gender: profile.gender || 'male',
+                bloodGroup: profile.bloodGroup || 'O+',
+                height: profile.height || '',
+                weight: profile.weight || '',
+                waistCircumference: profile.waistCircumference || '',
+                sportsActivityLevel: profile.sportsActivityLevel || 'Moderately Active',
+                prematureBirth: {
+                    isPremature: profile.prematureBirth?.isPremature || false,
+                    weeksPremature: profile.prematureBirth?.weeksPremature || 0
+                },
+                location: {
+                    country: profile.location?.country || 'India',
+                    state: profile.location?.state || '',
+                    city: profile.location?.city || '',
+                    address: profile.location?.address || ''
+                }
+            });
+        }
+        
+        if (!isEditingHealth) {
+            setHealthForm({
+                healthConditions: profile.healthConditions || [],
+                otherCondition: profile.otherCondition || '',
+                familyHistory: {
+                    siblingConditions: {
+                        hasCondition: profile.familyHistory?.siblingConditions?.hasCondition || false,
+                        description: profile.familyHistory?.siblingConditions?.description || ''
+                    },
+                    motherConditions: {
+                        hasCondition: profile.familyHistory?.motherConditions?.hasCondition || false,
+                        description: profile.familyHistory?.motherConditions?.description || ''
+                    },
+                    fatherConditions: {
+                        hasCondition: profile.familyHistory?.fatherConditions?.hasCondition || false,
+                        description: profile.familyHistory?.fatherConditions?.description || ''
+                    },
+                    nutritionConcerns: profile.familyHistory?.nutritionConcerns || ''
+                }
+            });
+        }
+        
+        if (!isEditingPrefs) {
+            setPrefsForm({
+                favoriteFoods: profile.preferences?.favoriteFoods || '',
+                dislikedFoods: profile.preferences?.dislikedFoods || '',
+                favoriteFruits: profile.preferences?.favoriteFruits || '',
+                favoriteVegetables: profile.preferences?.favoriteVegetables || '',
+                favoriteSnacks: profile.preferences?.favoriteSnacks || '',
+                waterIntake: profile.preferences?.waterIntake || 1000,
+                activityLevel: profile.preferences?.activityLevel || 'moderate',
+                sleepDuration: profile.preferences?.sleepDuration || 8,
+                screenTime: profile.preferences?.screenTime || 1,
+                eatingHabits: profile.preferences?.eatingHabits || 'average',
+                sleepQuality: profile.preferences?.sleepQuality || 'Average'
+            });
+
+            const likes = profile.preferences?.favoriteFoods
+                ? profile.preferences.favoriteFoods.split(',').map(s => s.trim()).filter(Boolean)
+                : [];
+            setSelectedLikes(likes.filter(item => likesOptions.includes(item)));
+            const customLikes = likes.filter(item => !likesOptions.includes(item)).join(', ');
+            setCustomLikedText(customLikes);
+
+            const dislikes = profile.preferences?.dislikedFoods
+                ? profile.preferences.dislikedFoods.split(',').map(s => s.trim()).filter(Boolean)
+                : [];
+            setSelectedDislikes(dislikes.filter(item => dislikesOptions.includes(item)));
+            const customDislikes = dislikes.filter(item => !dislikesOptions.includes(item)).join(', ');
+            setCustomDislikedText(customDislikes);
+        }
+    }, [profile, isEditingBasic, isEditingHealth, isEditingPrefs]);
 
     // Reports Vault State
     const [isAddingReport, setIsAddingReport] = useState(false);

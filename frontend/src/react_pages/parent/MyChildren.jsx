@@ -664,7 +664,7 @@ const MyChildren = () => {
                 isOpen={selectedChildId !== null}
                 onClose={() => setSelectedChildId(null)}
                 title={selectedChild ? `Manage Profile & Reports: ${selectedChild.name}` : "Manage Profile & Reports"}
-                maxWidth="max-w-[95%] md:max-w-[65vw]"
+                maxWidth="max-w-[95%] md:max-w-[85vw]"
             >
                 {selectedChild && (
                     <ProfileInfoAndReports
