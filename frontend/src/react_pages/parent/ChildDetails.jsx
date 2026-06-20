@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useMemo } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getProfileById as getProfile } from '../../api/profile.api';
 import { logMeal, deleteFoodItem } from '../../api/meal.api';
@@ -20,6 +20,8 @@ import DateTimeline from '../../components/meal/DateTimeline';
 import { getMealsByDate, getMealHistory, getLastMealTime } from '../../api/meal.api'; // Updated imports
 import ActivityTracking from '../../components/parent/ActivityTracking'; // Import Component
 import DigitalTwinView from '../../components/parent/DigitalTwinView';
+import ProfileInfoAndReports from '../../components/parent/ProfileInfoAndReports';
+import WellnessAnalysis from './WellnessAnalysis';
 
 const getLocalDateString = (d = new Date()) => {
     const year = d.getFullYear();
@@ -41,6 +43,15 @@ const ChildDetails = () => {
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('overview');
 
+    const searchParams = useSearchParams();
+    const tabParam = searchParams?.get('tab');
+
+    useEffect(() => {
+        if (tabParam) {
+            setActiveTab(tabParam);
+        }
+    }, [tabParam]);
+
     // Analytics
     const [chartData, setChartData] = useState([]);
     const [nutritionTrends, setNutritionTrends] = useState([]);
@@ -52,9 +63,9 @@ const ChildDetails = () => {
 
     const [isGrowthModalOpen, setIsGrowthModalOpen] = useState(false); // Growth Modal State
 
-    const fetchData = async () => {
+    const fetchData = async (silent = false) => {
         try {
-            setLoading(true);
+            if (!silent) setLoading(true);
             const [profileRes, historyRes, dailyRes, chartRes, prescRes, growthRes, nutritionRes, lastMealRes, sleepHistoryRes, sleepDayRes] = await Promise.all([
                 getProfile(id),
                 getMealHistory(id),
@@ -76,10 +87,6 @@ const ChildDetails = () => {
             // Actually, let's keep "meals" as the DAILY log object for the selected date
             // And maybe a separate "history" state for timeline dots?
 
-            // Correction: Previous code used `meals` as a list of recent logs.
-            // New design: `meals` should probably be the daily log object for `DailyMealCard`.
-            // Let's create `dailyLog` state.
-
             setDailyLog(dailyRes.data || dailyRes);
             setHistory(histData.logs || []);
             setStreak(histData.streak || 0);
@@ -96,7 +103,7 @@ const ChildDetails = () => {
             console.error(error);
             // navigate('/parent/dashboard'); // Don't redirect on error to allow retry or partial load
         } finally {
-            setLoading(false);
+            if (!silent) setLoading(false);
         }
     };
 
@@ -386,6 +393,8 @@ const ChildDetails = () => {
 
     const tabs = [
         { id: 'overview', label: 'Overview & Logs', icon: '📊' },
+        { id: 'profileInfo', label: 'Profile Info & Reports', icon: '📝' },
+        { id: 'wellness', label: 'Wellness Analysis', icon: '✨' },
         { id: 'twin', label: 'Digital Twin', icon: '🤖' },
         { id: 'growth', label: 'Growth Timeline', icon: '📏' }, // New Tab
         { id: 'analytics', label: 'Nutrition Trends', icon: '📈' },
@@ -700,6 +709,37 @@ const ChildDetails = () => {
                                         />
                                     </div>
                                 </div>
+                            )}
+
+                            {activeTab === 'profileInfo' && (
+                                <div className="space-y-12">
+                                    <ProfileInfoAndReports 
+                                        profile={profile} 
+                                        onUpdate={() => fetchData(true)} 
+                                    />
+                                    <div className="border-t pt-8">
+                                        <div className="mb-6 text-center md:text-left">
+                                            <h2 className="text-2xl font-black text-gray-900">Latest Wellness Analysis</h2>
+                                            <p className="text-gray-500 text-sm font-bold mt-1">
+                                                Computed automatically from the child's latest metrics, habits, and clinical settings.
+                                            </p>
+                                        </div>
+                                        <WellnessAnalysis 
+                                            profileId={id} 
+                                            profileData={profile} 
+                                            onUpdate={fetchData} 
+                                            hideHeader={true} 
+                                        />
+                                    </div>
+                                </div>
+                            )}
+
+                            {activeTab === 'wellness' && (
+                                <WellnessAnalysis 
+                                    profileData={profile} 
+                                    onUpdate={fetchData}
+                                    hideHeader={true} 
+                                />
                             )}
 
                             {activeTab === 'twin' && (

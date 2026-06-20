@@ -2,35 +2,17 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import Header from '../components/common/Header';
+import Footer from '../components/common/Footer';
 
 const LandingPage = () => {
     return (
         <div className="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 selection:bg-primary/30">
-            {/* Sticky Navbar */}
-            <header className="fixed top-0 z-50 w-full px-4 py-4 md:px-20 lg:px-40">
-                <nav className="glass-nav flex items-center justify-between rounded-full border border-white/20 px-6 py-3 shadow-lg dark:border-white/10 bg-white/80 backdrop-blur-xl">
-                    <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-white shadow-md shadow-primary/40">
-                            <span className="material-symbols-outlined">nutrition</span>
-                        </div>
-                        <h2 className="text-xl font-extrabold tracking-tight text-slate-800 dark:text-white">NutriKid</h2>
-                    </div>
-                    <div className="hidden md:flex flex-1 justify-center gap-10">
-                        <a className="text-sm font-semibold text-slate-600 hover:text-primary transition-colors dark:text-slate-300 dark:hover:text-primary" href="#how-it-works">How It Works</a>
-                        <a className="text-sm font-semibold text-slate-600 hover:text-primary transition-colors dark:text-slate-300 dark:hover:text-primary" href="#features">Features</a>
-                        <Link href="/login" className="text-sm font-semibold text-slate-600 hover:text-primary transition-colors dark:text-slate-300 dark:hover:text-primary">Login</Link>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <Link href="/register" className="flex min-w-[100px] cursor-pointer items-center justify-center rounded-full h-10 px-5 bg-primary text-white text-sm font-bold shadow-lg shadow-primary/30 hover:scale-105 active:scale-95 transition-all">
-                            <span>Get Started</span>
-                        </Link>
-                    </div>
-                </nav>
-            </header>
+            <Header />
 
             <main className="flex-1 pt-24">
                 {/* Hero Section */}
-                <section className="relative px-4 py-16 md:px-20 lg:px-40 overflow-visible">
+                <section id="home" className="relative px-4 py-16 md:px-20 lg:px-40 overflow-visible">
                     {/* Floating Decorative Icons */}
                     <div className="absolute top-[60%] right-[10%] opacity-20 dark:opacity-40 select-none animate-bounce delay-700">
                         <span className="material-symbols-outlined text-6xl text-orange-400 rotate-45">nutrition</span>
@@ -42,12 +24,12 @@ const LandingPage = () => {
                     <div className="flex flex-col gap-12 lg:flex-row lg:items-center">
                         <div className="flex flex-col gap-8 lg:w-1/2">
                             <div className="space-y-4">
-                                <span className="inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-primary dark:bg-primary/20">Welcome to NutriKid</span>
+                                <span className="inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-primary dark:bg-primary/20">Welcome to NutriBite</span>
                                 <h1 className="text-5xl font-extrabold leading-[1.1] tracking-tight text-slate-900 dark:text-white md:text-6xl lg:text-7xl">
                                     Healthy Habits for <span className="text-primary">Happy Kids</span>
                                 </h1>
                                 <p className="max-w-[500px] text-lg leading-relaxed text-slate-600 dark:text-slate-400">
-                                    Connecting pediatric nutrition with families and medical professionals through play, expert care, and data-driven insights.
+                                    Leading AI-powered Pediatric Nutrition intelligence platform for Child Health and Growth Monitoring. Empowering families and doctors with an AI Nutrition Assistant for secure, clinical nutrition tracking.
                                 </p>
                             </div>
                             <div className="flex flex-wrap gap-4">
@@ -78,8 +60,8 @@ const LandingPage = () => {
                                     <span className="material-symbols-outlined text-4xl">child_care</span>
                                 </div>
                                 <div className="z-10 space-y-2 max-w-sm">
-                                    <h3 className="text-2xl font-black text-slate-800 dark:text-white">NutriKid Dashboard</h3>
-                                    <p className="text-slate-600 dark:text-slate-400 text-sm">Empowering families with playful, science-backed nutrition guidance and real-time pediatrician access.</p>
+                                    <h3 className="text-2xl font-black text-slate-800 dark:text-white">NutriBite Dashboard</h3>
+                                    <p className="text-slate-600 dark:text-slate-400 text-sm">Empowering families with playful, science-backed child health growth monitoring, nutrition tracking, and healthy eating habits.</p>
                                 </div>
                                 <div className="z-10 flex gap-3 flex-wrap justify-center">
                                     <span className="inline-flex items-center gap-1.5 rounded-full bg-white dark:bg-slate-800 px-3 py-1 text-xs font-semibold text-slate-600 dark:text-slate-300 border border-slate-100 dark:border-slate-700 shadow-sm">
@@ -198,7 +180,7 @@ const LandingPage = () => {
                         <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-white/10 blur-3xl"></div>
                         <div className="relative z-10 flex flex-col items-center gap-8">
                             <h2 className="max-w-[800px] text-4xl font-black md:text-5xl">Ready to start your child's healthy journey?</h2>
-                            <p className="max-w-[600px] text-lg text-white/90">Join thousands of families already using NutriKid to build lifelong healthy habits.</p>
+                            <p className="max-w-[600px] text-lg text-white/90">Join thousands of families already using NutriBite to track growth, immunity, and kids nutrition habits.</p>
                             <div className="flex flex-wrap justify-center gap-4">
                                 <Link href="/register" className="flex min-w-[200px] cursor-pointer items-center justify-center rounded-full h-14 px-10 bg-white text-primary text-lg font-black shadow-xl hover:bg-slate-50 transition-all">
                                     Get Started Now
@@ -212,55 +194,7 @@ const LandingPage = () => {
                 </section>
             </main>
 
-            {/* Footer */}
-            <footer className="bg-slate-50 px-4 py-16 dark:bg-slate-900 md:px-20 lg:px-40">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-12 border-b border-slate-200 dark:border-slate-800 pb-12">
-                    <div className="flex flex-col gap-4">
-                        <div className="flex items-center gap-3">
-                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white">
-                                <span className="material-symbols-outlined text-sm">nutrition</span>
-                            </div>
-                            <h2 className="text-lg font-extrabold text-slate-800 dark:text-white">NutriKid</h2>
-                        </div>
-                        <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">Made with love for little ones and the heroes who care for them.</p>
-                    </div>
-                    <div>
-                        <h4 className="font-bold text-slate-900 dark:text-white mb-6 uppercase text-xs tracking-widest">Platform</h4>
-                        <ul className="flex flex-col gap-4 text-sm text-slate-500 dark:text-slate-400">
-                            <a className="hover:text-primary transition-colors" href="#">How it works</a>
-                            <a className="hover:text-primary transition-colors" href="#">Features</a>
-                            <a className="hover:text-primary transition-colors" href="#">Pricing</a>
-                            <a className="hover:text-primary transition-colors" href="#">Success Stories</a>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 className="font-bold text-slate-900 dark:text-white mb-6 uppercase text-xs tracking-widest">Company</h4>
-                        <ul className="flex flex-col gap-4 text-sm text-slate-500 dark:text-slate-400">
-                            <a className="hover:text-primary transition-colors" href="#">About Us</a>
-                            <a className="hover:text-primary transition-colors" href="#">Careers</a>
-                            <a className="hover:text-primary transition-colors" href="#">Blog</a>
-                            <a className="hover:text-primary transition-colors" href="#">Contact</a>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 className="font-bold text-slate-900 dark:text-white mb-6 uppercase text-xs tracking-widest">Support</h4>
-                        <ul className="flex flex-col gap-4 text-sm text-slate-500 dark:text-slate-400">
-                            <a className="hover:text-primary transition-colors" href="#">Help Center</a>
-                            <a className="hover:text-primary transition-colors" href="#">Privacy Policy</a>
-                            <a className="hover:text-primary transition-colors" href="#">Terms of Service</a>
-                            <a className="hover:text-primary transition-colors" href="#">Cookie Policy</a>
-                        </ul>
-                    </div>
-                </div>
-                <div className="flex flex-col md:flex-row items-center justify-between mt-12 gap-6">
-                    <p className="text-xs text-slate-400">© 2024 NutriKid Health Inc. All rights reserved.</p>
-                    <div className="flex gap-6">
-                        <a className="text-slate-400 hover:text-primary transition-colors" href="#"><span className="material-symbols-outlined">social_leaderboard</span></a>
-                        <a className="text-slate-400 hover:text-primary transition-colors" href="#"><span className="material-symbols-outlined">groups</span></a>
-                        <a className="text-slate-400 hover:text-primary transition-colors" href="#"><span className="material-symbols-outlined">share</span></a>
-                    </div>
-                </div>
-            </footer>
+            <Footer />
         </div>
     );
 };

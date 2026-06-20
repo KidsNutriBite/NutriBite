@@ -7,6 +7,7 @@ import { getPendingRequests, approveRequest, rejectRequest } from '../../api/acc
 import useAuth from '../../hooks/useAuth';
 import Modal from '../../components/common/Modal';
 import AddProfileForm from '../../components/parent/AddProfileForm';
+import WellnessInsightsModal from '../../components/parent/WellnessInsightsModal';
 import { motion, AnimatePresence } from 'framer-motion';
 import TipCard from '../../components/common/TipCard';
 import NutriGuideChat from '../../components/parent/chat/NutriGuideChat';
@@ -19,6 +20,7 @@ const ParentDashboard = () => {
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [insightsProfile, setInsightsProfile] = useState(null);
     const [selectedProfileForAccess, setSelectedProfileForAccess] = useState('');
     const [view, setView] = useState('dashboard'); // 'dashboard' | 'chat'
 
@@ -383,16 +385,34 @@ const ParentDashboard = () => {
                 isOpen={isAddModalOpen}
                 onClose={() => setIsAddModalOpen(false)}
                 title="Add New Child Profile"
-                maxWidth="max-w-3xl"
+                maxWidth="max-w-[95%] md:max-w-[65vw]"
             >
                 <AddProfileForm
-                    onSuccess={() => {
+                    onSuccess={(created) => {
                         setIsAddModalOpen(false);
-                        fetchData();
+                        setInsightsProfile(created);
                     }}
                     onCancel={() => setIsAddModalOpen(false)}
                 />
             </Modal>
+
+            {/* Wellness Insights Modal Sibling */}
+            <AnimatePresence>
+                {insightsProfile && (
+                    <WellnessInsightsModal
+                        profile={insightsProfile}
+                        onClose={(targetPath) => {
+                            setInsightsProfile(null);
+                            fetchData();
+                            if (targetPath) {
+                                router.push(targetPath);
+                            } else {
+                                router.push('/pricing');
+                            }
+                        }}
+                    />
+                )}
+            </AnimatePresence>
         </div>
     );
 };

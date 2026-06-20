@@ -14,7 +14,7 @@ const profileSchema = new mongoose.Schema(
         },
         dob: {
             type: Date,
-            required: false,
+            required: true,
         },
         age: {
             type: Number,
@@ -23,6 +23,10 @@ const profileSchema = new mongoose.Schema(
         gender: {
             type: String,
             enum: ['male', 'female', 'other'],
+            required: true,
+        },
+        bloodGroup: {
+            type: String,
             required: true,
         },
         height: {
@@ -35,48 +39,126 @@ const profileSchema = new mongoose.Schema(
         },
         waistCircumference: {
             type: Number, // in cm
-            required: false,
+            required: true,
         },
-        activityLevel: {
+        sportsActivityLevel: {
             type: String,
-            enum: ['low', 'moderate', 'high'],
-            default: 'moderate',
+            enum: ['Very Active', 'Active', 'Moderately Active', 'Low Activity', 'Sedentary'],
+            default: 'Moderately Active'
         },
-        dietaryPreferences: {
-            type: [String], // e.g., 'vegetarian', 'nut-free'
-            default: [],
-        },
-        usageReason: {
-            type: String, // e.g., 'Track growth', 'Improve habits'
-        },
-        goals: {
-            type: [String], // e.g., 'Improve immunity', 'Healthy weight'
-            default: [],
-        },
-        avatar: {
-            type: String,
-            required: true, // Mandatory avatar for UI/Kids Mode
-            default: 'lion', // Default avatar
-        },
-        profileImage: {
-            type: String, // URL to uploaded image
+        prematureBirth: {
+            isPremature: { type: Boolean, default: false },
+            weeksPremature: { type: Number, default: 0 }
         },
         location: {
-            city: { type: String },
-            state: { type: String },
-            coordinates: {
-                lat: { type: Number },
-                lng: { type: Number }
-            }
+            country: { type: String, required: true },
+            state: { type: String, required: true },
+            city: { type: String, required: true },
+            address: { type: String, required: true }
         },
         healthConditions: {
             type: [String],
-            // enum restriction removed to allow custom conditions
             default: [],
         },
-        medicalReports: {
-            type: [String], // Array of URLs/Paths
-            default: []
+        otherCondition: {
+            type: String,
+            default: ''
+        },
+        familyHistory: {
+            siblingConditions: {
+                hasCondition: { type: Boolean, default: false },
+                description: { type: String, default: '' }
+            },
+            motherConditions: {
+                hasCondition: { type: Boolean, default: false },
+                description: { type: String, default: '' }
+            },
+            fatherConditions: {
+                hasCondition: { type: Boolean, default: false },
+                description: { type: String, default: '' }
+            },
+            nutritionConcerns: { type: String, default: '' }
+        },
+        goals: {
+            primary: { type: String, required: true },
+            secondary: { type: [String], default: [] }
+        },
+        preferences: {
+            favoriteFoods: { type: String, default: '' },
+            dislikedFoods: { type: String, default: '' },
+            favoriteFruits: { type: String, default: '' },
+            favoriteVegetables: { type: String, default: '' },
+            favoriteSnacks: { type: String, default: '' },
+            waterIntake: { type: Number, default: 0 }, // in ml/day
+            activityLevel: { type: String, enum: ['low', 'moderate', 'high'], default: 'moderate' },
+            sleepDuration: { type: Number, default: 0 }, // in hours
+            sleepQuality: { type: String, enum: ['Poor', 'Average', 'Good'], default: 'Average' },
+            screenTime: { type: Number, default: 0 }, // in hours
+            eatingHabits: { type: String, enum: ['poor', 'average', 'good'], default: 'average' }
+        },
+        medicalReports: [
+            {
+                reportName: { type: String, required: true },
+                reportDate: { type: Date, required: true },
+                hospitalName: { type: String, required: true },
+                doctorName: { type: String, required: true },
+                comments: { type: String, default: '' },
+                attachment: { type: String, required: true }, // File path/URL
+                status: { type: String, enum: ['Reviewed', 'Not Reviewed'], default: 'Not Reviewed' }
+            }
+        ],
+        changeHistory: [
+            {
+                updatedAt: { type: Date, default: Date.now },
+                fieldsChanged: { type: [String] },
+                updatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' }
+            }
+        ],
+        wellnessAnalysis: {
+            score: { type: Number, default: 100 },
+            concerns: [
+                {
+                    issue: { type: String },
+                    whyItMatters: { type: String },
+                    healthImpact: { type: String },
+                    priority: { type: String },
+                    solutionKey: { type: String }
+                }
+            ],
+            monitor: [
+                {
+                    issue: { type: String },
+                    whyItMatters: { type: String },
+                    priority: { type: String }
+                }
+            ],
+            strengths: [
+                {
+                    strength: { type: String },
+                    benefit: { type: String },
+                    recommendation: { type: String }
+                }
+            ],
+            recommendations: [
+                {
+                    concern: { type: String },
+                    solution: { type: String },
+                    expectedImprovement: { type: String },
+                    icon: { type: String }
+                }
+            ]
+        },
+        parentNotes: {
+            type: String,
+            default: ''
+        },
+        avatar: {
+            type: String,
+            required: true,
+            default: 'lion',
+        },
+        profileImage: {
+            type: String,
         },
         healthNotes: {
             type: String, // Doctor's notes

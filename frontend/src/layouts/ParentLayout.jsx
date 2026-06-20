@@ -302,6 +302,16 @@ const ParentLayout = ({ children }) => {
                                         </div>
                                         My Profile
                                     </Link>
+                                    <Link
+                                        href="/parent/my-children"
+                                        onClick={() => setShowProfileDropdown(false)}
+                                        className="flex items-center gap-3 w-full px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-primary/5 hover:text-primary rounded-xl transition-all group mt-1"
+                                    >
+                                        <div className="p-1.5 rounded-lg bg-slate-100 text-slate-500 group-hover:bg-primary group-hover:text-white transition-colors">
+                                            <span className="material-symbols-outlined text-lg">child_care</span>
+                                        </div>
+                                        My Children
+                                    </Link>
                                     <button
                                         onClick={handleLogout}
                                         className="flex items-center gap-3 w-full px-4 py-3 text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-all mt-1 group"
