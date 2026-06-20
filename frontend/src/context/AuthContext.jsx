@@ -36,9 +36,25 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password, rememberMe = false) => {
         const { data } = await authService.login(email, password);
-        // data structure: { user: {...}, token: "..." }
-        // Storing token in localStorage for Phase 1 simplicity.
-        // TODO: Move to HttpOnly cookie for enhanced security in production.
+        
+        if (data.twoFactorRequired) {
+            return { twoFactorRequired: true, email: data.email };
+        }
+
+        if (rememberMe) {
+            localStorage.setItem('token', data.token);
+            sessionStorage.removeItem('token');
+        } else {
+            sessionStorage.setItem('token', data.token);
+            localStorage.removeItem('token');
+        }
+        api.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
+        setUser(data.user);
+        return data.user;
+    };
+
+    const verify2FA = async (email, otp, rememberMe = false) => {
+        const { data } = await authService.verify2FA(email, otp);
         if (rememberMe) {
             localStorage.setItem('token', data.token);
             sessionStorage.removeItem('token');
@@ -67,7 +83,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, register, logout, loading }}>
+        <AuthContext.Provider value={{ user, login, verify2FA, register, logout, loading }}>
             {!loading && children}
         </AuthContext.Provider>
     );

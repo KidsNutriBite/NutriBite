@@ -58,6 +58,26 @@ const userSchema = new mongoose.Schema(
         resetOtpExpiresAt: {
             type: Date,
         },
+        is2FAEnabled: {
+            type: Boolean,
+            default: false,
+        },
+        loginOTPHash: {
+            type: String,
+        },
+        loginOTPExpiresAt: {
+            type: Date,
+        },
+        loginOTPAttempts: {
+            type: Number,
+            default: 0,
+        },
+        loginOTPLastSentAt: {
+            type: Date,
+        },
+        accountLockedUntil: {
+            type: Date,
+        },
     },
     { timestamps: true }
 );
