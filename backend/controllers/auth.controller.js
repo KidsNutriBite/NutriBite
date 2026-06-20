@@ -3,8 +3,10 @@ import User from '../models/User.model.js';
 import generateToken from '../services/jwt.service.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import ApiResponse from '../utils/apiResponse.js';
-import { registerSchema, loginSchema, forgotPasswordSchema, resetPasswordSchema } from '../validators/auth.schema.js';
+import { registerSchema, loginSchema, forgotPasswordSchema, resetPasswordSchema, verify2FASchema, resend2FASchema } from '../validators/auth.schema.js';
 import { sendEmail } from '../services/email.service.js';
+import { sendSMS } from '../services/sms.service.js';
+import env from '../config/env.js';
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 
@@ -97,6 +99,59 @@ export const loginUser = asyncHandler(async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user && (await user.matchPassword(password))) {
+        // Check account lockout
+        if (user.accountLockedUntil && user.accountLockedUntil > Date.now()) {
+            const waitTime = Math.ceil((user.accountLockedUntil - Date.now()) / 1000 / 60);
+            res.status(403);
+            throw new Error(`Account locked due to multiple failed OTP attempts. Please try again in ${waitTime} minutes.`);
+        }
+
+        // Determine if 2FA is required
+        const isDoctor = user.role === 'doctor';
+        const isParentMandatory = user.role === 'parent' && env.PARENT_2FA_MANDATORY === 'true';
+        const isParentEnabled = user.role === 'parent' && user.is2FAEnabled;
+        const requires2FA = isDoctor || isParentMandatory || isParentEnabled;
+
+        if (requires2FA) {
+            // Generate 6 digit OTP
+            const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+            // Hash OTP
+            const salt = await bcrypt.genSalt(10);
+            user.loginOTPHash = await bcrypt.hash(otp, salt);
+            user.loginOTPExpiresAt = Date.now() + 5 * 60 * 1000; // 5 minutes
+            user.loginOTPAttempts = 0;
+            user.loginOTPLastSentAt = Date.now();
+            await user.save();
+
+            // Send OTP via Email
+            const emailMessage = `
+                <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+                    <h2 style="color: #4c799a;">NutriKid Login Verification</h2>
+                    <p>To complete your login, please enter the following verification code:</p>
+                    <p style="font-size: 24px; font-weight: bold; letter-spacing: 2px; color: #4c799a; background: #f0f7fc; padding: 10px 20px; border-radius: 5px; display: inline-block;">${otp}</p>
+                    <p>This code is valid for <strong>5 minutes</strong>. If you did not request this code, please secure your account.</p>
+                </div>
+            `;
+            await sendEmail(user.email, 'NutriKid - 2FA Login Code', emailMessage);
+
+            // Send OTP via SMS (if phone is set)
+            const phoneNum = user.phone || (user.role === 'parent' ? user.parentProfile?.phoneNumber : null);
+            if (phoneNum) {
+                const smsMessage = `Your NutriKid login verification code is ${otp}. Valid for 5 minutes.`;
+                await sendSMS(phoneNum, smsMessage);
+            }
+
+            return res.status(200).json(
+                new ApiResponse(200, {
+                    twoFactorRequired: true,
+                    email: user.email,
+                    message: 'Two-factor verification code sent successfully.'
+                })
+            );
+        }
+
+        // Standard direct login (if 2FA is not required)
         const token = generateToken(user._id, user.role);
         res.json(
             new ApiResponse(200, {
@@ -198,4 +253,146 @@ export const resetPassword = asyncHandler(async (req, res) => {
     await user.save();
 
     res.status(200).json(new ApiResponse(200, { message: 'Password reset successful' }));
+});
+
+// @desc    Verify Two-Factor Authentication (2FA) OTP
+// @route   POST /api/auth/verify-2fa
+// @access  Public
+export const verify2FA = asyncHandler(async (req, res) => {
+    const validation = verify2FASchema.safeParse(req.body);
+    if (!validation.success) {
+        res.status(400);
+        throw new Error(validation.error.errors[0].message);
+    }
+
+    const { email, otp } = validation.data;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        res.status(400);
+        throw new Error('Invalid request');
+    }
+
+    // Check account lockout
+    if (user.accountLockedUntil && user.accountLockedUntil > Date.now()) {
+        const waitTime = Math.ceil((user.accountLockedUntil - Date.now()) / 1000 / 60);
+        res.status(403);
+        throw new Error(`Account is locked due to multiple failed verification attempts. Please try again in ${waitTime} minutes.`);
+    }
+
+    // Check if OTP exists and is not expired
+    if (!user.loginOTPHash || !user.loginOTPExpiresAt || user.loginOTPExpiresAt < Date.now()) {
+        res.status(400);
+        throw new Error('Verification code has expired or is invalid. Please request a new code.');
+    }
+
+    // Compare code
+    const isMatch = await bcrypt.compare(otp, user.loginOTPHash);
+
+    if (!isMatch) {
+        user.loginOTPAttempts += 1;
+        
+        if (user.loginOTPAttempts >= 5) {
+            user.accountLockedUntil = Date.now() + 15 * 60 * 1000; // Lock for 15 mins
+            user.loginOTPHash = undefined;
+            user.loginOTPExpiresAt = undefined;
+            await user.save();
+            res.status(403);
+            throw new Error('Too many failed attempts. Your account has been locked for 15 minutes.');
+        }
+
+        await user.save();
+        res.status(400);
+        throw new Error(`Invalid verification code. ${5 - user.loginOTPAttempts} attempts remaining.`);
+    }
+
+    // Success: Reset OTP and Lockout fields
+    user.loginOTPHash = undefined;
+    user.loginOTPExpiresAt = undefined;
+    user.loginOTPAttempts = 0;
+    user.accountLockedUntil = undefined;
+    await user.save();
+
+    // Generate JWT
+    const token = generateToken(user._id, user.role);
+
+    res.status(200).json(
+        new ApiResponse(200, {
+            user: {
+                _id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+            },
+            token,
+        }, 'Login successful.')
+    );
+});
+
+// @desc    Resend Two-Factor Authentication (2FA) OTP
+// @route   POST /api/auth/resend-2fa
+// @access  Public
+export const resend2FA = asyncHandler(async (req, res) => {
+    const validation = resend2FASchema.safeParse(req.body);
+    if (!validation.success) {
+        res.status(400);
+        throw new Error(validation.error.errors[0].message);
+    }
+
+    const { email } = validation.data;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        // Return 200 to prevent email enumeration
+        return res.status(200).json(
+            new ApiResponse(200, { message: 'If the email exists, a new verification code has been sent.' })
+        );
+    }
+
+    // Check account lockout
+    if (user.accountLockedUntil && user.accountLockedUntil > Date.now()) {
+        const waitTime = Math.ceil((user.accountLockedUntil - Date.now()) / 1000 / 60);
+        res.status(403);
+        throw new Error(`Account is locked. Please try again in ${waitTime} minutes.`);
+    }
+
+    // Check send cooldown (60 seconds)
+    if (user.loginOTPLastSentAt && (Date.now() - user.loginOTPLastSentAt) < 60 * 1000) {
+        const waitTime = Math.ceil((60 * 1000 - (Date.now() - user.loginOTPLastSentAt)) / 1000);
+        res.status(429);
+        throw new Error(`Please wait ${waitTime} seconds before requesting a new verification code.`);
+    }
+
+    // Generate new OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Hash OTP
+    const salt = await bcrypt.genSalt(10);
+    user.loginOTPHash = await bcrypt.hash(otp, salt);
+    user.loginOTPExpiresAt = Date.now() + 5 * 60 * 1000; // 5 minutes
+    user.loginOTPAttempts = 0;
+    user.loginOTPLastSentAt = Date.now();
+    await user.save();
+
+    // Send OTP via Email
+    const emailMessage = `
+        <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+            <h2 style="color: #4c799a;">NutriKid Login Verification</h2>
+            <p>To complete your login, please enter the following verification code:</p>
+            <p style="font-size: 24px; font-weight: bold; letter-spacing: 2px; color: #4c799a; background: #f0f7fc; padding: 10px 20px; border-radius: 5px; display: inline-block;">${otp}</p>
+            <p>This code is valid for <strong>5 minutes</strong>. If you did not request this code, please secure your account.</p>
+        </div>
+    `;
+    await sendEmail(user.email, 'NutriKid - 2FA Login Code', emailMessage);
+
+    // Send OTP via SMS (if phone is set)
+    const phoneNum = user.phone || (user.role === 'parent' ? user.parentProfile?.phoneNumber : null);
+    if (phoneNum) {
+        const smsMessage = `Your NutriKid login verification code is ${otp}. Valid for 5 minutes.`;
+        await sendSMS(phoneNum, smsMessage);
+    }
+
+    res.status(200).json(
+        new ApiResponse(200, { message: 'If the email exists, a new verification code has been sent.' })
+    );
 });

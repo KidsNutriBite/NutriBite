@@ -260,6 +260,29 @@ const DoctorProfile = () => {
                                 />
                             </div>
 
+                            <div className="md:col-span-2">
+                                <h3 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3 border-b pb-2">Security</h3>
+                            </div>
+
+                            <div className="md:col-span-2 flex items-start gap-3 bg-slate-50 dark:bg-slate-700/30 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                                <div className="flex items-center h-5 mt-0.5">
+                                    <input
+                                        id="is2FAEnabled"
+                                        name="is2FAEnabled"
+                                        type="checkbox"
+                                        checked={true}
+                                        disabled={true}
+                                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded disabled:opacity-60"
+                                    />
+                                </div>
+                                <div className="text-sm">
+                                    <label htmlFor="is2FAEnabled" className="font-semibold text-gray-850 dark:text-gray-200">Two-Factor Authentication (2FA)</label>
+                                    <p className="text-gray-500 dark:text-gray-400 text-xs mt-0.5">
+                                        Two-Factor Authentication is mandatory for all Doctor accounts and cannot be disabled.
+                                    </p>
+                                </div>
+                            </div>
+
                             <div className="md:col-span-2 flex gap-3 justify-end mt-4">
                                 <button
                                     type="button"
@@ -306,6 +329,13 @@ const DoctorProfile = () => {
                                 <span className="text-sm text-gray-500 dark:text-gray-400">Location</span>
                                 <span className="font-medium text-gray-800 dark:text-gray-200">
                                     {[profile?.address?.city, profile?.address?.state, profile?.address?.country].filter(Boolean).join(', ') || 'Not set'}
+                                </span>
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-sm text-gray-500 dark:text-gray-400">Two-Factor Authentication</span>
+                                <span className="font-medium text-gray-800 dark:text-gray-200 flex items-center gap-1.5 mt-0.5">
+                                    <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
+                                    Enabled (Mandatory)
                                 </span>
                             </div>
                         </div>

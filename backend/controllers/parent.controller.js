@@ -2,6 +2,7 @@ import User from '../models/User.model.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import ApiResponse from '../utils/apiResponse.js';
 import { uploadFile } from '../services/storage.service.js';
+import env from '../config/env.js';
 
 // @desc    Get current parent profile
 // @route   GET /api/parent/me
@@ -12,14 +13,16 @@ export const getParentProfile = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error('User not found');
     }
-    res.status(200).json(new ApiResponse(200, user));
+    const userObj = user.toObject();
+    userObj.is2FAMandatory = env.PARENT_2FA_MANDATORY === 'true';
+    res.status(200).json(new ApiResponse(200, userObj));
 });
 
 // @desc    Update parent profile
 // @route   PATCH /api/parent/update
 // @access  Private (Parent)
 export const updateParentProfile = asyncHandler(async (req, res) => {
-    let { name, phone, address, title } = req.body;
+    let { name, phone, address, title, is2FAEnabled } = req.body;
 
     // Handle Address parsing if sent as JSON string via FormData
     if (address && typeof address === 'string') {
@@ -67,7 +70,15 @@ export const updateParentProfile = asyncHandler(async (req, res) => {
         }
     }
 
+    // Update 2FA settings
+    if (typeof is2FAEnabled !== 'undefined') {
+        user.is2FAEnabled = is2FAEnabled === 'true' || is2FAEnabled === true;
+    }
+
     await user.save();
 
-    res.status(200).json(new ApiResponse(200, { user, message: 'Profile updated successfully' }));
+    const userObj = user.toObject();
+    userObj.is2FAMandatory = env.PARENT_2FA_MANDATORY === 'true';
+
+    res.status(200).json(new ApiResponse(200, { user: userObj, message: 'Profile updated successfully' }));
 });

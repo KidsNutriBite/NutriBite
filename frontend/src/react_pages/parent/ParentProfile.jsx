@@ -26,7 +26,8 @@ const ParentProfile = () => {
             city: '',
             state: '',
             country: ''
-        }
+        },
+        is2FAEnabled: false
     });
 
     useEffect(() => {
@@ -45,7 +46,8 @@ const ParentProfile = () => {
                     city: data.data.address?.city || data.data.parentProfile?.city || '',
                     state: data.data.address?.state || '',
                     country: data.data.address?.country || ''
-                }
+                },
+                is2FAEnabled: data.data.is2FAEnabled || false
             });
             setLoading(false);
         } catch (error) {
@@ -104,6 +106,7 @@ const ParentProfile = () => {
             submitData.append('phone', formData.phone);
             submitData.append('title', formData.title);
             submitData.append('address', JSON.stringify(formData.address));
+            submitData.append('is2FAEnabled', formData.is2FAEnabled);
 
             if (selectedFile) {
                 submitData.append('profileImage', selectedFile);
@@ -148,40 +151,39 @@ const ParentProfile = () => {
 
                     {/* Avatar Container */}
                     <div
-                        className={`relative group ${isEditing ? 'cursor-pointer' : ''}`}
                         onClick={triggerFileSelect}
-                        title={isEditing ? "Click to change photo" : ""}
+                        className={`relative w-24 h-24 rounded-full overflow-hidden border-4 border-white dark:border-slate-700 shadow-md ${isEditing ? 'cursor-pointer group' : ''}`}
                     >
                         <img
                             src={previewUrl || profile?.profileImage || 'https://avatar.iran.liara.run/public'}
-                            alt="Profile"
-                            className="w-24 h-24 rounded-full border-4 border-white shadow-md bg-white object-cover"
+                            alt={profile?.name}
+                            className="w-full h-full object-cover"
                         />
-
-                        {/* Camera Overlay on Hover (Only in Edit Mode) */}
                         {isEditing && (
-                            <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                            <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                 <span className="material-symbols-outlined text-white">photo_camera</span>
                             </div>
                         )}
-
-                        <input
-                            type="file"
-                            ref={fileInputRef}
-                            onChange={handleFileChange}
-                            accept="image/*"
-                            className="hidden"
-                        />
                     </div>
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        accept="image/*"
+                        className="hidden"
+                    />
 
                     <div className="text-center md:text-left">
-                        <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
-                            {profile?.title} {profile?.name}
+                        <h2 className="text-xl font-bold text-gray-800 dark:text-white flex items-center justify-center md:justify-start gap-2">
+                            {profile?.title && <span className="text-gray-500 dark:text-gray-400 font-medium">{profile.title}.</span>}
+                            {profile?.name}
                         </h2>
-                        <p className="text-gray-500 dark:text-gray-400">{profile?.email}</p>
-                        <span className="inline-block mt-2 px-3 py-1 bg-blue-100 text-blue-700 text-xs font-semibold rounded-full uppercase tracking-wider">
-                            {profile?.role}
-                        </span>
+                        <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">{profile?.email}</p>
+                        <div className="mt-2.5 flex flex-wrap justify-center md:justify-start gap-2">
+                            <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 capitalize">
+                                {profile?.role}
+                            </span>
+                        </div>
                     </div>
                 </div>
 
@@ -189,6 +191,10 @@ const ParentProfile = () => {
                 <div className="p-8">
                     {isEditing ? (
                         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="md:col-span-2">
+                                <h3 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3 border-b pb-2">Personal Information</h3>
+                            </div>
+
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Title</label>
                                 <select
@@ -262,6 +268,32 @@ const ParentProfile = () => {
                                 />
                             </div>
 
+                            <div className="md:col-span-2">
+                                <h3 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-3 border-b pb-2">Security</h3>
+                            </div>
+
+                            <div className="md:col-span-2 flex items-start gap-3 bg-slate-50 dark:bg-slate-700/30 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                                <div className="flex items-center h-5 mt-0.5">
+                                    <input
+                                        id="is2FAEnabled"
+                                        name="is2FAEnabled"
+                                        type="checkbox"
+                                        checked={profile?.is2FAMandatory || formData.is2FAEnabled}
+                                        disabled={profile?.is2FAMandatory}
+                                        onChange={(e) => setFormData(prev => ({ ...prev, is2FAEnabled: e.target.checked }))}
+                                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded disabled:opacity-60"
+                                    />
+                                </div>
+                                <div className="text-sm">
+                                    <label htmlFor="is2FAEnabled" className="font-semibold text-gray-850 dark:text-gray-200">Two-Factor Authentication (2FA)</label>
+                                    <p className="text-gray-500 dark:text-gray-400 text-xs mt-0.5">
+                                        {profile?.is2FAMandatory 
+                                            ? 'Two-Factor Authentication is currently enforced globally by administration.' 
+                                            : 'Requires an email or SMS verification code when signing in to add an extra layer of security.'}
+                                    </p>
+                                </div>
+                            </div>
+
                             <div className="md:col-span-2 flex gap-3 justify-end mt-4">
                                 <button
                                     type="button"
@@ -277,7 +309,8 @@ const ParentProfile = () => {
                                                 city: profile.address?.city || '',
                                                 state: profile.address?.state || '',
                                                 country: profile.address?.country || ''
-                                            }
+                                            },
+                                            is2FAEnabled: profile.is2FAEnabled || false
                                         });
                                     }}
                                     className="px-6 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
@@ -302,6 +335,15 @@ const ParentProfile = () => {
                                 <span className="text-sm text-gray-500 dark:text-gray-400">Location</span>
                                 <span className="font-medium text-gray-800 dark:text-gray-200">
                                     {[profile?.address?.city, profile?.address?.state, profile?.address?.country].filter(Boolean).join(', ') || 'Not set'}
+                                </span>
+                            </div>
+                            <div className="flex flex-col">
+                                <span className="text-sm text-gray-500 dark:text-gray-400">Two-Factor Authentication</span>
+                                <span className="font-medium text-gray-800 dark:text-gray-200 flex items-center gap-1.5 mt-0.5">
+                                    <span className={`w-2.5 h-2.5 rounded-full ${profile?.is2FAMandatory || profile?.is2FAEnabled ? 'bg-green-500 animate-pulse' : 'bg-slate-400'}`}></span>
+                                    {profile?.is2FAMandatory 
+                                        ? 'Enabled (Mandatory)' 
+                                        : (profile?.is2FAEnabled ? 'Enabled' : 'Disabled')}
                                 </span>
                             </div>
                             <div className="flex flex-col">

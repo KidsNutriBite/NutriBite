@@ -83,7 +83,10 @@ export const getDoctorProfile = asyncHandler(async (req, res) => {
         res.status(404);
         throw new Error('User not found');
     }
-    res.status(200).json(new ApiResponse(200, user));
+    const userObj = user.toObject();
+    userObj.is2FAMandatory = true;
+    userObj.is2FAEnabled = true; // Always enabled for doctors
+    res.status(200).json(new ApiResponse(200, userObj));
 });
 
 // @desc    Update doctor profile
@@ -134,7 +137,12 @@ export const updateDoctorProfile = asyncHandler(async (req, res) => {
     }
 
     await user.save();
-    res.status(200).json(new ApiResponse(200, { user, message: 'Profile updated successfully' }));
+    
+    const userObj = user.toObject();
+    userObj.is2FAMandatory = true;
+    userObj.is2FAEnabled = true;
+
+    res.status(200).json(new ApiResponse(200, { user: userObj, message: 'Profile updated successfully' }));
 });
 
 // @desc    Get all registered doctors (for parents to choose)
