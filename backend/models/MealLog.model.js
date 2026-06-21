@@ -21,10 +21,68 @@ const dailyMealLogSchema = new mongoose.Schema(
             ref: 'Profile',
             required: true,
         },
+        parentId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        },
         date: {
             type: String, // Storing as YYYY-MM-DD string for easy querying
             required: true,
             index: true
+        },
+        mealTimes: {
+            breakfast: String,
+            morningSnack: String,
+            lunch: String,
+            afternoonSnack: String,
+            dinner: String,
+            eveningSnack: String
+        },
+        analysisResults: {
+            breakfast: mongoose.Schema.Types.Mixed,
+            morningSnack: mongoose.Schema.Types.Mixed,
+            lunch: mongoose.Schema.Types.Mixed,
+            afternoonSnack: mongoose.Schema.Types.Mixed,
+            dinner: mongoose.Schema.Types.Mixed,
+            eveningSnack: mongoose.Schema.Types.Mixed
+        },
+        mealMacros: {
+            breakfast: {
+                calories: { type: Number, default: 0 },
+                protein: { type: Number, default: 0 },
+                carbs: { type: Number, default: 0 },
+                fat: { type: Number, default: 0 }
+            },
+            morningSnack: {
+                calories: { type: Number, default: 0 },
+                protein: { type: Number, default: 0 },
+                carbs: { type: Number, default: 0 },
+                fat: { type: Number, default: 0 }
+            },
+            lunch: {
+                calories: { type: Number, default: 0 },
+                protein: { type: Number, default: 0 },
+                carbs: { type: Number, default: 0 },
+                fat: { type: Number, default: 0 }
+            },
+            afternoonSnack: {
+                calories: { type: Number, default: 0 },
+                protein: { type: Number, default: 0 },
+                carbs: { type: Number, default: 0 },
+                fat: { type: Number, default: 0 }
+            },
+            dinner: {
+                calories: { type: Number, default: 0 },
+                protein: { type: Number, default: 0 },
+                carbs: { type: Number, default: 0 },
+                fat: { type: Number, default: 0 }
+            },
+            eveningSnack: {
+                calories: { type: Number, default: 0 },
+                protein: { type: Number, default: 0 },
+                carbs: { type: Number, default: 0 },
+                fat: { type: Number, default: 0 }
+            }
         },
         breakfast: [foodItemSchema],
         morningSnack: [foodItemSchema],
@@ -53,6 +111,35 @@ const dailyMealLogSchema = new mongoose.Schema(
             afternoonSnack: String,
             dinner: String,
             eveningSnack: String
+        },
+
+        // Flat properties for single-meal logs (Step 8 compatibility)
+        childId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Profile'
+        },
+        mealType: {
+            type: String
+        },
+        mealImage: {
+            type: String
+        },
+        detectedFoods: [{
+            type: String
+        }],
+        nutritionValues: {
+            calories: { type: Number, default: 0 },
+            protein: { type: Number, default: 0 },
+            carbs: { type: Number, default: 0 },
+            fat: { type: Number, default: 0 },
+            fiber: { type: Number, default: 0 },
+            iron: { type: Number, default: 0 },
+            calcium: { type: Number, default: 0 },
+            vitaminC: { type: Number, default: 0 }
+        },
+        analysisDate: {
+            type: Date,
+            default: Date.now
         }
     },
     { timestamps: true }

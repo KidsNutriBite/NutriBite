@@ -1,5 +1,6 @@
 import Profile from '../models/Profile.model.js';
 import GrowthRecord from '../models/GrowthRecord.model.js';
+import MealLog from '../models/MealLog.model.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import ApiResponse from '../utils/apiResponse.js';
 import { profileSchema } from '../validators/profile.schema.js';
@@ -111,7 +112,7 @@ export const createProfile = asyncHandler(async (req, res) => {
     };
 
     // Calculate initial wellness analysis
-    profileData.wellnessAnalysis = computeWellnessAnalysis(profileData);
+    profileData.wellnessAnalysis = computeWellnessAnalysis(profileData, []);
 
     const profile = await Profile.create(profileData);
 
@@ -378,7 +379,8 @@ export const updateProfile = asyncHandler(async (req, res) => {
             ...updatePayload.prematureBirth
         }
     };
-    updatePayload.wellnessAnalysis = computeWellnessAnalysis(mergedProfileData);
+    const mealLogs = await MealLog.find({ profileId: req.params.id });
+    updatePayload.wellnessAnalysis = computeWellnessAnalysis(mergedProfileData, mealLogs);
 
     // Update in DB
     const updatedProfile = await Profile.findByIdAndUpdate(
@@ -463,7 +465,8 @@ export const reanalyzeProfile = asyncHandler(async (req, res) => {
         throw new Error('Child profile not found');
     }
 
-    profile.wellnessAnalysis = computeWellnessAnalysis(profile.toObject());
+    const mealLogs = await MealLog.find({ profileId: req.params.id });
+    profile.wellnessAnalysis = computeWellnessAnalysis(profile.toObject(), mealLogs);
     await profile.save();
 
     res.status(200).json(new ApiResponse(200, profile, 'Profile reanalyzed successfully'));

@@ -32,3 +32,13 @@ export const getLastMealTime = async (profileId) => {
     const response = await api.get(`/meals/last-meal/${profileId}`);
     return response.data;
 };
+
+// ANALYZE IMAGE
+export const analyzeMealImage = async (formData) => {
+    const response = await api.post('/meals/analyze-image', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    });
+    return response.data;
+};

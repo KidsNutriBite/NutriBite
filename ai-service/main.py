@@ -3,12 +3,13 @@ import re
 import time
 import json
 from typing import List, Optional, Dict, Any
-from fastapi import FastAPI, HTTPException, status, Request, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, HTTPException, status, Request, WebSocket, WebSocketDisconnect, File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
 from pydantic import BaseModel, Field
 from dotenv import load_dotenv
+
 
 # Import components
 from app.db.connection import get_all_foods, get_allergy_rules, get_condition_rules
@@ -21,6 +22,8 @@ from app.guardrails.safety import apply_guardrails
 from app.guardrails.security_guardrails import audit_security_gate
 from app.prompts.builder import build_chatbot_prompt
 from app.models.llm import run_comparative_benchmark, get_gemini_api_key
+from app.models.food_analysis import analyze_food_image
+
 
 # Load environment variables
 load_dotenv()
@@ -565,8 +568,24 @@ async def update_rag_endpoint(payload: RAGChunkUpdate):
             detail=f"Error updating vector database: {str(e)}"
         )
 
+@app.post("/analyze-image", response_model=Dict[str, Any])
+async def analyze_image_endpoint(file: UploadFile = File(...)):
+    """
+    Analyzes an uploaded child's food plate image using Ateeqq/food-analysis with fallbacks.
+    """
+    try:
+        contents = await file.read()
+        analysis_result = analyze_food_image(contents)
+        return analysis_result
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Error analyzing image: {str(e)}"
+        )
+
 @app.websocket("/ws/chat")
 async def websocket_chat_endpoint(websocket: WebSocket):
+
     """
     WebSocket endpoint for token-by-token streaming RAG answers.
     """
