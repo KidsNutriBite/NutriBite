@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+﻿import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import User from '../models/User.model.js';
 import Profile from '../models/Profile.model.js';
@@ -7,7 +7,7 @@ import MealLog from '../models/MealLog.model.js';
 dotenv.config();
 
 const run = async () => {
-    console.log('--- STARTING NUTRIBITE TESTING PROFILE POPULATION ---');
+    console.log('--- STARTING NutriKids TESTING PROFILE POPULATION ---');
     try {
         if (!process.env.MONGO_URI) {
             throw new Error("MONGO_URI is not set in backend .env file!");
@@ -21,13 +21,13 @@ const run = async () => {
         if (!parent) {
             parent = new User({
                 name: "Test Parent Explorer",
-                email: "explorer.parent@nutribite.com",
+                email: "explorer.parent@NutriKids.com",
                 password: "Password123", // Encrypted pre-save
                 role: "parent",
                 title: "Mr"
             });
             await parent.save();
-            console.log('✅ Created mock Parent user: explorer.parent@nutribite.com / Password123');
+            console.log('✅ Created mock Parent user: explorer.parent@NutriKids.com / Password123');
         } else {
             console.log(`✅ Using existing parent user ID: ${parent._id} (${parent.email})`);
         }
@@ -169,3 +169,4 @@ const run = async () => {
 };
 
 run();
+

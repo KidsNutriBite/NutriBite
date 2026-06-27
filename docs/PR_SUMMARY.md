@@ -1,4 +1,4 @@
-# PR Summary: NutriBite Chatbot AI & UX Revamp
+﻿# PR Summary: NutriKids Chatbot AI & UX Revamp
 
 ## Overview
 This PR overhauls the NutriGuide chatbot architecture and user experience to deliver a premium, medically-safe, and highly structured pediatric nutrition assistant. It resolves critical issues regarding conversational memory, repetitive output, unstructured text blobs, and lack of trust indicators.
@@ -32,6 +32,7 @@ This PR overhauls the NutriGuide chatbot architecture and user experience to del
 
 ## Commits
 This PR encapsulates 11 atomic commits covering foundational setup, core UI restructuring, UX enhancements, AI prompt tuning, and retrieval optimization.
+
 
 
 

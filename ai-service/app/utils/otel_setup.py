@@ -1,4 +1,4 @@
-import time
+﻿import time
 from fastapi import FastAPI, Request
 from starlette.middleware.base import BaseHTTPMiddleware
 from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
@@ -8,40 +8,40 @@ from starlette.responses import Response
 
 # Request counts
 REQUEST_COUNT = Counter(
-    "nutribite_ai_requests_total",
+    "NutriKids_ai_requests_total",
     "Total count of HTTP requests parsed by the AI microservice",
     ["method", "endpoint", "status"]
 )
 
 # API Global Latency
 REQUEST_LATENCY = Histogram(
-    "nutribite_ai_request_latency_seconds",
+    "NutriKids_ai_request_latency_seconds",
     "Overall latency duration for API requests in seconds",
     ["method", "endpoint"]
 )
 
 # Granular Internal Spans Latency
 SPANS_LATENCY = Histogram(
-    "nutribite_ai_spans_latency_seconds",
+    "NutriKids_ai_spans_latency_seconds",
     "Execution latency for specific internal processing blocks (RAG, reranking, LLM, etc.)",
     ["span_name"]
 )
 
 # Model specific metrics
 LLM_CALL_COUNT = Counter(
-    "nutribite_llm_calls_total",
+    "NutriKids_llm_calls_total",
     "Total requests sent to specific LLM models",
     ["model_name", "status"]
 )
 
 SAFETY_BLOCK_COUNT = Counter(
-    "nutribite_safety_blocks_total",
+    "NutriKids_safety_blocks_total",
     "Total counts of queries blocked by active guardrails",
     ["category"]
 )
 
 RETRIEVAL_MISS_COUNT = Counter(
-    "nutribite_retrieval_misses_total",
+    "NutriKids_retrieval_misses_total",
     "Total counts of queries returning zero RAG context chunks"
 )
 
@@ -97,3 +97,4 @@ class TraceSpan:
     def __exit__(self, exc_type, exc_val, exc_tb):
         duration = time.time() - self.start
         SPANS_LATENCY.labels(span_name=self.span_name).observe(duration)
+

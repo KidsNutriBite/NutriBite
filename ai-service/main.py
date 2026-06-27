@@ -1,4 +1,4 @@
-import os
+﻿import os
 import re
 import time
 import json
@@ -58,7 +58,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         return await call_next(request)
 
 app = FastAPI(
-    title="KidsNutriBite AI Hybrid Service",
+    title="KidsNutriKids AI Hybrid Service",
     description="Production-grade AI microservice implementing RAG + Structured DB + Planner + LLM",
     version="1.0.0",
 )
@@ -179,7 +179,7 @@ def read_root():
     api_key_set = len(get_gemini_api_key()) > 0
     return {
         "status": "online",
-        "service": "KidsNutriBite AI Service",
+        "service": "KidsNutriKids AI Service",
         "components": {
             "DB": "MongoDB Atlas Integration",
             "RAG": "Hybrid TF-IDF Semantic Index",
@@ -637,3 +637,4 @@ async def websocket_chat_endpoint(websocket: WebSocket):
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+

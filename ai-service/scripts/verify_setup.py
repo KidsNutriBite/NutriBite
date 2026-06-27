@@ -1,9 +1,9 @@
-import os
+﻿import os
 import json
 
 def verify_setup():
     print("==================================================")
-    print("[INFO] KidsNutriBite AI Service Structure Verification")
+    print("[INFO] KidsNutriKids AI Service Structure Verification")
     print("==================================================")
     
     # Define expected directory structure
@@ -74,3 +74,4 @@ def verify_setup():
 
 if __name__ == "__main__":
     verify_setup()
+

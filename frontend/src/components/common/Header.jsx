@@ -91,14 +91,9 @@ const Header = () => {
                 : 'bg-white/60 dark:bg-slate-950/60 backdrop-blur-lg border-white/20 dark:border-white/10'
             }`}>
                 {/* Brand Logo */}
-                <Link href="/" className="flex items-center gap-2.5 group">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary text-white shadow-md shadow-primary/30 transition-transform group-hover:rotate-12 duration-300">
-                        <span className="material-symbols-outlined text-[20px] font-bold">nutrition</span>
-                    </div>
-                    <span className="text-xl font-extrabold tracking-tight text-slate-800 dark:text-white transition-colors duration-200 group-hover:text-primary">
-                        NutriBite
-                    </span>
-                </Link>
+                <a href="/?loader=true" className="flex items-center group -my-8" style={{ transform: 'translateY(-10px)' }}>
+                    <img src="/logo.png" alt="NutriKids Logo" className="h-28 w-auto object-contain transition-transform group-hover:scale-105 duration-300" />
+                </a>
 
                 {/* Desktop Navigation Menu */}
                 <div className="hidden md:flex flex-1 justify-center gap-8 lg:gap-10">
@@ -230,3 +225,4 @@ const Header = () => {
 };
 
 export default Header;
+

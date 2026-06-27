@@ -1,6 +1,6 @@
-# 📊 RAG Retrieval Baseline Benchmark Report
+﻿# 📊 RAG Retrieval Baseline Benchmark Report
 
-This diagnostic benchmark report records the baseline quality and execution performance metrics of the NutriBite AI hybrid RAG retrieval pipeline in `ai-service-v2`.
+This diagnostic benchmark report records the baseline quality and execution performance metrics of the NutriKids AI hybrid RAG retrieval pipeline in `ai-service-v2`.
 
 ---
 
@@ -29,3 +29,4 @@ This diagnostic benchmark report records the baseline quality and execution perf
 - ICMR-NIN 2020
 - FSSAI
 - ICMR Pediatric Nutrition Guidelines
+

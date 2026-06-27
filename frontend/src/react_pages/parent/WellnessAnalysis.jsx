@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
@@ -415,37 +415,45 @@ const WellnessAnalysis = ({ profileId, profileData, onUpdate, hideHeader = false
                 </div>
             </motion.div>
 
-            {/* WHAT NEEDS ATTENTION (REDS) */}
+            {/* NutriKids Recommendations / Roadmap */}
             <motion.div
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="bg-white p-6 rounded-3xl border border-gray-100 shadow-sm space-y-4"
             >
-                <div>
-                    <h3 className="text-base font-black text-red-800 flex items-center gap-2">
-                        <span className="text-lg">🚨</span> WHAT NEEDS ATTENTION
-                    </h3>
-                    <p className="text-xs text-gray-400 font-bold uppercase tracking-wider mt-0.5">Developmental risks and deficiencies identified in child profile</p>
+                <div className="text-center space-y-2">
+                    <span className="px-3.5 py-1 bg-indigo-100 text-indigo-700 font-black text-xs uppercase tracking-widest rounded-full">
+                        Roadmap
+                    </span>
+                    <h2 className="text-2xl md:text-3xl font-black text-gray-900 leading-tight">
+                        NutriKids Recommendations
+                    </h2>
+                    <p className="text-gray-500 font-bold max-w-xl mx-auto text-sm">
+                        Here is how NutriKids's specialized features help address each observed area.
+                    </p>
                 </div>
 
-                <div className="space-y-4">
-                    {parsedDiagnostics.bads.map((item, idx) => (
-                        <div key={idx} className="p-4 bg-red-50/70 border border-red-200 rounded-2xl flex flex-col md:flex-row gap-4 justify-between items-start md:items-stretch">
-                            <div className="flex gap-3 items-start flex-1">
-                                <span className="text-2xl mt-0.5">{item.icon}</span>
-                                <div>
-                                    <h4 className="font-extrabold text-sm text-red-950 flex items-center gap-2">
-                                        {item.title}
-                                        <span className="bg-red-200/60 text-red-800 px-2 py-0.5 rounded text-[9px] font-black uppercase">Risk</span>
-                                    </h4>
-                                    <p className="text-xs font-bold text-red-800 mt-1">{item.value}</p>
-                                    <p className="text-[11px] text-red-700 font-medium leading-relaxed mt-0.5">{item.desc}</p>
-                                    
-                                    <div className="mt-2.5 space-y-1 text-xs leading-normal">
-                                        <p className="text-red-900 font-semibold">
-                                            ⚠️ <strong>Risk if ignored:</strong> {item.risk}
-                                        </p>
-                                    </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {wellness.recommendations.map((rec, idx) => (
+                        <motion.div
+                            key={idx}
+                            whileHover={{ y: -5 }}
+                            className="bg-gradient-to-b from-indigo-50/50 to-white border border-indigo-100 rounded-2xl p-6 flex flex-col justify-between shadow-sm hover:border-indigo-200 hover:shadow-md transition duration-300"
+                        >
+                            <div className="space-y-3">
+                                <div className="flex justify-between items-center">
+                                    <span className="text-2xl">{rec.icon || '🚀'}</span>
+                                    <span className="text-[10px] text-indigo-700 font-black bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-100/50 uppercase">
+                                        Roadmap Card
+                                    </span>
+                                </div>
+                                <div className="space-y-1">
+                                    <p className="text-[10px] text-gray-400 font-bold uppercase">Current Concern</p>
+                                    <p className="font-extrabold text-gray-900 text-sm leading-snug">{rec.concern}</p>
+                                </div>
+                                <div className="space-y-1 pt-2 border-t border-indigo-100/30">
+                                    <p className="text-[10px] text-indigo-500 font-black uppercase tracking-wider">NutriKids Feature</p>
+                                    <p className="font-bold text-gray-800 text-sm">{rec.solution}</p>
                                 </div>
                             </div>
 
@@ -571,3 +579,4 @@ const WellnessAnalysis = ({ profileId, profileData, onUpdate, hideHeader = false
 };
 
 export default WellnessAnalysis;
+

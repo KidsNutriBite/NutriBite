@@ -1,4 +1,4 @@
-# 🥦 NutriBite: Product Specification Document
+﻿# 🥦 NutriKids: Product Specification Document
 ## AI-Powered Pediatric Nutrition Intelligence Platform
 ### Document Reference: `project-spec_18thJune.md`
 **Date of Document**: June 18, 2026  
@@ -11,11 +11,11 @@
 ## 1. PRODUCT OVERVIEW
 
 ### 🌟 Product Vision
-NutriBite is a clinical-grade pediatric nutrition intelligence platform designed to bridge the structural feedback loops between parents, children, and pediatricians. By transforming static nutritional guidelines into a dynamic, safe, RAG-enriched decision engine, NutriBite empowers families with clinically validated dietary planning, gamified kid engagement, and direct medical oversight. 
+NutriKids is a clinical-grade pediatric nutrition intelligence platform designed to bridge the structural feedback loops between parents, children, and pediatricians. By transforming static nutritional guidelines into a dynamic, safe, RAG-enriched decision engine, NutriKids empowers families with clinically validated dietary planning, gamified kid engagement, and direct medical oversight. 
 
 ```mermaid
 graph TD
-    Parent[Parent Profile] -->|Logs Meals / Queries AI| App[NutriBite Next.js Frontend]
+    Parent[Parent Profile] -->|Logs Meals / Queries AI| App[NutriKids Next.js Frontend]
     Kid[Kid Profile] -->|Plays Food Buddy / Gains XP| App
     App -->|Saves Logs / Handshake RBAC| Node[Node.js Express Backend]
     Node -->|MongoDB Mongoose| DB[(MongoDB Atlas)]
@@ -72,7 +72,7 @@ graph TD
 
 ## 3. AUTHENTICATION FLOW
 
-NutriBite implements a stateless authentication workflow leveraging high-entropy JSON Web Tokens (JWT) stored in HTTP-only cookies to verify identity and route requests to appropriate role-based controllers.
+NutriKids implements a stateless authentication workflow leveraging high-entropy JSON Web Tokens (JWT) stored in HTTP-only cookies to verify identity and route requests to appropriate role-based controllers.
 
 ### 🛠️ Authentication Screens & Endpoints
 
@@ -314,7 +314,7 @@ graph TD
 
 ## 6. DATABASE DOCUMENTATION
 
-NutriBite utilizes MongoDB as its primary database system to take advantage of flexible, schema-less document hierarchies that suit daily food logs and variable clinical logs.
+NutriKids utilizes MongoDB as its primary database system to take advantage of flexible, schema-less document hierarchies that suit daily food logs and variable clinical logs.
 
 ### 🗃️ MongoDB Collections Architecture
 
@@ -484,7 +484,7 @@ All requests (excluding local FastAPI internal queries) require Bearer JWT verif
 
 ## 8. AI/ML ARCHITECTURE
 
-NutriBite utilizes a hybrid, multi-stage RAG and fallback chain optimized for medical safety, operational uptime, and low execution latency.
+NutriKids utilizes a hybrid, multi-stage RAG and fallback chain optimized for medical safety, operational uptime, and low execution latency.
 
 ```mermaid
 graph TD
@@ -529,7 +529,7 @@ All screens implement a sleek glassmorphic HSL theme with micro-animations via F
 ### 🖥️ App Screen Catalog
 
 #### 1. Landing Page
-* **Purpose**: Inform public visitors about NutriBite and direct them to auth gateways.
+* **Purpose**: Inform public visitors about NutriKids and direct them to auth gateways.
 * **Target User**: Unauthenticated Parents, Doctors, Evaluators.
 * **Components Present**: Responsive Hero section, feature grids, clinical safety badges, login/register CTA buttons.
 * **Actions Available**: Access auth pages.
@@ -616,7 +616,7 @@ All screens implement a sleek glassmorphic HSL theme with micro-animations via F
 
 ## 10. TEAM CONTRIBUTIONS
 
-Below is the structured registry of team members, modules developed, deliverables, and engineering contributions for the NutriBite platform.
+Below is the structured registry of team members, modules developed, deliverables, and engineering contributions for the NutriKids platform.
 
 ### 1. Abhiram: AI Engineer & Feature Development Lead
 * **Ownership Areas**: AI Core orchestration, Model Router, Prompt systems, and FastAPI deployment.
@@ -695,3 +695,4 @@ Below is the structured registry of team members, modules developed, deliverable
 
 ---
 *End of Specification Document*
+

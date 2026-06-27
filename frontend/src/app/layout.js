@@ -1,4 +1,4 @@
-import { Toaster } from 'react-hot-toast';
+﻿import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from '../context/AuthContext';
 import { ThemeProvider } from '../context/ThemeContext';
 import '../styles/globals.css';
@@ -7,7 +7,7 @@ import { Plus_Jakarta_Sans } from 'next/font/google';
 const plusJakartaSans = Plus_Jakarta_Sans({ subsets: ['latin'] });
 
 export const metadata = {
-  title: 'KidsNutriBite',
+  title: 'KidsNutriKids',
   description: 'AI-Powered Pediatric Nutrition Assistant',
 };
 
@@ -28,4 +28,5 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
 

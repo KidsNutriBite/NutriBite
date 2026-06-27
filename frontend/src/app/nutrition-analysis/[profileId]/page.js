@@ -129,7 +129,7 @@ export default function NutritionAnalysisPage() {
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = `nutribite-grocery-cart-${profileId}.txt`;
+        link.download = `nutrikids-grocery-cart-${profileId}.txt`;
         link.click();
         URL.revokeObjectURL(url);
         toast.success("Grocery list downloaded successfully!");

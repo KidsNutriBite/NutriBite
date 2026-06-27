@@ -1,4 +1,4 @@
-# 🧠 NutriBite — Enterprise Product Specification & System Architecture
+﻿# 🧠 NutriKids — Enterprise Product Specification & System Architecture
 ## *AI-Powered Pediatric Nutrition & Clinical Oversight Platform*
 ### Solutions Architecture | Technical Program Management | Product Engineering Documentation
 
@@ -7,12 +7,12 @@
 ## 1. EXECUTIVE PRODUCT OVERVIEW
 
 ### 🌟 Product Vision
-NutriBite is a state-of-the-art, full-stack pediatric nutrition intelligence platform designed to close the critical feedback loop between parents, children, and pediatricians. By transforming static nutritional guidelines into a dynamic, safe, RAG-enriched decision engine, NutriBite empowers families with clinically validated dietary planning, gamified kid engagement, and direct medical oversight.
+NutriKids is a state-of-the-art, full-stack pediatric nutrition intelligence platform designed to close the critical feedback loop between parents, children, and pediatricians. By transforming static nutritional guidelines into a dynamic, safe, RAG-enriched decision engine, NutriKids empowers families with clinically validated dietary planning, gamified kid engagement, and direct medical oversight.
 
 
 ```mermaid
 graph TD
-    Parent[Parent Profile] -->|Logs Meals / Queries AI| App[NutriBite Next.js Frontend]
+    Parent[Parent Profile] -->|Logs Meals / Queries AI| App[NutriKids Next.js Frontend]
     Kid[Kid Profile] -->|Plays Food Buddy / Gains XP| App
     App -->|Saves Logs / Handshake RBAC| Node[Node.js Express Backend]
     Node -->|MongoDB Mongoose| DB[(MongoDB Atlas)]
@@ -37,10 +37,10 @@ Modern pediatric care faces a triple threat:
 3. **Clinical Isolation**: Pediatricians receive zero real-time visibility into a child’s daily eating habits, relying on subjective, recall-biased diet histories during infrequent clinic visits.
 
 ### 💡 Business Opportunity & Value Proposition
-NutriBite establishes a high-growth B2B2C business opportunity:
+NutriKids establishes a high-growth B2B2C business opportunity:
 * **For Families (B2C)**: High-retention, subscription-based premium access to personalized meal coaching, real-time AI food diary reviews, and gamified leveling rewards.
 * **For Pediatric Clinics & Hospitals (B2B)**: Software-as-a-Service (SaaS) clinical portals integrated with parent logs, offering risk-flag alerts, growth tracking analytics, and secure electronic prescriptions.
-* **Competitive Differentiation**: Unlike standard calorie trackers (e.g., MyFitnessPal) or loose conversational bots (e.g., ChatGPT), NutriBite utilizes a **Deterministic Hybrid Planner Engine**. It separates computational logic (math, allergen blocking) from conversational framing, ensuring 100% medical safety while utilizing the creative power of large language models like Google Gemini.
+* **Competitive Differentiation**: Unlike standard calorie trackers (e.g., MyFitnessPal) or loose conversational bots (e.g., ChatGPT), NutriKids utilizes a **Deterministic Hybrid Planner Engine**. It separates computational logic (math, allergen blocking) from conversational framing, ensuring 100% medical safety while utilizing the creative power of large language models like Google Gemini.
 
 ---
 
@@ -143,7 +143,7 @@ sequenceDiagram
 
 ### 📁 Codebase Directory Structure
 ```bash
-NutriBite-main/
+NutriKids-main/
 ├── frontend/                     # Next.js 16.2.4 Application
 │   ├── Dockerfile                # Multi-stage production container configuration
 │   ├── src/
@@ -414,13 +414,13 @@ graph LR
 ### 🐳 Containerized Production Environment (docker-compose.yml)
 The application orchestrates its production container suite using standard Docker configurations:
 
-1. **MongoDB (`nutribite-db`)**: Custom MongoDB engine storing active profiles, meal logs, appointments, and DoctorAccess handshakes.
-2. **Ollama (`nutribite-ollama`)**: Locally-hosted LLM service running models (e.g. `llama3` or `mistral`) for complete offline capabilities and Privacy Mode.
-3. **FastAPI AI Service (`nutribite-ai-service`)**: Custom Python 3.12-slim runtime exposing port 8000. Undergoes automated healthchecks by querying `http://localhost:8000/`.
-4. **Express Node Backend (`nutribite-api-backend`)**: Custom Node server mapping port 5000. Connects to `mongodb://mongodb:27017/nutribite` and registers routes to handle requests.
-5. **Next.js Frontend (`nutribite-frontend`)**: Built in Next.js 16.2.4 mapping port 3000. Connects to Node APIs.
-6. **Prometheus Telemetry (`nutribite-prometheus`)**: Telemetry server scraping service uptime and request metrics on port 9090.
-7. **Grafana Portal (`nutribite-grafana`)**: Visualization dashboard mapping port 3001.
+1. **MongoDB (`NutriKids-db`)**: Custom MongoDB engine storing active profiles, meal logs, appointments, and DoctorAccess handshakes.
+2. **Ollama (`NutriKids-ollama`)**: Locally-hosted LLM service running models (e.g. `llama3` or `mistral`) for complete offline capabilities and Privacy Mode.
+3. **FastAPI AI Service (`NutriKids-ai-service`)**: Custom Python 3.12-slim runtime exposing port 8000. Undergoes automated healthchecks by querying `http://localhost:8000/`.
+4. **Express Node Backend (`NutriKids-api-backend`)**: Custom Node server mapping port 5000. Connects to `mongodb://mongodb:27017/NutriKids` and registers routes to handle requests.
+5. **Next.js Frontend (`NutriKids-frontend`)**: Built in Next.js 16.2.4 mapping port 3000. Connects to Node APIs.
+6. **Prometheus Telemetry (`NutriKids-prometheus`)**: Telemetry server scraping service uptime and request metrics on port 9090.
+7. **Grafana Portal (`NutriKids-grafana`)**: Visualization dashboard mapping port 3001.
 
 ---
 
@@ -523,3 +523,4 @@ python main.py
 * **Short-Term**: Implement **Nutrition Image Recognition** allowing parents to upload a picture of a meal (e.g., idli) and have Gemini automatically classify and log portions.
 * **Mid-Term**: Support **Wearable Integrations** (Apple Health, Fitbit) to dynamically scale target calorie needs based on a child's active energy expenditure.
 * **Long-Term**: Expand to **Multi-Language RAG** (Hindi, Telugu, Tamil, Marathi) enabling vernacular-speaking parents to log meals and chat with conversational clinical accuracy.
+

@@ -1,4 +1,4 @@
-# 📋 Knowledge Base Audit: NutriBite Datasets
+﻿# 📋 Knowledge Base Audit: NutriKids Datasets
 
 This document presents a comprehensive audit of all raw datasets currently indexed inside `ai-service-v2/datasets/`.
 
@@ -75,3 +75,4 @@ This document presents a comprehensive audit of all raw datasets currently index
   }
   ```
 * **Analysis**: Critical anomaly identified. A massive quantity of goals data contains identical, repeated dictionaries of target parameters (e.g. repeated records for `weight_gain` or `healthy_maintain`). This bloats database load pipelines and must be deduplicated to a single rule per goal name.
+

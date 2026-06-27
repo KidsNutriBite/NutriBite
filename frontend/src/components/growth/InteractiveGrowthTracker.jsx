@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+﻿import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { addGrowthRecord } from '../../api/growth.api';
@@ -517,18 +517,16 @@ const InteractiveGrowthTracker = ({ isOpen, onClose, childId, profile, growthHis
                                     <strong className="text-[#1a365d]">Height: </strong>{heightResult}
                                 </p>
                             </div>
-                            {summaryText && (
-                                <div className="bg-[#f0f4f8] p-4 rounded-xl border border-[#e2e8f0]">
-                                    <p className="text-[#2c5282] font-semibold flex items-center gap-2 text-sm">
-                                        <span className="material-symbols-outlined text-lg">insights</span>
-                                        {summaryText}
-                                    </p>
-                                </div>
-                            )}
-                            <p className="text-gray-400 text-xs italic leading-relaxed">
-                                Disclaimer: NutriBite Growth Calculator is for general educational use only. It does not replace medical advice from a qualified healthcare professional.
-                            </p>
-                        </div>
+                        )}
+
+                        <p className="text-[#718096] text-sm leading-relaxed mb-4">
+                            Each dot on the chart represents your child's measurement entered at a specific age. Multiple dots show how your child's growth changes over time.
+                        </p>
+
+                        <p className="text-[#a0aec0] text-xs leading-relaxed italic">
+                            Disclaimer: The NutriKids Growth Calculator is for general educational use only and is not a diagnostic tool. It does not replace medical advice or regular growth assessments by a qualified healthcare professional.
+                        </p>
+                    </div>
 
                         {/* ── Actions ── */}
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pb-4">
@@ -539,7 +537,28 @@ const InteractiveGrowthTracker = ({ isOpen, onClose, childId, profile, growthHis
                                 <span className="material-symbols-outlined text-lg">download</span>
                                 Download Report
                             </button>
-                            <button
+                            <button 
+                                onClick={() => {
+                                    if (navigator.share) {
+                                        navigator.share({
+                                            title: `NutriKids Growth Report for ${profile?.name}`,
+                                            text: `Check out ${profile?.name}'s latest growth statistics!`,
+                                            url: window.location.href,
+                                        });
+                                    } else {
+                                        alert('Share functionality is not supported on this browser.');
+                                    }
+                                }}
+                                className="bg-white border-2 border-[#1a365d] text-[#1a365d] hover:bg-gray-50 font-bold py-3 px-6 rounded-full shadow-sm flex items-center gap-2 transition"
+                            >
+                                <span className="material-symbols-outlined text-lg">share</span>
+                                Share report
+                            </button>
+                        </div>
+
+                        <div className="text-center mt-4 border-t border-gray-200 pt-6 w-full max-w-md">
+                            <p className="text-[#1a365d] font-bold mb-3">Keep monitoring your baby's growth timeline to earn Daily Wellness Points</p>
+                            <button 
                                 onClick={onClose}
                                 className="bg-white border-2 border-[#1a365d] text-[#1a365d] hover:bg-gray-50 font-bold py-3 px-6 rounded-full flex items-center gap-2 transition"
                             >
@@ -555,3 +574,4 @@ const InteractiveGrowthTracker = ({ isOpen, onClose, childId, profile, growthHis
 };
 
 export default InteractiveGrowthTracker;
+
