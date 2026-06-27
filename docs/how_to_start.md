@@ -1,6 +1,6 @@
-# How to Start the Project
+﻿# How to Start the Project
 
-This guide provides instructions on how to start the NutriBite platform locally. The project consists of three main components:
+This guide provides instructions on how to start the NutriKids platform locally. The project consists of three main components:
 - **Frontend** (React/Next.js)
 - **Backend API** (Node.js/Express)
 - **AI Service** (Python/FastAPI)
@@ -17,7 +17,7 @@ The frontend and Node.js backend are configured to run concurrently from the roo
 
 1. Open a terminal and navigate to the project root directory:
    ```bash
-   cd NutriBite-main
+   cd NutriKids-main
    ```
 2. Install dependencies (if you haven't already):
    ```bash
@@ -39,7 +39,7 @@ The AI service handles the advanced gamification, chatbot, and RAG features. It 
 1. Open a **new** terminal window/tab.
 2. Navigate to the `ai-service` directory:
    ```bash
-   cd NutriBite-main/ai-service
+   cd NutriKids-main/ai-service
    ```
 3. (Optional) Activate the virtual environment if you haven't:
    - **Windows:** `venv\Scripts\activate`
@@ -61,3 +61,4 @@ You should now have three services running:
 - **Frontend Interface:** [http://localhost:3000](http://localhost:3000)
 - **Backend Server:** [http://localhost:5000](http://localhost:5000)
 - **AI Service:** [http://127.0.0.1:8000](http://127.0.0.1:8000)
+

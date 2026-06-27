@@ -1,6 +1,6 @@
-# NutriBite - Complete Feature Specification
+﻿# NutriKids - Complete Feature Specification
 
-NutriBite is an AI-powered pediatric nutrition and clinical oversight platform that bridges the gap between parents, children, and pediatricians. Below is the list of complete features currently implemented in the system.
+NutriKids is an AI-powered pediatric nutrition and clinical oversight platform that bridges the gap between parents, children, and pediatricians. Below is the list of complete features currently implemented in the system.
 
 ---
 
@@ -79,4 +79,5 @@ NutriBite is an AI-powered pediatric nutrition and clinical oversight platform t
 ### 🛒 Shopping List Integration
 * **Nutrition Insights Cart**: Highlights nutritional gaps (e.g. iron deficiency) and recommends a list of healthy grocery items.
 * **Add to Cart Actions**: Parents can toggle recommendations into a grocery cart checklist.
-* **List Downloader**: A "Download List" utility exports the cart items to a text file (`nutribite-grocery-cart-[profileId].txt`) for offline shopping.
+* **List Downloader**: A "Download List" utility exports the cart items to a text file (`NutriKids-grocery-cart-[profileId].txt`) for offline shopping.
+

@@ -1,4 +1,4 @@
-import os
+﻿import os
 import json
 from typing import Dict, Any, List
 try:
@@ -163,7 +163,7 @@ def run_comparative_benchmark(
                 f"Total Protein: {planner_output.get('nutritional_validation', {}).get('planned_protein_g', 0)} g.\n\n"
                 f"### Verified Sources\n"
                 f"[1] Indian Academy of Pediatrics\n"
-                f"[2] NutriBite Verified Knowledge Base\n\n"
+                f"[2] NutriKids Verified Knowledge Base\n\n"
                 f"### Safety Disclaimer\n"
                 f"**Safety Alert**: Strictly avoided all allergenic foods like {', '.join(profile.get('allergies', []))}."
             )
@@ -462,4 +462,5 @@ def run_twin_analysis(profile: dict, meals: list, growth_records: list) -> dict:
             print(f"[Gemini Twin Analysis Error] Fallback triggered: {ex}")
             
     return local_result
+
 

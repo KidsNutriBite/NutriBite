@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+﻿import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine } from 'recharts';
 import { addGrowthRecord } from '../../api/growth.api';
@@ -491,7 +491,7 @@ const InteractiveGrowthTracker = ({ isOpen, onClose, childId, profile, growthHis
                         </p>
 
                         <p className="text-[#a0aec0] text-xs leading-relaxed italic">
-                            Disclaimer: The NutriBite Growth Calculator is for general educational use only and is not a diagnostic tool. It does not replace medical advice or regular growth assessments by a qualified healthcare professional.
+                            Disclaimer: The NutriKids Growth Calculator is for general educational use only and is not a diagnostic tool. It does not replace medical advice or regular growth assessments by a qualified healthcare professional.
                         </p>
                     </div>
 
@@ -509,7 +509,7 @@ const InteractiveGrowthTracker = ({ isOpen, onClose, childId, profile, growthHis
                                 onClick={() => {
                                     if (navigator.share) {
                                         navigator.share({
-                                            title: `NutriBite Growth Report for ${profile?.name}`,
+                                            title: `NutriKids Growth Report for ${profile?.name}`,
                                             text: `Check out ${profile?.name}'s latest growth statistics!`,
                                             url: window.location.href,
                                         });
@@ -542,3 +542,4 @@ const InteractiveGrowthTracker = ({ isOpen, onClose, childId, profile, growthHis
 };
 
 export default InteractiveGrowthTracker;
+

@@ -1,6 +1,6 @@
-# 🏗️ NutriBite AI: Core System Architecture
+﻿# 🏗️ NutriKids AI: Core System Architecture
 
-This document describes the layered, production-grade foundation architecture of the NutriBite AI microservice (`ai-service-v2`).
+This document describes the layered, production-grade foundation architecture of the NutriKids AI microservice (`ai-service-v2`).
 
 ---
 
@@ -40,3 +40,4 @@ This document describes the layered, production-grade foundation architecture of
 6. **Prompt Management**: Compiles declarative prompts dynamically based on child profile inputs, retrieved chunks, and structured planner outputs.
 7. **Model Router**: Centralized dispatcher handling local Ollama Mistral inference with automated API failovers to Google Gemini and static deterministic experts.
 8. **Logging & Tracing**: Profiles latencies, generation durations, RAG indices matching, and confidence ratings across spans, printing clean trace logs.
+

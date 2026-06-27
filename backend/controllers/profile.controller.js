@@ -1,4 +1,4 @@
-import Profile from '../models/Profile.model.js';
+﻿import Profile from '../models/Profile.model.js';
 import GrowthRecord from '../models/GrowthRecord.model.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import ApiResponse from '../utils/apiResponse.js';
@@ -128,12 +128,12 @@ export const createProfile = asyncHandler(async (req, res) => {
 
     // 7. Send Email Notification
     try {
-        const subject = `NutriBite: Child Profile Created - ${profile.name}`;
+        const subject = `NutriKids: Child Profile Created - ${profile.name}`;
         const html = `
             <div style="font-family: sans-serif; padding: 20px; color: #333; line-height: 1.5;">
                 <h2 style="color: #2b9dee; margin-bottom: 20px;">Child Profile Created Successfully</h2>
                 <p>Hello,</p>
-                <p>A new child profile has been successfully created under your account on <strong>NutriBite</strong>.</p>
+                <p>A new child profile has been successfully created under your account on <strong>NutriKids</strong>.</p>
                 <div style="background-color: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin: 20px 0;">
                     <table style="width: 100%;">
                         <tr>
@@ -154,9 +154,9 @@ export const createProfile = asyncHandler(async (req, res) => {
                         </tr>
                     </table>
                 </div>
-                <p>You can now manage their nutrition, track growth milestones, and upload medical reports on the NutriBite Parent Dashboard.</p>
+                <p>You can now manage their nutrition, track growth milestones, and upload medical reports on the NutriKids Parent Dashboard.</p>
                 <br/>
-                <p>Best regards,<br/><strong>NutriBite Team</strong></p>
+                <p>Best regards,<br/><strong>NutriKids Team</strong></p>
             </div>
         `;
         await sendEmail(req.user.email, subject, html);
@@ -404,12 +404,12 @@ export const updateProfile = asyncHandler(async (req, res) => {
 
     // 7. Send Email Alert
     try {
-        const subject = `NutriBite: Profile Updated - ${updatedProfile.name}`;
+        const subject = `NutriKids: Profile Updated - ${updatedProfile.name}`;
         const html = `
             <div style="font-family: sans-serif; padding: 20px; color: #333; line-height: 1.5;">
                 <h2 style="color: #2b9dee; margin-bottom: 20px;">Profile Update Alert</h2>
                 <p>Hello,</p>
-                <p>The profile of <strong>${updatedProfile.name}</strong> has been updated in your NutriBite account.</p>
+                <p>The profile of <strong>${updatedProfile.name}</strong> has been updated in your NutriKids account.</p>
                 <div style="background-color: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; margin: 20px 0;">
                     <table style="width: 100%;">
                         <tr>
@@ -434,7 +434,7 @@ export const updateProfile = asyncHandler(async (req, res) => {
                 </div>
                 <p>You can review this audit log in the child's profile view under the "Change History" log.</p>
                 <br/>
-                <p>Best regards,<br/><strong>NutriBite Team</strong></p>
+                <p>Best regards,<br/><strong>NutriKids Team</strong></p>
             </div>
         `;
         await sendEmail(req.user.email, subject, html);
@@ -468,3 +468,4 @@ export const reanalyzeProfile = asyncHandler(async (req, res) => {
 
     res.status(200).json(new ApiResponse(200, profile, 'Profile reanalyzed successfully'));
 });
+

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -147,7 +147,7 @@ const AboutPage = () => {
                             Our Origins
                         </span>
                         <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-slate-900 dark:text-white sm:text-5xl md:text-6xl">
-                            About <span className="text-primary">NutriBite</span>
+                            About <span className="text-primary">NutriKids</span>
                         </h1>
                         <p className="max-w-3xl mx-auto text-lg md:text-xl leading-relaxed text-slate-600 dark:text-slate-300">
                             Building the Future of Pediatric Nutrition Intelligence Through Artificial Intelligence, Clinical Collaboration, and Personalized Child Health Monitoring.
@@ -171,12 +171,12 @@ const AboutPage = () => {
                     </motion.div>
                 </section>
 
-                {/* SECTION 2: Why NutriBite Was Created */}
+                {/* SECTION 2: Why NutriKids Was Created */}
                 <section className="bg-white dark:bg-slate-900/40 border-y border-slate-100 dark:border-slate-900 px-4 py-20 md:px-8 lg:px-16">
                     <div className="max-w-7xl mx-auto">
                         <div className="text-center space-y-4 mb-16">
                             <h2 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white md:text-4xl">
-                                Why NutriBite Was Created
+                                Why NutriKids Was Created
                             </h2>
                             <p className="max-w-2xl mx-auto text-slate-500 dark:text-slate-400">
                                 Bridging the communication and tracking gap between family dining tables and pediatrician clinics.
@@ -240,7 +240,7 @@ const AboutPage = () => {
                                 The Solution
                             </span>
                             <h3 className="text-2xl font-black text-slate-800 dark:text-white mb-8">
-                                NutriBite Bridges This Gap
+                                NutriKids Bridges This Gap
                             </h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
                                 {[
@@ -303,7 +303,7 @@ const AboutPage = () => {
                                 Meet The Team
                             </h2>
                             <p className="max-w-xl mx-auto text-slate-500 dark:text-slate-400">
-                                The engineering, data, and clinical minds behind NutriBite's pediatric platform.
+                                The engineering, data, and clinical minds behind NutriKids's pediatric platform.
                             </p>
                         </div>
 
@@ -378,3 +378,4 @@ const AboutPage = () => {
 };
 
 export default AboutPage;
+

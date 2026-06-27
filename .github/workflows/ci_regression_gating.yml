@@ -1,4 +1,4 @@
-name: NutriBite AI Regression Gating & CI Pipeline
+﻿name: NutriKids AI Regression Gating & CI Pipeline
 
 on:
   push:
@@ -69,3 +69,4 @@ jobs:
         else
           echo "✅ All clinical safety evaluation gates passed successfully."
         fi
+

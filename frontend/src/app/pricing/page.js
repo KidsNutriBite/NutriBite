@@ -1,7 +1,7 @@
-import PricingPage from "../../react_pages/PricingPage";
+﻿import PricingPage from "../../react_pages/PricingPage";
 
 export const metadata = {
-  title: 'Pricing Plans | NutriBite - Pediatric Nutrition Platform',
+  title: 'Pricing Plans | NutriKids - Pediatric Nutrition Platform',
   description: 'Choose the right plan for tracking your child\'s health, growth monitoring, and access our AI Nutrition Assistant or clinical pediatrician networks.',
   keywords: [
     'Pediatric Nutrition',
@@ -18,3 +18,4 @@ export const metadata = {
 export default function Page() {
   return <PricingPage />;
 }
+

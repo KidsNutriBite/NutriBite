@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -961,11 +961,11 @@ const AddProfileForm = ({ onSuccess, onCancel }) => {
                 </div>
             )}
 
-            {/* Step 7: Why NutriBite? */}
+            {/* Step 7: Why NutriKids? */}
             {step === 7 && (
                 <div className="space-y-6 animate-in slide-in-from-right fade-in duration-300">
                     <div>
-                        <h3 className="text-xl font-bold text-slate-800 dark:text-white">Why NutriBite?</h3>
+                        <h3 className="text-xl font-bold text-slate-800 dark:text-white">Why NutriKids?</h3>
                         <p className="text-sm text-slate-500">Help align goals and targets for automated suggestions.</p>
                     </div>
 
@@ -1241,3 +1241,4 @@ const AddProfileForm = ({ onSuccess, onCancel }) => {
 };
 
 export default AddProfileForm;
+

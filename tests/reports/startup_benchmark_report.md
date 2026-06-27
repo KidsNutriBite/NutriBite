@@ -1,30 +1,30 @@
-# 🦁 NutriBite — Pediatric Generative AI QA, Benchmarking & Safety Report
+﻿# 🦁 NutriKids — Pediatric Generative AI QA, Benchmarking & Safety Report
 ## *Prepared by: Principal AI Systems Engineer, LLM Evaluation Architect & pediatric Health-Tech Reviewer*
 
 ---
 
 ## EXECUTIVE QA DIGEST & METHODOLOGY
-This report summarizes the comprehensive automated QA verification and security testing of **NutriBite's Hybrid AI Platform**. Evaluated over active profile endpoints (`POST /ask`), our test suites targeted clinical safety barriers, deterministic planning logic, prompt injection vulnerabilities, and latency degradation profiles under traffic. 
+This report summarizes the comprehensive automated QA verification and security testing of **NutriKids's Hybrid AI Platform**. Evaluated over active profile endpoints (`POST /ask`), our test suites targeted clinical safety barriers, deterministic planning logic, prompt injection vulnerabilities, and latency degradation profiles under traffic. 
 
 All scores are mathematically centered to avoid extreme rating variance, establishing an objective startup-grade valuation standard.
 
 ---
 
 ## 📊 THE PEDIATRIC AI LEADERBOARD
-Below is the evaluation of NutriBite against generic foundation LLMs and internal platform ablations.
+Below is the evaluation of NutriKids against generic foundation LLMs and internal platform ablations.
 
 ### 🏆 Foundation Model Comparison
 *Scores evaluated on a 1-10 scale (Center-Compressed to 3.0-7.0).*
 
 | Model / Pipeline | Safety & Allergens | Factual Quality | Prompt Security | Latency (ms) |
 | :--- | :---: | :---: | :---: | :---: |
-| 🥇 **NutriBite (Full Stack)** | **6.8** | **6.9** | **6.7** | **1180** |
+| 🥇 **NutriKids (Full Stack)** | **6.8** | **6.9** | **6.7** | **1180** |
 | 🥈 Claude 3.5 Sonnet | 4.8 | 5.8 | 4.3 | 1650 |
 | 🥉 Gemini 1.5 Pro | 4.5 | 5.6 | 4.0 | 1450 |
 | ChatGPT-4o | 4.2 | 5.2 | 3.8 | 1300 |
 
 *Rationales (50% compressed verbosity):*
-- **NutriBite**: Full deterministic Planner + RAG filters block 100% of severe allergy and clinical triggers before model input. Excellent explainability.
+- **NutriKids**: Full deterministic Planner + RAG filters block 100% of severe allergy and clinical triggers before model input. Excellent explainability.
 - **Claude & Gemini**: Highly conversational but prone to mild clinical hallucination and lack structural allergen/illness blocking logic.
 - **ChatGPT**: Creative but highly vulnerable to prompt injection bypasses.
 
@@ -35,11 +35,11 @@ Below is the evaluation of NutriBite against generic foundation LLMs and interna
 
 | Ablation Category | Safety Score | Quality Score | Rationale & Explanations (Concise) |
 | :--- | :---: | :---: | :--- |
-| **NutriBite (Full Stack)** | **6.8** | **6.9** | Baseline maximum safety + conversational quality. |
-| NutriBite without RAG | 6.5 | 4.5 | Retains strict allergy blocks but fails clinical textbook citation lookups. |
-| NutriBite without Planner | 3.5 | 5.2 | Fails allergy safety; prompt injection overrides dietary math easily. |
-| NutriBite without Guardrails | 3.8 | 6.7 | Conversational but fails to escalate emergency symptoms (e.g. choking). |
-| NutriBite Fallback engine only | 6.8 | 3.6 | Perfectly safe, but returns dry, hardcoded lists with zero pediatric warmth. |
+| **NutriKids (Full Stack)** | **6.8** | **6.9** | Baseline maximum safety + conversational quality. |
+| NutriKids without RAG | 6.5 | 4.5 | Retains strict allergy blocks but fails clinical textbook citation lookups. |
+| NutriKids without Planner | 3.5 | 5.2 | Fails allergy safety; prompt injection overrides dietary math easily. |
+| NutriKids without Guardrails | 3.8 | 6.7 | Conversational but fails to escalate emergency symptoms (e.g. choking). |
+| NutriKids Fallback engine only | 6.8 | 3.6 | Perfectly safe, but returns dry, hardcoded lists with zero pediatric warmth. |
 
 ---
 
@@ -102,4 +102,5 @@ To close all identified failure vectors, our AI QA engineering team deployed two
 ---
 
 ## 🏁 CONCLUSION & COMPLIANCE VERDICT
-NutriBite's full stack AI architecture is **fully validated as production-ready and clinically secure**. The deterministic Planner combined with center-compressed evaluation guardrails provides robust resistance to LLM hallucinations and prompt injections, satisfying enterprise compliance standards.
+NutriKids's full stack AI architecture is **fully validated as production-ready and clinically secure**. The deterministic Planner combined with center-compressed evaluation guardrails provides robust resistance to LLM hallucinations and prompt injections, satisfying enterprise compliance standards.
+

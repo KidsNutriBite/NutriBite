@@ -1,4 +1,4 @@
-# 🧠 KidsNutriBite — FINAL IMPLEMENTATION ROADMAP
+﻿# 🧠 KidsNutriKids — FINAL IMPLEMENTATION ROADMAP
 ## Hybrid AI System (RAG + Structured DB + Planner + LLM)
 
 This is the FINAL clear implementation plan for your project.
@@ -184,3 +184,4 @@ score = nutrition_match * 0.35 + \
 ## ✅ PHASE 1 — ENVIRONMENT SETUP
 - Tech Stack: FastAPI, PyTorch, FAISS, SentenceTransformers, MongoDB, Python 3.11+.
 - Package installations specified in requirements.txt.
+

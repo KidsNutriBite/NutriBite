@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
@@ -234,10 +234,10 @@ const WellnessInsightsModal = ({ profile, onClose }) => {
                         )}
                     </div>
 
-                    {/* NUTRIBITE ROADMAP */}
+                    {/* NutriKids ROADMAP */}
                     <div className="space-y-4 pt-4 border-t border-gray-150 dark:border-slate-800">
                         <h3 className="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2">
-                            <span>🚀</span> How NutriBite Can Help
+                            <span>🚀</span> How NutriKids Can Help
                         </h3>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             {analysis.recommendations && analysis.recommendations.map((rec, idx) => (
@@ -255,7 +255,7 @@ const WellnessInsightsModal = ({ profile, onClose }) => {
                                             <p className="font-extrabold text-slate-800 dark:text-white text-sm">{rec.concern}</p>
                                         </div>
                                         <div className="border-t border-dashed border-slate-200 dark:border-slate-700 pt-2">
-                                            <p className="text-xs text-indigo-600 font-black uppercase tracking-wider">NutriBite Feature</p>
+                                            <p className="text-xs text-indigo-600 font-black uppercase tracking-wider">NutriKids Feature</p>
                                             <p className="font-extrabold text-indigo-950 dark:text-indigo-300 text-sm">{rec.solution}</p>
                                         </div>
                                     </div>
@@ -301,3 +301,4 @@ const WellnessInsightsModal = ({ profile, onClose }) => {
 };
 
 export default WellnessInsightsModal;
+

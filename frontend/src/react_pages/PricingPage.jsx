@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -82,7 +82,7 @@ const PricingPage = () => {
             a: "We track standard WHO growth benchmarks including height-for-age, weight-for-age, BMI-for-age, and daily caloric and macronutrient distribution. This ensures active monitoring of kids nutrition, growth spurts, and overall child health trends."
         },
         {
-            q: "Is my kid's nutritional data secure on NutriBite?",
+            q: "Is my kid's nutritional data secure on NutriKids?",
             a: "Security is our highest priority. All data, including growth records, clinical logs, and profile information, is encrypted both in transit and at rest. We ensure strict isolation of records so that only authorized family members and clinical advisors have access."
         },
         {
@@ -378,3 +378,4 @@ const PricingPage = () => {
 };
 
 export default PricingPage;
+

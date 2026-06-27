@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
@@ -349,7 +349,7 @@ const WellnessAnalysis = ({ profileId, profileData, onUpdate, hideHeader = false
                 </motion.div>
             </div>
 
-            {/* NutriBite Recommendations / Roadmap */}
+            {/* NutriKids Recommendations / Roadmap */}
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -360,10 +360,10 @@ const WellnessAnalysis = ({ profileId, profileData, onUpdate, hideHeader = false
                         Roadmap
                     </span>
                     <h2 className="text-2xl md:text-3xl font-black text-gray-900 leading-tight">
-                        NutriBite Recommendations
+                        NutriKids Recommendations
                     </h2>
                     <p className="text-gray-500 font-bold max-w-xl mx-auto text-sm">
-                        Here is how NutriBite's specialized features help address each observed area.
+                        Here is how NutriKids's specialized features help address each observed area.
                     </p>
                 </div>
 
@@ -386,7 +386,7 @@ const WellnessAnalysis = ({ profileId, profileData, onUpdate, hideHeader = false
                                     <p className="font-extrabold text-gray-900 text-sm leading-snug">{rec.concern}</p>
                                 </div>
                                 <div className="space-y-1 pt-2 border-t border-indigo-100/30">
-                                    <p className="text-[10px] text-indigo-500 font-black uppercase tracking-wider">NutriBite Feature</p>
+                                    <p className="text-[10px] text-indigo-500 font-black uppercase tracking-wider">NutriKids Feature</p>
                                     <p className="font-bold text-gray-800 text-sm">{rec.solution}</p>
                                 </div>
                                 <div className="space-y-1">
@@ -441,3 +441,4 @@ const WellnessAnalysis = ({ profileId, profileData, onUpdate, hideHeader = false
 };
 
 export default WellnessAnalysis;
+
