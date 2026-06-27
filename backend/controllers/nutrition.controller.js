@@ -10,11 +10,6 @@ export const getNutritionAnalysis = async (req, res) => {
         const sunlightMinutes = req.query.sunlight ? parseInt(req.query.sunlight, 10) : 0;
 
         const analysis = await analyzeNutrition(profileId, sunlightMinutes);
-
-        // Remove the nested score structure to match exactly the required API output format
-        // The prompt requested score: 75 instead of score: { value: 75, status: "..." }
-        // But also status is helpful. We will just flatten it based on prompt:
-        // { ..., score: 75, ... }
         
         const responseData = {
             deficiencies: analysis.deficiencies,
@@ -24,9 +19,18 @@ export const getNutritionAnalysis = async (req, res) => {
             scoreStatus: analysis.score.status,
             groceryList: analysis.groceryList,
             explanations: analysis.explanations,
-            // Include extra helpful data
             dailyAverages: analysis.dailyAverages,
-            requiredDaily: analysis.requiredDaily
+            requiredDaily: analysis.requiredDaily,
+            
+            // Expose the advanced sub-scores and plans
+            nutritionScore: analysis.nutritionScore,
+            deficiencyScore: analysis.deficiencyScore,
+            growthRiskScore: analysis.growthRiskScore,
+            hydrationScore: analysis.hydrationScore,
+            mealQualityScore: analysis.mealQualityScore,
+            improvementPlan: analysis.improvementPlan,
+            growthImpacts: analysis.growthImpacts,
+            aiExplanation: analysis.aiExplanation
         };
 
         res.status(200).json(responseData);

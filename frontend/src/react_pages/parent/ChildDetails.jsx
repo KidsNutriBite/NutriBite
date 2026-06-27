@@ -2,6 +2,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine } from 'recharts';
 import { getProfileById as getProfile } from '../../api/profile.api';
 import { logMeal, deleteFoodItem } from '../../api/meal.api';
 import { getMealFrequency, getPrescriptions, getNutritionTrends } from '../../api/analytics.api';
@@ -302,6 +303,39 @@ const ChildDetails = () => {
             }
         }
     };
+
+    const todayTotals = useMemo(() => {
+        if (!dailyLog) return { calories: 0, protein: 0, carbs: 0, fat: 0 };
+        const slots = ['breakfast', 'morningSnack', 'lunch', 'afternoonSnack', 'dinner', 'eveningSnack'];
+        return slots.reduce((acc, slot) => {
+            const items = dailyLog[slot] || [];
+            const slotMacros = dailyLog.mealMacros?.[slot] || {};
+            if (slotMacros.calories || slotMacros.protein) {
+                return {
+                    calories: acc.calories + (slotMacros.calories || 0),
+                    protein: acc.protein + (slotMacros.protein || 0),
+                    carbs: acc.carbs + (slotMacros.carbs || 0),
+                    fat: acc.fat + (slotMacros.fat || 0)
+                };
+            }
+            return {
+                calories: acc.calories + items.reduce((sum, item) => sum + (item.calories || 0), 0),
+                protein: acc.protein + items.reduce((sum, item) => sum + (item.protein || 0), 0),
+                carbs: acc.carbs + items.reduce((sum, item) => sum + (item.carbs || 0), 0),
+                fat: acc.fat + items.reduce((sum, item) => sum + (item.fats || item.fat || 0), 0)
+            };
+        }, { calories: 0, protein: 0, carbs: 0, fat: 0 });
+    }, [dailyLog]);
+
+    const recommendedProtein = useMemo(() => {
+        const age = Number(profile?.age || 0);
+        return age <= 3 ? 15 : (age <= 8 ? 25 : 30);
+    }, [profile]);
+
+    const recommendedCalories = useMemo(() => {
+        const age = Number(profile?.age || 0);
+        return age <= 3 ? 1200 : (age <= 8 ? 1600 : 2000);
+    }, [profile]);
 
     // Analytics Calculations
     const stats = useMemo(() => {
@@ -660,7 +694,136 @@ const ChildDetails = () => {
                                         </div>
                                     </div>
 
+                                    {/* Today's Nutrition Overview */}
+                                    <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-gray-100 dark:border-slate-800 shadow-sm space-y-6">
+                                        <h3 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                                            <span className="material-symbols-outlined text-green-500">nutrition</span>
+                                            Today's Nutrition Summary
+                                        </h3>
+                                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                            <div className="bg-orange-50/50 dark:bg-slate-800/20 border border-orange-100/30 dark:border-slate-800 p-4 rounded-2xl text-center">
+                                                <p className="text-[10px] font-black text-orange-600 dark:text-orange-400 uppercase tracking-widest mb-1">Calories Consumed</p>
+                                                <p className="text-2xl font-black text-gray-800 dark:text-white">{Math.round(todayTotals.calories)} <span className="text-xs font-bold text-gray-400">kcal</span></p>
+                                            </div>
+                                            <div className="bg-blue-50/50 dark:bg-slate-800/20 border border-blue-100/30 dark:border-slate-800 p-4 rounded-2xl text-center">
+                                                <p className="text-[10px] font-black text-blue-600 dark:text-blue-400 uppercase tracking-widest mb-1">Protein Consumed</p>
+                                                <p className="text-2xl font-black text-gray-800 dark:text-white">{Math.round(todayTotals.protein * 10) / 10} <span className="text-xs font-bold text-gray-400">g</span></p>
+                                            </div>
+                                            <div className="bg-yellow-50/50 dark:bg-slate-800/20 border border-yellow-100/30 dark:border-slate-800 p-4 rounded-2xl text-center">
+                                                <p className="text-[10px] font-black text-yellow-600 dark:text-yellow-400 uppercase tracking-widest mb-1">Carbs Consumed</p>
+                                                <p className="text-2xl font-black text-gray-800 dark:text-white">{Math.round(todayTotals.carbs * 10) / 10} <span className="text-xs font-bold text-gray-400">g</span></p>
+                                            </div>
+                                            <div className="bg-green-50/50 dark:bg-slate-800/20 border border-green-100/30 dark:border-slate-800 p-4 rounded-2xl text-center">
+                                                <p className="text-[10px] font-black text-green-600 dark:text-green-400 uppercase tracking-widest mb-1">Fat Consumed</p>
+                                                <p className="text-2xl font-black text-gray-800 dark:text-white">{Math.round(todayTotals.fat * 10) / 10} <span className="text-xs font-bold text-gray-400">g</span></p>
+                                            </div>
+                                        </div>
+                                    </div>
 
+                                    {/* Pediatric Nutrition Insights */}
+                                    <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-gray-100 dark:border-slate-800 shadow-sm space-y-6">
+                                        <div>
+                                            <h3 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                                                <span className="material-symbols-outlined text-purple-500">insights</span>
+                                                Pediatric Nutrition Insights
+                                            </h3>
+                                            <p className="text-xs text-gray-400 mt-1">Comparing today's intake against standard target boundaries based on child's age, weight, and goals.</p>
+                                        </div>
+
+                                        <div className="space-y-4">
+                                            {/* Protein Comparison */}
+                                            {(() => {
+                                                const target = recommendedProtein;
+                                                const current = todayTotals.protein;
+                                                const pct = (current / target) * 100;
+                                                
+                                                let status = "Protein Balanced";
+                                                let indicatorColor = "text-green-600 bg-green-50 border-green-100 dark:bg-green-950/20 dark:text-green-400 dark:border-green-900/30";
+                                                let bullet = "🟢";
+                                                
+                                                if (current < target * 0.6) {
+                                                    status = "Protein Deficit";
+                                                    indicatorColor = "text-red-600 bg-red-50 border-red-100 dark:bg-red-950/20 dark:text-red-400 dark:border-red-900/30";
+                                                    bullet = "🔴";
+                                                } else if (current < target) {
+                                                    status = "Needs Attention";
+                                                    indicatorColor = "text-yellow-600 bg-yellow-50 border-yellow-100 dark:bg-yellow-950/20 dark:text-yellow-400 dark:border-yellow-900/30";
+                                                    bullet = "🟡";
+                                                }
+
+                                                return (
+                                                    <div className="p-4 rounded-2xl bg-gray-50/50 dark:bg-slate-800/10 border border-gray-100 dark:border-slate-800/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                                        <div className="space-y-1">
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="text-sm font-black text-gray-800 dark:text-white">Protein Intake</span>
+                                                                <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border ${indicatorColor}`}>
+                                                                    {bullet} {status}
+                                                                </span>
+                                                            </div>
+                                                            <p className="text-xs text-gray-500">
+                                                                Target is determined by age ({profile.age} Years), weight ({profile.weight} kg), and growth goals ({(Array.isArray(profile.goals) ? profile.goals : profile.goals ? [profile.goals] : []).join(', ') || 'General growth'}).
+                                                            </p>
+                                                        </div>
+                                                        <div className="flex items-center gap-4 shrink-0">
+                                                            <div className="text-right">
+                                                                <p className="text-xs font-bold text-gray-400 uppercase">Today's Intake</p>
+                                                                <p className="text-lg font-black text-gray-800 dark:text-white">{Math.round(current * 10) / 10}g <span className="text-gray-400 font-bold text-xs">/ {target}g Target</span></p>
+                                                            </div>
+                                                            <div className="w-16 h-1.5 bg-gray-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                                                                <div className={`h-full rounded-full ${current < target * 0.6 ? 'bg-red-500' : current < target ? 'bg-yellow-400' : 'bg-green-500'}`} style={{ width: `${Math.min(pct, 100)}%` }}></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })()}
+
+                                            {/* Calories Comparison */}
+                                            {(() => {
+                                                const target = recommendedCalories;
+                                                const current = todayTotals.calories;
+                                                const pct = (current / target) * 100;
+                                                
+                                                let status = "Energy Balanced";
+                                                let indicatorColor = "text-green-600 bg-green-50 border-green-100 dark:bg-green-950/20 dark:text-green-400 dark:border-green-900/30";
+                                                let bullet = "🟢";
+                                                
+                                                if (current < target * 0.6) {
+                                                    status = "Calorie Deficit";
+                                                    indicatorColor = "text-red-600 bg-red-50 border-red-100 dark:bg-red-950/20 dark:text-red-400 dark:border-red-900/30";
+                                                    bullet = "🔴";
+                                                } else if (current < target) {
+                                                    status = "Needs Attention";
+                                                    indicatorColor = "text-yellow-600 bg-yellow-50 border-yellow-100 dark:bg-yellow-950/20 dark:text-yellow-400 dark:border-yellow-900/30";
+                                                    bullet = "🟡";
+                                                }
+
+                                                return (
+                                                    <div className="p-4 rounded-2xl bg-gray-50/50 dark:bg-slate-800/10 border border-gray-100 dark:border-slate-800/80 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                                        <div className="space-y-1">
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="text-sm font-black text-gray-800 dark:text-white">Energy Intake</span>
+                                                                <span className={`text-[10px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full border ${indicatorColor}`}>
+                                                                    {bullet} {status}
+                                                                </span>
+                                                            </div>
+                                                            <p className="text-xs text-gray-500">
+                                                                Recommended calorie boundary matches standard metabolic targets for child physical stats.
+                                                            </p>
+                                                        </div>
+                                                        <div className="flex items-center gap-4 shrink-0">
+                                                            <div className="text-right">
+                                                                <p className="text-xs font-bold text-gray-400 uppercase">Today's Intake</p>
+                                                                <p className="text-lg font-black text-gray-800 dark:text-white">{Math.round(current)} kcal <span className="text-gray-400 font-bold text-xs">/ {target} kcal Target</span></p>
+                                                            </div>
+                                                            <div className="w-16 h-1.5 bg-gray-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                                                                <div className={`h-full rounded-full ${current < target * 0.6 ? 'bg-red-500' : current < target ? 'bg-yellow-400' : 'bg-green-500'}`} style={{ width: `${Math.min(pct, 100)}%` }}></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })()}
+                                        </div>
+                                    </div>
 
                                     {/* Date Timeline & Meal Card */}
                                     <div>
@@ -712,26 +875,10 @@ const ChildDetails = () => {
                             )}
 
                             {activeTab === 'profileInfo' && (
-                                <div className="space-y-12">
-                                    <ProfileInfoAndReports 
-                                        profile={profile} 
-                                        onUpdate={() => fetchData(true)} 
-                                    />
-                                    <div className="border-t pt-8">
-                                        <div className="mb-6 text-center md:text-left">
-                                            <h2 className="text-2xl font-black text-gray-900">Latest Wellness Analysis</h2>
-                                            <p className="text-gray-500 text-sm font-bold mt-1">
-                                                Computed automatically from the child's latest metrics, habits, and clinical settings.
-                                            </p>
-                                        </div>
-                                        <WellnessAnalysis 
-                                            profileId={id} 
-                                            profileData={profile} 
-                                            onUpdate={fetchData} 
-                                            hideHeader={true} 
-                                        />
-                                    </div>
-                                </div>
+                                <ProfileInfoAndReports 
+                                    profile={profile} 
+                                    onUpdate={() => fetchData(true)} 
+                                />
                             )}
 
                             {activeTab === 'wellness' && (
@@ -765,6 +912,7 @@ const ChildDetails = () => {
                                 <NutritionTrendsChart
                                     data={nutritionTrends}
                                     mealFrequencyData={chartData}
+                                    profile={profile}
                                 />
                             )}
 
@@ -792,6 +940,39 @@ const ChildDetails = () => {
                                             showCancel={false}
                                         />
                                     </div>
+
+                                    {/* Sleep History Graph */}
+                                    {sleepHistory && sleepHistory.length > 0 && (
+                                        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                                            <h3 className="font-bold text-gray-900 mb-2">Sleep Duration History</h3>
+                                            <p className="text-xs text-gray-500 mb-4">Tracking daily sleep duration over the last 30 days vs recommended goal (9h-11h).</p>
+                                            <div className="h-[200px] w-full">
+                                                <ResponsiveContainer width="100%" height="100%">
+                                                    <BarChart data={[...sleepHistory].sort((a,b) => new Date(a.date) - new Date(b.date)).slice(-14).map(s => ({
+                                                        date: s.date ? s.date.split('T')[0].split('-').slice(1).join('/') : '',
+                                                        hours: s.totalSleepHours || 0
+                                                    }))} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+                                                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                                                        <XAxis dataKey="date" stroke="#a0aec0" fontSize={10} className="font-bold" />
+                                                        <YAxis stroke="#a0aec0" fontSize={10} className="font-bold" />
+                                                        <Tooltip content={({ active, payload }) => {
+                                                            if (active && payload && payload.length) {
+                                                                return (
+                                                                    <div className="bg-white p-2.5 rounded-lg shadow-md border border-gray-100 text-xs font-bold">
+                                                                        <p className="text-gray-700">{payload[0].payload.date}</p>
+                                                                        <p className="text-indigo-600 mt-1">Slept: {payload[0].value} hrs</p>
+                                                                    </div>
+                                                                );
+                                                            }
+                                                            return null;
+                                                        }} />
+                                                        <ReferenceLine y={9} stroke="#48bb78" strokeDasharray="3 3" label={{ value: 'Min Target (9h)', fill: '#48bb78', fontSize: 9, position: 'top' }} />
+                                                        <Bar dataKey="hours" fill="#6366f1" radius={[4, 4, 0, 0]} maxBarSize={30} />
+                                                    </BarChart>
+                                                </ResponsiveContainer>
+                                            </div>
+                                        </div>
+                                    )}
 
                                     <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
                                         <h3 className="font-bold text-gray-900 mb-4">Recent Sleep Logs</h3>

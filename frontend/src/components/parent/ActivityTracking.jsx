@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { logActivity, getDailyActivity, deleteActivity, getActivityHistory } from '../../api/activity.api';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine } from 'recharts';
 
 const activityTypesList = [
     'Playing', 'Outdoor Play', 'Sports', 'Walking', 'Cycling', 
@@ -212,6 +213,39 @@ const ActivityTracking = ({ profileId, selectedDate, onActivityUpdate }) => {
                     )}
                 </div>
             </div>
+
+            {/* Activity History Graph */}
+            {history && history.length > 0 && (
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                    <h3 className="font-bold text-gray-900 mb-2">Activity History</h3>
+                    <p className="text-xs text-gray-500 mb-4">Tracking daily physical activity duration over the last 30 days vs. recommended goal (60 mins).</p>
+                    <div className="h-[200px] w-full">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={[...history].sort((a, b) => new Date(a.date) - new Date(b.date)).slice(-14).map(h => ({
+                                date: h.date ? h.date.split('-').slice(1).join('/') : '',
+                                duration: h.totalDuration || 0
+                            }))} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                                <XAxis dataKey="date" stroke="#a0aec0" fontSize={10} className="font-bold" />
+                                <YAxis stroke="#a0aec0" fontSize={10} className="font-bold" />
+                                <Tooltip content={({ active, payload }) => {
+                                    if (active && payload && payload.length) {
+                                        return (
+                                            <div className="bg-white p-2.5 rounded-lg shadow-md border border-gray-100 text-xs font-bold">
+                                                <p className="text-gray-700">{payload[0].payload.date}</p>
+                                                <p className="text-blue-600 mt-1">Duration: {payload[0].value} mins</p>
+                                            </div>
+                                        );
+                                    }
+                                    return null;
+                                }} />
+                                <ReferenceLine y={60} stroke="#48bb78" strokeDasharray="3 3" label={{ value: 'Goal (60m)', fill: '#48bb78', fontSize: 9, position: 'top' }} />
+                                <Bar dataKey="duration" fill="#3b82f6" radius={[4, 4, 0, 0]} maxBarSize={30} />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+            )}
 
             {/* List of Activities */}
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">

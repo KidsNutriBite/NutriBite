@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import { logMeal, getMealHistory, deleteFoodItem, getMealsByDate, getLastMealTime } from '../controllers/meal.controller.js';
+import { logMeal, getMealHistory, deleteFoodItem, getMealsByDate, getLastMealTime, analyzeMealImage, analyzeMealImageDebug } from '../controllers/meal.controller.js';
 import { protect } from '../middlewares/auth.middleware.js';
 import { authorize } from '../middlewares/role.middleware.js';
 import { checkProfileOwnership } from '../middlewares/ownership.middleware.js';
@@ -37,6 +37,12 @@ router.use(protect);
 
 // LOG MEAL (Use checkBodyOwnership for POST)
 router.post('/', authorize('parent'), upload.any(), checkBodyOwnership, logMeal);
+
+// ANALYZE IMAGE
+router.post('/analyze-image', authorize('parent'), upload.any(), analyzeMealImage);
+
+// DEBUG FOOD ANALYSIS (Task 5)
+router.post('/debug-food-analysis', authorize('parent'), upload.any(), analyzeMealImageDebug);
 
 // GET HISTORY (Use verify :id which is profileId)
 router.get('/history/:id', checkProfileOwnership, getMealHistory);
