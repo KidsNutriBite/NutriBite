@@ -42,7 +42,10 @@ const ICE_SERVERS = {
     ],
 };
 
-const SOCKET_URL = 'http://localhost:5000';
+// Resolve signaling server socket URL dynamically based on current page host
+const SOCKET_URL = typeof window !== 'undefined'
+    ? `${window.location.protocol}//${window.location.hostname}:5000`
+    : 'http://localhost:5000';
 
 export default function VideoCall({ consultationId, userRole, userName, onClose }) {
     const [callState, setCallState] = useState('connecting'); // connecting | waiting | in-call | ended | error
