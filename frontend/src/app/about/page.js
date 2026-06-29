@@ -1,8 +1,8 @@
-﻿import AboutPage from "../../react_pages/AboutPage";
+import AboutPage from "../../react_pages/AboutPage";
 
 export const metadata = {
-  title: 'About Us | NutriKids - Pediatric Nutrition Intelligence Platform',
-  description: 'Meet the engineers, mentors, and clinical dietitians behind NutriKids. Discover how we leverage an AI Nutrition Assistant, growth monitoring trends, and secure logs to improve pediatric child health.',
+  title: 'About Us | NutriBite - Pediatric Nutrition Intelligence Platform',
+  description: 'Meet the engineers, mentors, and clinical dietitians behind NutriBite. Discover how we leverage an AI Nutrition Assistant, growth monitoring trends, and secure logs to improve pediatric child health.',
   keywords: [
     'Pediatric Nutrition',
     'Child Health',
@@ -18,4 +18,3 @@ export const metadata = {
 export default function Page() {
   return <AboutPage />;
 }
-

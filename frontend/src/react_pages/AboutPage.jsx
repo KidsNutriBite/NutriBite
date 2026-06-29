@@ -1,109 +1,225 @@
-﻿"use client";
+"use client";
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
 
+// Sub-component for Team Member Cards with fallback image state and premium hover styles
+const TeamMemberCard = ({ member, itemVariants }) => {
+    const [imageError, setImageError] = useState(false);
+
+    return (
+        <motion.div
+            variants={itemVariants}
+            whileHover={{ y: -8, scale: 1.01 }}
+            className="relative flex flex-col p-6 rounded-3xl bg-white/70 dark:bg-slate-900/70 border border-slate-200/60 dark:border-slate-800/80 shadow-md hover:shadow-2xl hover:border-primary/30 dark:hover:border-primary/40 backdrop-blur-md transition-all duration-300 overflow-hidden"
+        >
+            {/* Elegant glassmorphism background hover card elements */}
+            <div className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/5 via-transparent to-accent-green/5 opacity-0 hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+            
+            {/* Top decoration banner based on role */}
+            <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-primary/40 via-accent-green/30 to-primary/40" />
+
+            <div className="flex items-center gap-4 mb-6">
+                {/* Premium Ring Wrap */}
+                <div className="h-16 w-16 rounded-full p-[2px] bg-gradient-to-tr from-primary to-accent-green shadow-md shrink-0 flex items-center justify-center">
+                    {member.image && !imageError ? (
+                        <img 
+                            src={member.image} 
+                            alt={member.name} 
+                            onError={() => setImageError(true)}
+                            className="h-full w-full rounded-full object-cover bg-white dark:bg-slate-900 border border-white/50 dark:border-slate-800"
+                        />
+                    ) : (
+                        <div className={`h-full w-full rounded-full ${member.avatarBg} text-white flex items-center justify-center font-extrabold text-base shadow-inner`}>
+                            {member.avatarInitials}
+                        </div>
+                    )}
+                </div>
+                <div>
+                    <span className="inline-block px-2 py-0.5 rounded-full text-[9px] font-black uppercase bg-primary/10 text-primary dark:bg-primary/20 tracking-wider mb-1">{member.type}</span>
+                    <h3 className="text-lg font-black text-slate-900 dark:text-white leading-tight">{member.name}</h3>
+                    <p className="text-xs text-slate-550 dark:text-slate-400 leading-snug">{member.role}</p>
+                </div>
+            </div>
+
+            {/* Department if Faculty / Specialization */}
+            {member.department && (
+                <div className="mb-4 px-3 py-1.5 rounded-xl bg-slate-100/80 dark:bg-slate-800/50 text-slate-700 dark:text-slate-355 text-xs font-semibold border border-slate-200/30 dark:border-slate-700/30">
+                    <span className="text-[10px] uppercase font-bold text-slate-400 block mb-0.5">Affiliation</span>
+                    {member.department}
+                </div>
+            )}
+
+            {/* Responsibilities */}
+            <div className="flex-1 space-y-2 mb-6">
+                <span className="text-[10px] uppercase font-black text-slate-400 dark:text-slate-550 tracking-widest">Key Focus & Background</span>
+                <ul className="space-y-2 text-xs text-slate-650 dark:text-slate-300">
+                    {member.responsibilities.map((resp, rIdx) => (
+                        <li key={rIdx} className="flex gap-2.5 items-start">
+                            <span className="material-symbols-outlined text-primary text-base select-none mt-0.5 shrink-0">task_alt</span>
+                            <span className="leading-relaxed">{resp}</span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+
+            {/* Contact Email */}
+            {member.email && (
+                <a 
+                    href={`mailto:${member.email}`}
+                    className="mt-auto flex items-center justify-center gap-2 py-2.5 px-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-primary border border-slate-200/50 dark:border-slate-700 text-xs font-semibold transition-all hover:scale-[1.02] hover:shadow-sm"
+                >
+                    <span className="material-symbols-outlined text-sm select-none">mail</span>
+                    <span className="truncate">{member.email}</span>
+                </a>
+            )}
+        </motion.div>
+    );
+};
+
 const AboutPage = () => {
-    // Team member cards metadata
-    const teamMembers = [
+    // Categorized team members metadata
+    const contributors = [
         {
             name: "Abhiram Bikkina",
             role: "AI Engineer & Feature Development Lead",
             email: "abhirambikkina@gmail.com",
             type: "Project Lead",
+            image: "/images/team/abhiram.jpg",
+            avatarInitials: "AB",
+            avatarBg: "bg-blue-500",
             responsibilities: [
                 "Product Architecture",
                 "AI Systems",
                 "LLM Integration",
                 "Feature Development",
                 "System Integration"
-            ],
-            avatarInitials: "AB",
-            avatarBg: "bg-blue-500"
+            ]
         },
         {
             name: "Dinesh Veera Bhargav",
             role: "AI & LLM Developer",
             email: "cb.sc.u4cse23302@cb.amrita.students.edu",
             type: "Core Contributor",
+            image: "/images/team/dinesh.png",
+            avatarInitials: "DB",
+            avatarBg: "bg-teal-500",
             responsibilities: [
                 "LLM Integration",
                 "Prompt Engineering",
                 "RAG Systems",
                 "AI Model Tuning"
-            ],
-            avatarInitials: "DB",
-            avatarBg: "bg-teal-500"
+            ]
         },
         {
             name: "Y. Tharun Kumar Reddy",
             role: "Backend & Database Engineer",
             email: "cb.sc.u4cse23153@cb.students.amrita.edu",
             type: "Core Contributor",
+            image: "/images/team/tharun.png",
+            avatarInitials: "TR",
+            avatarBg: "bg-emerald-500",
             responsibilities: [
                 "Backend Development",
                 "MongoDB",
                 "Authentication",
                 "API Development"
-            ],
-            avatarInitials: "TR",
-            avatarBg: "bg-emerald-500"
+            ]
         },
         {
             name: "Damarapati Pavan Krishna",
             role: "Data Engineer & Backend Developer",
             email: "cb.sc.u4cse23315@cb.students.amrita.edu",
             type: "Core Contributor",
+            image: "/images/team/pavan_k.png",
+            avatarInitials: "PK",
+            avatarBg: "bg-purple-500",
             responsibilities: [
                 "Dataset Collection",
                 "Data Processing",
                 "Backend Support"
-            ],
-            avatarInitials: "PK",
-            avatarBg: "bg-purple-500"
+            ]
         },
         {
             name: "Veluri Pavan Vignesh",
             role: "Frontend & UI/UX Engineer",
             email: "cb.sc.u4cse23354@cb.students.amrita.edu",
             type: "Core Contributor",
+            image: "/images/team/pavan_v.png",
+            avatarInitials: "PV",
+            avatarBg: "bg-orange-500",
             responsibilities: [
                 "UI Design",
                 "User Experience",
                 "Animations",
                 "Frontend Development"
-            ],
-            avatarInitials: "PV",
-            avatarBg: "bg-orange-500"
-        },
+            ]
+        }
+    ];
+
+    const guides = [
         {
             name: "Dr. T. Senthil Kumar",
-            role: "Project Guide",
-            department: "Computer Science and Engineering",
-            email: "senthilkumar@cb.amrita.edu",
+            role: "Project Guide / Faculty Mentor",
+            department: "Department of Computer Science and Engineering",
+            email: "t_senthilkumar@cb.amrita.edu",
             type: "Faculty Mentor",
+            image: "/images/team/senthil.png",
+            avatarInitials: "SK",
+            avatarBg: "bg-indigo-600",
             responsibilities: [
                 "Project Guidance & Mentorship",
                 "Academic Review",
                 "Research Validation"
-            ],
-            avatarInitials: "SK",
-            avatarBg: "bg-indigo-600"
+            ]
         },
         {
+            name: "Shanmugha Priya",
+            role: "Industry LLM Guide",
+            department: "AI Research & LLM Engineering",
+            type: "LLM Specialist",
+            image: "/images/team/shanmugha.jpg",
+            avatarInitials: "SP",
+            avatarBg: "bg-violet-600",
+            responsibilities: [
+                "Industry Guide who helped build and refine our LLM model",
+                "Advised on LLM training, prompt engineering, and RAG evaluation",
+                "Currently working on LLMs and generative AI in the tech industry"
+            ]
+        }
+    ];
+
+    const doctors = [
+        {
             name: "Sindhu Abhijith",
-            role: "Consultant Dietitian",
+            role: "Functional Medicine Clinical Nutritionist",
+            department: "Founder, Overall Health and Nutrition, Bangalore",
             email: "sindhu.abhijith@gmail.com",
             type: "Clinical Advisor",
-            responsibilities: [
-                "Clinical Validation",
-                "Nutrition Guidance",
-                "Pediatric Dietary Consultation"
-            ],
+            image: "/images/team/sindhu.jpg",
             avatarInitials: "SA",
-            avatarBg: "bg-pink-500"
+            avatarBg: "bg-pink-500",
+            responsibilities: [
+                "Functional medicine diagnostics & pediatric nutrition strategy.",
+                "Founder & Clinical Lead at Overall Health and Nutrition, Bangalore.",
+                "Clinical advisor validating pediatric meal safety standards."
+            ]
+        },
+        {
+            name: "Dr. A. Armugam, M.D., D.C.H.",
+            role: "Professor & Head of Pediatrics (Rtd) / Pediatric Mentor",
+            department: "Pediatrics & Child Health",
+            type: "Clinical Advisor",
+            image: "/images/team/armugam.png",
+            avatarInitials: "AA",
+            avatarBg: "bg-cyan-600",
+            responsibilities: [
+                "Professor and Head of the Department of Pediatrics, (Rtd), S.V. Medical College, Tirupati, AP.",
+                "Presently working as Professor of Pediatrics, RDT Hospital, for DNB students at Anantapur district, AP."
+            ]
         }
     ];
 
@@ -147,7 +263,7 @@ const AboutPage = () => {
                             Our Origins
                         </span>
                         <h1 className="text-4xl font-extrabold leading-tight tracking-tight text-slate-900 dark:text-white sm:text-5xl md:text-6xl">
-                            About <span className="text-primary">NutriKids</span>
+                            About <span className="text-primary">NutriBite</span>
                         </h1>
                         <p className="max-w-3xl mx-auto text-lg md:text-xl leading-relaxed text-slate-600 dark:text-slate-300">
                             Building the Future of Pediatric Nutrition Intelligence Through Artificial Intelligence, Clinical Collaboration, and Personalized Child Health Monitoring.
@@ -171,12 +287,12 @@ const AboutPage = () => {
                     </motion.div>
                 </section>
 
-                {/* SECTION 2: Why NutriKids Was Created */}
+                {/* SECTION 2: Why NutriBite Was Created */}
                 <section className="bg-white dark:bg-slate-900/40 border-y border-slate-100 dark:border-slate-900 px-4 py-20 md:px-8 lg:px-16">
                     <div className="max-w-7xl mx-auto">
                         <div className="text-center space-y-4 mb-16">
                             <h2 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white md:text-4xl">
-                                Why NutriKids Was Created
+                                Why NutriBite Was Created
                             </h2>
                             <p className="max-w-2xl mx-auto text-slate-500 dark:text-slate-400">
                                 Bridging the communication and tracking gap between family dining tables and pediatrician clinics.
@@ -240,7 +356,7 @@ const AboutPage = () => {
                                 The Solution
                             </span>
                             <h3 className="text-2xl font-black text-slate-800 dark:text-white mb-8">
-                                NutriKids Bridges This Gap
+                                NutriBite Bridges This Gap
                             </h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
                                 {[
@@ -293,79 +409,102 @@ const AboutPage = () => {
                 </section>
 
                 {/* SECTION 5: Meet The Team */}
-                <section className="bg-slate-50 dark:bg-slate-900/20 border-t border-slate-100 dark:border-slate-900 px-4 py-20 md:px-8 lg:px-16">
-                    <div className="max-w-7xl mx-auto">
-                        <div className="text-center space-y-4 mb-16">
+                <section className="relative bg-slate-50 dark:bg-slate-900/20 border-t border-slate-100 dark:border-slate-900 px-4 py-20 md:px-8 lg:px-16 overflow-hidden">
+                    {/* Ambient background glows for ultimate premium feel */}
+                    <div className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] bg-primary/5 dark:bg-primary/10 rounded-full blur-[130px] pointer-events-none animate-pulse" />
+                    <div className="absolute bottom-[10%] left-[-10%] w-[500px] h-[500px] bg-accent-green/5 dark:bg-accent-green/10 rounded-full blur-[130px] pointer-events-none animate-pulse delay-700" />
+
+                    <div className="relative z-10 max-w-7xl mx-auto space-y-20">
+                        {/* Section Header */}
+                        <div className="text-center space-y-4">
                             <span className="inline-block rounded-full bg-primary/10 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-primary dark:bg-primary/20">
-                                Contributors
+                                Our Team
                             </span>
                             <h2 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white md:text-4xl">
-                                Meet The Team
+                                Meet the Minds Behind NutriBite
                             </h2>
                             <p className="max-w-xl mx-auto text-slate-500 dark:text-slate-400">
-                                The engineering, data, and clinical minds behind NutriKids's pediatric platform.
+                                The engineering, clinical guidance, and mentorship core driving pediatric health intelligence.
                             </p>
                         </div>
 
-                        <motion.div 
-                            variants={containerVariants}
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true, margin: "-100px" }}
-                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-                        >
-                            {teamMembers.map((member, idx) => (
-                                <motion.div
-                                    key={idx}
-                                    variants={itemVariants}
-                                    whileHover={{ y: -8 }}
-                                    className="relative flex flex-col p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/80 shadow-md transition-all hover:shadow-xl overflow-hidden"
-                                >
-                                    {/* Top decoration banner based on role */}
-                                    <div className="absolute top-0 left-0 right-0 h-1.5 bg-primary/20 dark:bg-primary/10" />
-
-                                    <div className="flex items-center gap-4 mb-6">
-                                        <div className={`h-12 w-12 rounded-full ${member.avatarBg} text-white flex items-center justify-center font-extrabold text-base shadow-sm shrink-0`}>
-                                            {member.avatarInitials}
-                                        </div>
-                                        <div>
-                                            <span className="text-[10px] uppercase font-bold text-primary tracking-wider">{member.type}</span>
-                                            <h3 className="text-lg font-black text-slate-900 dark:text-white leading-tight">{member.name}</h3>
-                                            <p className="text-xs text-slate-500 dark:text-slate-400 leading-snug">{member.role}</p>
-                                        </div>
+                        {/* Category 1: Student Contributors */}
+                        <div className="space-y-8">
+                            <div className="border-l-4 border-primary pl-4 flex flex-wrap items-center gap-3">
+                                <div>
+                                    <div className="flex flex-wrap items-center gap-3">
+                                        <h3 className="text-2xl font-black text-slate-900 dark:text-white">Core Student Contributors</h3>
+                                        <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/10 text-primary border border-primary/20">
+                                            {contributors.length} Members
+                                        </span>
                                     </div>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">The core developers who built the backend, frontend, database, and AI systems.</p>
+                                </div>
+                            </div>
+                            <motion.div 
+                                variants={containerVariants}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true, margin: "-100px" }}
+                                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                            >
+                                {contributors.map((member, idx) => (
+                                    <TeamMemberCard key={idx} member={member} itemVariants={itemVariants} />
+                                ))}
+                            </motion.div>
+                        </div>
 
-                                    {/* Department if Faculty */}
-                                    {member.department && (
-                                        <div className="mb-4 px-3 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-300 text-xs font-semibold">
-                                            Department: {member.department}
-                                        </div>
-                                    )}
-
-                                    {/* Responsibilities */}
-                                    <div className="flex-1 space-y-2 mb-6">
-                                        <span className="text-[10px] uppercase font-bold text-slate-400 dark:text-slate-500 tracking-wider">Responsibilities:</span>
-                                        <ul className="space-y-1.5 text-xs text-slate-600 dark:text-slate-350">
-                                            {member.responsibilities.map((resp, rIdx) => (
-                                                <li key={rIdx} className="flex gap-2">
-                                                    <span className="material-symbols-outlined text-primary text-xs shrink-0 select-none">check_circle</span>
-                                                    <span>{resp}</span>
-                                                </li>
-                                            ))}
-                                        </ul>
+                        {/* Category 2: Guides & Mentors */}
+                        <div className="space-y-8">
+                            <div className="border-l-4 border-indigo-650 dark:border-indigo-500 pl-4 flex flex-wrap items-center gap-3">
+                                <div>
+                                    <div className="flex flex-wrap items-center gap-3">
+                                        <h3 className="text-2xl font-black text-slate-900 dark:text-white">Project Guides & Mentors</h3>
+                                        <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-indigo-650/10 text-indigo-650 dark:text-indigo-400 border border-indigo-650/20">
+                                            {guides.length} Mentors
+                                        </span>
                                     </div>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Academic mentors and industry specialists who guided the LLM and codebase architecture.</p>
+                                </div>
+                            </div>
+                            <motion.div 
+                                variants={containerVariants}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true, margin: "-100px" }}
+                                className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl"
+                            >
+                                {guides.map((member, idx) => (
+                                    <TeamMemberCard key={idx} member={member} itemVariants={itemVariants} />
+                                ))}
+                            </motion.div>
+                        </div>
 
-                                    {/* Contact Email */}
-                                    <a 
-                                        href={`mailto:${member.email}`}
-                                        className="mt-auto flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 hover:text-primary dark:text-slate-300 dark:hover:text-primary border border-slate-200/50 dark:border-slate-700 text-xs font-semibold transition-colors"
-                                    >
-                                        <span className="material-symbols-outlined text-sm select-none">mail</span>
-                                        <span className="truncate">{member.email}</span>
-                                    </a>
-                                </motion.div>
-                            ))}
-                        </motion.div>
+                        {/* Category 3: Clinical Advisors & Doctors */}
+                        <div className="space-y-8">
+                            <div className="border-l-4 border-cyan-650 dark:border-cyan-500 pl-4 flex flex-wrap items-center gap-3">
+                                <div>
+                                    <div className="flex flex-wrap items-center gap-3">
+                                        <h3 className="text-2xl font-black text-slate-900 dark:text-white">Clinical Advisors & Pediatricians</h3>
+                                        <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-cyan-650/10 text-cyan-650 dark:text-cyan-400 border border-cyan-650/20">
+                                            {doctors.length} Advisors
+                                        </span>
+                                    </div>
+                                    <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">Medical practitioners and pediatric dietitians who reviewed nutritional formulas and safety standards.</p>
+                                </div>
+                            </div>
+                            <motion.div 
+                                variants={containerVariants}
+                                initial="hidden"
+                                whileInView="visible"
+                                viewport={{ once: true, margin: "-100px" }}
+                                className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl"
+                            >
+                                {doctors.map((member, idx) => (
+                                    <TeamMemberCard key={idx} member={member} itemVariants={itemVariants} />
+                                ))}
+                            </motion.div>
+                        </div>
                     </div>
                 </section>
 
@@ -378,4 +517,3 @@ const AboutPage = () => {
 };
 
 export default AboutPage;
-
