@@ -60,6 +60,12 @@ export const registerUser = asyncHandler(async (req, res) => {
             experienceYears: roleData.experienceYears,
             registrationId: roleData.registrationId,
         };
+    } else if (role === 'dietitian') {
+        userData.dietitianProfile = {
+            specialization: roleData.specialization,
+            experienceYears: roleData.experienceYears,
+            registrationId: roleData.registrationId,
+        };
     }
 
     const user = await User.create(userData);
@@ -73,6 +79,7 @@ export const registerUser = asyncHandler(async (req, res) => {
                     name: user.name,
                     email: user.email,
                     role: user.role,
+                    availabilityStatus: user.availabilityStatus,
                 },
                 token,
             })
@@ -160,6 +167,7 @@ export const loginUser = asyncHandler(async (req, res) => {
                     name: user.name,
                     email: user.email,
                     role: user.role,
+                    availabilityStatus: user.availabilityStatus,
                 },
                 token,
             })
@@ -323,6 +331,7 @@ export const verify2FA = asyncHandler(async (req, res) => {
                 name: user.name,
                 email: user.email,
                 role: user.role,
+                availabilityStatus: user.availabilityStatus,
             },
             token,
         }, 'Login successful.')
@@ -395,4 +404,60 @@ export const resend2FA = asyncHandler(async (req, res) => {
     res.status(200).json(
         new ApiResponse(200, { message: 'If the email exists, a new verification code has been sent.' })
     );
+});
+
+// @desc    Update user availability status
+// @route   PATCH /api/auth/availability
+// @access  Private (Doctor/Dietitian)
+export const updateAvailabilityStatus = asyncHandler(async (req, res) => {
+    const { status } = req.body;
+    if (!['Available', 'Busy', 'Offline'].includes(status)) {
+        res.status(400);
+        throw new Error('Invalid availability status. Must be Available, Busy, or Offline.');
+    }
+
+    if (!['doctor', 'dietitian'].includes(req.user.role)) {
+        res.status(403);
+        throw new Error('Only Doctors and Dietitians can update availability status.');
+    }
+
+    const user = await User.findById(req.user._id);
+    user.availabilityStatus = status;
+    await user.save();
+
+    // If a Dietitian changes status to Available, process the Pending queue!
+    if (req.user.role === 'dietitian' && status === 'Available') {
+        const ConsultationRequest = (await import('../models/ConsultationRequest.model.js')).default;
+        
+        // Find all Pending requests, oldest first
+        const pendingRequests = await ConsultationRequest.find({ status: 'Pending' }).sort({ createdAt: 1 });
+        
+        for (const request of pendingRequests) {
+            // Find all Available Dietitians
+            const availableDietitians = await User.find({ role: 'dietitian', availabilityStatus: 'Available' });
+            if (availableDietitians.length === 0) break;
+            
+            // For each available dietitian, compute active cases
+            const dietitianLoads = await Promise.all(availableDietitians.map(async (dietitian) => {
+                const activeCount = await ConsultationRequest.countDocuments({
+                    dietitianId: dietitian._id,
+                    status: { $in: ['AssignedToDietitian', 'UnderDietitianReview', 'AssignedToDoctor', 'UnderDoctorReview', 'PrescriptionIssued'] }
+                });
+                return { dietitian, activeCount };
+            }));
+            
+            // Sort by active cases count ascending
+            dietitianLoads.sort((a, b) => a.activeCount - b.activeCount);
+            
+            // Assign to the dietitian with the lowest count
+            const chosen = dietitianLoads[0].dietitian;
+            
+            request.dietitianId = chosen._id;
+            request.assignedAt = new Date();
+            request.status = 'AssignedToDietitian';
+            await request.save();
+        }
+    }
+
+    res.status(200).json(new ApiResponse(200, { availabilityStatus: user.availabilityStatus }, 'Availability status updated successfully'));
 });

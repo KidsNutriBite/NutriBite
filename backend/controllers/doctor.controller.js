@@ -1,10 +1,8 @@
 import User from '../models/User.model.js';
-import DoctorAccess from '../models/DoctorAccess.model.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import ApiResponse from '../utils/apiResponse.js';
 import { findNearbyDoctors } from '../services/location.service.js';
 import {
-    requestAccess as requestAccessService,
     getMyPatients as getMyPatientsService,
     getPatientDetails as getPatientDetailsService,
     updateHealthNotes as updateHealthNotesService,
@@ -25,22 +23,6 @@ export const getNearbyDoctors = asyncHandler(async (req, res) => {
     const doctors = await findNearbyDoctors(lat, lng, radius);
 
     res.status(200).json(new ApiResponse(200, doctors));
-});
-
-// @desc    Request access to a parent's children (via Email)
-// @route   POST /api/doctor/request-access
-// @access  Private (Doctor)
-export const requestAccess = asyncHandler(async (req, res) => {
-    const { email } = req.body;
-
-    if (!email) {
-        res.status(400);
-        throw new Error('Parent email is required');
-    }
-
-    const result = await requestAccessService(req.user._id, email);
-
-    res.status(201).json(new ApiResponse(201, result));
 });
 
 // @desc    Get all active patients
@@ -153,36 +135,6 @@ export const getAllDoctors = asyncHandler(async (req, res) => {
         .select('name email profileImage doctorProfile')
         .sort({ name: 1 });
     res.status(200).json(new ApiResponse(200, doctors));
-});
-
-// @desc    Request full access to a patient profile
-// @route   POST /api/doctor/patients/:id/request-full-access
-// @access  Private (Doctor)
-export const requestFullAccess = asyncHandler(async (req, res) => {
-    const { message } = req.body;
-    const profileId = req.params.id;
-
-    if (!message) {
-        res.status(400);
-        throw new Error('Please provide a reason for requesting full access');
-    }
-
-    const access = await DoctorAccess.findOne({
-        doctorId: req.user._id,
-        profileId: profileId,
-        status: 'restricted'
-    });
-
-    if (!access) {
-        res.status(404);
-        throw new Error('No pending access found for this patient');
-    }
-
-    access.doctorMessage = message;
-    access.fullAccessRequested = true;
-    await access.save();
-
-    res.status(200).json(new ApiResponse(200, null, 'Full access request sent to parent'));
 });
 
 // @desc    Get growth velocity analysis for a patient

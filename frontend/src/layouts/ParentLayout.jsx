@@ -58,6 +58,8 @@ const ParentLayout = ({ children }) => {
     }, []);
 
     const fetchNotifications = async () => {
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+        if (!token) return;
         try {
             const { data } = await api.get('/notifications');
             setNotifications(data.data.notifications);
@@ -137,20 +139,12 @@ const ParentLayout = ({ children }) => {
                         Resources
                     </Link>
                     <Link
-                        href="/parent/access"
-                        className={isActive('/parent/access')
+                        href="/parent/consultations"
+                        className={isActive('/parent/consultations')
                             ? "bg-primary text-white text-sm font-bold px-5 py-2.5 rounded-full shadow-lg shadow-primary/30 transition-all"
                             : "text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary px-5 py-2.5 transition-colors"}
                     >
-                        Doctor Access
-                    </Link>
-                    <Link
-                        href="/parent/directory"
-                        className={isActive('/parent/directory')
-                            ? "bg-primary text-white text-sm font-bold px-5 py-2.5 rounded-full shadow-lg shadow-primary/30 transition-all"
-                            : "text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary px-5 py-2.5 transition-colors"}
-                    >
-                        Directory
+                        Consultations
                     </Link>
                 </nav>
 
@@ -353,23 +347,13 @@ const ParentLayout = ({ children }) => {
                             </div>
                         </Link>
                         <Link
-                            href="/parent/access"
+                            href="/parent/consultations"
                             onClick={() => setShowMobileMenu(false)}
-                            className={isActive('/parent/access') ? "bg-primary/10 text-primary font-bold px-4 py-3 rounded-xl" : "text-slate-600 dark:text-slate-400 font-medium px-4 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"}
+                            className={isActive('/parent/consultations') ? "bg-primary/10 text-primary font-bold px-4 py-3 rounded-xl" : "text-slate-600 dark:text-slate-400 font-medium px-4 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"}
                         >
                             <div className="flex items-center gap-3">
-                                <span className="material-symbols-outlined">verified_user</span>
-                                Doctor Access
-                            </div>
-                        </Link>
-                        <Link
-                            href="/parent/directory"
-                            onClick={() => setShowMobileMenu(false)}
-                            className={isActive('/parent/directory') ? "bg-primary/10 text-primary font-bold px-4 py-3 rounded-xl" : "text-slate-600 dark:text-slate-400 font-medium px-4 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"}
-                        >
-                            <div className="flex items-center gap-3">
-                                <span className="material-symbols-outlined">local_hospital</span>
-                                Directory
+                                <span className="material-symbols-outlined">chat_bubble</span>
+                                Consultations
                             </div>
                         </Link>
                     </nav>

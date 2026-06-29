@@ -52,6 +52,7 @@ const Login = () => {
             } else if (result) {
                 if (result.role === 'parent') navigate('/parent/dashboard');
                 else if (result.role === 'doctor') navigate('/doctor/dashboard');
+                else if (result.role === 'dietitian') navigate('/dietitian/dashboard');
             }
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed');
@@ -67,6 +68,7 @@ const Login = () => {
             const user = await verify2FA(pendingEmail, otp, rememberMe);
             if (user.role === 'parent') navigate('/parent/dashboard');
             else if (user.role === 'doctor') navigate('/doctor/dashboard');
+            else if (user.role === 'dietitian') navigate('/dietitian/dashboard');
         } catch (err) {
             setError(err.response?.data?.message || 'Verification failed');
         } finally {

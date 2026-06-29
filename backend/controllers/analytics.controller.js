@@ -93,8 +93,6 @@ export const createPrescription = asyncHandler(async (req, res) => {
         throw new Error('All fields are required');
     }
 
-    // (Middleware already checks if doctor has access to this profileId)
-
     const prescription = await Prescription.create({
         doctorId: req.user._id,
         profileId,
@@ -104,6 +102,19 @@ export const createPrescription = asyncHandler(async (req, res) => {
         instructions,
         nextCheckupDays: Number(nextCheckupDays) || 90
     });
+
+    // Update active consultation request
+    const ConsultationRequest = (await import('../models/ConsultationRequest.model.js')).default;
+    const request = await ConsultationRequest.findOne({
+        profileId,
+        doctorId: req.user._id,
+        status: { $in: ['AssignedToDoctor', 'UnderDoctorReview'] }
+    });
+    if (request) {
+        request.status = 'PrescriptionIssued';
+        request.prescriptionId = prescription._id;
+        await request.save();
+    }
 
     res.status(201).json(new ApiResponse(201, prescription, 'Prescription created'));
 });

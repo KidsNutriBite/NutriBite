@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 import api from '../api/axios';
 import useAuth from '../hooks/useAuth';
 import { useTheme } from '../context/ThemeContext';
+import { toast } from 'react-hot-toast';
 
 const DoctorLayout = ({ children }) => {
     const { logout, user } = useAuth();
@@ -18,10 +19,27 @@ const DoctorLayout = ({ children }) => {
     const [showNotifDropdown, setShowNotifDropdown] = useState(false);
     const [showProfileDropdown, setShowProfileDropdown] = useState(false);
     const [showMobileMenu, setShowMobileMenu] = useState(false);
+    const [availability, setAvailability] = useState(user?.availabilityStatus || 'Offline');
 
     const notifRef = useRef(null);
     const profileRef = useRef(null);
     const { theme, toggleTheme } = useTheme();
+
+    useEffect(() => {
+        if (user) {
+            setAvailability(user.availabilityStatus || 'Offline');
+        }
+    }, [user]);
+
+    const handleAvailabilityChange = async (newStatus) => {
+        try {
+            await api.patch('/auth/availability', { status: newStatus });
+            setAvailability(newStatus);
+            toast.success(`Availability set to ${newStatus}`);
+        } catch (error) {
+            toast.error(error.response?.data?.message || 'Failed to update availability status');
+        }
+    };
 
 
     // Close dropdowns on click outside
@@ -39,6 +57,8 @@ const DoctorLayout = ({ children }) => {
     }, []);
 
     const fetchNotifications = async () => {
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+        if (!token) return;
         try {
             const { data } = await api.get('/notifications');
             setNotifications(data.data.notifications);
@@ -131,6 +151,20 @@ const DoctorLayout = ({ children }) => {
                 </nav>
 
                 <div className="flex items-center gap-4">
+                    {/* Availability Status Toggle */}
+                    <div className="relative flex items-center gap-2 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-3 py-1.5 rounded-xl shadow-sm">
+                        <span className={`h-2.5 w-2.5 rounded-full ring-4 ${availability === 'Available' ? 'bg-green-500 ring-green-200' : availability === 'Busy' ? 'bg-amber-500 ring-amber-200' : 'bg-rose-500 ring-rose-200'}`}></span>
+                        <select
+                            value={availability}
+                            onChange={(e) => handleAvailabilityChange(e.target.value)}
+                            className="bg-transparent text-xs font-bold text-slate-700 dark:text-slate-300 focus:outline-none cursor-pointer pr-1"
+                        >
+                            <option value="Available">Available</option>
+                            <option value="Busy">Busy</option>
+                            <option value="Offline">Offline</option>
+                        </select>
+                    </div>
+
                     {/* Theme Toggle Button */}
                     <button
                         onClick={toggleTheme}

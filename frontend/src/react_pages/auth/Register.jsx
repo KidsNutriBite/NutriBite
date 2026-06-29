@@ -23,7 +23,7 @@ const Register = () => {
 
     useEffect(() => {
         const roleParam = searchParams.get('role');
-        if (roleParam && (roleParam === 'parent' || roleParam === 'doctor')) {
+        if (roleParam && (roleParam === 'parent' || roleParam === 'doctor' || roleParam === 'dietitian')) {
             setFormData(prev => ({ ...prev, role: roleParam }));
         }
     }, [searchParams]);
@@ -43,6 +43,7 @@ const Register = () => {
             const user = await register(formData);
             if (user.role === 'parent') navigate('/parent/dashboard');
             else if (user.role === 'doctor') navigate('/doctor/dashboard');
+            else if (user.role === 'dietitian') navigate('/dietitian/dashboard');
         } catch (err) {
             setError(err.response?.data?.message || 'Registration failed');
         }
@@ -106,6 +107,20 @@ const Register = () => {
                             <div className="flex items-center justify-center gap-2 py-2 rounded-md text-xs text-[#4c799a] dark:text-slate-400 font-semibold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-700 peer-checked:text-primary peer-checked:shadow-sm">
                                 <span className="material-symbols-outlined text-lg group-hover:scale-110 transition-transform">family_history</span>
                                 <span>Parent</span>
+                            </div>
+                        </label>
+                        <label className="flex-1 cursor-pointer group">
+                            <input
+                                type="radio"
+                                name="role"
+                                value="dietitian"
+                                checked={formData.role === 'dietitian'}
+                                onChange={() => handleRoleChange('dietitian')}
+                                className="hidden peer"
+                            />
+                            <div className="flex items-center justify-center gap-2 py-2 rounded-md text-xs text-[#4c799a] dark:text-slate-400 font-semibold transition-all peer-checked:bg-white dark:peer-checked:bg-slate-700 peer-checked:text-primary peer-checked:shadow-sm">
+                                <span className="material-symbols-outlined text-lg group-hover:scale-110 transition-transform">nutrition</span>
+                                <span>Dietitian</span>
                             </div>
                         </label>
                         <label className="flex-1 cursor-pointer group">
@@ -199,7 +214,7 @@ const Register = () => {
                             <div className="h-px bg-slate-200 dark:bg-slate-700 my-1"></div>
 
                             {/* Dynamic Fields based on Role */}
-                            {formData.role === 'parent' ? (
+                            {formData.role === 'parent' && (
                                 <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="space-y-2">
                                     <div className="grid grid-cols-2 gap-3">
                                         <div className="space-y-0.5">
@@ -252,7 +267,9 @@ const Register = () => {
                                         </div>
                                     </div>
                                 </motion.div>
-                            ) : (
+                            )}
+
+                            {formData.role === 'doctor' && (
                                 <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="space-y-2">
                                     <div className="grid grid-cols-2 gap-3">
                                         <div className="space-y-0.5">
@@ -304,7 +321,7 @@ const Register = () => {
                                             </div>
                                         </div>
                                         <div className="space-y-0.5">
-                                            <label className="text-[#0d161b] dark:text-slate-200 text-[10px] uppercase font-bold ml-1">Med ID</label>
+                                            <label className="text-[#0d161b] dark:text-slate-200 text-[10px] uppercase font-bold ml-1">Medical ID</label>
                                             <div className="relative">
                                                 <span className="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[#4c799a] text-base">badge</span>
                                                 <input
@@ -314,9 +331,62 @@ const Register = () => {
                                                     onChange={handleChange}
                                                     required
                                                     className="w-full pl-8 pr-2 py-2 bg-white dark:bg-slate-800 border compacted-input border-slate-200 dark:border-slate-700 rounded-lg text-xs text-[#0d161b] dark:text-white focus:border-primary outline-none transition-all placeholder:text-slate-400 font-medium"
-                                                    placeholder="ID"
+                                                    placeholder="MD-12345"
                                                 />
                                             </div>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+
+                            {formData.role === 'dietitian' && (
+                                <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} className="space-y-2">
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <div className="space-y-0.5">
+                                            <label className="text-[#0d161b] dark:text-slate-200 text-[10px] uppercase font-bold ml-1">Specialization</label>
+                                            <div className="relative">
+                                                <span className="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[#4c799a] text-base">stethoscope</span>
+                                                <input
+                                                    type="text"
+                                                    name="specialization"
+                                                    value={formData.specialization || ''}
+                                                    onChange={handleChange}
+                                                    required
+                                                    className="w-full pl-8 pr-2 py-2 bg-white dark:bg-slate-800 border compacted-input border-slate-200 dark:border-slate-700 rounded-lg text-xs text-[#0d161b] dark:text-white focus:border-primary outline-none transition-all placeholder:text-slate-400 font-medium"
+                                                    placeholder="Pediatric Nutrition"
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="space-y-0.5">
+                                            <label className="text-[#0d161b] dark:text-slate-200 text-[10px] uppercase font-bold ml-1">Exp (Yrs)</label>
+                                            <div className="relative">
+                                                <span className="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[#4c799a] text-base">history_edu</span>
+                                                <input
+                                                    type="number"
+                                                    name="experienceYears"
+                                                    value={formData.experienceYears || ''}
+                                                    onChange={handleChange}
+                                                    required
+                                                    min="0"
+                                                    className="w-full pl-8 pr-2 py-2 bg-white dark:bg-slate-800 border compacted-input border-slate-200 dark:border-slate-700 rounded-lg text-xs text-[#0d161b] dark:text-white focus:border-primary outline-none transition-all placeholder:text-slate-400 font-medium"
+                                                    placeholder="3"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-0.5">
+                                        <label className="text-[#0d161b] dark:text-slate-200 text-[10px] uppercase font-bold ml-1">Dietitian License ID</label>
+                                        <div className="relative">
+                                            <span className="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[#4c799a] text-base">badge</span>
+                                            <input
+                                                type="text"
+                                                name="registrationId"
+                                                value={formData.registrationId || ''}
+                                                onChange={handleChange}
+                                                required
+                                                className="w-full pl-8 pr-2 py-2 bg-white dark:bg-slate-800 border compacted-input border-slate-200 dark:border-slate-700 rounded-lg text-xs text-[#0d161b] dark:text-white focus:border-primary outline-none transition-all placeholder:text-slate-400 font-medium"
+                                                placeholder="RD-54321"
+                                            />
                                         </div>
                                     </div>
                                 </motion.div>

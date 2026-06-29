@@ -3,7 +3,7 @@ import { getMealFrequency, createPrescription, getPrescriptions, getNutritionTre
 import { protect } from '../middlewares/auth.middleware.js';
 import { checkDoctorAccess } from '../middlewares/doctor.middleware.js';
 import { authorize } from '../middlewares/role.middleware.js';
-import DoctorAccess from '../models/DoctorAccess.model.js';
+import Profile from '../models/Profile.model.js';
 import asyncHandler from '../utils/asyncHandler.js';
 
 const router = express.Router();
@@ -30,10 +30,15 @@ const checkSharedAccess = async (req, res, next) => {
     // Let's rely on the controller or a new middleware for thoroughness. 
     // Actually, let's keep it safe:
     if (req.user.role === 'parent') {
-        // Simple ownership check
-        // We assume the caller knows pId. 
-        // Real implementation should use proper middleware.
-        // For Phase 4, let's authorize 'doctor' explicitly for writes, and both for reads.
+        const profile = await Profile.findById(req.params.profileId);
+        if (!profile) {
+            res.status(404);
+            throw new Error('Profile not found');
+        }
+        if (profile.parentId.toString() !== req.user._id.toString()) {
+            res.status(403);
+            throw new Error('Not authorized to access this profile');
+        }
         next();
     } else {
         res.status(403);
@@ -41,18 +46,11 @@ const checkSharedAccess = async (req, res, next) => {
     }
 };
 
-// Middleware to ensure FULL access (active status)
+// Middleware to ensure a doctor is assigned through the consultation workflow.
 const checkFullAccess = asyncHandler(async (req, res, next) => {
-    const profileId = req.params.profileId || req.params.id || req.body.profileId;
-    const access = await DoctorAccess.findOne({
-        doctorId: req.user._id,
-        profileId: profileId,
-        status: 'active'
-    });
-
-    if (!access && req.user.role === 'doctor') {
-        res.status(403);
-        throw new Error('Full access is required for this action');
+    if (req.user.role === 'doctor') {
+        req.params.id = req.params.profileId || req.params.id || req.body.profileId;
+        return checkDoctorAccess(req, res, next);
     }
     next();
 });

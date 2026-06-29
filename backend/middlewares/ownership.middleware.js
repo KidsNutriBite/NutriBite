@@ -21,23 +21,35 @@ export const checkProfileOwnership = asyncHandler(async (req, res, next) => {
         throw new Error('Profile not found');
     }
 
-    // Allow if Parent owns the profile, OR if Doctor has ACTIVE access
     const isParent = profile.parentId.toString() === req.user._id.toString();
     
     let isAuthorizedDoctor = false;
+    let isAuthorizedDietitian = false;
+
     if (req.user.role === 'doctor') {
-        const DoctorAccess = (await import('../models/DoctorAccess.model.js')).default;
-        const access = await DoctorAccess.findOne({
+        const ConsultationRequest = (await import('../models/ConsultationRequest.model.js')).default;
+        const access = await ConsultationRequest.findOne({
             doctorId: req.user._id,
             profileId: profileId,
-            status: 'active'
+            status: { $in: ['AssignedToDoctor', 'UnderDoctorReview', 'PrescriptionIssued', 'Closed'] }
         });
         if (access) {
             isAuthorizedDoctor = true;
         }
     }
 
-    if (!isParent && !isAuthorizedDoctor) {
+    if (req.user.role === 'dietitian') {
+        const ConsultationRequest = (await import('../models/ConsultationRequest.model.js')).default;
+        const access = await ConsultationRequest.findOne({
+            dietitianId: req.user._id,
+            profileId: profileId
+        });
+        if (access) {
+            isAuthorizedDietitian = true;
+        }
+    }
+
+    if (!isParent && !isAuthorizedDoctor && !isAuthorizedDietitian) {
         res.status(403);
         throw new Error('Not authorized to access this profile');
     }

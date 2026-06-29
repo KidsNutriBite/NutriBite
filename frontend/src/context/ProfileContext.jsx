@@ -6,14 +6,14 @@ import useAuth from '../hooks/useAuth';
 export const ProfileContext = createContext(null);
 
 export const ProfileProvider = ({ children }) => {
-    const { user, isAuthenticated } = useAuth();
+    const { user } = useAuth();
     const [profiles, setProfiles] = useState([]);
     const [selectedProfileId, setSelectedProfileId] = useState(null);
     const [loadingProfiles, setLoadingProfiles] = useState(true);
 
     useEffect(() => {
         const fetchProfiles = async () => {
-            if (!isAuthenticated || user?.role !== 'parent') {
+            if (!user || user?.role !== 'parent') {
                 setProfiles([]);
                 setLoadingProfiles(false);
                 return;
@@ -43,7 +43,7 @@ export const ProfileProvider = ({ children }) => {
         };
 
         fetchProfiles();
-    }, [isAuthenticated, user]);
+    }, [user]);
 
     const changeProfile = (id) => {
         setSelectedProfileId(id);

@@ -99,7 +99,7 @@ const DoctorTwinView = ({ profileId, profile }) => {
                 {/* Clinical Radar Chart */}
                 <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-850 p-6 rounded-[2rem] shadow-sm flex flex-col justify-between">
                     <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4">Nutrient Gaps Map</h3>
-                    <div className="h-64 w-full flex items-center justify-center">
+                    <div className="w-full flex items-center justify-center" style={{ height: 256 }}>
                         <ResponsiveContainer width="100%" height="100%">
                             <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarChartData}>
                                 <PolarGrid stroke="#e2e8f0" strokeDasharray="3 3" />

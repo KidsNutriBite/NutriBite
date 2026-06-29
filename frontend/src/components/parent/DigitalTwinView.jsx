@@ -284,7 +284,7 @@ const DigitalTwinView = ({ profileId, profile }) => {
                     </div>
 
                     {/* Recharts container */}
-                    <div className="h-64 md:h-72 w-full flex items-center justify-center">
+                    <div className="w-full flex items-center justify-center" style={{ height: 288 }}>
                         <ResponsiveContainer width="100%" height="100%">
                             <RadarChart cx="50%" cy="50%" outerRadius="80%" data={simulatedData.radarChartData}>
                                 <PolarGrid stroke="#e2e8f0" strokeDasharray="3 3" />

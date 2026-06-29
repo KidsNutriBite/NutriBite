@@ -16,6 +16,13 @@ const doctorSchema = z.object({
     registrationId: z.string().min(2, 'Medical License ID is required'),
 });
 
+const dietitianSchema = z.object({
+    role: z.literal('dietitian'),
+    specialization: z.string().min(2, 'Specialization is required'),
+    experienceYears: z.coerce.number().min(0, 'Experience years must be valid'),
+    registrationId: z.string().min(2, 'Dietitian License ID is required'),
+});
+
 const baseUserSchema = z.object({
     title: z.enum(['Mr', 'Ms', 'Mrs']),
     name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -25,7 +32,7 @@ const baseUserSchema = z.object({
 
 export const registerSchema = z.intersection(
     baseUserSchema,
-    z.discriminatedUnion('role', [parentSchema, doctorSchema])
+    z.discriminatedUnion('role', [parentSchema, doctorSchema, dietitianSchema])
 );
 
 export const loginSchema = z.object({

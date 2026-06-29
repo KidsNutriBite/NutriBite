@@ -17,6 +17,7 @@ const nextConfig = {
   turbopack: {
     root: __dirname,
   },
+
   webpack: (config, { dev, isServer }) => {
     if (dev && !isServer) {
       config.watchOptions = {

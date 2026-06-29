@@ -1,5 +1,5 @@
 import asyncHandler from '../utils/asyncHandler.js';
-import DoctorAccess from '../models/DoctorAccess.model.js';
+import ConsultationRequest from '../models/ConsultationRequest.model.js';
 import Profile from '../models/Profile.model.js';
 
 // Middleware to check if the authenticated DOCTOR has active access to the profile
@@ -18,22 +18,16 @@ export const checkDoctorAccess = asyncHandler(async (req, res, next) => {
         throw new Error('Profile not found');
     }
 
-    // 2. Check for Access record (Active, Restricted, or Pending)
-    const access = await DoctorAccess.findOne({
+    // 2. Check for active/completed assigned consultation request
+    const access = await ConsultationRequest.findOne({
         doctorId: req.user._id,
         profileId: profileId,
-        status: { $in: ['active', 'restricted', 'pending'] },
+        status: { $in: ['AssignedToDoctor', 'UnderDoctorReview', 'PrescriptionIssued', 'Closed'] },
     });
 
     if (!access) {
         res.status(403);
         throw new Error('You do not have access to this patient profile');
-    }
-
-    // 3. Check Expiration (if set)
-    if (access.expiresAt && new Date() > access.expiresAt) {
-        res.status(403);
-        throw new Error('Access to this patient has expired');
     }
 
     // Attach profile to req for convenience
