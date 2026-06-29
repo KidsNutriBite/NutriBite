@@ -8,7 +8,10 @@ export default function VideoCall({ consultationId, userRole, userName, onClose 
     const apiRef = useRef(null);
 
     const roomName = `NutriKidConsult-${consultationId}`;
-    const domain = 'meet.jit.si';
+    
+    // Using a clean community-hosted Jitsi instance (meet.ffmuc.net) to avoid JaaS promotion banners.
+    // To use Jitsi as a Service (JaaS) in production, change domain to '8x8.vc' and follow JaaS instructions.
+    const domain = 'meet.ffmuc.net';
 
     useEffect(() => {
         const loadJitsi = () => {
