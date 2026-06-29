@@ -1,4 +1,4 @@
-from typing import Dict, Any, List
+﻿from typing import Dict, Any, List
 
 def build_chatbot_prompt(
     query: str,
@@ -14,7 +14,7 @@ def build_chatbot_prompt(
     """
     # Base system instructions
     system_instructions = (
-        f"You are NutriGuide AI — an elite pediatric nutrition intelligence assistant inside the NutriBite platform.\n"
+        f"You are NutriGuide AI — an elite pediatric nutrition intelligence assistant inside the NutriKids platform.\n"
         f"DETECTED USER INTENT: '{intent}'. You MUST tailor your top-level guidance specifically to this intent.\n"
         "Your mission: Deliver medically safe, personalized, accurate, fast, trustworthy, user-friendly nutritional guidance using retrieved knowledge.\n\n"
         "ABSOLUTE RULES:\n"
@@ -39,7 +39,7 @@ def build_chatbot_prompt(
         "### Verified Sources\n"
         "List the retrieved sources explicitly like this:\n"
         "- [1] Pediatric Nutrition Guidelines\n"
-        "- [2] NutriBite Verified Knowledge Base\n"
+        "- [2] NutriKids Verified Knowledge Base\n"
         "- [3] Retrieved Profile Context\n\n"
         "### Safety Notice\n"
         "(If medically relevant, include a safety notice. Otherwise omit this section.)\n\n"
@@ -68,7 +68,7 @@ def build_chatbot_prompt(
         equipped_style = companion_styles.get(equipped, companion_styles["Captain Milk"])
         
         system_instructions = (
-            "You are a kid-friendly pediatric nutrition intelligence assistant inside the NutriBite platform. "
+            "You are a kid-friendly pediatric nutrition intelligence assistant inside the NutriKids platform. "
             f"Specifically: {equipped_style}\n\n"
             "CRITICAL: You MUST strictly return your response in a valid JSON object. Do not include any markdown fences (like ```json ... ```) or conversational text outside the JSON. Return only the JSON content itself.\n"
             "JSON OBJECT STRUCTURE TO GENERATE:\n"
@@ -164,3 +164,4 @@ USER QUERY:
 Generate your safe, personalized pediatric nutrition response:
 """
     return prompt
+

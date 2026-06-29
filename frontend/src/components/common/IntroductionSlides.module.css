@@ -1,0 +1,383 @@
+.stage {
+  position: fixed;
+  inset: 0;
+  perspective: 1400px;
+  perspective-origin: 50% 50%;
+  z-index: 100;
+  overflow: hidden;
+  background: #FFFFFF;
+}
+
+/* ── AMBIENT BG ── */
+.ambient {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.ambCircle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.18;
+}
+
+/* ── FLOATING MICRO DOTS ── */
+.mdot {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ── CARD STACK ── */
+.slideCard {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+.cardPaper {
+  position: relative;
+  width: min(780px, 92vw);
+  min-height: min(560px, 80vh);
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1.5px solid rgba(56, 189, 248, 0.22);
+  border-radius: 28px;
+  box-shadow:
+    0 32px 80px rgba(56, 189, 248, 0.12),
+    0 8px 24px rgba(12, 27, 46, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  padding: 52px 56px 44px;
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 32px;
+  align-items: center;
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+}
+
+@media(max-width: 640px) {
+  .cardPaper {
+    grid-template-columns: 1fr;
+    padding: 36px 28px 32px;
+    min-height: auto;
+  }
+  .cardIllus {
+    display: none;
+  }
+}
+
+/* paper corner fold */
+.cardPaper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 44px;
+  height: 44px;
+  background: linear-gradient(225deg, rgba(56, 189, 248, 0.18) 50%, transparent 50%);
+  border-bottom-left-radius: 12px;
+  border-top-right-radius: 28px;
+}
+
+/* ── CARD TEXT ZONE ── */
+.cardLabel {
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #38BDF8;
+  font-weight: 800;
+  margin-bottom: 14px;
+}
+.cardHeadline {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(26px, 4.2vw, 48px);
+  line-height: 1.1;
+  color: #0C1B2E;
+  margin-bottom: 16px;
+  text-shadow: 0 2px 0 rgba(56, 189, 248, 0.15);
+}
+.cardSub {
+  font-size: clamp(13px, 1.6vw, 16px);
+  font-weight: 600;
+  color: #4A6FA5;
+  line-height: 1.65;
+  margin-bottom: 28px;
+}
+.qList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+.qItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: clamp(12px, 1.4vw, 14px);
+  font-weight: 700;
+  color: #1E3A5F;
+  line-height: 1.5;
+  opacity: 0;
+  transform: translateX(-16px);
+}
+.qMark {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #E8F7FE;
+  border: 1.5px solid #7DD3FC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fredoka One', cursive;
+  font-size: 12px;
+  color: #38BDF8;
+  margin-top: 1px;
+}
+
+/* REVEAL BAR */
+.revealBar {
+  border-top: 1.5px solid rgba(56, 189, 248, 0.2);
+  padding-top: 18px;
+  opacity: 0;
+}
+.revealText {
+  font-size: clamp(13px, 1.5vw, 15px);
+  font-weight: 800;
+  color: #0C1B2E;
+  line-height: 1.5;
+}
+.revealText span {
+  color: #38BDF8;
+}
+
+/* ── ILLUSTRATION ZONE ── */
+.cardIllus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  will-change: transform;
+}
+
+/* ── NAV ── */
+.nav {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.navBtn {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 14px 36px;
+  border-radius: 99px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  will-change: transform;
+}
+.navBtn:hover {
+  transform: translateY(-2px);
+}
+.btnNext {
+  background: linear-gradient(135deg, #38BDF8 0%, #0EA5E9 100%);
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(56, 189, 248, 0.40);
+}
+.btnSkip {
+  background: transparent;
+  color: #4A6FA5;
+  border: 1.5px solid rgba(56, 189, 248, 0.3);
+}
+
+/* ── PROGRESS PIPS ── */
+.pips {
+  position: fixed;
+  top: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.pip {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #BAE6FD;
+  transition: all 0.4s;
+}
+.pipActive {
+  background: #38BDF8;
+  width: 24px;
+  border-radius: 4px;
+}
+
+/* ── MIC DROP SCREEN ── */
+.micdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  opacity: 0;
+  pointer-events: none;
+  padding: 0 24px;
+  overflow-y: auto;
+}
+.mdContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: auto 0;
+  width: 100%;
+  max-width: 800px;
+  padding: 40px 0;
+}
+.mdPre {
+  font-size: clamp(12px, 1.4vw, 14px);
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #38BDF8;
+  margin-bottom: 28px;
+  opacity: 0;
+  transform: translateY(12px);
+}
+.mdSeq {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 36px;
+}
+.mdLine {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(18px, 2.8vw, 32px);
+  font-weight: 700;
+  color: #4A6FA5;
+  opacity: 0;
+  transform: translateY(12px);
+  text-align: center;
+}
+.mdArrow {
+  font-size: 20px;
+  color: #BAE6FD;
+  opacity: 0;
+}
+.mdBig {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(28px, 5vw, 64px);
+  color: #0C1B2E;
+  text-align: center;
+  line-height: 1.1;
+  opacity: 0;
+  transform: scale(0.88);
+  margin-bottom: 44px;
+}
+.mdBig span {
+  color: #38BDF8;
+}
+.mdCtaBlock {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.mdWelcome {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(22px, 3.5vw, 42px);
+  color: #38BDF8;
+  margin-bottom: 10px;
+}
+.mdTagline {
+  font-size: clamp(13px, 1.6vw, 17px);
+  font-weight: 600;
+  color: #4A6FA5;
+  max-width: 520px;
+  text-align: center;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+.mdEnterBtn {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 18px 52px;
+  border-radius: 99px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, #38BDF8 0%, #0EA5E9 100%);
+  color: #fff;
+  box-shadow: 0 12px 36px rgba(56, 189, 248, 0.45);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.mdEnterBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 44px rgba(56, 189, 248, 0.55);
+}
+
+/* ── Height Responsiveness for short / zoomed viewports ── */
+@media (max-height: 850px) {
+  .mdPre { margin-bottom: 16px; }
+  .mdSeq { gap: 10px; margin-bottom: 24px; }
+  .mdBig { margin-bottom: 28px; }
+  .mdTagline { margin-bottom: 20px; }
+  .mdContent { padding: 24px 0; }
+}
+@media (max-height: 700px) {
+  .mdPre { margin-bottom: 10px; }
+  .mdSeq { gap: 6px; margin-bottom: 16px; }
+  .mdBig { margin-bottom: 16px; }
+  .mdTagline { margin-bottom: 16px; }
+  .mdContent { padding: 16px 0; }
+  .mdEnterBtn { padding: 14px 44px; }
+}
+
+/* ── SKIP HINT ── */
+.skipHint {
+  position: fixed;
+  top: 28px;
+  right: 32px;
+  z-index: 300;
+  font-size: 12px;
+  font-weight: 700;
+  color: #4A6FA5;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  opacity: 0.5;
+}
+.skipHint:hover {
+  opacity: 1;
+}
+
+.stage svg text {
+  font-family: 'Fredoka One', cursive;
+}

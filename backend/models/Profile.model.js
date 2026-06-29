@@ -116,6 +116,17 @@ const profileSchema = new mongoose.Schema(
         ],
         wellnessAnalysis: {
             score: { type: Number, default: 100 },
+            nutritionScore: { type: Number, default: 100 },
+            deficiencyScore: { type: Number, default: 100 },
+            growthRiskScore: { type: Number, default: 100 },
+            hydrationScore: { type: Number, default: 100 },
+            mealQualityScore: { type: Number, default: 100 },
+            rdas: { type: mongoose.Schema.Types.Mixed },
+            deficiencies: { type: mongoose.Schema.Types.Mixed },
+            groceries: { type: [String], default: [] },
+            improvementPlan: { type: mongoose.Schema.Types.Mixed },
+            growthImpacts: { type: mongoose.Schema.Types.Mixed },
+            aiExplanation: { type: String, default: '' },
             concerns: [
                 {
                     issue: { type: String },

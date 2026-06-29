@@ -1,4 +1,4 @@
-# 🛡️ Architecture Audit: NutriBite AI Service
+﻿# 🛡️ Architecture Audit: NutriKids AI Service
 
 This audit captures the current architectural gaps, duplicate code paths, direct model dependencies, and structural inconsistencies in the legacy `ai-service` codebase, laying out the target blueprint for `ai-service-v2`.
 
@@ -52,3 +52,4 @@ This audit captures the current architectural gaps, duplicate code paths, direct
 1. **Copy Local Datasets**: Copy `ai-service/datasets` folder to `ai-service-v2/datasets` to ensure local filesystem operations for the RAG index and Planner calculations work immediately.
 2. **Create Unified Router**: Implement `ModelRouter` inside `ai-service-v2/app/models/model_router.py` to encapsulate Ollama & Gemini routing under unified endpoints.
 3. **Consolidate Schemas**: Use `ai-service-v2/app/schemas/chat_response.py` as the singular source of truth for response models across all endpoints.
+

@@ -129,7 +129,7 @@ export default function NutritionAnalysisPage() {
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = `nutribite-grocery-cart-${profileId}.txt`;
+        link.download = `nutrikids-grocery-cart-${profileId}.txt`;
         link.click();
         URL.revokeObjectURL(url);
         toast.success("Grocery list downloaded successfully!");
@@ -314,7 +314,6 @@ export default function NutritionAnalysisPage() {
                                         )}
                                     </div>
                                 </div>
-
                                 {/* Risks Card */}
                                 {analysis.risks.length > 0 && (
                                     <div className="bg-amber-50 p-6 rounded-3xl border border-amber-200">
@@ -329,6 +328,54 @@ export default function NutritionAnalysisPage() {
                                         </ul>
                                     </div>
                                 )}
+                            </div>
+
+                            {/* 12-Nutrient Target Breakdown Card */}
+                            <div className="md:col-span-3 bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 space-y-6">
+                                <div>
+                                    <h2 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                                        <span>📊</span> Detailed Daily Intake vs ICMR Targets
+                                    </h2>
+                                    <p className="text-slate-500 text-sm">Real-time comparison of average intake over 30 days against child's RDA guidelines.</p>
+                                </div>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {[
+                                        { key: 'calories', label: 'Calories', unit: 'kcal' },
+                                        { key: 'protein', label: 'Protein', unit: 'g' },
+                                        { key: 'carbs', label: 'Carbohydrates', unit: 'g' },
+                                        { key: 'fats', label: 'Fats', unit: 'g' },
+                                        { key: 'fiber', label: 'Dietary Fiber', unit: 'g' },
+                                        { key: 'iron', label: 'Iron', unit: 'mg' },
+                                        { key: 'calcium', label: 'Calcium', unit: 'mg' },
+                                        { key: 'vitaminA', label: 'Vitamin A', unit: 'mcg' },
+                                        { key: 'vitaminC', label: 'Vitamin C', unit: 'mg' },
+                                        { key: 'vitaminD', label: 'Vitamin D', unit: 'mcg' },
+                                        { key: 'zinc', label: 'Zinc', unit: 'mg' },
+                                        { key: 'water', label: 'Water Intake', unit: 'ml' }
+                                    ].map(n => {
+                                        const consumed = Number((analysis.dailyAverages?.[n.key] || 0).toFixed(1));
+                                        const target = Number((analysis.requiredDaily?.[n.key] || 1).toFixed(1));
+                                        const pct = Math.min(100, Math.round((consumed / target) * 100));
+                                        const progressColor = pct < 50 ? 'bg-rose-500' : (pct < 70 ? 'bg-orange-500' : (pct < 90 ? 'bg-amber-500' : 'bg-emerald-500'));
+                                        const textClass = pct < 50 ? 'text-rose-600' : (pct < 70 ? 'text-orange-600' : (pct < 90 ? 'text-amber-600' : 'text-emerald-600'));
+                                        
+                                        return (
+                                            <div key={n.key} className="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-2">
+                                                <div className="flex justify-between text-xs font-bold text-slate-700">
+                                                    <span>{n.label}</span>
+                                                    <span className={textClass}>{pct}%</span>
+                                                </div>
+                                                <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden">
+                                                    <div className={`h-full rounded-full ${progressColor} transition-all`} style={{ width: `${pct}%` }}></div>
+                                                </div>
+                                                <div className="flex justify-between text-[10px] text-slate-400 font-semibold">
+                                                    <span>Consumed: {consumed} {n.unit}</span>
+                                                    <span>Target: {target} {n.unit}</span>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
                             </div>
 
                             {/* Grocery List Card */}

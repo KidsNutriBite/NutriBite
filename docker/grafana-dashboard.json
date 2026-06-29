@@ -1,4 +1,4 @@
-{
+﻿{
   "annotations": {
     "list": [
       {
@@ -89,7 +89,7 @@
             "uid": "prometheus_ds"
           },
           "editorMode": "code",
-          "expr": "sum(rate(nutribite_ai_request_latency_seconds_sum[1m])) / sum(rate(nutribite_ai_request_latency_seconds_count[1m]))",
+          "expr": "sum(rate(NutriKids_ai_request_latency_seconds_sum[1m])) / sum(rate(NutriKids_ai_request_latency_seconds_count[1m]))",
           "legendFormat": "Avg Latency",
           "range": true,
           "refId": "A"
@@ -140,7 +140,7 @@
             "uid": "prometheus_ds"
           },
           "editorMode": "code",
-          "expr": "sum(rate(nutribite_ai_requests_total[1m])) by (status, endpoint)",
+          "expr": "sum(rate(NutriKids_ai_requests_total[1m])) by (status, endpoint)",
           "legendFormat": "{{endpoint}} - {{status}}",
           "range": true,
           "refId": "A"
@@ -185,7 +185,7 @@
             "type": "prometheus",
             "uid": "prometheus_ds"
           },
-          "expr": "sum(rate(nutribite_ai_spans_latency_seconds_sum[1m])) by (span_name) / sum(rate(nutribite_ai_spans_latency_seconds_count[1m])) by (span_name)",
+          "expr": "sum(rate(NutriKids_ai_spans_latency_seconds_sum[1m])) by (span_name) / sum(rate(NutriKids_ai_spans_latency_seconds_count[1m])) by (span_name)",
           "legendFormat": "{{span_name}}",
           "refId": "A"
         }
@@ -237,7 +237,7 @@
             "type": "prometheus",
             "uid": "prometheus_ds"
           },
-          "expr": "sum(nutribite_safety_blocks_total) by (category)",
+          "expr": "sum(NutriKids_safety_blocks_total) by (category)",
           "legendFormat": "Blocked: {{category}}",
           "refId": "A"
         }
@@ -249,7 +249,7 @@
   "schemaVersion": 36,
   "style": "dark",
   "tags": [
-    "nutribite",
+    "NutriKids",
     "observability",
     "ai"
   ],
@@ -260,6 +260,7 @@
     "from": "now-1h",
     "to": "now"
   },
-  "title": "NutriBite Pediatric AI Observability Panel",
+  "title": "NutriKids Pediatric AI Observability Panel",
   "version": 1
 }
+

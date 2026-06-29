@@ -30,6 +30,10 @@ import dietitianRoutes from './routes/dietitian.routes.js';
 import consultationRoutes from './routes/consultation.routes.js';
 import videoRoutes from './routes/video.routes.js';
 import { correlationMiddleware, requestLatencyLogger } from './utils/otel.js';
+import { protect } from './middlewares/auth.middleware.js';
+import { authorize } from './middlewares/role.middleware.js';
+import { analyzeMealImageDebug } from './controllers/meal.controller.js';
+import multer from 'multer';
 
 // Initialize App
 const app = express();
@@ -95,6 +99,10 @@ app.use('/api/twin', twinRoutes);
 app.use('/api/consultations', consultationRoutes);
 app.use('/api/dietitian', dietitianRoutes);
 app.use('/api/video', videoRoutes);
+
+// Debug Food Analysis Route (Task 5)
+const upload = multer();
+app.post('/api/debug-food-analysis', protect, authorize('parent'), upload.any(), analyzeMealImageDebug);
 
 // Health Check
 app.get('/', (req, res) => {

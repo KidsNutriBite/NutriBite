@@ -1,4 +1,4 @@
-# 🔍 Retrieval Pipeline Audit: NutriBite AI
+﻿# 🔍 Retrieval Pipeline Audit: NutriKids AI
 
 This document details the configuration parameters, mathematical setups, and retrieval mechanics of the RAG pipeline in `ai-service-v2`.
 
@@ -39,3 +39,4 @@ This yields matching values strictly bound to the range $[-1.0, 1.0]$.
    where $r_m(d)$ is the ordinal rank of document $d$ inside retrieval list $m$.
 2. **Cross-Encoder Reranking**: Merged chunks are processed by `cross-encoder/ms-marco-MiniLM-L-6-v2` to predict grounding relevance. Raw logits are mapped to a $[0, 1]$ confidence interval via sigmoid:
    $$\text{Confidence} = \frac{1}{1 + e^{-\text{logit}}}$$
+

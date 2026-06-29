@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import Link from 'next/link';
 
@@ -13,7 +13,7 @@ const Footer = () => {
                             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white">
                                 <span className="material-symbols-outlined text-sm">nutrition</span>
                             </div>
-                            <h2 className="text-lg font-extrabold text-slate-800 dark:text-white">NutriBite</h2>
+                            <h2 className="text-lg font-extrabold text-slate-800 dark:text-white">NutriKids</h2>
                         </div>
                         <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed max-w-sm">
                             Empowering families with intelligent pediatric nutrition tools, helping parents track child health, immunity, and healthy eating through AI-guided insights.
@@ -55,7 +55,7 @@ const Footer = () => {
 
                 <div className="flex flex-col md:flex-row items-center justify-between mt-8 gap-6">
                     <p className="text-xs text-slate-400 dark:text-slate-500">
-                        © {new Date().getFullYear()} NutriBite Inc. All rights reserved. Designed for pediatric nutrition intelligence.
+                        © {new Date().getFullYear()} NutriKids Inc. All rights reserved. Designed for pediatric nutrition intelligence.
                     </p>
                     <div className="flex gap-6">
                         <span className="text-slate-400 hover:text-primary cursor-pointer transition-colors material-symbols-outlined text-xl">
@@ -72,3 +72,4 @@ const Footer = () => {
 };
 
 export default Footer;
+

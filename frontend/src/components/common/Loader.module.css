@@ -1,0 +1,228 @@
+.loaderContainer {
+  --sky: #38BDF8;
+  --sky-mid: #7DD3FC;
+  --sky-pale: #BAE6FD;
+  --sky-ghost: #E0F4FE;
+  --white: #FFFFFF;
+  --ink: #0C4A6E;
+  --green: #4ADE80;
+
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: var(--white);
+  overflow: hidden;
+  font-family: 'Nunito', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  will-change: opacity;
+}
+
+/* ── CANVAS LAYER ── */
+.canvas3d {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── RIPPLE RINGS ── */
+.ringsWrap {
+  position: fixed; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1; pointer-events: none;
+}
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2.5px solid var(--sky-mid);
+  opacity: 0;
+  transform: scale(0);
+  will-change: transform, opacity;
+}
+
+/* ── FLOATING PARTICLES ── */
+.particle {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2;
+  will-change: transform, opacity;
+}
+
+/* ── LOGO ── */
+.logoShell {
+  position: relative;
+  width: clamp(220px, 32vw, 380px);
+  height: clamp(220px, 32vw, 380px);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 5;
+  will-change: transform;
+}
+.logoShell img {
+  width: 100%; height: 100%;
+  object-fit: contain;
+  will-change: transform;
+}
+
+/* 3-D spin shadow under logo */
+.logoShadow {
+  position: absolute;
+  bottom: -18px;
+  left: 50%; transform: translateX(-50%);
+  width: 70%; height: 22px;
+  background: radial-gradient(ellipse, rgba(56,189,248,0.30) 0%, transparent 75%);
+  border-radius: 50%;
+  filter: blur(4px);
+  will-change: transform, opacity;
+}
+
+/* ── HEADLINE ── */
+.headlineWrap {
+  margin-top: 36px;
+  text-align: center;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+.eyebrow {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(11px, 1.6vw, 15px);
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--sky);
+  margin-bottom: 8px;
+}
+.mainTitle {
+  font-family: 'Fredoka One', cursive;
+  font-size: clamp(28px, 5.5vw, 62px);
+  line-height: 1.08;
+  color: var(--sky);
+  /* 3-D letter-press effect */
+  text-shadow:
+    0 2px 0 #0ea5e9,
+    0 4px 0 #0284c7,
+    0 6px 0 #0369a1,
+    0 8px 16px rgba(2,132,199,0.25);
+  letter-spacing: 0.02em;
+}
+.mainTitle span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(40px) rotateX(-40deg);
+  will-change: transform, opacity;
+}
+
+/* ── SUB COPY ── */
+.subCopy {
+  margin-top: 20px;
+  max-width: clamp(280px, 44vw, 520px);
+  text-align: center;
+  font-size: clamp(13px, 1.8vw, 18px);
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.6;
+  opacity: 0;
+  transform: translateY(20px);
+  will-change: transform, opacity;
+}
+.subCopy strong { color: var(--sky); font-weight: 800; }
+
+/* ── PROGRESS BAR ── */
+.progressTrack {
+  margin-top: 44px;
+  width: clamp(160px, 28vw, 320px);
+  height: 7px;
+  background: var(--sky-ghost);
+  border-radius: 99px;
+  overflow: hidden;
+  opacity: 0;
+}
+.progressFill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--sky-mid), var(--sky));
+  border-radius: 99px;
+  box-shadow: 0 0 10px rgba(56,189,248,0.6);
+}
+
+/* ── DOTS ── */
+.dots {
+  margin-top: 18px;
+  display: flex; gap: 8px;
+  opacity: 0;
+}
+.dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--sky-mid);
+}
+
+/* ── SCAN SHIMMER on logo ── */
+@keyframes shimmerMove {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+.logoShimmer {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%);
+  background-size: 200% 100%;
+  animation: shimmerMove 2.8s linear infinite;
+  pointer-events: none;
+}
+
+.tapToContinue {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 20;
+  transform: translateY(15px);
+}
+
+.tapToContinue.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.tapIcon {
+  font-size: 28px;
+  color: var(--sky);
+  animation: tapPulse 1.8s infinite ease-in-out;
+}
+
+.tapText {
+  font-family: 'Nunito', sans-serif;
+  font-size: clamp(14px, 1.8vw, 16px);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--ink);
+  opacity: 0.85;
+}
+
+@keyframes tapPulse {
+  0%, 100% {
+    transform: scale(1) translateY(0);
+    opacity: 0.7;
+    filter: drop-shadow(0 0 0px rgba(56, 189, 248, 0));
+  }
+  50% {
+    transform: scale(1.15) translateY(-4px);
+    opacity: 1;
+    filter: drop-shadow(0 4px 8px rgba(56, 189, 248, 0.4));
+  }
+}
+
+.clickable {
+  cursor: pointer;
+}

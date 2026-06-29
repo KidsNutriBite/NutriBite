@@ -1,6 +1,6 @@
-# 📝 NutriBite Validation Report: Stage 1 & Stage 2A
+﻿# 📝 NutriKids Validation Report: Stage 1 & Stage 2A
 
-This report presents the diagnostic evaluation and validation results for **Stage 1 (Foundation Architecture)** and **Stage 2A (Retrieval Audit & Baseline Evaluation)** of the NutriBite AI Service (`ai-service-v2`).
+This report presents the diagnostic evaluation and validation results for **Stage 1 (Foundation Architecture)** and **Stage 2A (Retrieval Audit & Baseline Evaluation)** of the NutriKids AI Service (`ai-service-v2`).
 
 ---
 
@@ -13,7 +13,7 @@ The verification commands were executed to check the status of the local LLM dae
 * **Daemon Status:** **OFFLINE** / Not installed on this host.
 
 ### B. Expected Local Model
-* **Model Name:** `mistral` (declared on line 88 of [model_router.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriBite-main/NutriBite-main/ai-service-v2/app/models/model_router.py#L88)).
+* **Model Name:** `mistral` (declared on line 88 of [model_router.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriKids-main/NutriKids-main/ai-service-v2/app/models/model_router.py#L88)).
 * **Download Status:** **SKIPPED**. Automatic download (`ollama pull mistral`) was not possible because the Ollama CLI binary is unavailable in the environment path.
 * **Mitigation:** The system successfully bypassed the offline Ollama service and routed requests through the secondary Gemini API fallback and tertiary Static Deterministic Specialist.
 
@@ -26,15 +26,15 @@ All API endpoints in the `ai-service-v2` codebase were audited to check for dire
 
 | Endpoint | Target File Path | Direct SDK Call? | DECISION |
 | :--- | :--- | :--- | :--- |
-| `POST /ask` | [chat.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriBite-main/NutriBite-main/ai-service-v2/app/api/v1/chat.py#L91) | None | **PASS** |
-| `POST /chat` | [chat.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriBite-main/NutriBite-main/ai-service-v2/app/api/v1/chat.py#L127) | None | **PASS** |
-| `POST /generate-diet` | [chat.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriBite-main/NutriBite-main/ai-service-v2/app/api/v1/chat.py#L144) | None | **PASS** |
-| `POST /analyze-meal` | [chat.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriBite-main/NutriBite-main/ai-service-v2/app/api/v1/chat.py#L169) | None | **PASS** |
-| `WS /ws/chat` | [websocket.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriBite-main/NutriBite-main/ai-service-v2/app/api/v1/websocket.py#L74) | None | **PASS** |
+| `POST /ask` | [chat.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriKids-main/NutriKids-main/ai-service-v2/app/api/v1/chat.py#L91) | None | **PASS** |
+| `POST /chat` | [chat.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriKids-main/NutriKids-main/ai-service-v2/app/api/v1/chat.py#L127) | None | **PASS** |
+| `POST /generate-diet` | [chat.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriKids-main/NutriKids-main/ai-service-v2/app/api/v1/chat.py#L144) | None | **PASS** |
+| `POST /analyze-meal` | [chat.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriKids-main/NutriKids-main/ai-service-v2/app/api/v1/chat.py#L169) | None | **PASS** |
+| `WS /ws/chat` | [websocket.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriKids-main/NutriKids-main/ai-service-v2/app/api/v1/websocket.py#L74) | None | **PASS** |
 
 > [!NOTE]
 > **Decoupling Verdict: 100% PASS**
-> No endpoint directly communicates with `google.generativeai`, `requests.post(ollama_host)`, or other raw model endpoints. All calls are routed exclusively through [chat_orchestrator.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriBite-main/NutriBite-main/ai-service-v2/app/services/chat_orchestrator.py) which leverages the unified [model_router.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriBite-main/NutriBite-main/ai-service-v2/app/models/model_router.py).
+> No endpoint directly communicates with `google.generativeai`, `requests.post(ollama_host)`, or other raw model endpoints. All calls are routed exclusively through [chat_orchestrator.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriKids-main/NutriKids-main/ai-service-v2/app/services/chat_orchestrator.py) which leverages the unified [model_router.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriKids-main/NutriKids-main/ai-service-v2/app/models/model_router.py).
 
 ---
 
@@ -64,7 +64,7 @@ The model inference benchmarks were run to capture cold start latency, warm late
 
 ## 4. PART 5 — Streaming & WebSocket Validation
 
-The `/ws/chat` endpoint inside [websocket.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriBite-main/NutriBite-main/ai-service-v2/app/api/v1/websocket.py) was audited for real-time performance:
+The `/ws/chat` endpoint inside [websocket.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriKids-main/NutriKids-main/ai-service-v2/app/api/v1/websocket.py) was audited for real-time performance:
 
 1. **Incremental Streaming:** **VERIFIED**. The model router's `.stream()` yields individual token packages dynamically. The WebSocket loop forwards them using `await manager.send_json({"type": "token", "content": token})` immediately.
 2. **Fake Streaming/Buffering:** **NONE DETECTED**. Chunks are pushed instantly to the client rather than buffered and flushed in bulk.
@@ -76,11 +76,11 @@ The `/ws/chat` endpoint inside [websocket.py](file:///c:/Users/abhir/.android/On
 ## 5. PART 6 — Architecture & Endpoint Flow
 
 The foundation architecture adheres strictly to single-responsibility modules:
-* **One Chat Orchestrator:** [chat_orchestrator.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriBite-main/NutriBite-main/ai-service-v2/app/services/chat_orchestrator.py) (`ChatOrchestrator`)
-* **One Model Router:** [model_router.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriBite-main/NutriBite-main/ai-service-v2/app/models/model_router.py) (`ModelRouter`)
-* **One Prompt System:** [prompts/builder.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriBite-main/NutriBite-main/ai-service-v2/app/prompts/builder.py)
-* **One Response Schema:** [chat_response.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriBite-main/NutriBite-main/ai-service-v2/app/schemas/chat_response.py) (`ChatResponse`)
-* **One Tracing System:** [tracing_service.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriBite-main/NutriBite-main/ai-service-v2/app/services/tracing_service.py) (`TracingService`)
+* **One Chat Orchestrator:** [chat_orchestrator.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriKids-main/NutriKids-main/ai-service-v2/app/services/chat_orchestrator.py) (`ChatOrchestrator`)
+* **One Model Router:** [model_router.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriKids-main/NutriKids-main/ai-service-v2/app/models/model_router.py) (`ModelRouter`)
+* **One Prompt System:** [prompts/builder.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriKids-main/NutriKids-main/ai-service-v2/app/prompts/builder.py)
+* **One Response Schema:** [chat_response.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriKids-main/NutriKids-main/ai-service-v2/app/schemas/chat_response.py) (`ChatResponse`)
+* **One Tracing System:** [tracing_service.py](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriKids-main/NutriKids-main/ai-service-v2/app/services/tracing_service.py) (`TracingService`)
 
 ### Request Execution Flows
 
@@ -109,7 +109,7 @@ graph TD
 
 ## 6. PART 7 & 9 — Retrieval & Knowledge Base Audit
 
-Detailed findings from [retrieval_audit.md](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriBite-main/NutriBite-main/docs/retrieval_audit.md) and [knowledge_base_audit.md](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriBite-main/NutriBite-main/docs/knowledge_base_audit.md):
+Detailed findings from [retrieval_audit.md](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriKids-main/NutriKids-main/docs/retrieval_audit.md) and [knowledge_base_audit.md](file:///c:/Users/abhir/.android/OneDrive/Desktop/NutriKids-main/NutriKids-main/docs/knowledge_base_audit.md):
 
 ### A. RAG Parameters & Mechanics
 * **Embedding Model:** `intfloat/e5-small-v2` (384 dimensions) requiring `passage: ` and `query: ` prefixes.
@@ -211,3 +211,4 @@ Do not stage yet. **Proceed directly to Stage 2B (RAG Optimization & Deduplicati
 * Integrate **Lexical BM25** to resolve keyword blindness.
 * Deduplicate `goals.json`, `foods.json`, and `conditions.json`.
 * Implement a **Domain Classifier Gate** to cleanly refuse out-of-domain and dangerous unsupported queries before prompt compilation.
+
