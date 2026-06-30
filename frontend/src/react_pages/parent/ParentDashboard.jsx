@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { getMyProfiles } from '../../api/profile.api';
-import { getPendingRequests, approveRequest, rejectRequest } from '../../api/access.api';
 import useAuth from '../../hooks/useAuth';
 import Modal from '../../components/common/Modal';
 import AddProfileForm from '../../components/parent/AddProfileForm';
@@ -17,11 +16,9 @@ const ParentDashboard = () => {
     const router = useRouter();
     const navigate = (path) => typeof path === 'number' && path < 0 ? router.back() : router.push(path);
     const [profiles, setProfiles] = useState([]);
-    const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [insightsProfile, setInsightsProfile] = useState(null);
-    const [selectedProfileForAccess, setSelectedProfileForAccess] = useState('');
     const [view, setView] = useState('dashboard'); // 'dashboard' | 'chat'
 
     const getDaysSinceUpdate = (profile) => {
@@ -45,43 +42,12 @@ const ParentDashboard = () => {
 
     const fetchData = async () => {
         try {
-            const [profilesRes, requestsRes] = await Promise.all([
-                getMyProfiles(),
-                getPendingRequests()
-            ]);
+            const profilesRes = await getMyProfiles();
             setProfiles(Array.isArray(profilesRes) ? profilesRes : profilesRes.data || []);
-            setRequests(Array.isArray(requestsRes) ? requestsRes : requestsRes.data || []);
-            const profileList = Array.isArray(profilesRes) ? profilesRes : profilesRes.data || [];
-            if (profileList.length > 0) {
-                setSelectedProfileForAccess(profileList[0]._id);
-            }
         } catch (error) {
             console.error("Error fetching dashboard data", error);
         } finally {
             setLoading(false);
-        }
-    };
-
-    const handleApproveRequest = async (requestId) => {
-        if (!selectedProfileForAccess) return;
-        try {
-            await approveRequest(requestId, selectedProfileForAccess);
-            // Refresh requests
-            const res = await getPendingRequests();
-            setRequests(res.data || []);
-        } catch (error) {
-            console.error("Error approving request", error);
-        }
-    };
-
-    const handleRejectRequest = async (requestId) => {
-        try {
-            await rejectRequest(requestId);
-            // Refresh requests
-            const res = await getPendingRequests();
-            setRequests(res.data || []);
-        } catch (error) {
-            console.error("Error rejecting request", error);
         }
     };
 
@@ -231,55 +197,6 @@ const ParentDashboard = () => {
                     </div>
                 );
             })()}
-
-            {/* Doctor Notification Banner */}
-            {requests.length > 0 && (
-                <div className="mb-12 space-y-4">
-                    {requests.map((req) => (
-                        <div key={req._id} className="flex flex-col md:flex-row items-center justify-between gap-6 rounded-2xl border-2 border-primary/20 bg-primary/5 p-6 dark:bg-primary/10">
-                            <div className="flex items-center gap-5 text-center md:text-left flex-col md:flex-row">
-                                <div className="bg-primary text-white p-4 rounded-xl shadow-lg shadow-primary/20">
-                                    <span className="material-symbols-outlined text-3xl">medical_services</span>
-                                </div>
-                                <div>
-                                    <p className="text-slate-900 dark:text-white text-xl font-bold">Doctor Access Request</p>
-                                    <p className="text-slate-600 dark:text-slate-400 font-medium">
-                                        <span className="font-bold text-primary">Dr. {req.doctor?.name || 'Unknown'}</span> wants to view your child's health data.
-                                    </p>
-                                    {profiles.length > 1 && (
-                                        <div className="mt-2 text-left">
-                                            <label className="text-xs font-bold text-slate-500 uppercase mr-2">For:</label>
-                                            <select
-                                                value={selectedProfileForAccess}
-                                                onChange={(e) => setSelectedProfileForAccess(e.target.value)}
-                                                className="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 text-sm outline-none focus:border-primary"
-                                            >
-                                                {profiles.map(p => (
-                                                    <option key={p._id} value={p._id}>{p.name}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                            <div className="flex gap-3 w-full md:w-auto">
-                                <button
-                                    onClick={() => handleRejectRequest(req._id)}
-                                    className="flex-1 md:flex-none py-3 px-6 rounded-xl border-2 border-slate-200 dark:border-slate-700 font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-                                >
-                                    Reject
-                                </button>
-                                <button
-                                    onClick={() => handleApproveRequest(req._id)}
-                                    className="flex-1 md:flex-none py-3 px-6 rounded-xl bg-primary text-white font-bold shadow-md shadow-primary/20 hover:bg-primary/90 transition-transform active:scale-95"
-                                >
-                                    Approve
-                                </button>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
 
             {/* Child Profile Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">

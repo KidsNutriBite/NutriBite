@@ -13,20 +13,22 @@ import authRoutes from './routes/auth.routes.js';
 import profileRoutes from './routes/profile.routes.js';
 import mealRoutes from './routes/meal.routes.js';
 import doctorRoutes from './routes/doctor.routes.js';
-import accessRoutes from './routes/access.routes.js';
 import analyticsRoutes from './routes/analytics.routes.js';
 import gameRoutes from './routes/game.routes.js';
 import hospitalRoutes from './routes/hospital.routes.js';
 import appointmentRoutes from './routes/appointment.routes.js';
 import parentRoutes from './routes/parent.routes.js';
 import notificationRoutes from './routes/notification.routes.js';
-import growthRoutes from './routes/growth.routes.js'; // New import
+import growthRoutes from './routes/growth.routes.js';
 import escalationRoutes from './routes/escalation.routes.js';
 import nutritionTrendsRoutes from './routes/nutritionTrends.routes.js';
 import sleepRoutes from './routes/sleep.routes.js';
 import activityRoutes from './routes/activity.routes.js';
-import nutritionRoutes from './routes/nutrition.routes.js'; // New import
+import nutritionRoutes from './routes/nutrition.routes.js';
 import twinRoutes from './routes/twin.routes.js';
+import dietitianRoutes from './routes/dietitian.routes.js';
+import consultationRoutes from './routes/consultation.routes.js';
+import videoRoutes from './routes/video.routes.js';
 import { correlationMiddleware, requestLatencyLogger } from './utils/otel.js';
 import { protect } from './middlewares/auth.middleware.js';
 import { authorize } from './middlewares/role.middleware.js';
@@ -46,11 +48,11 @@ const rateLimiter = (req, res, next) => {
 
     let requests = clients.get(ip) || [];
     requests = requests.filter(t => now - t < windowMs);
-    
+
     if (requests.length >= maxRequests) {
         return res.status(429).json({ message: "Too many requests from this IP, please try again after a minute." });
     }
-    
+
     requests.push(now);
     clients.set(ip, requests);
     next();
@@ -70,7 +72,7 @@ app.use(cors({
     credentials: true
 }));
 app.use(helmet({
-    crossOriginResourcePolicy: { policy: "cross-origin" } // Allow images to be loaded
+    crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
 
 // Serve Uploads
@@ -83,18 +85,20 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/profiles', profileRoutes);
 app.use('/api/meals', mealRoutes);
 app.use('/api/doctor', doctorRoutes);
-app.use('/api/access', accessRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/game', gameRoutes);
 app.use('/api/hospitals', hospitalRoutes);
 app.use('/api/appointments', appointmentRoutes);
-app.use('/api/growth', growthRoutes); // New route
+app.use('/api/growth', growthRoutes);
 app.use('/api/escalations', escalationRoutes);
 app.use('/api/nutrition-trends', nutritionTrendsRoutes);
 app.use('/api/sleep', sleepRoutes);
 app.use('/api/activity', activityRoutes);
-app.use('/api/nutrition-analysis', nutritionRoutes); // Mount nutrition routes
+app.use('/api/nutrition-analysis', nutritionRoutes);
 app.use('/api/twin', twinRoutes);
+app.use('/api/consultations', consultationRoutes);
+app.use('/api/dietitian', dietitianRoutes);
+app.use('/api/video', videoRoutes);
 
 // Debug Food Analysis Route (Task 5)
 const upload = multer();
@@ -107,7 +111,7 @@ app.get('/', (req, res) => {
 
 // Error Handling
 app.use((err, req, res, next) => {
-    const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+    const statusCode = res.statusCode === 200 ? (err.statusCode || 500) : res.statusCode;
     res.status(statusCode).json({
         success: false,
         message: err.message || 'Internal Server Error',

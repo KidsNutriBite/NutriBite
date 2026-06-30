@@ -1,7 +1,7 @@
 import GrowthRecord from '../models/GrowthRecord.model.js';
 import Profile from '../models/Profile.model.js';
 import Notification from '../models/Notification.model.js';
-import DoctorAccess from '../models/DoctorAccess.model.js';
+import ConsultationRequest from '../models/ConsultationRequest.model.js';
 import { calculateBMI, calculateAgeInMonths, calculatePercentileAndRisk } from '../utils/growthUtils.js';
 
 // Get growth history for a child
@@ -78,10 +78,11 @@ export const addGrowthRecord = async (req, res) => {
         if (userRole === 'parent' && (riskStatus === 'underweight' || riskStatus === 'obese')) {
             // Find linked doctors
             try {
-                // Find doctors who have active access to this specific child (profileId)
-                const linkedDoctors = await DoctorAccess.find({
+                // Find doctors assigned to an active consultation for this child.
+                const linkedDoctors = await ConsultationRequest.find({
                     profileId: childId,
-                    status: 'active'
+                    doctorId: { $ne: null },
+                    status: { $in: ['AssignedToDoctor', 'UnderDoctorReview', 'PrescriptionIssued'] }
                 });
 
                 if (linkedDoctors.length > 0) {

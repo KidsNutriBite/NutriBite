@@ -37,9 +37,14 @@ const userSchema = new mongoose.Schema(
         },
         role: {
             type: String,
-            enum: ['parent', 'doctor'],
+            enum: ['parent', 'doctor', 'dietitian'],
             default: 'parent',
             required: true,
+        },
+        availabilityStatus: {
+            type: String,
+            enum: ['Available', 'Busy', 'Offline'],
+            default: 'Offline',
         },
         parentProfile: {
             phoneNumber: { type: String },
@@ -49,6 +54,11 @@ const userSchema = new mongoose.Schema(
         doctorProfile: {
             specialization: { type: String },
             hospitalName: { type: String },
+            experienceYears: { type: Number },
+            registrationId: { type: String },
+        },
+        dietitianProfile: {
+            specialization: { type: String },
             experienceYears: { type: Number },
             registrationId: { type: String },
         },

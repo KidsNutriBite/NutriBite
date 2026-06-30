@@ -2,7 +2,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getPatientDetails, requestFullAccess } from '../../api/doctor.api';
 import { getMealFrequency, getPrescriptions, createPrescription } from '../../api/analytics.api';
 import MealFrequencyChart from '../../components/charts/MealFrequencyChart';
 import toast from 'react-hot-toast';
@@ -10,6 +9,8 @@ import api from '../../api/axios';
 import DoctorTwinView from '../../components/doctor/DoctorTwinView';
 import GrowthVelocityCenter from '../../components/doctor/GrowthVelocityCenter';
 import { getGrowthVelocity } from '../../api/doctor.api';
+import VideoCall from '../../components/video/VideoCall';
+import { useAuth } from '../../context/AuthContext';
 
 const getImageUrl = (url) => {
     if (!url) return null;
@@ -19,11 +20,15 @@ const getImageUrl = (url) => {
 
 const PatientDetails = () => {
     const { id } = useParams();
+    const { user } = useAuth();
     const [profile, setProfile] = useState(null);
     const [meals, setMeals] = useState([]);
     const [status, setStatus] = useState('active');
-    const [message, setMessage] = useState('');
+    const [consultationRequestId, setConsultationRequestId] = useState('');
+    const [doctorNotes, setDoctorNotes] = useState('');
+    const [savingDoctorNotes, setSavingDoctorNotes] = useState(false);
     const [activeTab, setActiveTab] = useState('overview');
+    const [activeCall, setActiveCall] = useState(false);
 
     // Clinician Specialization Check
     const [clinician, setClinician] = useState(null);
@@ -40,11 +45,6 @@ const PatientDetails = () => {
     const [newPrescription, setNewPrescription] = useState({ title: '', instructions: '', nextCheckupDays: 90 });
     const [loading, setLoading] = useState(true);
 
-    // Request Modal State
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [requestReason, setRequestReason] = useState('');
-    const [requestLoading, setRequestLoading] = useState(false);
-
     const fetchAllData = async () => {
         try {
             setLoading(true);
@@ -52,7 +52,8 @@ const PatientDetails = () => {
             setProfile(detailRes.data.data.profile);
             setMeals(detailRes.data.data.meals || []);
             setStatus(detailRes.data.data.status);
-            setMessage(detailRes.data.data.message || '');
+            setConsultationRequestId(detailRes.data.data.consultationRequestId || '');
+            setDoctorNotes(detailRes.data.data.doctorNotes || '');
 
             // Fetch clinician details to check specialization
             try {
@@ -103,19 +104,25 @@ const PatientDetails = () => {
         }
     };
 
-    const handleRequestFullAccess = async (e) => {
-        e.preventDefault();
+    const handleSaveDoctorNotes = async () => {
+        if (!consultationRequestId) return;
         try {
-            setRequestLoading(true);
-            await requestFullAccess(id, requestReason);
-            toast.success('Request sent to parent!');
-            setIsModalOpen(false);
-            setRequestReason('');
+            setSavingDoctorNotes(true);
+            await api.patch(`/consultations/${consultationRequestId}/doctor-notes`, { notes: doctorNotes });
+            toast.success('Doctor notes saved');
         } catch (error) {
-            toast.error(error.response?.data?.message || 'Failed to send request');
+            toast.error(error.response?.data?.message || 'Failed to save doctor notes');
         } finally {
-            setRequestLoading(false);
+            setSavingDoctorNotes(false);
         }
+    };
+
+    const handleJoinVideoCall = () => {
+        if (!consultationRequestId) {
+            toast.error('No active consultation linked to this patient.');
+            return;
+        }
+        setActiveCall(true);
     };
 
     // Determine clinician role dynamically
@@ -287,12 +294,26 @@ const PatientDetails = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [status]);
+>>>>>>> origin/main
 
     if (loading) return <div className="flex justify-center py-20"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div></div>;
     if (!profile) return null;
 
+
     return (
         <div className="space-y-8">
+            {/* Video Call Modal */}
+            <AnimatePresence>
+                {activeCall && consultationRequestId && (
+                    <VideoCall
+                        consultationId={consultationRequestId}
+                        userRole="doctor"
+                        userName={user?.name || 'Doctor'}
+                        onClose={() => setActiveCall(false)}
+                    />
+                )}
+            </AnimatePresence>
+
             {/* Header Card */}
             <div className={`p-8 rounded-[2rem] shadow-sm border flex flex-col md:flex-row items-center md:items-start gap-8 ${status === 'restricted' ? 'bg-amber-50 border-amber-100' : 'bg-white border-gray-100'}`}>
                 <div className={`w-24 h-24 rounded-full flex items-center justify-center text-5xl shadow-inner overflow-hidden ${status === 'restricted' ? 'bg-amber-100' : 'bg-blue-50'}`}>
@@ -316,12 +337,6 @@ const PatientDetails = () => {
                             <span className="material-symbols-outlined text-sm">visibility</span>
                             {isDietitian ? 'Dietitian Dashboard (Read-Only)' : 'Doctor View Mode (Read-Only)'}
                         </span>
-                        {status === 'restricted' && (
-                            <span className="px-3 py-1 bg-amber-200 text-amber-800 font-bold text-[10px] uppercase tracking-wider rounded-full flex items-center gap-1 w-fit mx-auto md:mx-0">
-                                <span className="material-symbols-outlined text-sm">lock</span>
-                                Restricted View
-                            </span>
-                        )}
                     </div>
                     <p className="text-gray-500 font-medium mb-4">Patient ID: {profile._id} • Clinician Role: {isDietitian ? 'Dietitian' : 'Pediatric Specialist'}</p>
                     <div className="flex flex-wrap gap-4 justify-center md:justify-start">
@@ -340,15 +355,17 @@ const PatientDetails = () => {
                     </div>
                 </div>
 
-                {status === 'restricted' && (
-                    <div className="shrink-0 w-full md:w-auto">
+                {/* Video Call Button */}
+                {status === 'active' && consultationRequestId && (
+                    <div className="flex flex-col items-center gap-2">
                         <button
-                            onClick={() => setIsModalOpen(true)}
-                            className="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-6 rounded-xl transition-all shadow-lg shadow-amber-200 flex items-center gap-2 justify-center"
+                            onClick={handleJoinVideoCall}
+                            className="px-5 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-2xl shadow-lg shadow-indigo-200 transition flex items-center gap-2 active:scale-95"
                         >
-                            <span className="material-symbols-outlined">key</span>
-                            Request Detailed Access
+                            <span className="material-symbols-outlined text-xl">video_call</span>
+                            Video Call with Patient
                         </button>
+                        <p className="text-[10px] text-gray-400 font-medium">Built-in secure video call</p>
                     </div>
                 )}
             </div>
@@ -554,6 +571,24 @@ const PatientDetails = () => {
                                                 ))}
                                             </div>
                                         )}
+                                    </div>
+                                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+                                        <h2 className="font-black uppercase text-xs tracking-widest text-gray-400 mb-4">Doctor Notes</h2>
+                                        <textarea
+                                            value={doctorNotes}
+                                            onChange={(e) => setDoctorNotes(e.target.value)}
+                                            rows="5"
+                                            className="w-full border-2 border-gray-100 bg-gray-50 rounded-2xl px-5 py-4 focus:border-primary focus:bg-white focus:outline-none transition-all font-medium text-sm"
+                                            placeholder="Write consultation notes for this case..."
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={handleSaveDoctorNotes}
+                                            disabled={savingDoctorNotes || !consultationRequestId}
+                                            className="mt-3 px-5 py-2.5 bg-primary text-white font-bold rounded-xl disabled:opacity-50"
+                                        >
+                                            {savingDoctorNotes ? 'Saving...' : 'Save Notes'}
+                                        </button>
                                     </div>
                                 </div>
                             )}
@@ -882,62 +917,6 @@ const PatientDetails = () => {
                     </AnimatePresence>
                 </div>
             </div>
-
-            {/* Request Modal */}
-            <AnimatePresence>
-                {isModalOpen && (
-                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            onClick={() => setIsModalOpen(false)}
-                            className="absolute inset-0 bg-gray-900/60 backdrop-blur-sm"
-                        />
-                        <motion.div
-                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                            animate={{ scale: 1, opacity: 1, y: 0 }}
-                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                            className="relative bg-white rounded-[2.5rem] p-8 max-w-md w-full shadow-2xl border border-gray-100"
-                        >
-                            <div className="flex justify-between items-center mb-6">
-                                <h3 className="text-2xl font-black text-gray-900">Request Full Access</h3>
-                                <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-900">
-                                    <span className="material-symbols-outlined">close</span>
-                                </button>
-                            </div>
-
-                            <p className="text-gray-500 mb-6 text-sm leading-relaxed">
-                                Explain to the parent why you need detailed access (meal logs, charts, history). They will review your request.
-                            </p>
-
-                            <form onSubmit={handleRequestFullAccess} className="space-y-4">
-                                <textarea
-                                    value={requestReason}
-                                    onChange={(e) => setRequestReason(e.target.value)}
-                                    placeholder="e.g., I need to analyze the meal logs to understand the child's nutrient deficiency better."
-                                    className="w-full bg-gray-50 border border-gray-200 rounded-2xl p-4 min-h-[120px] focus:ring-primary focus:border-primary outline-none font-medium text-sm resize-none"
-                                    required
-                                />
-                                <button
-                                    type="submit"
-                                    disabled={requestLoading || !requestReason.trim()}
-                                    className="w-full bg-primary text-white font-bold py-4 rounded-xl shadow-lg shadow-blue-200 flex items-center justify-center gap-2 disabled:opacity-50"
-                                >
-                                    {requestLoading ? (
-                                        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                                    ) : (
-                                        <>
-                                            <span className="material-symbols-outlined text-lg">send</span>
-                                            Submit Request
-                                        </>
-                                    )}
-                                </button>
-                            </form>
-                        </motion.div>
-                    </div>
-                )}
-            </AnimatePresence>
         </div>
     );
 };

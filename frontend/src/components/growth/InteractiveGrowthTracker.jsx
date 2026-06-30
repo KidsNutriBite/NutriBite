@@ -517,7 +517,6 @@ const InteractiveGrowthTracker = ({ isOpen, onClose, childId, profile, growthHis
                                     <strong className="text-[#1a365d]">Height: </strong>{heightResult}
                                 </p>
                             </div>
-                        )}
 
                         <p className="text-[#718096] text-sm leading-relaxed mb-4">
                             Each dot on the chart represents your child's measurement entered at a specific age. Multiple dots show how your child's growth changes over time.

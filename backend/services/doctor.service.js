@@ -1,4 +1,4 @@
-import DoctorAccess from '../models/DoctorAccess.model.js';
+import ConsultationRequest from '../models/ConsultationRequest.model.js';
 import AuditLog from '../models/AuditLog.model.js';
 import Profile from '../models/Profile.model.js';
 import MealLog from '../models/MealLog.model.js';
@@ -6,73 +6,35 @@ import User from '../models/User.model.js';
 import { createNotification } from './notification.service.js';
 
 /**
- * Request access to a child profile via parent email
- */
-export const requestAccess = async (doctorId, parentEmail) => {
-    const parent = await User.findOne({ email: parentEmail, role: 'parent' });
-    if (!parent) {
-        throw new Error('Parent with this email not found');
-    }
-
-    // Find profiles for this parent
-    const profiles = await Profile.find({ parentId: parent._id });
-    if (profiles.length === 0) {
-        throw new Error('This parent has no child profiles yet');
-    }
-
-    const requests = [];
-    for (const profile of profiles) {
-        // Check existing
-        const existing = await DoctorAccess.findOne({ doctorId, profileId: profile._id });
-        if (!existing) {
-            const req = await DoctorAccess.create({
-                doctorId,
-                profileId: profile._id,
-                status: 'pending'
-            });
-            requests.push(req);
-
-            // Notify Parent
-            await createNotification(
-                parent._id,
-                `A Doctor has requested access to ${profile.name}'s profile.`,
-                'system',
-                doctorId
-            );
-        }
-    }
-
-    if (requests.length === 0) {
-        return { message: 'Access requests already sent or exist.' };
-    }
-
-    return { message: `Access requested for ${requests.length} children.`, requests };
-};
-
-/**
  * Get all patients (profiles) that the doctor has access to
  */
 export const getMyPatients = async (doctorId) => {
-    const accesses = await DoctorAccess.find({
+    const requests = await ConsultationRequest.find({
         doctorId,
-        status: { $in: ['active', 'restricted'] }
+        status: { $in: ['AssignedToDoctor', 'UnderDoctorReview', 'PrescriptionIssued', 'Closed'] }
     }).populate('profileId');
+
     const Prescription = (await import('../models/Prescription.model.js')).default;
     
-    const results = await Promise.all(accesses.map(async (a) => {
-        if (!a.profileId) return null;
-        const profileObj = a.profileId.toObject();
-        const lastCheckup = await Prescription.findOne({ profileId: profileObj._id })
-            .sort({ date: -1 })
-            .lean();
-        return {
-            ...profileObj,
-            accessStatus: a.status,
-            accessId: a._id,
-            lastCheckupDate: lastCheckup ? lastCheckup.date : null
-        };
-    }));
-    return results.filter(p => p !== null && p._id);
+    const profileMap = new Map();
+    for (const req of requests) {
+        if (!req.profileId) continue;
+        const profileIdStr = req.profileId._id.toString();
+        if (!profileMap.has(profileIdStr)) {
+            const profileObj = req.profileId.toObject();
+            const lastCheckup = await Prescription.findOne({ profileId: req.profileId._id })
+                .sort({ date: -1 })
+                .lean();
+            profileMap.set(profileIdStr, {
+                ...profileObj,
+                accessStatus: 'active',
+                consultationRequestId: req._id,
+                consultationStatus: req.status,
+                lastCheckupDate: lastCheckup ? lastCheckup.date : null
+            });
+        }
+    }
+    return Array.from(profileMap.values());
 };
 
 /**
@@ -80,21 +42,14 @@ export const getMyPatients = async (doctorId) => {
  * Logs the attempt to AuditLog
  */
 export const validateAccess = async (doctorId, profileId, action = 'VIEW_ATTEMPT') => {
-    // 1. Check Access Record
-    const access = await DoctorAccess.findOne({
+    // 1. Check active/completed consultation request
+    const access = await ConsultationRequest.findOne({
         doctorId,
         profileId,
-        status: { $in: ['active', 'restricted', 'pending'] }
+        status: { $in: ['AssignedToDoctor', 'UnderDoctorReview', 'PrescriptionIssued', 'Closed'] }
     });
 
-    let status = 'DENIED';
-    if (access) {
-        if (access.status === 'active') {
-            status = 'ALLOWED';
-        } else {
-            status = 'RESTRICTED';
-        }
-    }
+    const status = access ? 'ALLOWED' : 'DENIED';
 
     // 2. Create Audit Log (Async, don't block)
     AuditLog.create({
@@ -109,11 +64,6 @@ export const validateAccess = async (doctorId, profileId, action = 'VIEW_ATTEMPT
         throw new Error('Access Denied: You do not have permission to view this patient.');
     }
 
-    // If action requires full access (e.g., UPDATE_NOTES), check if status is active
-    if (action === 'UPDATE_NOTES' && access.status !== 'active') {
-        throw new Error('Access Denied: Full access is required to update health notes.');
-    }
-
     return true;
 };
 
@@ -122,10 +72,10 @@ export const validateAccess = async (doctorId, profileId, action = 'VIEW_ATTEMPT
  */
 export const getPatientDetails = async (doctorId, profileId) => {
     // 1. Fetch Access Info first to check status
-    const access = await DoctorAccess.findOne({
+    const access = await ConsultationRequest.findOne({
         doctorId,
         profileId,
-        status: { $in: ['active', 'restricted', 'pending'] }
+        status: { $in: ['AssignedToDoctor', 'UnderDoctorReview', 'PrescriptionIssued', 'Closed'] }
     });
 
     if (!access) throw new Error('Access Denied');
@@ -133,24 +83,6 @@ export const getPatientDetails = async (doctorId, profileId) => {
     // 2. Fetch Data
     const profile = await Profile.findById(profileId);
     if (!profile) throw new Error('Profile not found');
-
-    if (access.status === 'restricted' || access.status === 'pending') {
-        // Return only basic info for restricted/pending status
-        return {
-            profile: {
-                _id: profile._id,
-                name: profile.name,
-                age: profile.age,
-                height: profile.height,
-                weight: profile.weight,
-                avatar: profile.avatar,
-                profileImage: profile.profileImage
-            },
-            message: access.message,
-            status: 'restricted', // Always tell frontend it is restricted if not active
-            accessId: access._id
-        };
-    }
 
     const logs = await MealLog.find({ profileId }).sort({ date: -1 }).limit(30);
     const meals = [];
@@ -186,7 +118,8 @@ export const getPatientDetails = async (doctorId, profileId) => {
         profile,
         meals,
         status: 'active',
-        accessId: access._id
+        consultationRequestId: access._id,
+        consultationStatus: access.status
     };
 };
 
@@ -219,13 +152,13 @@ export const updateHealthNotes = async (doctorId, profileId, note) => {
  * Calls FastAPI /growth/velocity with the child's GrowthRecords
  */
 export const getGrowthVelocity = async (doctorId, profileId) => {
-    // 1. Validate active access (doctors with restricted access cannot see clinical data)
-    const access = await DoctorAccess.findOne({
+    // 1. Validate consultation assignment. ConsultationRequest is the single source of truth.
+    const access = await ConsultationRequest.findOne({
         doctorId,
         profileId,
-        status: 'active'
+        status: { $in: ['AssignedToDoctor', 'UnderDoctorReview', 'PrescriptionIssued'] }
     });
-    if (!access) throw new Error('Active access required to view Growth Velocity data');
+    if (!access) throw new Error('Assigned consultation access required to view Growth Velocity data');
 
     // 2. Fetch child profile
     const profile = await Profile.findById(profileId);
