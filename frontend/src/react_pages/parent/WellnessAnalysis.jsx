@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
@@ -434,7 +434,7 @@ const WellnessAnalysis = ({ profileId, profileData, onUpdate, hideHeader = false
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {wellness.recommendations.map((rec, idx) => (
+                    {parsedDiagnostics.bads.map((item, idx) => (
                         <motion.div
                             key={idx}
                             whileHover={{ y: -5 }}
@@ -442,18 +442,18 @@ const WellnessAnalysis = ({ profileId, profileData, onUpdate, hideHeader = false
                         >
                             <div className="space-y-3">
                                 <div className="flex justify-between items-center">
-                                    <span className="text-2xl">{rec.icon || '🚀'}</span>
+                                    <span className="text-2xl">{item.icon || '🚀'}</span>
                                     <span className="text-[10px] text-indigo-700 font-black bg-indigo-50 px-2.5 py-1 rounded-full border border-indigo-100/50 uppercase">
                                         Roadmap Card
                                     </span>
                                 </div>
                                 <div className="space-y-1">
                                     <p className="text-[10px] text-gray-400 font-bold uppercase">Current Concern</p>
-                                    <p className="font-extrabold text-gray-900 text-sm leading-snug">{rec.concern}</p>
+                                    <p className="font-extrabold text-gray-900 text-sm leading-snug">{item.risk}</p>
                                 </div>
                                 <div className="space-y-1 pt-2 border-t border-indigo-100/30">
                                     <p className="text-[10px] text-indigo-500 font-black uppercase tracking-wider">NutriKids Feature</p>
-                                    <p className="font-bold text-gray-800 text-sm">{rec.solution}</p>
+                                    <p className="font-bold text-gray-800 text-sm">{item.desc}</p>
                                 </div>
                             </div>
 
@@ -463,13 +463,13 @@ const WellnessAnalysis = ({ profileId, profileData, onUpdate, hideHeader = false
                                     <p className="text-xs font-bold text-red-700 leading-normal mt-0.5">{item.action}</p>
                                 </div>
                                 <button
-                                    onClick={() => onNavigateTab && onNavigateTab(item.feature.tab)}
+                                    onClick={() => onNavigateTab && item.feature && onNavigateTab(item.feature.tab)}
                                     className="w-full bg-red-800 text-white font-extrabold text-xs py-2 px-3 rounded-xl shadow hover:bg-red-950 transition flex items-center justify-center gap-1.5"
                                 >
-                                    <span>{item.feature.emoji}</span> Go to {item.feature.label} →
+                                    <span>{item.feature?.emoji}</span> Go to {item.feature?.label} →
                                 </button>
                             </div>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             </motion.div>
