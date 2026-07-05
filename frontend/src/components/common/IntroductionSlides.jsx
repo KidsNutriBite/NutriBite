@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
@@ -296,14 +296,7 @@ export default function IntroductionSlides({ onComplete }) {
               <img
                 src="/indian_food.jpg"
                 alt="Indian Food Thali"
-                style={{
-                  width: '240px',
-                  height: '240px',
-                  objectFit: 'cover',
-                  borderRadius: '24px',
-                  border: '4px solid #FFFFFF',
-                  boxShadow: '0 12px 32px rgba(12, 27, 46, 0.18)'
-                }}
+                className={styles.illusImg}
               />
             </div>
           </div>
@@ -333,14 +326,7 @@ export default function IntroductionSlides({ onComplete }) {
               <img
                 src="/digital_twin.png"
                 alt="Digital Twin Growth Predictions"
-                style={{
-                  width: '240px',
-                  height: '240px',
-                  objectFit: 'cover',
-                  borderRadius: '24px',
-                  border: '4px solid #FFFFFF',
-                  boxShadow: '0 12px 32px rgba(12, 27, 46, 0.18)'
-                }}
+                className={styles.illusImg}
               />
             </div>
           </div>
@@ -370,14 +356,7 @@ export default function IntroductionSlides({ onComplete }) {
               <img
                 src="/doctor_safety.png"
                 alt="AI Doctor Nutrition Safety"
-                style={{
-                  width: '240px',
-                  height: '240px',
-                  objectFit: 'cover',
-                  borderRadius: '24px',
-                  border: '4px solid #FFFFFF',
-                  boxShadow: '0 12px 32px rgba(12, 27, 46, 0.18)'
-                }}
+                className={styles.illusImg}
               />
             </div>
           </div>
@@ -407,14 +386,7 @@ export default function IntroductionSlides({ onComplete }) {
               <img
                 src="/gamified_kids.png"
                 alt="Gamified Kids Experience"
-                style={{
-                  width: '240px',
-                  height: '240px',
-                  objectFit: 'cover',
-                  borderRadius: '24px',
-                  border: '4px solid #FFFFFF',
-                  boxShadow: '0 12px 32px rgba(12, 27, 46, 0.18)'
-                }}
+                className={styles.illusImg}
               />
             </div>
           </div>
@@ -426,11 +398,17 @@ export default function IntroductionSlides({ onComplete }) {
         <div className={styles.mdContent}>
           <p className={styles.mdPre} id="mdpre">The Real Question Is Not...</p>
           <div className={styles.mdSeq}>
-            <div className={styles.mdLine} id="ml1">"Did my child finish their meal?"</div>
+            <div className={styles.mdLine} id="ml1">
+              <div className={styles.interactiveQuestion}>"Did my child finish their meal?"</div>
+            </div>
             <div className={styles.mdArrow} id="ma1">&#8595;</div>
-            <div className={styles.mdLine} id="ml2">"Did my child eat enough today?"</div>
+            <div className={styles.mdLine} id="ml2">
+              <div className={styles.interactiveQuestion}>"Did my child eat enough today?"</div>
+            </div>
             <div className={styles.mdArrow} id="ma2">&#8595;</div>
-            <div className={styles.mdLine} id="ml3">"Did my child grow this month?"</div>
+            <div className={styles.mdLine} id="ml3">
+              <div className={styles.interactiveQuestion}>"Did my child grow this month?"</div>
+            </div>
             <div className={styles.mdArrow} id="ma3">&#8595;</div>
           </div>
           <div className={styles.mdBig} id="mdbig">Do I truly understand<br/>my child's <span>development</span>?</div>

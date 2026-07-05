@@ -43,34 +43,73 @@
 }
 .cardPaper {
   position: relative;
-  width: min(780px, 92vw);
-  min-height: min(560px, 80vh);
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1.5px solid rgba(56, 189, 248, 0.22);
-  border-radius: 28px;
+  width: 80vw;
+  max-width: 960px;
+  height: 75vh;
+  max-height: 580px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1.5px solid rgba(43, 157, 238, 0.2);
+  border-radius: 32px;
   box-shadow:
-    0 32px 80px rgba(56, 189, 248, 0.12),
-    0 8px 24px rgba(12, 27, 46, 0.08),
+    0 40px 90px rgba(43, 157, 238, 0.08),
+    0 12px 32px rgba(12, 27, 46, 0.06),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  padding: 52px 56px 44px;
-  display: grid;
-  grid-template-columns: 1fr 280px;
-  gap: 32px;
+  padding: 48px;
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
   align-items: center;
+  justify-content: space-between;
   will-change: transform, opacity;
   transform-style: preserve-3d;
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-@media(max-width: 640px) {
+.cardPaper:hover {
+  border-color: rgba(43, 157, 238, 0.4);
+  box-shadow:
+    0 48px 100px rgba(43, 157, 238, 0.12),
+    0 16px 40px rgba(12, 27, 46, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+}
+
+@media(max-width: 900px), (max-height: 650px) {
   .cardPaper {
-    grid-template-columns: 1fr;
-    padding: 36px 28px 32px;
-    min-height: auto;
+    width: 85vw;
+    height: 80vh;
+    max-height: 500px;
+    flex-direction: column;
+    gap: 20px;
+    padding: 32px;
+    overflow-y: auto;
+  }
+  .cardText {
+    height: auto;
+    overflow-y: visible;
+    padding-right: 0;
+    gap: 16px;
   }
   .cardIllus {
-    display: none;
+    width: 100%;
+    height: auto;
+    order: -1; /* image at top */
+  }
+  .illusImg {
+    max-width: 140px;
+  }
+}
+
+@media(max-width: 480px), (max-height: 520px) {
+  .cardPaper {
+    width: 92vw;
+    height: 85vh;
+    padding: 20px;
+  }
+  .cardIllus {
+    display: none; /* hide illustration on ultra narrow or short screens */
   }
 }
 
@@ -82,7 +121,7 @@
   right: 0;
   width: 44px;
   height: 44px;
-  background: linear-gradient(225deg, rgba(56, 189, 248, 0.18) 50%, transparent 50%);
+  background: linear-gradient(225deg, rgba(43, 157, 238, 0.15) 50%, transparent 50%);
   border-bottom-left-radius: 12px;
   border-top-right-radius: 28px;
 }
@@ -92,20 +131,20 @@
   font-size: 11px;
   letter-spacing: 0.25em;
   text-transform: uppercase;
-  color: #38BDF8;
+  color: #2b9dee;
   font-weight: 800;
   margin-bottom: 14px;
 }
 .cardHeadline {
   font-family: 'Fredoka One', cursive;
-  font-size: clamp(26px, 4.2vw, 48px);
+  font-size: clamp(26px, 4.2vw, 42px);
   line-height: 1.1;
   color: #0C1B2E;
   margin-bottom: 16px;
-  text-shadow: 0 2px 0 rgba(56, 189, 248, 0.15);
+  text-shadow: 0 2px 0 rgba(43, 157, 238, 0.15);
 }
 .cardSub {
-  font-size: clamp(13px, 1.6vw, 16px);
+  font-size: clamp(13px, 1.6vw, 15px);
   font-weight: 600;
   color: #4A6FA5;
   line-height: 1.65;
@@ -140,13 +179,13 @@
   justify-content: center;
   font-family: 'Fredoka One', cursive;
   font-size: 12px;
-  color: #38BDF8;
+  color: #2b9dee;
   margin-top: 1px;
 }
 
 /* REVEAL BAR */
 .revealBar {
-  border-top: 1.5px solid rgba(56, 189, 248, 0.2);
+  border-top: 1.5px solid rgba(43, 157, 238, 0.2);
   padding-top: 18px;
   opacity: 0;
 }
@@ -157,16 +196,46 @@
   line-height: 1.5;
 }
 .revealText span {
-  color: #38BDF8;
+  color: #2b9dee;
 }
 
 /* ── ILLUSTRATION ZONE ── */
 .cardIllus {
+  width: 280px;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   position: relative;
   will-change: transform;
+}
+
+.illusImg {
+  width: 100%;
+  max-width: 260px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 24px;
+  border: 4px solid #FFFFFF;
+  box-shadow: 0 12px 32px rgba(12, 27, 46, 0.18);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.cardPaper:hover .illusImg {
+  transform: scale(1.04) rotate(1.5deg);
+  box-shadow: 0 20px 48px rgba(12, 27, 46, 0.25);
+}
+
+/* ── CARD TEXT ── */
+.cardText {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-y: auto;
+  padding-right: 8px;
 }
 
 /* ── NAV ── */
@@ -183,28 +252,42 @@
 .navBtn {
   font-family: 'Nunito', sans-serif;
   font-weight: 800;
-  font-size: 14px;
-  letter-spacing: 0.06em;
+  font-size: 13px;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 14px 36px;
+  padding: 12px 32px;
   border-radius: 99px;
   border: none;
   cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.15s;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, background 0.3s ease;
   will-change: transform;
 }
-.navBtn:hover {
-  transform: translateY(-2px);
-}
 .btnNext {
-  background: linear-gradient(135deg, #38BDF8 0%, #0EA5E9 100%);
+  background: linear-gradient(135deg, #2b9dee 0%, #0ea5e9 100%);
   color: #fff;
-  box-shadow: 0 8px 24px rgba(56, 189, 248, 0.40);
+  box-shadow: 0 8px 20px rgba(43, 157, 238, 0.3);
+}
+.btnNext:hover {
+  transform: translateY(-2.5px) scale(1.02);
+  box-shadow: 0 12px 28px rgba(43, 157, 238, 0.45);
+}
+.btnNext:active {
+  transform: translateY(0) scale(0.98);
 }
 .btnSkip {
   background: transparent;
-  color: #4A6FA5;
-  border: 1.5px solid rgba(56, 189, 248, 0.3);
+  color: #4a6fa5;
+  border: 1.5px solid rgba(43, 157, 238, 0.25);
+  transition: all 0.2s ease;
+}
+.btnSkip:hover {
+  background: rgba(43, 157, 238, 0.05);
+  border-color: rgba(43, 157, 238, 0.5);
+  color: #2b9dee;
+  transform: translateY(-2px);
+}
+.btnSkip:active {
+  transform: translateY(0);
 }
 
 /* ── PROGRESS PIPS ── */
@@ -226,7 +309,7 @@
   transition: all 0.4s;
 }
 .pipActive {
-  background: #38BDF8;
+  background: #2b9dee;
   width: 24px;
   border-radius: 4px;
 }
@@ -251,7 +334,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: auto 0;
+  margin: 60px auto 40px;
   width: 100%;
   max-width: 800px;
   padding: 40px 0;
@@ -261,7 +344,7 @@
   font-weight: 800;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: #38BDF8;
+  color: #2b9dee;
   margin-bottom: 28px;
   opacity: 0;
   transform: translateY(12px);
@@ -275,17 +358,44 @@
 }
 .mdLine {
   font-family: 'Nunito', sans-serif;
-  font-size: clamp(18px, 2.8vw, 32px);
-  font-weight: 700;
-  color: #4A6FA5;
   opacity: 0;
   transform: translateY(12px);
   text-align: center;
 }
+
+.interactiveQuestion {
+  font-size: clamp(16px, 2.6vw, 28px);
+  font-weight: 700;
+  color: #4A6FA5;
+  padding: 12px 24px;
+  border-radius: 20px;
+  background: rgba(241, 245, 249, 0.4);
+  border: 1px solid rgba(43, 157, 238, 0.12);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: inline-block;
+  user-select: none;
+}
+
+.interactiveQuestion:hover {
+  background: rgba(43, 157, 238, 0.08);
+  border-color: rgba(43, 157, 238, 0.35);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 24px rgba(43, 157, 238, 0.08);
+  color: #2b9dee;
+}
+
 .mdArrow {
   font-size: 20px;
   color: #BAE6FD;
   opacity: 0;
+  display: inline-block;
+  animation: arrowBounce 1.5s infinite ease-in-out;
+}
+
+@keyframes arrowBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
 }
 .mdBig {
   font-family: 'Fredoka One', cursive;

@@ -5,7 +5,9 @@ import {
     getProfileById,
     updateProfile,
     deleteProfile,
-    reanalyzeProfile
+    reanalyzeProfile,
+    getChildDietPlan,
+    getUnifiedDietPlan
 } from '../controllers/profile.controller.js';
 import { protect } from '../middlewares/auth.middleware.js';
 import { authorize } from '../middlewares/role.middleware.js';
@@ -20,6 +22,9 @@ router.use(authorize('parent', 'doctor')); // Generally accessible, but specific
 
 router.post('/', authorize('parent'), upload.any(), createProfile);
 router.get('/', authorize('parent'), getMyProfiles); // Doctors use a different route to see patients
+
+router.get('/unified-diet-plan', authorize('parent'), getUnifiedDietPlan);
+router.get('/:id/diet-plan', checkProfileOwnership, getChildDietPlan);
 
 router.post('/:id/reanalyze', authorize('parent'), checkProfileOwnership, reanalyzeProfile);
 

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import Link from 'next/link';
 
@@ -28,7 +28,7 @@ const Footer = () => {
                                 <Link className="hover:text-primary transition-colors" href="/#how-it-works">How it works</Link>
                             </li>
                             <li>
-                                <Link className="hover:text-primary transition-colors" href="/#features">Features</Link>
+                                <Link className="hover:text-primary transition-colors" href="/features">Features</Link>
                             </li>
                             <li>
                                 <Link className="hover:text-primary transition-colors" href="/pricing">Pricing Plans</Link>
