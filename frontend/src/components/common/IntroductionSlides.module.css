@@ -44,9 +44,10 @@
 .cardPaper {
   position: relative;
   width: 80vw;
-  max-width: 960px;
-  height: 75vh;
-  max-height: 580px;
+  max-width: 900px;
+  height: auto;
+  min-height: 460px;
+  max-height: 85vh;
   background: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -56,10 +57,10 @@
     0 40px 90px rgba(43, 157, 238, 0.08),
     0 12px 32px rgba(12, 27, 46, 0.06),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  padding: 48px;
+  padding: 32px 40px;
   display: flex;
   flex-direction: row;
-  gap: 40px;
+  gap: 32px;
   align-items: center;
   justify-content: space-between;
   will-change: transform, opacity;
@@ -148,13 +149,13 @@
   font-weight: 600;
   color: #4A6FA5;
   line-height: 1.65;
-  margin-bottom: 28px;
+  margin-bottom: 16px;
 }
 .qList {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-bottom: 28px;
+  gap: 8px;
+  margin-bottom: 16px;
 }
 .qItem {
   display: flex;
@@ -201,7 +202,7 @@
 
 /* ── ILLUSTRATION ZONE ── */
 .cardIllus {
-  width: 280px;
+  width: 220px;
   height: 100%;
   display: flex;
   align-items: center;
@@ -213,7 +214,7 @@
 
 .illusImg {
   width: 100%;
-  max-width: 260px;
+  max-width: 200px;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 24px;
@@ -276,14 +277,14 @@
 }
 .btnSkip {
   background: transparent;
-  color: #4a6fa5;
-  border: 1.5px solid rgba(43, 157, 238, 0.25);
+  color: #000000;
+  border: 1.5px solid #000000;
   transition: all 0.2s ease;
 }
 .btnSkip:hover {
-  background: rgba(43, 157, 238, 0.05);
-  border-color: rgba(43, 157, 238, 0.5);
-  color: #2b9dee;
+  background: rgba(0, 0, 0, 0.05);
+  border-color: #000000;
+  color: #000000;
   transform: translateY(-2px);
 }
 .btnSkip:active {
@@ -478,14 +479,15 @@
   z-index: 300;
   font-size: 12px;
   font-weight: 700;
-  color: #4A6FA5;
+  color: #000000;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   cursor: pointer;
-  opacity: 0.5;
+  opacity: 0.8;
 }
 .skipHint:hover {
   opacity: 1;
+  color: #000000;
 }
 
 .stage svg text {

@@ -399,7 +399,7 @@ export default function IntroductionSlides({ onComplete }) {
           <p className={styles.mdPre} id="mdpre">The Real Question Is Not...</p>
           <div className={styles.mdSeq}>
             <div className={styles.mdLine} id="ml1">
-              <div className={styles.interactiveQuestion}>"Did my child finish their meal?"</div>
+              <div className={styles.interactiveQuestion}>"Did my child finish the meal?"</div>
             </div>
             <div className={styles.mdArrow} id="ma1">&#8595;</div>
             <div className={styles.mdLine} id="ml2">

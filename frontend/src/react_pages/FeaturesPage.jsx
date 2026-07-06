@@ -160,9 +160,121 @@ const FEATURES_DATA = [
   }
 ];
 
-// ==========================================
-// 2. MAIN COMPONENT
-// ==========================================
+// Helper to render cute animal SVGs for the kids mode simulator
+const renderBuddySVG = (buddyId, sizeClass = "w-16 h-16") => {
+  switch (buddyId) {
+    case "leo":
+      return (
+        <svg viewBox="0 0 100 100" className={`${sizeClass} transition-all duration-300 transform`}>
+          {/* Mane */}
+          <path d="M 50 10 A 12 12 0 0 1 65 18 A 12 12 0 0 1 82 25 A 12 12 0 0 1 85 45 A 12 12 0 0 1 90 65 A 12 12 0 0 1 78 82 A 12 12 0 0 1 60 90 A 12 12 0 0 1 40 90 A 12 12 0 0 1 22 82 A 12 12 0 0 1 10 65 A 12 12 0 0 1 15 45 A 12 12 0 0 1 18 25 A 12 12 0 0 1 35 18 Z" fill="#F59E0B" />
+          {/* Inner Mane */}
+          <circle cx="50" cy="50" r="34" fill="#D97706" />
+          {/* Ears */}
+          <circle cx="28" cy="28" r="9" fill="#F59E0B" />
+          <circle cx="28" cy="28" r="5" fill="#FEF3C7" />
+          <circle cx="72" cy="28" r="9" fill="#F59E0B" />
+          <circle cx="72" cy="28" r="5" fill="#FEF3C7" />
+          {/* Face */}
+          <circle cx="50" cy="53" r="28" fill="#FBBF24" />
+          {/* Eyes */}
+          <circle cx="40" cy="48" r="3.5" fill="#1F2937" />
+          <circle cx="39" cy="46" r="1.2" fill="#FFFFFF" />
+          <circle cx="60" cy="48" r="3.5" fill="#1F2937" />
+          <circle cx="59" cy="46" r="1.2" fill="#FFFFFF" />
+          {/* Cheeks */}
+          <circle cx="34" cy="56" r="3" fill="#EF4444" opacity="0.4" />
+          <circle cx="66" cy="56" r="3" fill="#EF4444" opacity="0.4" />
+          {/* Snout */}
+          <ellipse cx="50" cy="57" rx="6" ry="4" fill="#FEF3C7" />
+          {/* Nose */}
+          <polygon points="47,55 53,55 50,58" fill="#1F2937" />
+          {/* Mouth */}
+          <path d="M 47 59 Q 50 61 53 59" fill="none" stroke="#1F2937" strokeWidth="1" strokeLinecap="round" />
+        </svg>
+      );
+    case "pom":
+      return (
+        <svg viewBox="0 0 100 100" className={`${sizeClass} transition-all duration-300 transform`}>
+          {/* Ears */}
+          <circle cx="25" cy="25" r="12" fill="#EC4899" />
+          <circle cx="25" cy="25" r="6" fill="#FBCFE8" />
+          <circle cx="75" cy="25" r="12" fill="#EC4899" />
+          <circle cx="75" cy="25" r="6" fill="#FBCFE8" />
+          {/* Face */}
+          <circle cx="50" cy="55" r="36" fill="#F472B6" />
+          {/* Eye Patches */}
+          <ellipse cx="38" cy="48" rx="8" ry="10" fill="#DB2777" opacity="0.3" />
+          <ellipse cx="62" cy="48" rx="8" ry="10" fill="#DB2777" opacity="0.3" />
+          {/* Eyes */}
+          <circle cx="38" cy="48" r="4.5" fill="#1F2937" />
+          <circle cx="36.5" cy="46" r="1.5" fill="#FFFFFF" />
+          <circle cx="62" cy="48" r="4.5" fill="#1F2937" />
+          <circle cx="60.5" cy="46" r="1.5" fill="#FFFFFF" />
+          {/* Cheeks */}
+          <circle cx="26" cy="60" r="4" fill="#EF4444" opacity="0.5" />
+          <circle cx="74" cy="60" r="4" fill="#EF4444" opacity="0.5" />
+          {/* Snout */}
+          <ellipse cx="50" cy="58" rx="7" ry="5" fill="#FFF1F2" />
+          <circle cx="50" cy="56" r="2.5" fill="#1F2937" />
+          <path d="M 46 59 Q 50 63 54 59" fill="none" stroke="#1F2937" strokeWidth="1.2" strokeLinecap="round" />
+        </svg>
+      );
+    case "bun":
+      return (
+        <svg viewBox="0 0 100 100" className={`${sizeClass} transition-all duration-300 transform`}>
+          {/* Long Ears */}
+          <path d="M 32 38 C 22 8, 44 8, 40 38 Z" fill="#38BDF8" />
+          <path d="M 34 38 C 28 15, 40 15, 38 38 Z" fill="#FCE7F3" />
+          <path d="M 68 38 C 78 8, 56 8, 60 38 Z" fill="#38BDF8" />
+          <path d="M 66 38 C 72 15, 60 15, 62 38 Z" fill="#FCE7F3" />
+          {/* Face */}
+          <circle cx="50" cy="62" r="30" fill="#0EA5E9" />
+          {/* Eyes */}
+          <circle cx="39" cy="57" r="4" fill="#1F2937" />
+          <circle cx="37.5" cy="55" r="1.2" fill="#FFFFFF" />
+          <circle cx="61" cy="57" r="4" fill="#1F2937" />
+          <circle cx="59.5" cy="55" r="1.2" fill="#FFFFFF" />
+          {/* Blush */}
+          <circle cx="29" cy="65" r="4" fill="#EF4444" opacity="0.4" />
+          <circle cx="71" cy="65" r="4" fill="#EF4444" opacity="0.4" />
+          {/* Nose & Mouth */}
+          <polygon points="48,61 52,61 50,63" fill="#F472B6" />
+          <path d="M 46 65 Q 50 68 54 65" fill="none" stroke="#1F2937" strokeWidth="1.2" strokeLinecap="round" />
+          {/* Buck Teeth */}
+          <rect x="48" y="65" width="4" height="3" fill="#FFFFFF" stroke="#1F2937" strokeWidth="0.5" />
+        </svg>
+      );
+    case "swift":
+      return (
+        <svg viewBox="0 0 100 100" className={`${sizeClass} transition-all duration-300 transform`}>
+          {/* Hair Tuft/Flame */}
+          <path d="M 50 8 C 65 20, 55 35, 50 35 C 45 35, 35 20, 50 8 Z" fill="#EF4444" />
+          {/* Ears */}
+          <polygon points="18,50 12,24 34,40" fill="#F97316" />
+          <polygon points="18,48 15,28 30,40" fill="#FEE2E2" />
+          <polygon points="82,50 88,24 66,40" fill="#F97316" />
+          <polygon points="82,48 85,28 70,40" fill="#FEE2E2" />
+          {/* Face */}
+          <polygon points="18,50 82,50 72,82 50,90 28,82" fill="#F97316" />
+          <polygon points="26,50 74,50 68,78 50,86 32,78" fill="#FBAF24" />
+          {/* Eyes */}
+          <ellipse cx="38" cy="55" rx="4.5" ry="6" fill="#1F2937" />
+          <circle cx="36.5" cy="52" r="1.5" fill="#FFFFFF" />
+          <ellipse cx="62" cy="55" rx="4.5" ry="6" fill="#1F2937" />
+          <circle cx="60.5" cy="52" r="1.5" fill="#FFFFFF" />
+          {/* Cheek blush */}
+          <circle cx="28" cy="66" r="3.5" fill="#EF4444" opacity="0.5" />
+          <circle cx="72" cy="66" r="3.5" fill="#EF4444" opacity="0.5" />
+          {/* Nose/Mouth */}
+          <circle cx="50" cy="64" r="2" fill="#1F2937" />
+          <path d="M 45 68 Q 50 74 55 68" fill="none" stroke="#1F2937" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+      );
+    default:
+      return null;
+  }
+};
 
 const FeaturesPage = () => {
   const [activeCategory, setActiveCategory] = useState("all");
@@ -360,34 +472,32 @@ const FeaturesPage = () => {
                 </div>
 
                 {/* Avatar illustration */}
-                <div className="h-28 w-28 rounded-full bg-gradient-to-tr from-primary/20 to-accent-orange/20 flex items-center justify-center shadow-inner animate-bounce" style={{ animationDuration: '3s' }}>
-                  {selectedBuddy === "leo" && <Smile className="text-amber-500 w-14 h-14" />}
-                  {selectedBuddy === "pom" && <Heart className="text-rose-500 w-14 h-14 fill-rose-500/20" />}
-                  {selectedBuddy === "bun" && <Award className="text-sky-500 w-14 h-14" />}
-                  {selectedBuddy === "swift" && <Flame className="text-orange-500 w-14 h-14" />}
+                <div className="h-32 w-32 rounded-full bg-gradient-to-tr from-primary/20 to-accent-orange/20 flex items-center justify-center shadow-2xl border border-white/20 hover:scale-110 active:scale-95 transition-all duration-300 animate-bounce" style={{ animationDuration: '3s' }}>
+                  {renderBuddySVG(selectedBuddy, "w-20 h-20")}
                 </div>
               </div>
 
               {/* Selector buttons */}
               <div className="grid grid-cols-4 gap-2 pt-4 border-t border-slate-200/50 dark:border-slate-800/50 mt-4">
                 {[
-                  { id: "leo", label: "Leo", icon: Smile, color: "text-amber-500" },
-                  { id: "pom", label: "Pompom", icon: Heart, color: "text-rose-500" },
-                  { id: "bun", label: "Bunbun", icon: Award, color: "text-sky-500" },
-                  { id: "swift", label: "Swift", icon: Flame, color: "text-orange-500" }
+                  { id: "leo", label: "Leo" },
+                  { id: "pom", label: "Pompom" },
+                  { id: "bun", label: "Bunbun" },
+                  { id: "swift", label: "Swift" }
                 ].map(buddy => {
-                  const BuddyIcon = buddy.icon;
                   return (
                     <button
                       key={buddy.id}
                       onClick={() => setSelectedBuddy(buddy.id)}
-                      className={`flex flex-col items-center justify-center p-2 rounded-xl border text-xs font-bold transition-all hover:scale-105 active:scale-95 cursor-pointer ${
+                      className={`flex flex-col items-center justify-center p-2 rounded-2xl border text-xs font-bold transition-all hover:scale-110 active:scale-90 cursor-pointer group/buddy ${
                         selectedBuddy === buddy.id
-                        ? 'border-primary bg-primary/10 text-primary dark:bg-primary/20'
-                        : 'border-slate-200/80 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-850'
+                        ? 'border-primary bg-primary/10 text-primary dark:bg-primary/20 shadow-md shadow-primary/10'
+                        : 'border-slate-200/80 dark:border-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-850 hover:border-slate-350'
                       }`}
                     >
-                      <BuddyIcon className={`w-5 h-5 mb-1 ${buddy.color}`} />
+                      <div className="w-10 h-10 mb-1 flex items-center justify-center transition-transform duration-300 group-hover/buddy:scale-110 group-hover/buddy:rotate-3">
+                        {renderBuddySVG(buddy.id, "w-8 h-8")}
+                      </div>
                       <span>{buddy.label}</span>
                     </button>
                   );

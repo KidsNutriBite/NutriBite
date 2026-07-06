@@ -178,14 +178,31 @@
 .tapToContinue {
   margin-top: 32px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 6px;
+  gap: 10px;
+  padding: 12px 32px;
+  background: linear-gradient(135deg, var(--sky) 0%, #0ea5e9 100%);
+  color: var(--white);
+  border: none;
+  border-radius: 99px;
+  box-shadow: 0 8px 24px rgba(56, 189, 248, 0.3);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, box-shadow 0.3s ease;
   z-index: 20;
   transform: translateY(15px);
+  cursor: pointer;
+}
+
+.tapToContinue:hover {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  box-shadow: 0 12px 28px rgba(56, 189, 248, 0.45);
+  transform: translateY(-2px);
+}
+
+.tapToContinue:active {
+  transform: translateY(1px);
 }
 
 .tapToContinue.visible {
@@ -195,8 +212,8 @@
 }
 
 .tapIcon {
-  font-size: 28px;
-  color: var(--sky);
+  font-size: 20px;
+  color: var(--white);
   animation: tapPulse 1.8s infinite ease-in-out;
 }
 
@@ -206,8 +223,7 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.15em;
-  color: var(--ink);
-  opacity: 0.85;
+  color: var(--white);
 }
 
 @keyframes tapPulse {
