@@ -3,6 +3,7 @@ import MealLog from '../models/MealLog.model.js';
 import { computeDynamicWellnessScore } from '../utils/nutritionIntelligence.js';
 import { ResponseBuilder } from './nutritionIntelligenceEngine.js';
 import { MealPlannerService } from './mealPlannerEngine.js';
+import { GroceryOptimizerService } from './groceryOptimizerEngine.js';
 
 export const analyzeNutrition = async (profileId, sunlightMinutes = 0) => {
     // 1. Fetch Profile
@@ -11,10 +12,10 @@ export const analyzeNutrition = async (profileId, sunlightMinutes = 0) => {
         throw new Error('Profile not found');
     }
 
-    // 2. Fetch Meal Logs (Last 30 days)
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    const dateString = thirtyDaysAgo.toISOString().split('T')[0];
+    // 2. Fetch Meal Logs (Last 7 days for weekly analysis)
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const dateString = sevenDaysAgo.toISOString().split('T')[0];
 
     const logs = await MealLog.find({
         profileId,
@@ -26,6 +27,9 @@ export const analyzeNutrition = async (profileId, sunlightMinutes = 0) => {
     
     // 4. Generate daily meal plan using MealPlannerService
     const mealPlanData = MealPlannerService.generatePlan(profile, logs);
+
+    // 5. Optimize weekly groceries using GroceryOptimizerService
+    const groceryPlanData = GroceryOptimizerService.optimize(profile, logs, mealPlanData.dailyPlan, analysis.groceryList);
     
     // Extrapolate daily averages and target requirements for response
     const avg = {};
@@ -90,7 +94,12 @@ export const analyzeNutrition = async (profileId, sunlightMinutes = 0) => {
         
         // Phase 2 Meal Planner integrations
         mealPlan: mealPlanData.dailyPlan,
-        mealPlanSummary: mealPlanData.totalPlan
+        mealPlanSummary: mealPlanData.totalPlan,
+
+        // Phase 3 Grocery Optimizer integrations
+        groceryPlan: groceryPlanData.groceries,
+        groceryPlanSummary: groceryPlanData.summary,
+        groceryPlanInsights: groceryPlanData.insights
     };
 };
 
