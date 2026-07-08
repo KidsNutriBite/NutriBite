@@ -12,7 +12,7 @@ import { toast } from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const ResourcesLibrary = () => {
-    const { selectedProfile } = useProfile();
+    const { selectedProfile, profiles, selectedProfileId, changeProfile } = useProfile();
     const [activeTab, setActiveTab] = useState('guides'); // guides, recipes, portions, dietplan
     const [activeFilter, setActiveFilter] = useState('All');
     const [savedResources, setSavedResources] = useState(new Set());
@@ -399,15 +399,52 @@ const ResourcesLibrary = () => {
                         Based on {childName}'s health parameters showing {activeDeficiencies.length > 0 ? `deficiencies in ${activeDeficiencies.join(', ')}` : 'healthy growth ranges'}, we have curated traditional Indian recipes, clinical portion guidelines, and developmental tips to support their daily vitality.
                     </p>
 
-                    <div className="flex flex-col sm:flex-row gap-4">
-                        <button 
-                            onClick={handleDownloadChildPlan}
-                            disabled={downloading}
-                            className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-blue-600/20 transition-all active:scale-95 flex items-center justify-center gap-2 text-xs uppercase tracking-wider disabled:opacity-50"
-                        >
-                            <span className="material-symbols-outlined text-base">download</span>
-                            {downloading ? 'Generating Plan...' : 'Download Weekly Plan (PDF)'}
-                        </button>
+                    <div className="flex flex-col gap-6 mt-2 relative z-20">
+                        {/* Profile switcher pills next to download button area */}
+                        {profiles && profiles.length > 0 && (
+                            <div className="flex flex-wrap gap-3 items-center">
+                                <span className="text-xs font-black text-[#4c799a] dark:text-slate-400 uppercase tracking-widest mr-1.5 flex items-center gap-1.5 select-none">
+                                    <span className="material-symbols-outlined text-base">child_care</span>
+                                    Switch Child Profile:
+                                </span>
+                                <div className="flex flex-wrap gap-2.5">
+                                    {profiles.map(p => {
+                                        const isSelected = selectedProfileId === p._id;
+                                        return (
+                                            <button
+                                                key={p._id}
+                                                onClick={() => changeProfile(p._id)}
+                                                className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl border font-bold text-xs uppercase tracking-wider transition-all duration-300 active:scale-95 shadow-sm hover:shadow-md cursor-pointer ${
+                                                    isSelected 
+                                                        ? 'bg-blue-600 border-blue-600 text-white shadow-blue-600/25 scale-[1.03]' 
+                                                        : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-blue-400 dark:hover:border-slate-500'
+                                                }`}
+                                            >
+                                                {p.profileImage ? (
+                                                    <img src={p.profileImage} alt="" className="w-5 h-5 rounded-full object-cover ring-1 ring-white/10" />
+                                                ) : (
+                                                    <div className="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-600 flex items-center justify-center text-[10px]">
+                                                        👶
+                                                    </div>
+                                                )}
+                                                <span>{p.name}</span>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="flex flex-col sm:flex-row gap-4">
+                            <button 
+                                onClick={handleDownloadChildPlan}
+                                disabled={downloading}
+                                className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3.5 px-6 rounded-2xl shadow-lg shadow-blue-600/20 transition-all active:scale-95 flex items-center justify-center gap-2 text-xs uppercase tracking-wider disabled:opacity-50 w-full sm:w-auto"
+                            >
+                                <span className="material-symbols-outlined text-base">download</span>
+                                {downloading ? 'Generating Plan...' : 'Download Weekly Plan (PDF)'}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

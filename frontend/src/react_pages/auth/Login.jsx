@@ -8,6 +8,7 @@ import { resend2FA } from '../../api/auth.api';
 import { motion } from 'framer-motion';
 import SimpleNavbar from '../../components/common/SimpleNavbar';
 import { useTheme } from '../../context/ThemeContext';
+import AuthTransition from '../../components/common/AuthTransition';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -16,6 +17,7 @@ const Login = () => {
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const [showTransition, setShowTransition] = useState(true);
     
     // 2FA state variables
     const [is2faPending, setIs2faPending] = useState(false);
@@ -103,9 +105,13 @@ const Login = () => {
 
     return (
         <div className="relative flex h-screen w-full flex-col lg:flex-row overflow-hidden bg-background-light dark:bg-background-dark text-[#0d161b] dark:text-slate-100">
+            {showTransition && (
+                <AuthTransition type="login" onComplete={() => setShowTransition(false)} />
+            )}
+
             {/* Back to Home Button at Top Left */}
             <div className="absolute top-6 left-6 z-30">
-                <Link href="/" className="group flex items-center gap-1.5 text-xs md:text-sm font-bold text-[#4c799a] dark:text-slate-400 hover:text-primary dark:hover:text-primary transition-all bg-white/60 dark:bg-slate-900/60 backdrop-blur-md border border-white/20 dark:border-slate-800 rounded-full px-3 md:px-4 py-2 shadow-md">
+                <Link href="/" className="group flex items-center gap-1.5 text-xs md:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 transition-all bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-full px-3 md:px-4 py-2 shadow-lg">
                     <span className="material-symbols-outlined text-base group-hover:-translate-x-0.5 transition-transform">arrow_back</span>
                     <span>Back to Home</span>
                 </Link>
@@ -114,15 +120,33 @@ const Login = () => {
 
 
             {/* Left Side: Mascot & Brand (Playful) */}
-            <div className="hidden lg:flex w-1/2 h-full flex-col justify-center items-center bg-primary/10 dark:bg-primary/5 p-8 relative overflow-hidden">
+            <motion.div 
+                initial={{ x: -150, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ type: 'spring', stiffness: 50, damping: 15, delay: 0.15 }}
+                className="hidden lg:flex w-1/2 h-full flex-col justify-center items-center bg-primary/10 dark:bg-primary/5 p-8 relative overflow-hidden z-10"
+            >
+                {/* Background Image Layer with lower transparency (higher opacity) inside left half only */}
+                <div 
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.85] dark:opacity-[0.20] pointer-events-none z-0" 
+                    style={{ backgroundImage: "url('/login-bg.png')" }}
+                />
+
                 {/* Decorative blobs */}
                 <div className="absolute top-[-10%] left-[-10%] w-64 h-64 bg-primary/20 rounded-full blur-3xl"></div>
                 <div className="absolute bottom-[-5%] right-[-5%] w-80 h-80 bg-green-200/30 dark:bg-green-900/10 rounded-full blur-3xl"></div>
 
                 <div className="relative z-10 text-center max-w-md flex flex-col items-center">
                     <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-xl relative mt-10 mb-8">
-                        {/* Restored Picture Mascot */}
-                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-24 h-24 bg-contain bg-no-repeat" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuB5iFQF5PvsrBF5KoKLWA0Pab87ovOtRxXtk-paD_POUwT3mSt2bXLFcpL57AVszQ6AAwq4lqrWi7iX_e-TsQw1D66wzy54-s_vRDetO8JqDGJcLFx3tgsxgb6MVwhzxuTbSZhOMgZQ1r7dZX_y8nbWqhoS0Bkvh1JKLwOuxi9qPau02n7KXIIkbI0GNuhl8wPLWsjl4PZ4D6eJZpQhXsKPPqFeXo9mRPa3vgFlLl3sUNzteYIdaVS7tFXnptkfdxAYkLntMvUzYw8')" }}></div>
+                        {/* Restored Picture Mascot Container with semi-circle top */}
+                        <motion.div 
+                            initial={{ scale: 0, rotate: -20 }}
+                            animate={{ scale: 1, rotate: 0 }}
+                            transition={{ type: 'spring', stiffness: 90, damping: 12, delay: 0.6 }}
+                            className="absolute -top-12 left-1/2 -translate-x-1/2 w-24 h-24 bg-white dark:bg-slate-800 rounded-t-full border border-b-0 border-slate-100 dark:border-slate-700 shadow-sm overflow-hidden flex items-center justify-center"
+                        >
+                            <div className="w-full h-full bg-contain bg-center bg-no-repeat scale-[0.9]" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuB5iFQF5PvsrBF5KoKLWA0Pab87ovOtRxXtk-paD_POUwT3mSt2bXLFcpL57AVszQ6AAwq4lqrWi7iX_e-TsQw1D66wzy54-s_vRDetO8JqDGJcLFx3tgsxgb6MVwhzxuTbSZhOMgZQ1r7dZX_y8nbWqhoS0Bkvh1JKLwOuxi9qPau02n7KXIIkbI0GNuhl8wPLWsjl4PZ4D6eJZpQhXsKPPqFeXo9mRPa3vgFlLl3sUNzteYIdaVS7tFXnptkfdxAYkLntMvUzYw8')" }}></div>
+                        </motion.div>
                         <div className="pt-12">
                             <h2 className="text-2xl font-extrabold text-[#0d161b] dark:text-white mb-2">Welcome back!</h2>
                             <p className="text-[#4c799a] dark:text-slate-400 text-sm leading-relaxed">
@@ -131,15 +155,25 @@ const Login = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </motion.div>
 
             {/* Right Side: Auth Form (Clean & Soft with Glass Finish) */}
-            <div className="w-full lg:w-1/2 h-full flex flex-col items-center px-4 py-12 md:py-20 lg:py-8 overflow-y-auto scrollbar-hide relative bg-slate-50/50 dark:bg-slate-950/10">
+            <motion.div 
+                initial={{ x: 150, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ type: 'spring', stiffness: 50, damping: 15, delay: 0.15 }}
+                className="w-full lg:w-1/2 h-full flex flex-col items-center px-4 py-12 md:py-20 lg:py-8 overflow-y-auto scrollbar-hide relative bg-slate-50/50 dark:bg-slate-950/10 z-10"
+            >
                 {/* Background glowing gradients behind glass card for premium effect */}
                 <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
                 <div className="absolute bottom-1/4 left-1/4 w-72 h-72 bg-emerald-300/10 rounded-full blur-3xl pointer-events-none"></div>
 
-                <div className="w-full max-w-[440px] bg-white/40 dark:bg-slate-900/45 backdrop-blur-xl p-8 rounded-[2rem] border border-white/25 dark:border-slate-800/55 shadow-2xl relative z-10 my-auto">
+                <motion.div 
+                    initial={{ scale: 0.9, opacity: 0, y: 30 }}
+                    animate={{ scale: 1, opacity: 1, y: 0 }}
+                    transition={{ type: 'spring', stiffness: 60, damping: 12, delay: 0.3 }}
+                    className="w-full max-w-[440px] bg-white/40 dark:bg-slate-900/45 backdrop-blur-xl p-8 rounded-[2rem] border border-white/25 dark:border-slate-800/55 shadow-2xl relative z-10 my-auto"
+                >
 
                     <header className="mb-6 lg:hidden">
                         <div className="flex items-center justify-center gap-2 mb-4">
@@ -329,8 +363,8 @@ const Login = () => {
                         <a href="#" className="hover:text-primary transition-colors">Terms</a>
                         <a href="#" className="hover:text-primary transition-colors">Support</a>
                     </footer>
-                </div>
-            </div>
+                </motion.div>
+            </motion.div>
         </div>
     );
 };
