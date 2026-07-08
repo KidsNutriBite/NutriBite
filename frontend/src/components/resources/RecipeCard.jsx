@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 
-const RecipeCard = ({ title, prepTime, nutrition, image, isSaved, onToggleSave, onClick }) => {
+const RecipeCard = ({ title, prepTime, nutrition, image, isSaved, onToggleSave, onClick, recommended }) => {
     return (
         <div onClick={onClick} className="group bg-white dark:bg-slate-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all border border-slate-100 dark:border-slate-800 flex flex-col h-full cursor-pointer">
             <div className="relative h-48 overflow-hidden">
@@ -19,6 +19,12 @@ const RecipeCard = ({ title, prepTime, nutrition, image, isSaved, onToggleSave, 
                         {prepTime}
                     </span>
                 </div>
+
+                {recommended && (
+                    <div className="absolute top-3 left-[92px] bg-gradient-to-r from-blue-500 to-indigo-600 dark:from-blue-600 dark:to-indigo-700 text-white text-[9px] font-black px-2.5 py-1.5 rounded-full uppercase tracking-wider shadow-md">
+                        ✨ Recommended
+                    </div>
+                )}
 
                 <button
                     onClick={(e) => { e.stopPropagation(); onToggleSave(); }}

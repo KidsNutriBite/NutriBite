@@ -30,4 +30,14 @@ export const reanalyzeProfile = async (id) => {
     return response.data;
 };
 
+export const getChildDietPlan = async (id) => {
+    const response = await api.get(`/profiles/${id}/diet-plan`);
+    return response.data;
+};
+
+export const getUnifiedDietPlan = async () => {
+    const response = await api.get('/profiles/unified-diet-plan');
+    return response.data;
+};
+
 

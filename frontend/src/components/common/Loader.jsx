@@ -370,10 +370,10 @@ export default function Loader({ onAnimationComplete, onFadeOutComplete }) {
         </div>
 
         {/* ── TAP TO CONTINUE ── */}
-        <div className={`${styles.tapToContinue} ${isLoaded ? styles.visible : ''}`}>
+        <button className={`${styles.tapToContinue} ${isLoaded ? styles.visible : ''}`} type="button">
           <span className={styles.tapText}>Tap to Continue</span>
           <span className={`material-symbols-outlined ${styles.tapIcon}`}>touch_app</span>
-        </div>
+        </button>
       </div>
     </div>
   );

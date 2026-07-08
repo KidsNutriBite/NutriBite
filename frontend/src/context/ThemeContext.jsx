@@ -18,15 +18,9 @@ export const ThemeProvider = ({ children }) => {
                 document.documentElement.classList.remove('dark');
             }
         } else {
-            // Check system preference
-            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const initialTheme = systemPrefersDark ? 'dark' : 'light';
-            setTheme(initialTheme);
-            if (initialTheme === 'dark') {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
+            // Default to light mode (ignoring system preferences as per request)
+            setTheme('light');
+            document.documentElement.classList.remove('dark');
         }
     }, []);
 

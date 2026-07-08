@@ -20,6 +20,7 @@ export default function CartoonKid({ activeStep }) {
   const item1Ref = useRef(null); // Profile / Apple
   const item2Ref = useRef(null); // Broccoli
   const item3Ref = useRef(null); // Shield / Stethoscope
+  const item4Ref = useRef(null); // Salad / PDF
 
   useEffect(() => {
     // 1. Hover/Mouse Move Eye Tracking
@@ -109,7 +110,16 @@ export default function CartoonKid({ activeStep }) {
           delay: 0.8,
         });
 
-        // Scroll Trigger for eye roll and tracking steps
+        gsap.to(item4Ref.current, {
+          y: 6,
+          rotation: -8,
+          duration: 3.0,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+          delay: 1.0,
+        });
+
         ScrollTrigger.create({
           trigger: parentSection,
           start: "top center",
@@ -120,7 +130,7 @@ export default function CartoonKid({ activeStep }) {
             const p = self.progress;
 
             // Make eyes "roll" at the beginning, then focus
-            if (p < 0.2) {
+            if (p < 0.15) {
               const rollAngle = p * Math.PI * 4; // Multiple full rotations
               const rollRadius = 3.5;
               gsap.to([leftPupilRef.current, rightPupilRef.current], {
@@ -128,18 +138,22 @@ export default function CartoonKid({ activeStep }) {
                 y: Math.sin(rollAngle) * rollRadius,
                 duration: 0.1,
               });
-            } else if (p >= 0.2 && p < 0.5) {
+            } else if (p >= 0.15 && p < 0.4) {
               // Focus left/up (looking at step 1)
               gsap.to([leftPupilRef.current, rightPupilRef.current], { x: -3, y: -2, duration: 0.3 });
               gsap.to(mouthRef.current, { attr: { d: "M 88 132 Q 100 140 112 132 Z" }, duration: 0.3 }); // small smile
-            } else if (p >= 0.5 && p < 0.8) {
-              // Focus right/down (looking at step 2)
-              gsap.to([leftPupilRef.current, rightPupilRef.current], { x: 3, y: 2, duration: 0.3 });
+            } else if (p >= 0.4 && p < 0.6) {
+              // Focus left/down (looking at step 2)
+              gsap.to([leftPupilRef.current, rightPupilRef.current], { x: -3, y: 3, duration: 0.3 });
               gsap.to(mouthRef.current, { attr: { d: "M 86 130 Q 100 148 114 130 Z" }, duration: 0.3 }); // wide smile
+            } else if (p >= 0.6 && p < 0.8) {
+              // Focus right/up (looking at step 3)
+              gsap.to([leftPupilRef.current, rightPupilRef.current], { x: 3, y: -2, duration: 0.3 });
+              gsap.to(mouthRef.current, { attr: { d: "M 84 126 Q 100 156 116 126 Z" }, duration: 0.3 }); // huge smile
             } else {
-              // Focus center/down (looking at step 3)
-              gsap.to([leftPupilRef.current, rightPupilRef.current], { x: 0, y: 3.5, duration: 0.3 });
-              gsap.to(mouthRef.current, { attr: { d: "M 84 126 Q 100 156 116 126 Z" }, duration: 0.3 }); // huge excited open smile
+              // Focus right/down (looking at step 4)
+              gsap.to([leftPupilRef.current, rightPupilRef.current], { x: 3, y: 3, duration: 0.3 });
+              gsap.to(mouthRef.current, { attr: { d: "M 84 126 Q 100 156 116 126 Z" }, duration: 0.3 }); // huge smile
             }
           },
         });
@@ -160,6 +174,8 @@ export default function CartoonKid({ activeStep }) {
     } else if (activeStep === 1) {
       gsap.to(mouthRef.current, { attr: { d: "M 86 130 Q 100 148 114 130 Z" }, duration: 0.3 });
     } else if (activeStep === 2) {
+      gsap.to(mouthRef.current, { attr: { d: "M 84 126 Q 100 156 116 126 Z" }, duration: 0.3 });
+    } else if (activeStep === 3) {
       gsap.to(mouthRef.current, { attr: { d: "M 84 126 Q 100 156 116 126 Z" }, duration: 0.3 });
     }
   }, [activeStep]);
@@ -203,6 +219,18 @@ export default function CartoonKid({ activeStep }) {
       >
         <div className="flex items-center justify-center w-12 h-12 rounded-full bg-sky-500 text-white shadow-lg text-2xl border border-sky-300">
           🩺
+        </div>
+      </div>
+
+      {/* Item 4: AI personalized diet plans & PDF downloads (Active in step 4: Diet plans) */}
+      <div
+        ref={item4Ref}
+        className={`absolute bottom-8 right-8 z-25 transition-all duration-500 scale-95 ${
+          activeStep === 3 ? "opacity-100 filter drop-shadow-[0_0_15px_rgba(129,140,248,0.7)] scale-110" : "opacity-45"
+        }`}
+      >
+        <div className="flex items-center justify-center w-14 h-14 rounded-full bg-indigo-500 text-white shadow-lg text-3xl border border-indigo-300">
+          🥗
         </div>
       </div>
 

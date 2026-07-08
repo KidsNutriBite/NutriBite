@@ -7,6 +7,8 @@ import useAuth from '../../hooks/useAuth';
 import { resend2FA } from '../../api/auth.api';
 import { motion } from 'framer-motion';
 import SimpleNavbar from '../../components/common/SimpleNavbar';
+import { useTheme } from '../../context/ThemeContext';
+import AuthTransition from '../../components/common/AuthTransition';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -15,6 +17,7 @@ const Login = () => {
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+    const [showTransition, setShowTransition] = useState(true);
     
     // 2FA state variables
     const [is2faPending, setIs2faPending] = useState(false);
@@ -25,8 +28,16 @@ const Login = () => {
     const [resending, setResending] = useState(false);
 
     const { login, verify2FA } = useAuth();
+    const { theme, toggleTheme } = useTheme();
     const router = useRouter();
     const navigate = (path) => typeof path === 'number' && path < 0 ? router.back() : router.push(path);
+
+    // Prevent landing page from running initial animations on back navigation
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            sessionStorage.setItem('has_loaded', 'true');
+        }
+    }, []);
 
     // Resend countdown timer
     useEffect(() => {
@@ -94,25 +105,48 @@ const Login = () => {
 
     return (
         <div className="relative flex h-screen w-full flex-col lg:flex-row overflow-hidden bg-background-light dark:bg-background-dark text-[#0d161b] dark:text-slate-100">
-            <SimpleNavbar />
+            {showTransition && (
+                <AuthTransition type="login" onComplete={() => setShowTransition(false)} />
+            )}
+
+            {/* Back to Home Button at Top Left */}
+            <div className="absolute top-6 left-6 z-30">
+                <Link href="/" className="group flex items-center gap-1.5 text-xs md:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 transition-all bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-full px-3 md:px-4 py-2 shadow-lg">
+                    <span className="material-symbols-outlined text-base group-hover:-translate-x-0.5 transition-transform">arrow_back</span>
+                    <span>Back to Home</span>
+                </Link>
+            </div>
+
+
+
             {/* Left Side: Mascot & Brand (Playful) */}
-            <div className="hidden lg:flex w-1/2 h-full flex-col justify-center items-center bg-primary/10 dark:bg-primary/5 p-8 relative overflow-hidden">
+            <motion.div 
+                initial={{ x: -150, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ type: 'spring', stiffness: 50, damping: 15, delay: 0.15 }}
+                className="hidden lg:flex w-1/2 h-full flex-col justify-center items-center bg-primary/10 dark:bg-primary/5 p-8 relative overflow-hidden z-10"
+            >
+                {/* Background Image Layer with lower transparency (higher opacity) inside left half only */}
+                <div 
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-[0.85] dark:opacity-[0.20] pointer-events-none z-0" 
+                    style={{ backgroundImage: "url('/login-bg.png')" }}
+                />
+
                 {/* Decorative blobs */}
                 <div className="absolute top-[-10%] left-[-10%] w-64 h-64 bg-primary/20 rounded-full blur-3xl"></div>
                 <div className="absolute bottom-[-5%] right-[-5%] w-80 h-80 bg-green-200/30 dark:bg-green-900/10 rounded-full blur-3xl"></div>
 
-                <div className="relative z-10 text-center max-w-md">
-                    <div className="mb-6 flex justify-center">
-                        {/* Logo Component */}
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 text-primary">
-                                <span className="material-symbols-outlined text-4xl">nutrition</span>
-                            </div>
-                        </div>
-                    </div>
-
+                <div className="relative z-10 text-center max-w-md flex flex-col items-center">
                     <div className="bg-white dark:bg-slate-800 rounded-xl p-6 shadow-xl relative mt-10 mb-8">
-                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-24 h-24 bg-contain bg-no-repeat" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuB5iFQF5PvsrBF5KoKLWA0Pab87ovOtRxXtk-paD_POUwT3mSt2bXLFcpL57AVszQ6AAwq4lqrWi7iX_e-TsQw1D66wzy54-s_vRDetO8JqDGJcLFx3tgsxgb6MVwhzxuTbSZhOMgZQ1r7dZX_y8nbWqhoS0Bkvh1JKLwOuxi9qPau02n7KXIIkbI0GNuhl8wPLWsjl4PZ4D6eJZpQhXsKPPqFeXo9mRPa3vgFlLl3sUNzteYIdaVS7tFXnptkfdxAYkLntMvUzYw8')" }}></div>
+                        {/* Restored Picture Mascot Container with semi-circle top */}
+                        <motion.div 
+                            initial={{ scale: 0, rotate: -20 }}
+                            animate={{ scale: 1, rotate: 0 }}
+                            transition={{ type: 'spring', stiffness: 90, damping: 12, delay: 0.6 }}
+                            className="absolute -top-12 left-1/2 -translate-x-1/2 w-24 h-24 bg-white dark:bg-slate-800 rounded-t-full border border-b-0 border-slate-100 dark:border-slate-700 shadow-sm overflow-hidden flex items-center justify-center"
+                        >
+                            <div className="w-full h-full bg-contain bg-center bg-no-repeat scale-[0.9]" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuB5iFQF5PvsrBF5KoKLWA0Pab87ovOtRxXtk-paD_POUwT3mSt2bXLFcpL57AVszQ6AAwq4lqrWi7iX_e-TsQw1D66wzy54-s_vRDetO8JqDGJcLFx3tgsxgb6MVwhzxuTbSZhOMgZQ1r7dZX_y8nbWqhoS0Bkvh1JKLwOuxi9qPau02n7KXIIkbI0GNuhl8wPLWsjl4PZ4D6eJZpQhXsKPPqFeXo9mRPa3vgFlLl3sUNzteYIdaVS7tFXnptkfdxAYkLntMvUzYw8')" }}></div>
+                        </motion.div>
                         <div className="pt-12">
                             <h2 className="text-2xl font-extrabold text-[#0d161b] dark:text-white mb-2">Welcome back!</h2>
                             <p className="text-[#4c799a] dark:text-slate-400 text-sm leading-relaxed">
@@ -121,17 +155,31 @@ const Login = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </motion.div>
 
-            {/* Right Side: Auth Form (Clean & Soft) */}
-            <div className="w-full lg:w-1/2 h-full flex flex-col items-center justify-center p-4 lg:p-8 overflow-y-auto scrollbar-hide">
-                <div className="w-full max-w-[420px]">
-                    <header className="mb-6 lg:hidden pt-12">
-                        <div className="flex items-center justify-center gap-2 mb-2">
-                            <div className="w-8 h-8 text-primary">
-                                <span className="material-symbols-outlined text-3xl">nutrition</span>
-                            </div>
-                            <h2 className="text-xl font-bold text-primary">NutriKid</h2>
+            {/* Right Side: Auth Form (Clean & Soft with Glass Finish) */}
+            <motion.div 
+                initial={{ x: 150, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ type: 'spring', stiffness: 50, damping: 15, delay: 0.15 }}
+                className="w-full lg:w-1/2 h-full flex flex-col items-center px-4 py-12 md:py-20 lg:py-8 overflow-y-auto scrollbar-hide relative bg-slate-50/50 dark:bg-slate-950/10 z-10"
+            >
+                {/* Background glowing gradients behind glass card for premium effect */}
+                <div className="absolute top-1/4 right-1/4 w-72 h-72 bg-primary/10 rounded-full blur-3xl pointer-events-none"></div>
+                <div className="absolute bottom-1/4 left-1/4 w-72 h-72 bg-emerald-300/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <motion.div 
+                    initial={{ scale: 0.9, opacity: 0, y: 30 }}
+                    animate={{ scale: 1, opacity: 1, y: 0 }}
+                    transition={{ type: 'spring', stiffness: 60, damping: 12, delay: 0.3 }}
+                    className="w-full max-w-[440px] bg-white/40 dark:bg-slate-900/45 backdrop-blur-xl p-8 rounded-[2rem] border border-white/25 dark:border-slate-800/55 shadow-2xl relative z-10 my-auto"
+                >
+
+                    <header className="mb-6 lg:hidden">
+                        <div className="flex items-center justify-center gap-2 mb-4">
+                            <Link href="/?loader=true">
+                                <img src="/logo.png" alt="NutriKids Logo" className="h-16 w-auto object-contain" />
+                            </Link>
                         </div>
                         <h1 className="text-2xl font-black text-[#0d161b] dark:text-white leading-tight text-center">
                             {is2faPending ? 'Security Verification' : 'Nice to see you again!'}
@@ -165,8 +213,8 @@ const Login = () => {
                                 <p className="text-sm text-[#4c799a] dark:text-slate-400">Please enter the 6-digit authentication code sent to your registered credentials.</p>
                             </div>
 
-                            <form onSubmit={handleVerifyOTP} className="space-y-4">
-                                <div className="space-y-1">
+                            <form onSubmit={handleVerifyOTP} className="space-y-5">
+                                <div className="space-y-1.5">
                                     <label className="text-[#0d161b] dark:text-slate-200 text-xs font-bold ml-1">Verification Code</label>
                                     <div className="relative">
                                         <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#4c799a] text-lg">security</span>
@@ -236,8 +284,8 @@ const Login = () => {
                                 <p className="text-sm text-[#4c799a] dark:text-slate-400">Enter your details to access your account</p>
                             </div>
 
-                            <form onSubmit={handleSubmit} className="space-y-4">
-                                <div className="space-y-1">
+                            <form onSubmit={handleSubmit} className="space-y-5">
+                                <div className="space-y-1.5">
                                     <label className="text-[#0d161b] dark:text-slate-200 text-xs font-bold ml-1">Email Address</label>
                                     <div className="relative">
                                         <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#4c799a] text-lg">alternate_email</span>
@@ -252,9 +300,12 @@ const Login = () => {
                                     </div>
                                 </div>
 
-                                <div className="space-y-1">
+                                <div className="space-y-1.5">
                                     <div className="flex items-center justify-between px-1">
                                         <label className="text-[#0d161b] dark:text-slate-200 text-xs font-bold">Password</label>
+                                        <Link href="/forgot-password" className="text-xs font-semibold text-primary hover:underline transition-colors">
+                                            Forgot password?
+                                        </Link>
                                     </div>
                                     <div className="relative">
                                         <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#4c799a] text-lg">lock</span>
@@ -279,11 +330,6 @@ const Login = () => {
                                             </span>
                                         </button>
                                     </div>
-                                </div>
-                                <div className="flex justify-end px-1">
-                                    <Link href="/forgot-password" className="text-xs font-medium text-primary hover:text-primary/80 transition-colors">
-                                        Forgot password?
-                                    </Link>
                                 </div>
 
                                 <div className="flex items-center gap-2 px-1">
@@ -317,8 +363,8 @@ const Login = () => {
                         <a href="#" className="hover:text-primary transition-colors">Terms</a>
                         <a href="#" className="hover:text-primary transition-colors">Support</a>
                     </footer>
-                </div>
-            </div>
+                </motion.div>
+            </motion.div>
         </div>
     );
 };

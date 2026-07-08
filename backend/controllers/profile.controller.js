@@ -1,4 +1,4 @@
-﻿import Profile from '../models/Profile.model.js';
+import Profile from '../models/Profile.model.js';
 import GrowthRecord from '../models/GrowthRecord.model.js';
 import MealLog from '../models/MealLog.model.js';
 import asyncHandler from '../utils/asyncHandler.js';
@@ -7,6 +7,7 @@ import { profileSchema } from '../validators/profile.schema.js';
 import { uploadFile } from '../services/storage.service.js';
 import { sendEmail } from '../services/email.service.js';
 import { computeWellnessAnalysis } from '../utils/wellnessEngine.js';
+import axios from 'axios';
 
 // @desc    Create a new child profile
 // @route   POST /api/profiles
@@ -470,5 +471,323 @@ export const reanalyzeProfile = asyncHandler(async (req, res) => {
     await profile.save();
 
     res.status(200).json(new ApiResponse(200, profile, 'Profile reanalyzed successfully'));
+});
+
+// @desc    Get dynamic diet plan for a specific child using Gemini API
+// @route   GET /api/profiles/:id/diet-plan
+// @access  Private (Owner/Parent)
+export const getChildDietPlan = asyncHandler(async (req, res) => {
+    const profile = await Profile.findById(req.params.id);
+    if (!profile) {
+        res.status(404);
+        throw new Error('Child profile not found');
+    }
+
+    const deficiencies = profile.wellnessAnalysis?.deficiencies || {};
+    const activeDeficiencies = Object.keys(deficiencies).filter(
+        key => deficiencies[key]?.severity === 'RED' || deficiencies[key]?.severity === 'ORANGE'
+    );
+
+    const prompt = `
+You are a pediatric nutritionist specializing in traditional Indian cuisine.
+Generate a highly personalized 7-day Indian diet plan (Monday to Sunday) for a child named ${profile.name}, age ${profile.age}, gender ${profile.gender}, height ${profile.height}cm, weight ${profile.weight}kg.
+Active Deficiencies to address: ${activeDeficiencies.join(', ') || 'None (General Growth)'}.
+Dietary preferences: ${profile.preferences?.dietaryPreferences || 'None'}.
+
+Rules:
+1. Recommend ONLY authentic, location-appropriate Indian dishes (e.g., Ragi Chilla, Palak Khichdi, Masala Roasted Makhana, Curd Rice, Moong Dal Chilla, Idli Sambar, Paneer Bhurji Paratha). Do NOT include non-Indian foods like avocado toast, quinoa, kale, blueberry smoothies, oats waffles, chia seed pudding, or general western foods.
+2. Focus specifically on the child's active deficiencies:
+   - If Iron deficiency: emphasize spinach (palak), beetroot, sesame/til, jaggery, ragi, and pairing with Vitamin C (sweet lime, lemon juice, amla) for absorption.
+   - If Protein deficiency: emphasize paneer, curd, pulses, lentils, sprouted grains, nuts.
+   - If Calcium/Vitamin D deficiency: emphasize milk, curd, ragi, sesame seeds, paneer, and daylight exposure.
+   - If Hydration/Water gap: emphasize warm water, buttermilk/chaas, fresh coconut water, home-made fresh juices.
+   - If Fiber gap: emphasize whole-grain rotis, fresh local vegetables (lauki, turai, bhindi, carrots), local fruits.
+3. Keep the meals child-friendly, appealing, and easy to prepare using standard Indian household ingredients.
+4. Provide a day-by-day JSON format structure matching this schema:
+{
+  "weeklyPlan": [
+    {
+      "day": "Monday",
+      "focus": "Brief focus name (e.g., Iron Absorption & Energy Boost)",
+      "rationale": "Clear, concise scientific explanation of why these meals work for this child's deficiencies using Indian foods",
+      "meals": {
+        "breakfast": "Meal name and brief description",
+        "lunch": "Meal name and brief description",
+        "snack": "Meal name and brief description",
+        "dinner": "Meal name and brief description"
+      }
+    }
+  ]
+}
+Return ONLY valid JSON. Do not include markdown code block formatting (like \`\`\`json).
+`;
+
+    try {
+        const apiKey = process.env.GEMINI_API_KEY;
+        if (!apiKey) {
+            throw new Error('GEMINI_API_KEY not configured');
+        }
+
+        const apiResponse = await axios.post(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+            {
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: { responseMimeType: "application/json" }
+            }
+        );
+
+        const responseText = apiResponse.data.candidates[0].content.parts[0].text;
+        const planData = JSON.parse(responseText);
+        res.status(200).json(new ApiResponse(200, planData, 'Child diet plan generated successfully'));
+    } catch (err) {
+        console.error('Gemini error generating child diet plan:', err.message);
+        // Fallback rule-based plan if Gemini fails
+        const fallbackPlan = {
+            weeklyPlan: [
+                {
+                    day: "Monday",
+                    focus: "Iron & Energy Boost",
+                    rationale: "Combines spinach with ragi to help boost iron and energy levels naturally.",
+                    meals: {
+                        breakfast: "Ragi Dosa with Coconut Chutney",
+                        lunch: "Palak Dal, Carrot Sabzi, and Brown Rice",
+                        snack: "Masala Roasted Makhana",
+                        dinner: "Mixed Vegetable Khichdi with Ghee"
+                    }
+                },
+                {
+                    day: "Tuesday",
+                    focus: "Calcium & Bone Health",
+                    rationale: "Dairy and ragi supply calcium to help build bone structure.",
+                    meals: {
+                        breakfast: "Milk and Oats Porridge with Dates",
+                        lunch: "Paneer Bhurji with Whole Wheat Roti",
+                        snack: "Til Chikki & Banana",
+                        dinner: "Lauki Sabzi with Moong Dal and Phulka"
+                    }
+                },
+                {
+                    day: "Wednesday",
+                    focus: "Protein & Muscle Support",
+                    rationale: "Moong dal chilla provides building blocks for growth.",
+                    meals: {
+                        breakfast: "Moong Dal Chilla stuffed with Paneer",
+                        lunch: "Rajma Masala with Jeera Rice",
+                        snack: "Peanut Chikki & Fresh Orange Juice",
+                        dinner: "Vegetable Upma with Mint Chutney"
+                    }
+                },
+                {
+                    day: "Thursday",
+                    focus: "Gut Health & Digestion",
+                    rationale: "Probiotics in curd support healthy digestion.",
+                    meals: {
+                        breakfast: "Idli Sambar with Mint Chutney",
+                        lunch: "Curd Rice with Pomegranate Seeds",
+                        snack: "Roasted Chana & Buttermilk (Chaas)",
+                        dinner: "Aloo Gobhi Sabzi with Jowar Roti"
+                    }
+                },
+                {
+                    day: "Friday",
+                    focus: "Brain Development & Focus",
+                    rationale: "Almonds and seeds provide essential fats for cognitive concentration.",
+                    meals: {
+                        breakfast: "Vegetable Poha with Roasted Peanuts",
+                        lunch: "Soya Chunks Curry with Spinach Roti",
+                        snack: "Walnuts & Dates with Milk",
+                        dinner: "Paneer Pulao with Cucumber Raita"
+                    }
+                },
+                {
+                    day: "Saturday",
+                    focus: "Weekend Balance",
+                    rationale: "A delicious and nutrient-packed menu that children love.",
+                    meals: {
+                        breakfast: "Whole Wheat Pancakes with Honey",
+                        lunch: "Mild Chole with Baked Bhature",
+                        snack: "Fruit Chaat (Apple, Papaya, Sweet Lime)",
+                        dinner: "Besan Chilla with Green Chutney"
+                    }
+                },
+                {
+                    day: "Sunday",
+                    focus: "Reset & Hydration",
+                    rationale: "Light, hydration-focused meals to prepare for the week.",
+                    meals: {
+                        breakfast: "Suji Upma with Watermelon Juice",
+                        lunch: "Dal Tadka, Beans Sabzi, and Phulka",
+                        snack: "Yogurt Parfait with Pomegranate",
+                        dinner: "Mixed Vegetable Soup and Dal Khichdi"
+                    }
+                }
+            ]
+        };
+        res.status(200).json(new ApiResponse(200, fallbackPlan, 'Child diet plan loaded from fallback'));
+    }
+});
+
+// @desc    Get dynamic unified family diet plan using Gemini API based on all children's combined deficiencies
+// @route   GET /api/profiles/unified-diet-plan
+// @access  Private (Parent)
+export const getUnifiedDietPlan = asyncHandler(async (req, res) => {
+    const profiles = await Profile.find({ parentId: req.user._id });
+    if (!profiles || profiles.length === 0) {
+        res.status(404);
+        throw new Error('No child profiles found for this user');
+    }
+
+    const childrenNames = [];
+    const allDeficiencies = new Set();
+
+    profiles.forEach(p => {
+        childrenNames.push(p.name);
+        const defs = p.wellnessAnalysis?.deficiencies || {};
+        Object.keys(defs).forEach(key => {
+            if (defs[key]?.severity === 'RED' || defs[key]?.severity === 'ORANGE') {
+                allDeficiencies.add(key);
+            }
+        });
+    });
+
+    const compiledDeficiencies = Array.from(allDeficiencies);
+
+    const prompt = `
+You are a pediatric nutritionist specializing in traditional Indian cuisine.
+Generate a unified weekly Indian diet plan (Monday to Sunday) designed for a family with children: ${childrenNames.join(', ')}.
+The combined health deficiencies that need to be addressed across the children are: ${compiledDeficiencies.join(', ') || 'None (General Growth)'}.
+
+Rules:
+1. Recommending separate dishes for multiple children is exhausting for parents. Recommend ONE unified meal plan that meets all their nutritional requirements at once.
+2. Recommend ONLY authentic, location-appropriate Indian dishes (e.g., Ragi Chilla, Palak Khichdi, Masala Roasted Makhana, Curd Rice, Moong Dal Chilla, Idli Sambar, Paneer Bhurji Paratha). Do NOT include non-Indian foods like avocado toast, quinoa, kale, blueberry smoothies, oats waffles, chia seed pudding, or general western foods.
+3. Focus specifically on the children's combined active deficiencies:
+   - If Iron: emphasize spinach, beetroot, sesame/til, jaggery, ragi, and pairing with Vitamin C (sweet lime, lemon juice, amla) for absorption.
+   - If Protein: emphasize paneer, curd, pulses, lentils, sprouted grains, nuts.
+   - If Calcium/Vitamin D: emphasize milk, curd, ragi, sesame seeds, paneer, and daylight exposure.
+   - If Hydration/Water: emphasize warm water, buttermilk/chaas, fresh coconut water, home-made fresh juices.
+   - If Fiber: emphasize whole-grain rotis, fresh local vegetables (lauki, turai, bhindi, carrots), local fruits.
+4. Keep the meals child-friendly, appealing, and easy to prepare using standard Indian household ingredients.
+5. Provide a day-by-day JSON format structure matching this schema:
+{
+  "weeklyPlan": [
+    {
+      "day": "Monday",
+      "focus": "Brief focus name (e.g., Combined Iron & Protein Boost)",
+      "rationale": "Clear, concise explanation of why this menu works for the combined deficiencies (${compiledDeficiencies.join(', ')}) of all children (${childrenNames.join(', ')})",
+      "meals": {
+        "breakfast": "Meal name and brief description",
+        "lunch": "Meal name and brief description",
+        "snack": "Meal name and brief description",
+        "dinner": "Meal name and brief description"
+      }
+    }
+  ]
+}
+Return ONLY valid JSON. Do not include markdown code block formatting (like \`\`\`json).
+`;
+
+    try {
+        const apiKey = process.env.GEMINI_API_KEY;
+        if (!apiKey) {
+            throw new Error('GEMINI_API_KEY not configured');
+        }
+
+        const apiResponse = await axios.post(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+            {
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: { responseMimeType: "application/json" }
+            }
+        );
+
+        const responseText = apiResponse.data.candidates[0].content.parts[0].text;
+        const planData = JSON.parse(responseText);
+        res.status(200).json(new ApiResponse(200, planData, 'Unified family diet plan generated successfully'));
+    } catch (err) {
+        console.error('Gemini error generating unified diet plan:', err.message);
+        // Fallback unified plan
+        const fallbackPlan = {
+            weeklyPlan: [
+                {
+                    day: "Monday",
+                    focus: "Combined Iron & Calcium Support",
+                    rationale: "Integrates ragi, paneer, and spinach to address both iron and calcium needs simultaneously for all children.",
+                    meals: {
+                        breakfast: "Ragi Paneer Cheela with Mint Chutney",
+                        lunch: "Palak Dal, Carrot Sabzi, Curd, and Wheat Phulka",
+                        snack: "Roasted Sesame Jaggery Ladoo & Orange Slices",
+                        dinner: "Moong Dal Khichdi with Ghee & Tomato Soup"
+                    }
+                },
+                {
+                    day: "Tuesday",
+                    focus: "Protein & Gut Health Focus",
+                    rationale: "Lentils and curd provide gut probiotics and protein tissue building blocks.",
+                    meals: {
+                        breakfast: "Idli Sambar with Coconut Chutney",
+                        lunch: "Paneer Pulao, Cucumber Raita, and Beetroot Salad",
+                        snack: "Roasted Makhana & Sweet Lime",
+                        dinner: "Lauki Dal, Beans Poriyal, and Roti"
+                    }
+                },
+                {
+                    day: "Wednesday",
+                    focus: "Fiber & Energy Reset",
+                    rationale: "Whole grains and green vegetables provide high fiber for digestion and sustained play energy.",
+                    meals: {
+                        breakfast: "Vegetable Upma with Lemon Juice",
+                        lunch: "Black Chana Curry, Spinach Roti, and Curd",
+                        snack: "Fruit Chaat (Apple, Papaya, Banana)",
+                        dinner: "Aloo Methi Sabzi, Yellow Dal, and Phulka"
+                    }
+                },
+                {
+                    day: "Thursday",
+                    focus: "Bone & Skeletal Support",
+                    rationale: "Calcium-heavy dairy and sesame snacks are matched with iron-building green lentils.",
+                    meals: {
+                        breakfast: "Milk & Atta Sheera with Almonds",
+                        lunch: "Soybean Curry, Curd Rice, and Kachumber Salad",
+                        snack: "Til Chikki & Buttermilk (Chaas)",
+                        dinner: "Mixed Veg Sabzi, Dal Fry, and Multigrain Roti"
+                    }
+                },
+                {
+                    day: "Friday",
+                    focus: "Brain Growth & Hydration",
+                    rationale: "Nuts and hydrating juices promote focus and maintain electrolyte balance.",
+                    meals: {
+                        breakfast: "Vegetable Poha with Lemon & Peanuts",
+                        lunch: "Rajma Masala, Jeera Rice, and Mint Raita",
+                        snack: "Soaked Almonds & Pomegranate Juice",
+                        dinner: "Paneer Bhurji with Whole Wheat Phulka"
+                    }
+                },
+                {
+                    day: "Saturday",
+                    focus: "Weekend Balanced Treat",
+                    rationale: "Combines high protein dal with kid-favorites for a healthy weekend treat.",
+                    meals: {
+                        breakfast: "Besan Chilla stuffed with paneer and peas",
+                        lunch: "Mild Kabuli Chole with Steamed Rice and Salad",
+                        snack: "Roasted Chana & Banana Sweet Lassi",
+                        dinner: "Vegetable Soup and Khichdi with Ghee"
+                    }
+                },
+                {
+                    day: "Sunday",
+                    focus: "Hydration & Nutrient Boost",
+                    rationale: "Curd and fresh liquid bases reset digestion and replenish body fluids.",
+                    meals: {
+                        breakfast: "Suji Paneer Toast with Fresh Watermelon Juice",
+                        lunch: "Paneer Butter Masala (mild), Dal Makhani, and Phulka",
+                        snack: "Roasted Makhana & Almonds",
+                        dinner: "Simple Moong Dal Khichdi and Curd"
+                    }
+                }
+            ]
+        };
+        res.status(200).json(new ApiResponse(200, fallbackPlan, 'Unified family diet plan loaded from fallback'));
+    }
 });
 
