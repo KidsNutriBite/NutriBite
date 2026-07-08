@@ -146,6 +146,10 @@ export default function NutritionAnalysisPage() {
     const [sunlight, setSunlight] = useState(15);
     const [cart, setCart] = useState([]);
 
+    // Phase 2 Meal Planner local states
+    const [swappedMeals, setSwappedMeals] = useState({});
+    const [expandedMeal, setExpandedMeal] = useState(null);
+
     const toggleCart = (item) => {
         setCart(prev => {
             const exists = prev.find(c => c.food === item.food);
@@ -194,6 +198,20 @@ export default function NutritionAnalysisPage() {
         }
     }, [profileId, sunlight]);
 
+    const handleRefreshMealPlan = () => {
+        fetchAnalysis();
+        setSwappedMeals({});
+        toast.success("Meal plan refreshed and updated!");
+    };
+
+    const toggleSwapMeal = (slot) => {
+        setSwappedMeals(prev => ({
+            ...prev,
+            [slot]: !prev[slot]
+        }));
+        toast.success(`Swapped ingredients for ${slot}!`, { duration: 1500 });
+    };
+
     if (loading && !analysis) {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-950 gap-4">
@@ -218,17 +236,28 @@ export default function NutritionAnalysisPage() {
     const overallScore = analysis?.score?.value ?? analysis?.overallScore ?? 50;
     const scoreStatus = analysis?.score?.status ?? analysis?.scoreStatus ?? 'Needs Improvement';
     const subScores = analysis?.subScores ?? {
-        nutrition: analysis?.nutritionScore || 50,
-        deficiency: analysis?.deficiencyScore || 50,
-        growthRisk: analysis?.growthRiskScore || 50,
-        hydration: analysis?.hydrationScore || 50,
-        mealQuality: analysis?.mealQualityScore || 50
+        nutrition: analysis?.nutritionScore ?? 50,
+        deficiency: analysis?.deficiencyScore ?? 50,
+        growthRisk: analysis?.growthRiskScore ?? 50,
+        hydration: analysis?.hydrationScore ?? 50,
+        mealQuality: analysis?.mealQualityScore ?? 50
     };
 
     const gapsList = analysis?.gaps ? Object.values(analysis.gaps) : [];
     const recommendations = analysis?.recommendations || [];
     const priorityActions = analysis?.priorityActions || [];
     const groceryItems = analysis?.groceryList || [];
+    const mealPlan = analysis?.mealPlan || null;
+    const mealPlanSummary = analysis?.mealPlanSummary || null;
+
+    const mealSlots = [
+        { key: 'breakfast', label: 'Breakfast', time: '8:00 AM', icon: 'brightness_low' },
+        { key: 'morningSnack', label: 'Morning Snack', time: '11:00 AM', icon: 'cookie' },
+        { key: 'lunch', label: 'Lunch', time: '1:30 PM', icon: 'wb_sunny' },
+        { key: 'eveningSnack', label: 'Evening Snack', time: '5:00 PM', icon: 'local_cafe' },
+        { key: 'dinner', label: 'Dinner', time: '8:00 PM', icon: 'bedtime' },
+        { key: 'bedtime', label: 'Bedtime Snack', time: '9:30 PM', icon: 'nights_stay' }
+    ];
 
     return (
         <div className="min-h-screen bg-[#F8FAFC] dark:bg-slate-950 py-10 px-4 sm:px-6 lg:px-8 transition-colors">
@@ -443,7 +472,7 @@ export default function NutritionAnalysisPage() {
                                                         <div className="flex justify-between items-center mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
                                                             <div className="flex items-center gap-2">
                                                                 <span className="material-symbols-outlined text-indigo-500 text-xl leading-none">{getNutrientIconName(rec.nutrient)}</span>
-                                                                <span className="text-sm font-black text-slate-800 dark:text-slate-150 uppercase tracking-tight">{rec.label} Deficiency</span>
+                                                                <span className="text-sm font-black text-slate-800 dark:text-slate-155 uppercase tracking-tight">{rec.label} Deficiency</span>
                                                             </div>
                                                             <div className="flex gap-2">
                                                                 <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest ${styles.bg} ${styles.text}`}>
@@ -512,11 +541,215 @@ export default function NutritionAnalysisPage() {
                                     ) : (
                                         <div className="md:col-span-2 text-center p-8 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl">
                                             <span className="material-symbols-outlined text-emerald-500 text-4xl mb-2">check_circle</span>
-                                            <p className="text-xs font-bold text-slate-400 uppercase">Child meets all daily critical RDA guidelines. No action needed.</p>
+                                            <p className="text-xs font-bold text-slate-400 uppercase">Child meets all daily daily RDA targets. No action needed.</p>
                                         </div>
                                     )}
                                 </div>
                             </div>
+
+                            {/* Phase 2: Personalized Daily Meal Planner Section */}
+                            {mealPlan && (
+                                <div className="space-y-6">
+                                    <div className="flex justify-between items-center">
+                                        <div>
+                                            <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-1 flex items-center gap-1.5 select-none">
+                                                <span className="material-symbols-outlined text-slate-500">restaurant_menu</span>
+                                                Intelligent Daily Meal Planner
+                                            </h2>
+                                            <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">
+                                                Chronological Indian diet balancing target pediatric deficits
+                                            </p>
+                                        </div>
+                                        <button 
+                                            onClick={handleRefreshMealPlan}
+                                            className="px-3.5 py-2 bg-white dark:bg-slate-900 hover:bg-slate-50 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5 shadow-sm transition-all duration-200 cursor-pointer"
+                                        >
+                                            <span className="material-symbols-outlined text-sm">refresh</span>
+                                            <span>Refresh Plan</span>
+                                        </button>
+                                    </div>
+
+                                    {/* Daily plan slots */}
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                        {mealSlots.map((slot) => {
+                                            const meal = mealPlan[slot.key];
+                                            if (!meal) return null;
+
+                                            const isExpanded = expandedMeal === slot.key;
+                                            const isSwapped = !!swappedMeals[slot.key];
+
+                                            return (
+                                                <div 
+                                                    key={slot.key}
+                                                    className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-850 rounded-2xl p-5 flex flex-col justify-between shadow-sm relative overflow-hidden transition-all duration-200 hover:shadow-md"
+                                                >
+                                                    <div>
+                                                        {/* Slot header */}
+                                                        <div className="flex justify-between items-center mb-3">
+                                                            <div className="flex items-center gap-1.5">
+                                                                <span className="material-symbols-outlined text-slate-400 text-base leading-none">{slot.icon}</span>
+                                                                <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">
+                                                                    {slot.label} • {slot.time}
+                                                                </span>
+                                                            </div>
+                                                            <span className="px-2 py-0.5 bg-slate-100 dark:bg-slate-800 border border-slate-150 dark:border-slate-750 rounded text-[9px] font-black uppercase tracking-wider text-slate-500">
+                                                                {meal.regionalTag}
+                                                            </span>
+                                                        </div>
+
+                                                        {/* Meal Title & Swap Indicators */}
+                                                        <div className="mb-4">
+                                                            <h3 className="text-base font-black text-slate-800 dark:text-white leading-tight mb-2">
+                                                                {isSwapped ? (meal.substitutions?.[0]?.alternative || meal.name) : meal.name}
+                                                            </h3>
+                                                            
+                                                            {isSwapped && meal.substitutions?.length > 0 && (
+                                                                <div className="text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/20 px-2.5 py-1 rounded-lg border border-amber-200/30 flex items-center gap-1">
+                                                                    <span className="material-symbols-outlined text-xs leading-none">swap_horiz</span>
+                                                                    <span>Using: {meal.substitutions.map(s => s.alternative).join(' & ')} instead</span>
+                                                                </div>
+                                                            )}
+                                                        </div>
+
+                                                        {/* Targeted nutrients */}
+                                                        <div className="flex flex-wrap gap-1 mb-4">
+                                                            {meal.nutrientsImproved.map((n, i) => (
+                                                                <span key={i} className="px-2 py-0.5 bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900 rounded-full text-[9px] font-black uppercase tracking-wider flex items-center gap-0.5">
+                                                                    <span className="material-symbols-outlined text-[10px] leading-none">{getNutrientIconName(n)}</span>
+                                                                    {n}
+                                                                </span>
+                                                            ))}
+                                                        </div>
+
+                                                        {/* Small nutrition estimates */}
+                                                        <div className="bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-100 dark:border-slate-900 grid grid-cols-3 gap-2 text-center mb-4">
+                                                            <div>
+                                                                <p className="text-[8px] font-black uppercase text-slate-400">Calories</p>
+                                                                <p className="text-xs font-bold text-slate-700 dark:text-slate-300">{meal.estimatedNutrients.calories} kcal</p>
+                                                            </div>
+                                                            <div>
+                                                                <p className="text-[8px] font-black uppercase text-slate-400">Protein</p>
+                                                                <p className="text-xs font-bold text-slate-700 dark:text-slate-300">{meal.estimatedNutrients.protein}g</p>
+                                                            </div>
+                                                            <div>
+                                                                <p className="text-[8px] font-black uppercase text-slate-400">Fiber</p>
+                                                                <p className="text-xs font-bold text-slate-700 dark:text-slate-300">{meal.estimatedNutrients.fiber}g</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Action buttons */}
+                                                    <div>
+                                                        <div className="flex gap-2">
+                                                            <button 
+                                                                onClick={() => setExpandedMeal(isExpanded ? null : slot.key)}
+                                                                className="flex-1 text-[10px] font-bold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 flex items-center gap-1 transition-all uppercase tracking-wider justify-center py-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 cursor-pointer"
+                                                            >
+                                                                <span className="material-symbols-outlined text-sm leading-none">
+                                                                    {isExpanded ? 'expand_less' : 'description'}
+                                                                </span>
+                                                                <span>{isExpanded ? 'Hide Details' : 'View Info'}</span>
+                                                            </button>
+
+                                                            {meal.substitutions?.length > 0 && (
+                                                                <button 
+                                                                    onClick={() => toggleSwapMeal(slot.key)}
+                                                                    className="flex-1 text-[10px] font-bold px-3 py-2.5 rounded-lg flex items-center justify-center gap-1 transition-all uppercase tracking-wider border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 cursor-pointer"
+                                                                >
+                                                                    <span className="material-symbols-outlined text-sm leading-none">swap_horiz</span>
+                                                                    <span>{isSwapped ? 'Revert Swap' : 'Swap Food'}</span>
+                                                                </button>
+                                                            )}
+                                                        </div>
+
+                                                        {/* Expanded details */}
+                                                        <AnimatePresence>
+                                                            {isExpanded && (
+                                                                <motion.div
+                                                                    initial={{ height: 0, opacity: 0 }}
+                                                                    animate={{ height: 'auto', opacity: 1 }}
+                                                                    exit={{ height: 0, opacity: 0 }}
+                                                                    className="overflow-hidden mt-4 border-t border-slate-100 dark:border-slate-800 pt-4 space-y-4"
+                                                                >
+                                                                    {/* Description */}
+                                                                    <div>
+                                                                        <h4 className="text-[8px] font-black uppercase tracking-wider text-slate-400 mb-0.5">Clinical Rationale</h4>
+                                                                        <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                                                                            {meal.whyThisMeal}
+                                                                        </p>
+                                                                    </div>
+
+                                                                    {/* Pairing */}
+                                                                    <div>
+                                                                        <h4 className="text-[8px] font-black uppercase tracking-wider text-slate-400 mb-0.5">Synergy Food Pairing</h4>
+                                                                        <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed font-medium bg-slate-50 dark:bg-slate-950 p-2 rounded-lg border border-slate-100 dark:border-slate-900">
+                                                                            <strong>{meal.pairing}</strong>: {meal.pairExplanation}
+                                                                        </p>
+                                                                    </div>
+
+                                                                    {/* Serving suggestion */}
+                                                                    <div>
+                                                                        <h4 className="text-[8px] font-black uppercase tracking-wider text-slate-400 mb-0.5">Portion Guideline</h4>
+                                                                        <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
+                                                                            {meal.servingSuggestion}
+                                                                        </p>
+                                                                    </div>
+
+                                                                    {/* Substitutions available */}
+                                                                    {meal.substitutions?.length > 0 && (
+                                                                        <div>
+                                                                            <h4 className="text-[8px] font-black uppercase tracking-wider text-slate-400 mb-1">Substitutions Available</h4>
+                                                                            <div className="space-y-1.5">
+                                                                                {meal.substitutions.map((sub, sIdx) => (
+                                                                                    <div key={sIdx} className="p-2 bg-slate-50 dark:bg-slate-950 border border-slate-150 dark:border-slate-900 rounded-lg text-[10px]">
+                                                                                        <p className="font-bold text-slate-700 dark:text-slate-300">
+                                                                                            Swap "{sub.ingredient}" for "{sub.alternative}"
+                                                                                        </p>
+                                                                                        <p className="text-slate-400 font-medium leading-normal mt-0.5">{sub.rationale}</p>
+                                                                                    </div>
+                                                                                ))}
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+                                                                </motion.div>
+                                                            )}
+                                                        </AnimatePresence>
+                                                    </div>
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+
+                                    {/* Total Plan Nutrient Summation Card */}
+                                    {mealPlanSummary && (
+                                        <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
+                                            <div>
+                                                <h3 className="text-sm font-black text-slate-850 dark:text-white uppercase tracking-tight flex items-center gap-1.5">
+                                                    <span className="material-symbols-outlined text-indigo-500">done_all</span>
+                                                    Planned Meal Plan Nutritional Value
+                                                </h3>
+                                                <p className="text-xs text-slate-400 leading-relaxed font-medium mt-1">
+                                                    Sum of the 6 recommended diagnostic meal choices compared against dynamic daily RDA guidelines.
+                                                </p>
+                                            </div>
+                                            <div className="flex flex-wrap gap-4 text-center">
+                                                {[
+                                                    { label: 'Calories', val: `${mealPlanSummary.calories} kcal` },
+                                                    { label: 'Protein', val: `${mealPlanSummary.protein}g` },
+                                                    { label: 'Carbs', val: `${mealPlanSummary.carbs}g` },
+                                                    { label: 'Fats', val: `${mealPlanSummary.fats}g` },
+                                                    { label: 'Fiber', val: `${mealPlanSummary.fiber}g` }
+                                                ].map((sum, sumIdx) => (
+                                                    <div key={sumIdx} className="bg-slate-50 dark:bg-slate-950 px-4 py-2.5 rounded-xl border border-slate-100 dark:border-slate-900 min-w-[90px]">
+                                                        <p className="text-[8px] font-black uppercase text-slate-450 tracking-wider mb-0.5">{sum.label}</p>
+                                                        <p className="text-xs font-black text-indigo-600 dark:text-indigo-400">{sum.val}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
 
                             {/* Smart Grocery List Card */}
                             <div className="bg-slate-900 dark:bg-slate-900/60 p-6 rounded-2xl border border-slate-800 text-white space-y-6">
@@ -547,7 +780,7 @@ export default function NutritionAnalysisPage() {
                             </div>
 
                             {/* Shopping Cart Container */}
-                            <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+                            <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-850 shadow-sm space-y-4">
                                 <div className="flex justify-between items-center pb-4 border-b border-slate-100 dark:border-slate-805">
                                     <div className="flex items-center gap-2">
                                         <span className="material-symbols-outlined text-indigo-500 text-2xl">shopping_cart</span>

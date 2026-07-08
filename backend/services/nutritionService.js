@@ -2,6 +2,7 @@ import Profile from '../models/Profile.model.js';
 import MealLog from '../models/MealLog.model.js';
 import { computeDynamicWellnessScore } from '../utils/nutritionIntelligence.js';
 import { ResponseBuilder } from './nutritionIntelligenceEngine.js';
+import { MealPlannerService } from './mealPlannerEngine.js';
 
 export const analyzeNutrition = async (profileId, sunlightMinutes = 0) => {
     // 1. Fetch Profile
@@ -22,6 +23,9 @@ export const analyzeNutrition = async (profileId, sunlightMinutes = 0) => {
 
     // 3. Compute dynamic wellness using the new modular engine
     const analysis = ResponseBuilder.build(profile, logs);
+    
+    // 4. Generate daily meal plan using MealPlannerService
+    const mealPlanData = MealPlannerService.generatePlan(profile, logs);
     
     // Extrapolate daily averages and target requirements for response
     const avg = {};
@@ -82,7 +86,11 @@ export const analyzeNutrition = async (profileId, sunlightMinutes = 0) => {
         // Expose new modular engine payload directly for advanced frontend features
         priorityActions: analysis.priorityActions,
         recommendations: analysis.recommendations,
-        gaps: analysis.gaps
+        gaps: analysis.gaps,
+        
+        // Phase 2 Meal Planner integrations
+        mealPlan: mealPlanData.dailyPlan,
+        mealPlanSummary: mealPlanData.totalPlan
     };
 };
 
