@@ -66,78 +66,6 @@ const getSeverityStyles = (severity) => {
     }
 };
 
-const GroceryCard = ({ item, isInCart, onCartToggle }) => {
-    const [expanded, setExpanded] = useState(false);
-
-    return (
-        <motion.div 
-            whileHover={{ y: -2 }}
-            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 flex flex-col h-full shadow-sm hover:shadow-md transition-all duration-200"
-        >
-            <div className="flex items-start justify-between mb-3 gap-2">
-                <div className="flex-1">
-                    <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-2">{item.food}</h3>
-                    <div className="flex flex-wrap gap-1.5">
-                        {item.nutrients.map((n, i) => (
-                            <span key={i} className="px-2 py-0.5 bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1">
-                                <span className="material-symbols-outlined text-xs leading-none">{getNutrientIconName(n)}</span>
-                                {n}
-                            </span>
-                        ))}
-                    </div>
-                </div>
-                <div className="w-9 h-9 bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl flex items-center justify-center text-slate-500 shrink-0">
-                    <span className="material-symbols-outlined text-lg leading-none">{getNutrientIconName(item.nutrients[0])}</span>
-                </div>
-            </div>
-            
-            <div className="mt-auto pt-3">
-                <p className="text-slate-600 dark:text-slate-400 text-xs leading-relaxed bg-slate-50 dark:bg-slate-900/60 p-3 rounded-xl border border-slate-100 dark:border-slate-800">
-                    {item.explanations[0]}
-                </p>
-                
-                <div className="flex gap-2 mt-4">
-                    <button 
-                        onClick={() => setExpanded(!expanded)}
-                        className="flex-1 text-[10px] font-bold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 flex items-center gap-1 transition-colors uppercase tracking-wider justify-center py-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700"
-                    >
-                        <span>{expanded ? 'Hide Details' : 'Why Buy'}</span>
-                    </button>
-                    
-                    <button
-                        onClick={onCartToggle}
-                        className={`flex-1 text-[10px] font-bold px-3 py-2.5 rounded-lg flex items-center justify-center gap-1 transition-all uppercase tracking-wider ${
-                            isInCart 
-                            ? 'bg-rose-50 dark:bg-rose-950/20 hover:bg-rose-100 dark:hover:bg-rose-900/30 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800/40' 
-                            : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm'
-                        }`}
-                    >
-                        <span className="material-symbols-outlined text-sm leading-none">{isInCart ? 'remove_shopping_cart' : 'shopping_cart'}</span>
-                        <span>{isInCart ? 'Remove' : 'Add to Cart'}</span>
-                    </button>
-                </div>
-                
-                <AnimatePresence>
-                    {expanded && (
-                        <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            className="overflow-hidden"
-                        >
-                            <div className="pt-3 mt-3 border-t border-slate-100 dark:border-slate-800">
-                                <p className="text-[11px] text-slate-500 leading-relaxed">
-                                    Adding <strong className="text-slate-700 dark:text-slate-200">{item.food}</strong> directly supports target absorption guidelines for {item.nutrients.join(' & ')}. Highly bioavailable source tailored to recent logs.
-                                </p>
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </div>
-        </motion.div>
-    );
-};
-
 export default function NutritionAnalysisPage() {
     const { profileId } = useParams();
     const router = useRouter();
@@ -149,6 +77,12 @@ export default function NutritionAnalysisPage() {
     // Phase 2 Meal Planner local states
     const [swappedMeals, setSwappedMeals] = useState({});
     const [expandedMeal, setExpandedMeal] = useState(null);
+
+    // Phase 3 Grocery Planner local states
+    const [grocerySearch, setGrocerySearch] = useState('');
+    const [groceryCategory, setGroceryCategory] = useState('All');
+    const [groceryActionStates, setGroceryActionStates] = useState({});
+    const [showCompleted, setShowCompleted] = useState(false);
 
     const toggleCart = (item) => {
         setCart(prev => {
@@ -167,7 +101,7 @@ export default function NutritionAnalysisPage() {
             return;
         }
         const titleStr = `NUTRITION INSIGHTS - GROCERY CART LIST\nGenerated on: ${new Date().toLocaleDateString()}\n\n`;
-        const content = titleStr + cart.map((item, idx) => `${idx + 1}. ${item.food}\n   Target nutrients: ${item.nutrients.join(', ')}\n   Details: ${item.explanations[0]}`).join('\n\n');
+        const content = titleStr + cart.map((item, idx) => `${idx + 1}. ${item.food}\n   Target nutrients: ${item.nutrients.join(', ')}\n   Details: ${item.rationale || item.explanations?.[0]}`).join('\n\n');
         
         const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
         const url = URL.createObjectURL(blob);
@@ -212,6 +146,34 @@ export default function NutritionAnalysisPage() {
         toast.success(`Swapped ingredients for ${slot}!`, { duration: 1500 });
     };
 
+    // Phase 3 grocery action handlers
+    const updateGroceryAction = (food, actionType) => {
+        setGroceryActionStates(prev => {
+            const current = prev[food] || { isPurchased: false, isOwned: false, isHidden: false };
+            const updated = { ...current };
+            
+            if (actionType === 'purchase') {
+                updated.isPurchased = !updated.isPurchased;
+                if (updated.isPurchased) updated.isOwned = false; // mutually exclusive
+            } else if (actionType === 'own') {
+                updated.isOwned = !updated.isOwned;
+                if (updated.isOwned) updated.isPurchased = false; // mutually exclusive
+            } else if (actionType === 'hide') {
+                updated.isHidden = true;
+            } else if (actionType === 'restore') {
+                updated.isHidden = false;
+                updated.isPurchased = false;
+                updated.isOwned = false;
+            }
+
+            return {
+                ...prev,
+                [food]: updated
+            };
+        });
+        toast.success(`Updated ${food} status`, { duration: 1000 });
+    };
+
     if (loading && !analysis) {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen bg-slate-50 dark:bg-slate-950 gap-4">
@@ -246,9 +208,43 @@ export default function NutritionAnalysisPage() {
     const gapsList = analysis?.gaps ? Object.values(analysis.gaps) : [];
     const recommendations = analysis?.recommendations || [];
     const priorityActions = analysis?.priorityActions || [];
-    const groceryItems = analysis?.groceryList || [];
     const mealPlan = analysis?.mealPlan || null;
     const mealPlanSummary = analysis?.mealPlanSummary || null;
+
+    // Phase 3 Optimizer Unpacks
+    const groceryPlan = analysis?.groceryPlan || [];
+    const groceryPlanSummary = analysis?.groceryPlanSummary || {
+        totalItems: 0, criticalItems: 0, highPriorityItems: 0, multiNutrientItems: 0, weeklyImpacts: []
+    };
+    const groceryPlanInsights = analysis?.groceryPlanInsights || [];
+
+    // Filter grocery items based on local search & actions
+    const allFilteredGroceries = groceryPlan.filter(item => {
+        const matchesSearch = item.food.toLowerCase().includes(grocerySearch.toLowerCase()) ||
+                              item.nutrients.some(n => n.toLowerCase().includes(grocerySearch.toLowerCase()));
+        const matchesCategory = groceryCategory === 'All' || item.category === groceryCategory;
+        const isHidden = !!groceryActionStates[item.food]?.isHidden;
+        
+        return matchesSearch && matchesCategory && !isHidden;
+    });
+
+    const activeGroceries = allFilteredGroceries.filter(item => {
+        const state = groceryActionStates[item.food];
+        return !state?.isPurchased && !state?.isOwned;
+    });
+
+    const completedGroceries = allFilteredGroceries.filter(item => {
+        const state = groceryActionStates[item.food];
+        return !!state?.isPurchased || !!state?.isOwned;
+    });
+
+    // Dynamic sticky summary calculations
+    const remainingCount = activeGroceries.length;
+    const criticalRemaining = activeGroceries.filter(i => i.priority === 'Critical').length;
+    const highRemaining = activeGroceries.filter(i => i.priority === 'High').length;
+    const multiRemaining = activeGroceries.filter(i => i.nutrients.length >= 2).length;
+
+    const groceryCategories = ['All', 'Vegetables', 'Fruits', 'Whole Grains', 'Dairy', 'Protein', 'Healthy Fats', 'Hydration', 'Others'];
 
     const mealSlots = [
         { key: 'breakfast', label: 'Breakfast', time: '8:00 AM', icon: 'brightness_low' },
@@ -729,7 +725,7 @@ export default function NutritionAnalysisPage() {
                                                     Planned Meal Plan Nutritional Value
                                                 </h3>
                                                 <p className="text-xs text-slate-400 leading-relaxed font-medium mt-1">
-                                                    Sum of the 6 recommended diagnostic meal choices compared against dynamic daily RDA guidelines.
+                                                    Sum of the 6 recommended diagnostic meal choices compared against daily RDA targets.
                                                 </p>
                                             </div>
                                             <div className="flex flex-wrap gap-4 text-center">
@@ -751,33 +747,270 @@ export default function NutritionAnalysisPage() {
                                 </div>
                             )}
 
-                            {/* Smart Grocery List Card */}
-                            <div className="bg-slate-900 dark:bg-slate-900/60 p-6 rounded-2xl border border-slate-800 text-white space-y-6">
-                                <div>
-                                    <h2 className="text-xl font-black mb-1 flex items-center gap-1.5 select-none text-white">
-                                        <span className="material-symbols-outlined text-slate-400">shopping_basket</span>
-                                        Smart Grocery Recommendations
-                                    </h2>
-                                    <p className="text-slate-400 text-xs font-semibold uppercase tracking-wider">Specific items to address nutritional deficiencies</p>
-                                </div>
+                            {/* Phase 3: Smart Grocery Optimizer Section */}
+                            {groceryPlan && (
+                                <div className="space-y-6">
+                                    <div className="mb-2">
+                                        <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-1 flex items-center gap-1.5 select-none">
+                                            <span className="material-symbols-outlined text-slate-500">shopping_basket</span>
+                                            Smart Grocery Optimizer
+                                        </h2>
+                                        <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">
+                                            Convert pediatric deficiencies and daily meal ingredients into a prioritized shopping list
+                                        </p>
+                                    </div>
 
-                                {groceryItems.length > 0 ? (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                        {groceryItems.map((item, idx) => (
-                                            <GroceryCard 
-                                                key={idx} 
-                                                item={item} 
-                                                isInCart={cart.some(c => c.food === item.food)}
-                                                onCartToggle={() => toggleCart(item)}
-                                            />
-                                        ))}
+                                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                                        {/* Left Side: Grocery list, search and category filters */}
+                                        <div className="lg:col-span-8 space-y-6">
+                                            {/* Search and category filter tray */}
+                                            <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+                                                <div className="relative">
+                                                    <span className="material-symbols-outlined absolute left-3 top-2.5 text-slate-400 text-lg">search</span>
+                                                    <input 
+                                                        type="text" 
+                                                        placeholder="Search shopping items (e.g. spinach, calcium)..."
+                                                        value={grocerySearch}
+                                                        onChange={(e) => setGrocerySearch(e.target.value)}
+                                                        className="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 pl-10 pr-4 py-2.5 rounded-xl text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-indigo-500 text-slate-800 dark:text-slate-200"
+                                                    />
+                                                </div>
+
+                                                <div className="flex flex-wrap gap-1.5">
+                                                    {groceryCategories.map(cat => (
+                                                        <button 
+                                                            key={cat}
+                                                            onClick={() => setGroceryCategory(cat)}
+                                                            className={`px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-colors cursor-pointer border ${
+                                                                groceryCategory === cat
+                                                                ? 'bg-indigo-600 text-white border-indigo-600'
+                                                                : 'bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700'
+                                                            }`}
+                                                        >
+                                                            {cat}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+
+                                            {/* Grocery List Grid */}
+                                            {activeGroceries.length > 0 ? (
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                    {activeGroceries.map((item, idx) => {
+                                                        const isCart = cart.some(c => c.food === item.food);
+                                                        const styles = getSeverityStyles(item.priority);
+                                                        return (
+                                                            <div 
+                                                                key={idx}
+                                                                className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 flex flex-col justify-between shadow-sm transition-all duration-200 hover:shadow-md"
+                                                            >
+                                                                <div>
+                                                                    <div className="flex justify-between items-start gap-2 mb-2">
+                                                                        <div>
+                                                                            <h3 className="text-base font-black text-slate-800 dark:text-white leading-tight">
+                                                                                {item.food}
+                                                                            </h3>
+                                                                            <span className="text-[9px] font-extrabold uppercase text-slate-400">
+                                                                                {item.category}
+                                                                            </span>
+                                                                        </div>
+                                                                        <span className={`px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest ${styles.bg} ${styles.text}`}>
+                                                                            {item.priority}
+                                                                        </span>
+                                                                    </div>
+
+                                                                    {/* Nutrient chips */}
+                                                                    <div className="flex flex-wrap gap-1 mb-3">
+                                                                        {item.nutrients.map((n, i) => (
+                                                                            <span key={i} className="px-1.5 py-0.5 bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 text-[9px] font-black uppercase tracking-wider rounded">
+                                                                                {n}
+                                                                            </span>
+                                                                        ))}
+                                                                    </div>
+
+                                                                    {/* Meal Usage Indicator */}
+                                                                    {item.usedInMeals?.length > 0 && (
+                                                                        <div className="mb-3 text-[9px] font-bold text-slate-500 flex items-center gap-1">
+                                                                            <span className="material-symbols-outlined text-xs leading-none">restaurant</span>
+                                                                            <span>Used in: {item.usedInMeals.join(', ')}</span>
+                                                                        </div>
+                                                                    )}
+
+                                                                    <p className="text-xs text-slate-650 dark:text-slate-400 leading-relaxed font-medium bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-100 dark:border-slate-900 mb-4">
+                                                                        {item.rationale}
+                                                                    </p>
+                                                                </div>
+
+                                                                {/* Item actions */}
+                                                                <div className="space-y-2">
+                                                                    <div className="flex gap-2">
+                                                                        <button 
+                                                                            onClick={() => toggleCart(item)}
+                                                                            className={`flex-1 text-[9px] font-black px-2 py-2 rounded-lg flex items-center justify-center gap-1 transition-all uppercase tracking-wider cursor-pointer ${
+                                                                                isCart 
+                                                                                ? 'bg-rose-50 dark:bg-rose-950/20 hover:bg-rose-100 dark:hover:bg-rose-900/30 text-rose-600 dark:text-rose-400 border border-rose-200 dark:border-rose-800/40' 
+                                                                                : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm'
+                                                                            }`}
+                                                                        >
+                                                                            <span className="material-symbols-outlined text-xs leading-none">{isCart ? 'remove_shopping_cart' : 'shopping_cart'}</span>
+                                                                            <span>{isCart ? 'Remove' : 'Add to List'}</span>
+                                                                        </button>
+                                                                        
+                                                                        <button 
+                                                                            onClick={() => updateGroceryAction(item.food, 'hide')}
+                                                                            className="px-2 py-2 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-500 dark:text-slate-400 flex items-center justify-center cursor-pointer"
+                                                                            title="Hide Item"
+                                                                        >
+                                                                            <span className="material-symbols-outlined text-xs leading-none">visibility_off</span>
+                                                                        </button>
+                                                                    </div>
+
+                                                                    <div className="flex gap-2">
+                                                                        <button 
+                                                                            onClick={() => updateGroceryAction(item.food, 'purchase')}
+                                                                            className="flex-1 text-[9px] font-black px-2 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 flex items-center justify-center gap-1 cursor-pointer uppercase tracking-wider"
+                                                                        >
+                                                                            <span className="material-symbols-outlined text-xs leading-none text-emerald-500">check_circle</span>
+                                                                            <span>Purchased</span>
+                                                                        </button>
+                                                                        
+                                                                        <button 
+                                                                            onClick={() => updateGroceryAction(item.food, 'own')}
+                                                                            className="flex-1 text-[9px] font-black px-2 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-655 dark:text-slate-300 flex items-center justify-center gap-1 cursor-pointer uppercase tracking-wider"
+                                                                        >
+                                                                            <span className="material-symbols-outlined text-xs leading-none text-amber-500">home</span>
+                                                                            <span>At Home</span>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            ) : (
+                                                <div className="text-center py-12 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                                                    <span className="material-symbols-outlined text-slate-300 text-4xl mb-2">shopping_bag</span>
+                                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">No active shopping items left in this selection.</p>
+                                                </div>
+                                            )}
+
+                                            {/* Collapsible Completed/Owned Drawer */}
+                                            {completedGroceries.length > 0 && (
+                                                <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 shadow-sm">
+                                                    <button 
+                                                        onClick={() => setShowCompleted(!showCompleted)}
+                                                        className="w-full flex items-center justify-between text-xs font-black uppercase tracking-wider text-slate-500 cursor-pointer"
+                                                    >
+                                                        <span>Completed & Owned Items ({completedGroceries.length})</span>
+                                                        <span className="material-symbols-outlined text-sm leading-none">
+                                                            {showCompleted ? 'expand_less' : 'expand_more'}
+                                                        </span>
+                                                    </button>
+                                                    
+                                                    <AnimatePresence>
+                                                        {showCompleted && (
+                                                            <motion.div 
+                                                                initial={{ height: 0, opacity: 0 }}
+                                                                animate={{ height: 'auto', opacity: 1 }}
+                                                                exit={{ height: 0, opacity: 0 }}
+                                                                className="overflow-hidden mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2"
+                                                            >
+                                                                {completedGroceries.map((item, idx) => {
+                                                                    const state = groceryActionStates[item.food];
+                                                                    return (
+                                                                        <div key={idx} className="flex justify-between items-center bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-100 dark:border-slate-900 text-xs">
+                                                                            <div className="flex items-center gap-2">
+                                                                                <span className={`material-symbols-outlined text-sm ${state?.isPurchased ? 'text-emerald-500' : 'text-amber-500'}`}>
+                                                                                    {state?.isPurchased ? 'check_circle' : 'home'}
+                                                                                </span>
+                                                                                <span className="font-bold text-slate-500 dark:text-slate-400 line-through">
+                                                                                    {item.food}
+                                                                                </span>
+                                                                                <span className="text-[8px] bg-slate-200 dark:bg-slate-800 text-slate-500 px-2 py-0.5 rounded uppercase font-black tracking-wider">
+                                                                                    {state?.isPurchased ? 'Bought' : 'At Home'}
+                                                                                </span>
+                                                                            </div>
+                                                                            <button 
+                                                                                onClick={() => updateGroceryAction(item.food, 'restore')}
+                                                                                className="text-[9px] font-bold uppercase tracking-wider text-indigo-600 hover:underline cursor-pointer"
+                                                                            >
+                                                                                Restore
+                                                                            </button>
+                                                                        </div>
+                                                                    );
+                                                                })}
+                                                            </motion.div>
+                                                        )}
+                                                    </AnimatePresence>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Right Side: Sticky Shopping Summary & Weekly Impact */}
+                                        <div className="lg:col-span-4 lg:sticky lg:top-4 space-y-6">
+                                            {/* Summary metrics card */}
+                                            <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
+                                                <h3 className="text-xs font-black uppercase text-indigo-600 dark:text-indigo-400 tracking-widest flex items-center gap-1.5 select-none">
+                                                    <span className="material-symbols-outlined text-base">receipt_long</span>
+                                                    Shopping Summary
+                                                </h3>
+
+                                                <div className="grid grid-cols-2 gap-4">
+                                                    <div className="bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-100 dark:border-slate-900 text-center">
+                                                        <p className="text-[8px] font-black uppercase text-slate-400 tracking-wider">Remaining</p>
+                                                        <p className="text-2xl font-black text-slate-800 dark:text-white mt-1">{remainingCount}</p>
+                                                    </div>
+                                                    <div className="bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-100 dark:border-slate-900 text-center">
+                                                        <p className="text-[8px] font-black uppercase text-slate-400 tracking-wider">Critical Left</p>
+                                                        <p className="text-2xl font-black text-rose-500 mt-1">{criticalRemaining}</p>
+                                                    </div>
+                                                    <div className="bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-100 dark:border-slate-900 text-center">
+                                                        <p className="text-[8px] font-black uppercase text-slate-400 tracking-wider">High Left</p>
+                                                        <p className="text-2xl font-black text-red-500 mt-1">{highRemaining}</p>
+                                                    </div>
+                                                    <div className="bg-slate-50 dark:bg-slate-950 p-3 rounded-xl border border-slate-100 dark:border-slate-900 text-center">
+                                                        <p className="text-[8px] font-black uppercase text-slate-400 tracking-wider">Multi-Gaps</p>
+                                                        <p className="text-2xl font-black text-indigo-600 dark:text-indigo-400 mt-1">{multiRemaining}</p>
+                                                    </div>
+                                                </div>
+
+                                                {/* Estimated Weekly Impact list */}
+                                                <div className="border-t border-slate-100 dark:border-slate-800 pt-4 space-y-3">
+                                                    <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 select-none">
+                                                        Weekly Nutritional Impact
+                                                    </h4>
+                                                    <ul className="space-y-2">
+                                                        {groceryPlanSummary.weeklyImpacts.map((imp, idx) => (
+                                                            <li key={idx} className="flex items-start gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300">
+                                                                <span className="material-symbols-outlined text-indigo-500 text-base leading-none shrink-0">check_circle</span>
+                                                                <span className="leading-snug">{imp}</span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </div>
+                                            </div>
+
+                                            {/* Shopping insights card */}
+                                            {groceryPlanInsights.length > 0 && (
+                                                <div className="bg-slate-900 dark:bg-slate-900/60 p-6 rounded-2xl border border-slate-800 shadow-sm text-white space-y-4">
+                                                    <h3 className="text-xs font-black uppercase text-slate-400 tracking-widest flex items-center gap-1.5 select-none text-white">
+                                                        <span className="material-symbols-outlined text-base text-slate-400">lightbulb</span>
+                                                        Smart Shopping Insights
+                                                    </h3>
+                                                    <div className="space-y-3">
+                                                        {groceryPlanInsights.map((insight, idx) => (
+                                                            <div key={idx} className="flex items-start gap-2.5 text-xs leading-relaxed text-slate-350">
+                                                                <span className="text-indigo-400 text-xs font-bold leading-none select-none">•</span>
+                                                                <p className="font-medium text-slate-300">{insight}</p>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
-                                ) : (
-                                    <div className="text-center py-8 bg-slate-850/40 rounded-xl border border-slate-800">
-                                        <p className="text-xs font-bold text-slate-400 uppercase">Diet checks look complete. No specific items required.</p>
-                                    </div>
-                                )}
-                            </div>
+                                </div>
+                            )}
 
                             {/* Shopping Cart Container */}
                             <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-850 shadow-sm space-y-4">
@@ -794,13 +1027,13 @@ export default function NutritionAnalysisPage() {
                                             <>
                                                 <button
                                                     onClick={() => setCart([])}
-                                                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-355 font-bold rounded-lg text-xs border border-slate-200 dark:border-slate-750 uppercase tracking-wider"
+                                                    className="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-355 font-bold rounded-lg text-xs border border-slate-200 dark:border-slate-750 uppercase tracking-wider cursor-pointer"
                                                 >
                                                     Clear
                                                 </button>
                                                 <button 
                                                     onClick={downloadCart}
-                                                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-wider flex items-center gap-1 shadow-sm"
+                                                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-bold text-xs uppercase tracking-wider flex items-center gap-1 shadow-sm cursor-pointer"
                                                 >
                                                     <span className="material-symbols-outlined text-sm">download</span>
                                                     Download (.txt)
@@ -826,7 +1059,7 @@ export default function NutritionAnalysisPage() {
                                                 </div>
                                                 <button
                                                     onClick={() => toggleCart(item)}
-                                                    className="w-7 h-7 rounded-full bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/40 text-rose-500 hover:text-rose-600 flex items-center justify-center transition-colors shrink-0"
+                                                    className="w-7 h-7 rounded-full bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/40 text-rose-500 hover:text-rose-600 flex items-center justify-center transition-colors shrink-0 cursor-pointer"
                                                 >
                                                     <span className="material-symbols-outlined text-sm leading-none">close</span>
                                                 </button>

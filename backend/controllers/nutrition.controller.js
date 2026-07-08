@@ -39,7 +39,12 @@ export const getNutritionAnalysis = async (req, res) => {
 
             // Expose Phase 2 Meal Planner outputs
             mealPlan: analysis.mealPlan,
-            mealPlanSummary: analysis.mealPlanSummary
+            mealPlanSummary: analysis.mealPlanSummary,
+
+            // Expose Phase 3 Grocery Optimizer outputs
+            groceryPlan: analysis.groceryPlan,
+            groceryPlanSummary: analysis.groceryPlanSummary,
+            groceryPlanInsights: analysis.groceryPlanInsights
         };
 
         res.status(200).json(responseData);
