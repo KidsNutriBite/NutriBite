@@ -14,7 +14,7 @@ const getNutrientIconName = (nutrient) => {
         case 'carbs': return 'bakery_dining';
         case 'fats': return 'spa';
         case 'vitamind': return 'wb_sunny';
-        case 'calcium': return 'bone';
+        case 'calcium': return 'shield';
         case 'fiber': return 'eco';
         case 'water': return 'water_drop';
         default: return 'nutrition';
