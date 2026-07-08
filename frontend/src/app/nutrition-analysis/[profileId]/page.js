@@ -234,10 +234,10 @@ export default function NutritionAnalysisPage() {
         <div className="min-h-screen bg-[#F8FAFC] dark:bg-slate-950 py-10 px-4 sm:px-6 lg:px-8 transition-colors">
             <div className="max-w-6xl mx-auto space-y-8">
                 {/* Back Button */}
-                <div className="flex items-center justify-between">
+                <div className="flex justify-start">
                     <button 
                         onClick={() => router.back()}
-                        className="flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-indigo-600 transition-colors group uppercase tracking-wider"
+                        className="group flex items-center gap-1.5 text-xs md:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-indigo-600 transition-all bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-full px-4 py-2 shadow-md hover:shadow-lg cursor-pointer"
                     >
                         <span className="material-symbols-outlined text-base group-hover:-translate-x-0.5 transition-transform">arrow_back</span>
                         <span>Back to Child Details</span>
