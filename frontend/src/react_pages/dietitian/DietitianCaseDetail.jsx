@@ -378,7 +378,7 @@ const DietitianCaseDetail = () => {
                             <div className="p-4 bg-purple-50/50 dark:bg-purple-950/10 border border-purple-100 dark:border-purple-900/30 rounded-xl space-y-2">
                                 <p className="text-xs text-purple-700 font-bold uppercase tracking-wider">Assigned Doctor</p>
                                 <div className="flex items-center gap-3">
-                                    <div className="size-10 rounded-full bg-cover bg-center" style={{ backgroundImage: `url('${request.doctorId.profileImage || 'https://avatar.iran.liara.run/public/boy'}')` }}></div>
+                                    <div className="size-10 rounded-full bg-cover bg-center" style={{ backgroundImage: `url('${request.doctorId.profileImage || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23cccccc"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>'}')` }}></div>
                                     <div>
                                         <p className="font-bold text-slate-800 dark:text-white text-sm">Dr. {request.doctorId.name}</p>
                                         <p className="text-xs text-slate-400">{request.doctorId.doctorProfile?.specialization || 'Pediatrician'}</p>
@@ -413,7 +413,7 @@ const DietitianCaseDetail = () => {
                                         <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-xl space-y-3">
                                             <span className="inline-flex px-2 py-0.5 rounded-md bg-green-100 text-green-700 text-[10px] font-bold uppercase tracking-wide">Recommended Doctor</span>
                                             <div className="flex items-center gap-3">
-                                                <div className="size-10 rounded-full bg-cover bg-center" style={{ backgroundImage: `url('${recommendedDoctor.profileImage || 'https://avatar.iran.liara.run/public/boy'}')` }}></div>
+                                                <div className="size-10 rounded-full bg-cover bg-center" style={{ backgroundImage: `url('${recommendedDoctor.profileImage || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23cccccc"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>'}')` }}></div>
                                                 <div>
                                                     <p className="font-bold text-slate-800 dark:text-white text-sm">Dr. {recommendedDoctor.name}</p>
                                                     <p className="text-xs text-slate-400">{recommendedDoctor.doctorProfile?.specialization || 'Pediatrician'}</p>

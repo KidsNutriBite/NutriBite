@@ -32,9 +32,7 @@ export const registerUser = asyncHandler(async (req, res) => {
     }
 
     // Default Avatar Logic
-    let profileImage = 'https://avatar.iran.liara.run/public';
-    if (title === 'Mr') profileImage = 'https://avatar.iran.liara.run/public/boy';
-    else if (['Ms', 'Mrs'].includes(title)) profileImage = 'https://avatar.iran.liara.run/public/girl';
+    let profileImage = '';
 
     // Construct user object based on role
     const userData = {

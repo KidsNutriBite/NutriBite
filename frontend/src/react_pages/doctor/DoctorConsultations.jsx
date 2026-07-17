@@ -4,9 +4,9 @@ import { motion } from 'framer-motion';
 
 const DoctorAppointments = () => {
     const appointments = [
-        { id: 1, name: 'Zayan Khan', type: 'Follow-up', date: 'Oct 24, 2023', time: '10:30 AM', status: 'Confirmed', avatar: 'https://avatar.iran.liara.run/public/1' },
-        { id: 2, name: 'Ayesha Ahmed', type: 'Initial Consultation', date: 'Oct 24, 2023', time: '11:45 AM', status: 'Pending', avatar: 'https://avatar.iran.liara.run/public/2' },
-        { id: 3, name: 'Rayan Ahmed', type: 'Nutrition Review', date: 'Oct 25, 2023', time: '09:00 AM', status: 'Confirmed', avatar: 'https://avatar.iran.liara.run/public/3' },
+        { id: 1, name: 'Zayan Khan', type: 'Follow-up', date: 'Oct 24, 2023', time: '10:30 AM', status: 'Confirmed', avatar: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23cccccc"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>' },
+        { id: 2, name: 'Ayesha Ahmed', type: 'Initial Consultation', date: 'Oct 24, 2023', time: '11:45 AM', status: 'Pending', avatar: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23cccccc"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>' },
+        { id: 3, name: 'Rayan Ahmed', type: 'Nutrition Review', date: 'Oct 25, 2023', time: '09:00 AM', status: 'Confirmed', avatar: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23cccccc"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>' },
     ];
 
     return (

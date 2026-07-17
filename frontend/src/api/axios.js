@@ -17,4 +17,27 @@ api.interceptors.request.use(
     (error) => Promise.reject(error)
 );
 
+// Add a response interceptor
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            const url = error.config?.url || '';
+            const isAuthRoute = url.includes('/auth/login') || 
+                               url.includes('/auth/register') || 
+                               url.includes('/auth/verify-2fa') || 
+                               url.includes('/auth/me');
+            
+            if (!isAuthRoute) {
+                localStorage.removeItem('token');
+                sessionStorage.removeItem('token');
+                if (typeof window !== 'undefined') {
+                    window.location.href = '/login';
+                }
+            }
+        }
+        return Promise.reject(error);
+    }
+);
+
 export default api;

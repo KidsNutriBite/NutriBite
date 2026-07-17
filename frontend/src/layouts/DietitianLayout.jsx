@@ -8,11 +8,27 @@ import { useTheme } from '../context/ThemeContext';
 import { toast } from 'react-hot-toast';
 
 const DietitianLayout = ({ children }) => {
-    const { logout, user } = useAuth();
+    const { logout, user, loading } = useAuth();
     const router = useRouter();
     const navigate = (path) => typeof path === 'number' && path < 0 ? router.back() : router.push(path);
     const pathname = usePathname();
     const location = { pathname };
+
+    useEffect(() => {
+        if (!loading) {
+            if (!user) {
+                router.replace('/login');
+            } else if (user.role !== 'dietitian') {
+                if (user.role === 'parent') {
+                    router.replace('/parent/dashboard');
+                } else if (user.role === 'doctor') {
+                    router.replace('/doctor/dashboard');
+                } else {
+                    router.replace('/login');
+                }
+            }
+        }
+    }, [user, loading, router]);
 
     const [notifications, setNotifications] = useState([]);
     const [unreadCount, setUnreadCount] = useState(0);
@@ -101,6 +117,13 @@ const DietitianLayout = ({ children }) => {
             default: return 'bg-gray-400 ring-gray-200';
         }
     };
+    if (loading || !user || user.role !== 'dietitian') {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-background-light dark:bg-background-dark">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+            </div>
+        );
+    }
 
     return (
         <div className="bg-background-light dark:bg-background-dark font-display min-h-screen text-slate-800 dark:text-slate-200">
@@ -220,7 +243,7 @@ const DietitianLayout = ({ children }) => {
                             </div>
                             <div
                                 className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 ring-2 ring-primary/20"
-                                style={{ backgroundImage: `url('${user?.profileImage || 'https://avatar.iran.liara.run/public'}')` }}
+                                style={{ backgroundImage: `url('${user?.profileImage || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23cccccc"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>'}')` }}
                             ></div>
                         </div>
 
