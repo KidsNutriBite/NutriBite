@@ -67,10 +67,25 @@ app.use('/api', rateLimiter);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(cors({
-    origin: [process.env.CLIENT_URL || 'http://localhost:5173', 'http://localhost:3000'],
-    credentials: true
-}));
+const allowedOrigins = [
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "https://nutrikids-frontend.vercel.app",
+    "https://nutrikids-frontend-jjxo5it1i-pavan-vignesh-vs-projects.vercel.app",
+];
+
+app.use(
+    cors({
+        origin: function (origin, callback) {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error(`Origin ${origin} not allowed by CORS`));
+            }
+        },
+        credentials: true,
+    })
+);
 app.use(helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" }
 }));
