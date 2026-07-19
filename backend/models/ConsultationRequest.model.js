@@ -110,6 +110,13 @@ const consultationRequestSchema = new mongoose.Schema(
                     type: Number,
                     default: 0,
                 },
+                diseaseOrCondition: {
+                    type: String,
+                    default: '',
+                },
+                medicinesDiscussed: [
+                    { type: String }
+                ],
                 summary: {
                     type: String,
                     default: '',

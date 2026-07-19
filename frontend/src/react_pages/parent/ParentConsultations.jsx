@@ -323,49 +323,31 @@ const ParentConsultations = () => {
                                             </h4>
                                         </div>
                                         {c.videoCallLogs.map((log, logIdx) => (
-                                            <div key={logIdx} className="p-4 bg-indigo-50 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/30 rounded-2xl space-y-3">
+                                            <div key={log._id || logIdx} className="p-4 bg-white border border-slate-200 rounded-2xl space-y-3 shadow-sm">
                                                 {/* Call Header */}
-                                                <div className="flex items-center justify-between">
+                                                <div className="flex items-center justify-between flex-wrap gap-2">
                                                     <div className="flex items-center gap-2">
                                                         <span className="w-6 h-6 rounded-full bg-indigo-600 text-white text-[10px] font-black flex items-center justify-center">
                                                             {logIdx + 1}
                                                         </span>
-                                                        <span className="text-xs font-bold text-indigo-800 dark:text-indigo-300">
-                                                            Session {logIdx + 1}
-                                                        </span>
+                                                        <span className="text-xs font-bold text-indigo-800">Session {logIdx + 1}</span>
                                                     </div>
-                                                    <div className="flex items-center gap-3 text-[10px] text-slate-400 font-medium">
-                                                        {log.durationMinutes > 0 && (
-                                                            <span>⏱ {log.durationMinutes} min</span>
-                                                        )}
+                                                    <div className="flex items-center gap-2 text-[10px] text-slate-400 font-medium">
+                                                        {log.durationMinutes > 0 && <span>⏱ {log.durationMinutes} min</span>}
                                                         <span>{new Date(log.callDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-                                                        <span className="px-2 py-0.5 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 rounded-full font-bold">AI Generated</span>
+                                                        <span className="px-2 py-0.5 bg-indigo-100 text-indigo-600 rounded-full font-bold">AI Generated</span>
                                                     </div>
                                                 </div>
 
-                                                {/* Summary */}
+                                                {/* Summary only */}
                                                 {log.summary && (
                                                     <div>
-                                                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-wider mb-1">Summary</p>
-                                                        <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">{log.summary}</p>
-                                                    </div>
-                                                )}
-
-                                                {/* Recommendations */}
-                                                {log.recommendations && log.recommendations.length > 0 && (
-                                                    <div>
-                                                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-wider mb-2">Recommendations</p>
-                                                        <ul className="space-y-1">
-                                                            {log.recommendations.map((rec, rIdx) => (
-                                                                <li key={rIdx} className="flex items-start gap-2 text-xs text-slate-700 dark:text-slate-300">
-                                                                    <span className="text-indigo-500 mt-0.5 shrink-0">•</span>
-                                                                    {rec}
-                                                                </li>
-                                                            ))}
-                                                        </ul>
+                                                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-wider mb-1">Call Summary</p>
+                                                        <p className="text-xs text-slate-700 leading-relaxed">{log.summary}</p>
                                                     </div>
                                                 )}
                                             </div>
+
                                         ))}
                                     </div>
                                 )}

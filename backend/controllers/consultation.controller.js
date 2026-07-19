@@ -678,64 +678,51 @@ export const generateVideoCallSummary = asyncHandler(async (req, res) => {
         throw new Error('Consultation request not found');
     }
 
-    // Build AI prompt
-    const prompt = transcript && transcript.trim().length > 20
-        ? `You are a pediatric clinical assistant. Analyze the following doctor-patient video consultation transcript and generate:
-1. A concise clinical summary (2-3 sentences) of what was discussed.
-2. A list of 3-5 specific, actionable recommendations for the child's nutrition or health.
+    const sessionNum = (request.videoCallLogs?.length || 0) + 1;
+    const hasTranscript = transcript && transcript.trim().length > 20;
+
+    let summary = 'No transcript was captured for this session.';
+
+    if (hasTranscript) {
+        const prompt = `You are a medical assistant. The following is a transcript from a video consultation between a doctor and a patient/parent.
 
 Transcript:
 "${transcript}"
 
-Respond ONLY in this exact JSON format (no markdown, no extra text):
-{
-  "summary": "...",
-  "recommendations": ["...", "...", "..."]
-}`
-        : `You are a pediatric clinical assistant. A video consultation was completed but no transcript was captured. Generate a generic post-consultation summary and recommendations placeholder.
+Write a clear, concise summary (3-5 sentences) of what was discussed in this call. Focus on what both parties talked about — symptoms mentioned, concerns raised, what the doctor said, and any decisions made.
 
-Respond ONLY in this exact JSON format (no markdown, no extra text):
-{
-  "summary": "A video consultation session was completed between the doctor and patient. Detailed transcript was not available for this session.",
-  "recommendations": ["Follow up with prescribed dietary changes", "Monitor child's meal intake daily", "Schedule next consultation within 2 weeks if no improvement"]
-}`;
+Respond with ONLY the summary text. No JSON, no headers, no bullet points — just plain paragraph text.`;
 
-    let summary = 'Video consultation completed.';
-    let recommendations = ['Follow up as advised by doctor.'];
+        try {
+            const geminiRes = await fetch(
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }],
+                        generationConfig: { temperature: 0.3, maxOutputTokens: 400 },
+                    }),
+                }
+            );
 
-    try {
-        const geminiRes = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
-            {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: prompt }] }],
-                    generationConfig: { temperature: 0.4, maxOutputTokens: 512 },
-                }),
+            if (geminiRes.ok) {
+                const geminiData = await geminiRes.json();
+                const text = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+                if (text.trim()) summary = text.trim();
+            } else {
+                const errBody = await geminiRes.text();
+                console.error('Gemini API error:', geminiRes.status, errBody);
             }
-        );
-
-        if (geminiRes.ok) {
-            const geminiData = await geminiRes.json();
-            const rawText = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-            // Strip markdown code fences if any
-            const cleaned = rawText.replace(/```json|```/g, '').trim();
-            const parsed = JSON.parse(cleaned);
-            summary = parsed.summary || summary;
-            recommendations = Array.isArray(parsed.recommendations) ? parsed.recommendations : recommendations;
+        } catch (err) {
+            console.error('Gemini AI summarization failed:', err.message);
         }
-    } catch (err) {
-        console.error('Gemini AI summarization failed:', err.message);
-        // Fallback to defaults — don't crash
     }
 
-    // Append a new video call log entry
     request.videoCallLogs.push({
         callDate: new Date(),
         durationMinutes: durationMinutes || 0,
         summary,
-        recommendations,
         generatedBy: 'AI',
     });
     await request.save();
@@ -744,4 +731,47 @@ Respond ONLY in this exact JSON format (no markdown, no extra text):
         log: request.videoCallLogs[request.videoCallLogs.length - 1],
         totalCalls: request.videoCallLogs.length,
     }, 'Video call summary generated successfully'));
+});
+
+
+
+
+// Delete a specific video call log (for cleanup)
+export const deleteVideoCallLog = asyncHandler(async (req, res) => {
+    const { requestId, logId } = req.params;
+
+    const request = await ConsultationRequest.findById(requestId);
+    if (!request) {
+        res.status(404);
+        throw new Error('Consultation request not found');
+    }
+
+    const originalLength = request.videoCallLogs.length;
+    request.videoCallLogs = request.videoCallLogs.filter(
+        (log) => log._id.toString() !== logId
+    );
+
+    if (request.videoCallLogs.length === originalLength) {
+        res.status(404);
+        throw new Error('Video call log not found');
+    }
+
+    await request.save();
+    res.status(200).json(new ApiResponse(200, { totalCalls: request.videoCallLogs.length }, 'Video call log deleted'));
+});
+
+// Clear ALL video call logs for a consultation (dev/cleanup only)
+export const clearAllVideoCallLogs = asyncHandler(async (req, res) => {
+    const { requestId } = req.params;
+
+    const request = await ConsultationRequest.findById(requestId);
+    if (!request) {
+        res.status(404);
+        throw new Error('Consultation request not found');
+    }
+
+    request.videoCallLogs = [];
+    await request.save();
+
+    res.status(200).json(new ApiResponse(200, { totalCalls: 0 }, 'All video call logs cleared'));
 });
