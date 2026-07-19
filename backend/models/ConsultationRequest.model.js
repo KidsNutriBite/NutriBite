@@ -100,6 +100,31 @@ const consultationRequestSchema = new mongoose.Schema(
                 },
             }
         ],
+        videoCallLogs: [
+            {
+                callDate: {
+                    type: Date,
+                    default: Date.now,
+                },
+                durationMinutes: {
+                    type: Number,
+                    default: 0,
+                },
+                summary: {
+                    type: String,
+                    default: '',
+                },
+                recommendations: [
+                    {
+                        type: String,
+                    }
+                ],
+                generatedBy: {
+                    type: String,
+                    default: 'AI',
+                },
+            }
+        ],
     },
     { timestamps: true }
 );

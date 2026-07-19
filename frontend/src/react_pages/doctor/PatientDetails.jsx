@@ -29,6 +29,7 @@ const PatientDetails = () => {
     const [savingDoctorNotes, setSavingDoctorNotes] = useState(false);
     const [activeTab, setActiveTab] = useState('overview');
     const [activeCall, setActiveCall] = useState(false);
+    const [videoCallLogs, setVideoCallLogs] = useState([]);
 
     // Clinician Specialization Check
     const [clinician, setClinician] = useState(null);
@@ -54,6 +55,7 @@ const PatientDetails = () => {
             setStatus(detailRes.data.data.status);
             setConsultationRequestId(detailRes.data.data.consultationRequestId || '');
             setDoctorNotes(detailRes.data.data.doctorNotes || '');
+            setVideoCallLogs(detailRes.data.data.videoCallLogs || []);
 
             // Fetch clinician details to check specialization
             try {
@@ -149,6 +151,7 @@ const PatientDetails = () => {
                 { id: 'suggested-plans', label: 'Suggested Meal Plans', icon: '📋' },
                 { id: 'growth-velocity', label: 'Growth Velocity',      icon: '📈' },
                 { id: 'twin',            label: 'Digital Twin View',    icon: '🤖' },
+                { id: 'video-calls',     label: 'Video Consultations',  icon: '📹' },
             ];
         } else {
             return [
@@ -159,6 +162,7 @@ const PatientDetails = () => {
                 { id: 'food-patterns',   label: 'Food Patterns',        icon: '🍉' },
                 { id: 'deficiency-risks',label: 'Deficiency Risks',     icon: '⚠️' },
                 { id: 'prescriptions',   label: 'Prescriptions',        icon: '📝' },
+                { id: 'video-calls',     label: 'Video Consultations',  icon: '📹' },
             ];
         }
     }, [status, isDietitian]);
@@ -308,7 +312,10 @@ const PatientDetails = () => {
                         consultationId={consultationRequestId}
                         userRole="doctor"
                         userName={user?.name || 'Doctor'}
-                        onClose={() => setActiveCall(false)}
+                        onClose={() => {
+                            setActiveCall(false);
+                            fetchAllData();
+                        }}
                     />
                 )}
             </AnimatePresence>
@@ -417,6 +424,42 @@ const PatientDetails = () => {
                             {/* TAB: Nutrition Intake (Dietitian Overview) */}
                             {activeTab === 'overview' && isDietitian && status === 'active' && (
                                 <div className="space-y-6">
+                                    {/* Child Growth Progression Details */}
+                                    <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm space-y-4">
+                                        <div>
+                                            <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                                                <span className="material-symbols-outlined text-indigo-500">monitoring</span>
+                                                Child Growth Progression Details
+                                            </h3>
+                                            <p className="text-xs text-gray-500 mt-1">Current child anthropometrics and growth indicators recorded in the system.</p>
+                                        </div>
+                                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                            <div className="p-4 bg-slate-50 dark:bg-slate-800/30 border rounded-2xl flex items-center gap-3">
+                                                <span className="text-2xl">📏</span>
+                                                <div>
+                                                    <p className="text-[10px] font-bold text-gray-400 uppercase">Height</p>
+                                                    <p className="font-extrabold text-slate-800 dark:text-white">{profile.height} cm</p>
+                                                </div>
+                                            </div>
+                                            <div className="p-4 bg-slate-50 dark:bg-slate-800/30 border rounded-2xl flex items-center gap-3">
+                                                <span className="text-2xl">⚖️</span>
+                                                <div>
+                                                    <p className="text-[10px] font-bold text-gray-400 uppercase">Weight</p>
+                                                    <p className="font-extrabold text-slate-800 dark:text-white">{profile.weight} kg</p>
+                                                </div>
+                                            </div>
+                                            <div className="p-4 bg-slate-50 dark:bg-slate-800/30 border rounded-2xl flex items-center gap-3">
+                                                <span className="text-2xl">📊</span>
+                                                <div>
+                                                    <p className="text-[10px] font-bold text-gray-400 uppercase">Body Mass Index (BMI)</p>
+                                                    <p className="font-extrabold text-slate-800 dark:text-white">
+                                                        {profile.height && profile.weight ? (profile.weight / Math.pow(profile.height / 100, 2)).toFixed(1) : '--'}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm space-y-6">
                                         <div>
                                             <h3 className="text-xl font-bold text-gray-900">Nutrition Intake Evaluation</h3>
@@ -823,6 +866,77 @@ const PatientDetails = () => {
                                             </div>
                                         </div>
                                     )}
+                                </div>
+                            )}
+
+                            {activeTab === 'video-calls' && status === 'active' && (
+                                <div className="space-y-6">
+                                    <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm space-y-6">
+                                        <div className="flex justify-between items-center pb-4 border-b border-gray-100">
+                                            <div>
+                                                <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                                                    <span className="material-symbols-outlined text-indigo-500">video_camera_front</span>
+                                                    Video Consultation Sessions
+                                                </h3>
+                                                <p className="text-xs text-gray-500 mt-1">Chronological timeline of video call summaries and recommendations generated by AI.</p>
+                                            </div>
+                                            <span className="px-3 py-1 bg-indigo-50 text-indigo-700 font-bold text-xs rounded-full">
+                                                {videoCallLogs.length} Total Calls
+                                            </span>
+                                        </div>
+
+                                        {videoCallLogs.length === 0 ? (
+                                            <div className="text-center py-12 bg-gray-50/50 rounded-2xl border border-dashed border-gray-250">
+                                                <span className="material-symbols-outlined text-4xl text-gray-300">video_chat</span>
+                                                <p className="text-sm font-medium text-gray-500 mt-2">No video consultations have been conducted yet.</p>
+                                            </div>
+                                        ) : (
+                                            <div className="space-y-6">
+                                                {videoCallLogs.map((log, idx) => (
+                                                    <div key={idx} className="p-6 bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-800 rounded-2.5xl space-y-4">
+                                                        <div className="flex justify-between items-center flex-wrap gap-2">
+                                                            <div className="flex items-center gap-3">
+                                                                <span className="w-8 h-8 rounded-full bg-indigo-600 text-white text-xs font-black flex items-center justify-center">
+                                                                    {idx + 1}
+                                                                </span>
+                                                                <span className="font-extrabold text-slate-800 dark:text-white text-base">
+                                                                    Video Call Session #{idx + 1}
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex items-center gap-3 text-xs text-gray-400 font-medium">
+                                                                {log.durationMinutes > 0 && (
+                                                                    <span>⏱ {log.durationMinutes} minutes</span>
+                                                                )}
+                                                                <span>{new Date(log.callDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                                                                <span className="px-2 py-0.5 bg-indigo-150 text-indigo-700 rounded-full font-bold text-[10px]">AI Summary</span>
+                                                            </div>
+                                                        </div>
+
+                                                        {log.summary && (
+                                                            <div className="space-y-1">
+                                                                <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Discussion Summary</h4>
+                                                                <p className="text-sm text-gray-700 leading-relaxed font-medium">{log.summary}</p>
+                                                            </div>
+                                                        )}
+
+                                                        {log.recommendations && log.recommendations.length > 0 && (
+                                                            <div className="space-y-2">
+                                                                <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">AI Actionable Recommendations</h4>
+                                                                <ul className="space-y-1">
+                                                                    {log.recommendations.map((rec, rIdx) => (
+                                                                        <li key={rIdx} className="flex items-start gap-2.5 text-xs text-gray-700">
+                                                                            <span className="text-indigo-500 mt-1 shrink-0">•</span>
+                                                                            <span className="font-medium">{rec}</span>
+                                                                        </li>
+                                                                    ))}
+                                                                </ul>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             )}
 

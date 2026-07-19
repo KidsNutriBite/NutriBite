@@ -13,7 +13,8 @@ import {
     getAvailableDietitians,
     updateStatus,
     updateDietitianNotes,
-    updateDoctorNotes
+    updateDoctorNotes,
+    generateVideoCallSummary
 } from '../controllers/consultation.controller.js';
 import { protect } from '../middlewares/auth.middleware.js';
 import { authorize } from '../middlewares/role.middleware.js';
@@ -45,5 +46,8 @@ router.patch('/:requestId/status', authorize('dietitian', 'doctor'), updateStatu
 
 // Shared parent/dietitian/doctor details route
 router.get('/:requestId', getConsultationDetails);
+
+// Video call AI summary (accessible to all roles)
+router.post('/:requestId/video-summary', authorize('parent', 'doctor', 'dietitian'), generateVideoCallSummary);
 
 export default router;

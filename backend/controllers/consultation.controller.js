@@ -664,3 +664,84 @@ export const updateDoctorNotes = asyncHandler(async (req, res) => {
 
     res.status(200).json(new ApiResponse(200, request, 'Doctor notes updated'));
 });
+
+// @desc    Auto-generate video call summary using Gemini AI from a speech transcript
+// @route   POST /api/consultations/:requestId/video-summary
+// @access  Protected (parent, doctor, dietitian)
+export const generateVideoCallSummary = asyncHandler(async (req, res) => {
+    const { requestId } = req.params;
+    const { transcript, durationMinutes } = req.body;
+
+    const request = await ConsultationRequest.findById(requestId);
+    if (!request) {
+        res.status(404);
+        throw new Error('Consultation request not found');
+    }
+
+    // Build AI prompt
+    const prompt = transcript && transcript.trim().length > 20
+        ? `You are a pediatric clinical assistant. Analyze the following doctor-patient video consultation transcript and generate:
+1. A concise clinical summary (2-3 sentences) of what was discussed.
+2. A list of 3-5 specific, actionable recommendations for the child's nutrition or health.
+
+Transcript:
+"${transcript}"
+
+Respond ONLY in this exact JSON format (no markdown, no extra text):
+{
+  "summary": "...",
+  "recommendations": ["...", "...", "..."]
+}`
+        : `You are a pediatric clinical assistant. A video consultation was completed but no transcript was captured. Generate a generic post-consultation summary and recommendations placeholder.
+
+Respond ONLY in this exact JSON format (no markdown, no extra text):
+{
+  "summary": "A video consultation session was completed between the doctor and patient. Detailed transcript was not available for this session.",
+  "recommendations": ["Follow up with prescribed dietary changes", "Monitor child's meal intake daily", "Schedule next consultation within 2 weeks if no improvement"]
+}`;
+
+    let summary = 'Video consultation completed.';
+    let recommendations = ['Follow up as advised by doctor.'];
+
+    try {
+        const geminiRes = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }],
+                    generationConfig: { temperature: 0.4, maxOutputTokens: 512 },
+                }),
+            }
+        );
+
+        if (geminiRes.ok) {
+            const geminiData = await geminiRes.json();
+            const rawText = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            // Strip markdown code fences if any
+            const cleaned = rawText.replace(/```json|```/g, '').trim();
+            const parsed = JSON.parse(cleaned);
+            summary = parsed.summary || summary;
+            recommendations = Array.isArray(parsed.recommendations) ? parsed.recommendations : recommendations;
+        }
+    } catch (err) {
+        console.error('Gemini AI summarization failed:', err.message);
+        // Fallback to defaults — don't crash
+    }
+
+    // Append a new video call log entry
+    request.videoCallLogs.push({
+        callDate: new Date(),
+        durationMinutes: durationMinutes || 0,
+        summary,
+        recommendations,
+        generatedBy: 'AI',
+    });
+    await request.save();
+
+    res.status(200).json(new ApiResponse(200, {
+        log: request.videoCallLogs[request.videoCallLogs.length - 1],
+        totalCalls: request.videoCallLogs.length,
+    }, 'Video call summary generated successfully'));
+});
