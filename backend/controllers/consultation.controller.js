@@ -1,3 +1,4 @@
+import axios from 'axios';
 import ConsultationRequest from '../models/ConsultationRequest.model.js';
 import DietitianDoctorGroup from '../models/DietitianDoctorGroup.model.js';
 import User from '../models/User.model.js';
@@ -692,34 +693,66 @@ export const generateVideoCallSummary = asyncHandler(async (req, res) => {
         }
     }
 
+    let fullTranscript = '';
+
     if (activeLog) {
-        // Append to existing session
+        // Append to existing transcript
         if (newText) {
-            const currentSummary = activeLog.summary || '';
-            if (currentSummary === 'No speech was captured during this session.') {
-                activeLog.summary = newText;
-            } else if (!currentSummary.includes(newText)) {
+            const currentTranscript = activeLog.transcript || '';
+            if (!currentTranscript) {
+                activeLog.transcript = newText;
+            } else if (!currentTranscript.includes(newText)) {
                 // Avoid duplicating the exact same string if sent twice
-                activeLog.summary = `${currentSummary}\n\n${newText}`.trim();
+                activeLog.transcript = `${currentTranscript}\n\n${newText}`.trim();
             }
         }
         activeLog.durationMinutes = Math.max(activeLog.durationMinutes, durationMinutes || 0);
+        fullTranscript = activeLog.transcript;
     } else {
         // Create new session
+        fullTranscript = newText;
         request.videoCallLogs.push({
             callDate: now,
             durationMinutes: durationMinutes || 0,
-            summary: newText || 'No speech was captured during this session.',
-            generatedBy: 'transcript',
+            transcript: fullTranscript,
+            summary: '', // To be filled
+            generatedBy: 'ai',
         });
+        activeLog = request.videoCallLogs[request.videoCallLogs.length - 1];
     }
 
+    // Generate AI Summary based on the FULL combined transcript
+    let aiSummary = 'No speech was captured during this session.';
+    if (fullTranscript && fullTranscript.trim().length > 0) {
+        try {
+            const prompt = `You are a medical assistant summarizing a video consultation between a doctor and a parent.
+Below is the raw transcript of the call. Please provide a clear, concise paragraph summarizing what was discussed. Do not output anything else.
+
+Transcript:
+"${fullTranscript}"`;
+
+            const response = await axios.post(
+                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+                {
+                    contents: [{ parts: [{ text: prompt }] }],
+                    generationConfig: { maxOutputTokens: 250, temperature: 0.3 }
+                }
+            );
+
+            aiSummary = response.data.candidates[0].content.parts[0].text.trim();
+        } catch (error) {
+            console.error("Gemini API Error:", error?.response?.data || error.message);
+            aiSummary = fullTranscript; // Fallback to raw transcript if AI fails
+        }
+    }
+
+    activeLog.summary = aiSummary;
     await request.save();
 
     res.status(200).json(new ApiResponse(200, {
-        log: request.videoCallLogs[request.videoCallLogs.length - 1],
+        log: activeLog,
         totalCalls: request.videoCallLogs.length,
-    }, 'Video call transcript saved successfully'));
+    }, 'Video call summary generated successfully'));
 });
 
 

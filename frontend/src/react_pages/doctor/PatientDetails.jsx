@@ -958,15 +958,20 @@ const PatientDetails = () => {
                                                                     <span>⏱ {log.durationMinutes} min</span>
                                                                 )}
                                                                 <span>{new Date(log.callDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
-                                                                <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full font-bold text-[10px]">Transcript Log</span>
+                                                                <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full font-bold text-[10px]">AI Generated</span>
                                                             </div>
                                                         </div>
 
-                                                        {/* Summary only */}
                                                         {log.summary && (
-                                                            <div className="space-y-1.5">
-                                                                <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Transcript</h4>
-                                                                <p className="text-sm text-gray-700 leading-relaxed">{log.summary}</p>
+                                                            <div className="space-y-1.5 mb-2">
+                                                                <h4 className="text-[10px] font-black text-indigo-500 uppercase tracking-widest flex items-center gap-1"><span className="material-symbols-outlined text-[14px]">smart_toy</span> AI Summary</h4>
+                                                                <p className="text-sm text-gray-700 leading-relaxed font-medium">{log.summary}</p>
+                                                            </div>
+                                                        )}
+                                                        {log.transcript && (
+                                                            <div className="space-y-1.5 p-3 bg-slate-50 rounded-lg">
+                                                                <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Raw Transcript</h4>
+                                                                <p className="text-xs text-slate-500 leading-relaxed italic">{log.transcript}</p>
                                                             </div>
                                                         )}
 
