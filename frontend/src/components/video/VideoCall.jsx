@@ -138,9 +138,9 @@ export default function VideoCall({ consultationId, userRole, userName, onClose 
                     videoConferenceJoined: () => {
                         callStartTimeRef.current = Date.now();
                         startTranscription();
-                    },
-                    readyToClose: handleCallEnd,
-                    videoConferenceLeft: handleCallEnd,
+                    }
+                    // Removed readyToClose and videoConferenceLeft to prevent Jitsi from automatically ending the session on network drops or pauses.
+                    // The session will now strictly ONLY save when the user clicks the explicit "Close" button on the top right.
                 });
 
             } catch (err) {
