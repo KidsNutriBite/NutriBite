@@ -678,16 +678,42 @@ export const generateVideoCallSummary = asyncHandler(async (req, res) => {
         throw new Error('Consultation request not found');
     }
 
-    const summary = (transcript && transcript.trim().length > 0)
-        ? transcript.trim()
-        : 'No speech was captured during this session.';
+    const newText = transcript ? transcript.trim() : '';
+    
+    // Find if there is an existing session created in the last 15 minutes
+    const FIFTEEN_MINUTES = 15 * 60 * 1000;
+    const now = new Date();
+    
+    let activeLog = null;
+    if (request.videoCallLogs.length > 0) {
+        const lastLog = request.videoCallLogs[request.videoCallLogs.length - 1];
+        if (now - new Date(lastLog.callDate) < FIFTEEN_MINUTES) {
+            activeLog = lastLog;
+        }
+    }
 
-    request.videoCallLogs.push({
-        callDate: new Date(),
-        durationMinutes: durationMinutes || 0,
-        summary,
-        generatedBy: 'transcript',
-    });
+    if (activeLog) {
+        // Append to existing session
+        if (newText) {
+            const currentSummary = activeLog.summary || '';
+            if (currentSummary === 'No speech was captured during this session.') {
+                activeLog.summary = newText;
+            } else if (!currentSummary.includes(newText)) {
+                // Avoid duplicating the exact same string if sent twice
+                activeLog.summary = `${currentSummary}\n\n${newText}`.trim();
+            }
+        }
+        activeLog.durationMinutes = Math.max(activeLog.durationMinutes, durationMinutes || 0);
+    } else {
+        // Create new session
+        request.videoCallLogs.push({
+            callDate: now,
+            durationMinutes: durationMinutes || 0,
+            summary: newText || 'No speech was captured during this session.',
+            generatedBy: 'transcript',
+        });
+    }
+
     await request.save();
 
     res.status(200).json(new ApiResponse(200, {

@@ -98,7 +98,19 @@ const ParentConsultations = () => {
                         consultationId={activeCall.consultationId}
                         userRole="parent"
                         userName={user?.name || 'Parent'}
-                        onClose={() => setActiveCall(null)}
+                        onClose={async (transcript, durationMinutes) => {
+                            setActiveCall(null);
+                            if (transcript && transcript.length > 0) {
+                                try {
+                                    await api.post(`/consultations/${activeCall.consultationId}/video-summary`, {
+                                        transcript,
+                                        durationMinutes,
+                                    });
+                                } catch (err) {
+                                    console.error('Failed to save parent transcript:', err);
+                                }
+                            }
+                        }}
                     />
                 )}
             </AnimatePresence>
