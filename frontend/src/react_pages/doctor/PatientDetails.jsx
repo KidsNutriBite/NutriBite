@@ -312,8 +312,20 @@ const PatientDetails = () => {
                         consultationId={consultationRequestId}
                         userRole="doctor"
                         userName={user?.name || 'Doctor'}
-                        onClose={() => {
+                        onClose={async (transcript, durationMinutes) => {
                             setActiveCall(false);
+                            if (transcript && transcript.length > 0) {
+                                try {
+                                    await api.post(`/consultations/${consultationRequestId}/video-summary`, {
+                                        transcript,
+                                        durationMinutes,
+                                    });
+                                    toast.success('Transcript saved successfully!');
+                                } catch (err) {
+                                    console.error('Failed to save transcript:', err);
+                                    toast.error('Could not save transcript.');
+                                }
+                            }
                             fetchAllData();
                         }}
                     />

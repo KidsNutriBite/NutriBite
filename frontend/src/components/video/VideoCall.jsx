@@ -64,32 +64,19 @@ export default function VideoCall({ consultationId, userRole, userName, onClose 
     }, []);
 
     // ── End Call → Generate AI Summary ────────────────────────────
-    const handleCallEnd = useCallback(async () => {
+    const handleCallEnd = useCallback(() => {
         if (hasSavedRef.current) return;
         hasSavedRef.current = true;
         
         stopTranscription();
-        setIsGeneratingSummary(true);
 
         const durationMs = callStartTimeRef.current ? Date.now() - callStartTimeRef.current : 0;
         const durationMinutes = Math.max(1, Math.round(durationMs / 60000));
         const transcript = transcriptRef.current.trim();
 
-        try {
-            await api.post(`/consultations/${consultationId}/video-summary`, {
-                transcript,
-                durationMinutes,
-            });
-            setSummaryDone(true);
-            toast.success('✅ Transcript saved!', { duration: 4000 });
-        } catch (err) {
-            console.error('Failed to save transcript:', err);
-            toast.error('Could not save transcript. Call logged anyway.');
-        } finally {
-            setIsGeneratingSummary(false);
-            setTimeout(() => onClose(), 1500);
-        }
-    }, [consultationId, onClose, stopTranscription]);
+        // Pass the transcript back to the parent component to handle saving
+        onClose(transcript, durationMinutes);
+    }, [onClose, stopTranscription]);
 
     // ── Init Jitsi ─────────────────────────────────────────────────
     useEffect(() => {
@@ -226,20 +213,11 @@ export default function VideoCall({ consultationId, userRole, userName, onClose 
                             Check your internet connection and try again.
                         </p>
                         <button
-                            onClick={onClose}
+                            onClick={() => onClose('', 0)}
                             className="mt-2 px-6 py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-xl text-sm font-semibold transition"
                         >
                             Close
                         </button>
-                    </div>
-                )}
-
-                {/* AI Summary Overlay */}
-                {isGeneratingSummary && (
-                    <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center gap-4 z-10">
-                        <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-                        <p className="text-white font-bold text-lg">Generating AI Summary...</p>
-                        <p className="text-slate-400 text-sm">Analyzing your consultation transcript</p>
                     </div>
                 )}
             </motion.div>
