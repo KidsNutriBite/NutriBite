@@ -11,6 +11,7 @@ export default function VideoCall({ consultationId, userRole, userName, onClose 
     const recognitionRef = useRef(null);
     const transcriptRef = useRef('');
     const callStartTimeRef = useRef(null);
+    const hasSavedRef = useRef(false);
 
     const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
     const [summaryDone, setSummaryDone] = useState(false);
@@ -64,7 +65,9 @@ export default function VideoCall({ consultationId, userRole, userName, onClose 
 
     // ── End Call → Generate AI Summary ────────────────────────────
     const handleCallEnd = useCallback(async () => {
-        if (isGeneratingSummary || summaryDone) return;
+        if (hasSavedRef.current) return;
+        hasSavedRef.current = true;
+        
         stopTranscription();
         setIsGeneratingSummary(true);
 
@@ -78,15 +81,15 @@ export default function VideoCall({ consultationId, userRole, userName, onClose 
                 durationMinutes,
             });
             setSummaryDone(true);
-            toast.success('✅ AI consultation summary generated!', { duration: 4000 });
+            toast.success('✅ Transcript saved!', { duration: 4000 });
         } catch (err) {
-            console.error('Failed to generate video summary:', err);
-            toast.error('Could not generate AI summary. Call logged without summary.');
+            console.error('Failed to save transcript:', err);
+            toast.error('Could not save transcript. Call logged anyway.');
         } finally {
             setIsGeneratingSummary(false);
             setTimeout(() => onClose(), 1500);
         }
-    }, [consultationId, isGeneratingSummary, summaryDone, onClose, stopTranscription]);
+    }, [consultationId, onClose, stopTranscription]);
 
     // ── Init Jitsi ─────────────────────────────────────────────────
     useEffect(() => {
