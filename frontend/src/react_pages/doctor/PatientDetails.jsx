@@ -946,14 +946,14 @@ const PatientDetails = () => {
                                                                     <span>⏱ {log.durationMinutes} min</span>
                                                                 )}
                                                                 <span>{new Date(log.callDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
-                                                                <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full font-bold text-[10px]">AI Generated</span>
+                                                                <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full font-bold text-[10px]">Transcript Log</span>
                                                             </div>
                                                         </div>
 
                                                         {/* Summary only */}
                                                         {log.summary && (
                                                             <div className="space-y-1.5">
-                                                                <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Call Summary</h4>
+                                                                <h4 className="text-[10px] font-black text-gray-400 uppercase tracking-widest">Transcript</h4>
                                                                 <p className="text-sm text-gray-700 leading-relaxed">{log.summary}</p>
                                                             </div>
                                                         )}

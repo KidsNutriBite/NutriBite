@@ -678,60 +678,24 @@ export const generateVideoCallSummary = asyncHandler(async (req, res) => {
         throw new Error('Consultation request not found');
     }
 
-    const sessionNum = (request.videoCallLogs?.length || 0) + 1;
-    const hasTranscript = transcript && transcript.trim().length > 20;
-
-    let summary = 'No transcript was captured for this session.';
-
-    if (hasTranscript) {
-        const prompt = `You are a medical assistant. The following is a transcript from a video consultation between a doctor and a patient/parent.
-
-Transcript:
-"${transcript}"
-
-Write a clear, concise summary (3-5 sentences) of what was discussed in this call. Focus on what both parties talked about — symptoms mentioned, concerns raised, what the doctor said, and any decisions made.
-
-Respond with ONLY the summary text. No JSON, no headers, no bullet points — just plain paragraph text.`;
-
-        try {
-            const geminiRes = await fetch(
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }],
-                        generationConfig: { temperature: 0.3, maxOutputTokens: 400 },
-                    }),
-                }
-            );
-
-            if (geminiRes.ok) {
-                const geminiData = await geminiRes.json();
-                const text = geminiData?.candidates?.[0]?.content?.parts?.[0]?.text || '';
-                if (text.trim()) summary = text.trim();
-            } else {
-                const errBody = await geminiRes.text();
-                console.error('Gemini API error:', geminiRes.status, errBody);
-            }
-        } catch (err) {
-            console.error('Gemini AI summarization failed:', err.message);
-        }
-    }
+    const summary = (transcript && transcript.trim().length > 0)
+        ? transcript.trim()
+        : 'No speech was captured during this session.';
 
     request.videoCallLogs.push({
         callDate: new Date(),
         durationMinutes: durationMinutes || 0,
         summary,
-        generatedBy: 'AI',
+        generatedBy: 'transcript',
     });
     await request.save();
 
     res.status(200).json(new ApiResponse(200, {
         log: request.videoCallLogs[request.videoCallLogs.length - 1],
         totalCalls: request.videoCallLogs.length,
-    }, 'Video call summary generated successfully'));
+    }, 'Video call transcript saved successfully'));
 });
+
 
 
 

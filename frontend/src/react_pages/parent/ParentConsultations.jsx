@@ -335,14 +335,14 @@ const ParentConsultations = () => {
                                                     <div className="flex items-center gap-2 text-[10px] text-slate-400 font-medium">
                                                         {log.durationMinutes > 0 && <span>⏱ {log.durationMinutes} min</span>}
                                                         <span>{new Date(log.callDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-                                                        <span className="px-2 py-0.5 bg-indigo-100 text-indigo-600 rounded-full font-bold">AI Generated</span>
+                                                        <span className="px-2 py-0.5 bg-indigo-100 text-indigo-600 rounded-full font-bold">Transcript Log</span>
                                                     </div>
                                                 </div>
 
                                                 {/* Summary only */}
                                                 {log.summary && (
                                                     <div>
-                                                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-wider mb-1">Call Summary</p>
+                                                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-wider mb-1">Transcript</p>
                                                         <p className="text-xs text-slate-700 leading-relaxed">{log.summary}</p>
                                                     </div>
                                                 )}
