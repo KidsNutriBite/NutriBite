@@ -347,9 +347,35 @@ const ParentConsultations = () => {
                                                     <div className="flex items-center gap-2 text-[10px] text-slate-400 font-medium">
                                                         {log.durationMinutes > 0 && <span>⏱ {log.durationMinutes} min</span>}
                                                         <span>{new Date(log.callDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
-                                                        <span className="px-2 py-0.5 bg-indigo-100 text-indigo-600 rounded-full font-bold">AI Generated</span>
+                                                        <span className="px-2 py-0.5 bg-indigo-100 text-indigo-600 rounded-full font-bold">{log.summary ? 'AI Generated' : 'Transcript Log'}</span>
                                                     </div>
                                                 </div>
+
+                                                {!log.summary && log.transcript && (
+                                                    <div className="mt-1">
+                                                        <button
+                                                            onClick={async () => {
+                                                                try {
+                                                                    toast.loading('Generating AI summary...', { id: 'ai-summary' });
+                                                                    const res = await api.post(`/consultations/${c._id}/video-summary/${log._id}/generate-ai`);
+                                                                    setHistory(prev => prev.map(req => {
+                                                                        if (req._id === c._id) {
+                                                                            return { ...req, videoCallLogs: req.videoCallLogs.map(l => l._id === log._id ? res.data.data.log : l) };
+                                                                        }
+                                                                        return req;
+                                                                    }));
+                                                                    toast.success('AI summary generated!', { id: 'ai-summary' });
+                                                                } catch (err) {
+                                                                    toast.error('Failed to generate AI summary.', { id: 'ai-summary' });
+                                                                }
+                                                            }}
+                                                            className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 text-[11px] font-bold rounded-lg transition"
+                                                        >
+                                                            <span className="material-symbols-outlined text-[14px]">smart_toy</span>
+                                                            Generate AI Summary
+                                                        </button>
+                                                    </div>
+                                                )}
 
                                                 {log.summary && (
                                                     <div className="mb-2">
