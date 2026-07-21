@@ -721,38 +721,65 @@ export const generateVideoCallSummary = asyncHandler(async (req, res) => {
         activeLog = request.videoCallLogs[request.videoCallLogs.length - 1];
     }
 
-    // Generate AI Summary based on the FULL combined transcript
-    let aiSummary = 'No speech was captured during this session.';
-    if (fullTranscript && fullTranscript.trim().length > 0) {
-        try {
-            const prompt = `You are a medical assistant summarizing a video consultation between a doctor and a parent.
-Below is the raw transcript of the call. Please provide a clear, concise paragraph summarizing what was discussed. Do not output anything else.
-
-Transcript:
-"${fullTranscript}"`;
-
-            const response = await axios.post(
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
-                {
-                    contents: [{ parts: [{ text: prompt }] }],
-                    generationConfig: { maxOutputTokens: 250, temperature: 0.3 }
-                }
-            );
-
-            aiSummary = response.data.candidates[0].content.parts[0].text.trim();
-        } catch (error) {
-            console.error("Gemini API Error:", error?.response?.data || error.message);
-            aiSummary = fullTranscript; // Fallback to raw transcript if AI fails
-        }
-    }
-
-    activeLog.summary = aiSummary;
     await request.save();
 
     res.status(200).json(new ApiResponse(200, {
         log: activeLog,
         totalCalls: request.videoCallLogs.length,
-    }, 'Video call summary generated successfully'));
+    }, 'Video call transcript saved successfully'));
+});
+
+// @desc    Generate AI summary for a specific video call log
+// @route   POST /api/consultations/:requestId/video-summary/:logId/generate-ai
+// @access  Protected (doctor)
+export const generateAiSummary = asyncHandler(async (req, res) => {
+    const { requestId, logId } = req.params;
+
+    const request = await ConsultationRequest.findById(requestId);
+    if (!request) {
+        res.status(404);
+        throw new Error('Consultation request not found');
+    }
+
+    const log = request.videoCallLogs.id(logId);
+    if (!log) {
+        res.status(404);
+        throw new Error('Video call log not found');
+    }
+
+    if (!log.transcript || log.transcript.trim() === '') {
+        res.status(400);
+        throw new Error('No transcript available to summarize');
+    }
+
+    let aiSummary = '';
+    try {
+        const prompt = `You are a medical assistant summarizing a video consultation between a doctor and a parent.
+Below is the raw transcript of the call. Please provide a clear, concise paragraph summarizing what was discussed. Do not output anything else.
+
+Transcript:
+"${log.transcript}"`;
+
+        const response = await axios.post(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+            {
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: { maxOutputTokens: 250, temperature: 0.3 }
+            }
+        );
+
+        aiSummary = response.data.candidates[0].content.parts[0].text.trim();
+    } catch (error) {
+        console.error("Gemini API Error:", error?.response?.data || error.message);
+        res.status(500);
+        throw new Error('Failed to generate AI summary due to API error');
+    }
+
+    log.summary = aiSummary;
+    log.generatedBy = 'ai';
+    await request.save();
+
+    res.status(200).json(new ApiResponse(200, { log }, 'AI summary generated successfully'));
 });
 
 

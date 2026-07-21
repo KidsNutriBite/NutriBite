@@ -16,7 +16,8 @@ import {
     updateDoctorNotes,
     generateVideoCallSummary,
     deleteVideoCallLog,
-    clearAllVideoCallLogs
+    clearAllVideoCallLogs,
+    generateAiSummary
 } from '../controllers/consultation.controller.js';
 import { protect } from '../middlewares/auth.middleware.js';
 import { authorize } from '../middlewares/role.middleware.js';
@@ -51,6 +52,7 @@ router.get('/:requestId', getConsultationDetails);
 
 // Video call AI summary (accessible to all roles)
 router.post('/:requestId/video-summary', authorize('parent', 'doctor', 'dietitian'), generateVideoCallSummary);
+router.post('/:requestId/video-summary/:logId/generate-ai', authorize('doctor', 'dietitian'), generateAiSummary);
 router.delete('/:requestId/video-summary/:logId', authorize('parent', 'doctor', 'dietitian'), deleteVideoCallLog);
 router.delete('/:requestId/video-summary', authorize('parent', 'doctor', 'dietitian'), clearAllVideoCallLogs);
 

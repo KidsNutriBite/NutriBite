@@ -944,7 +944,7 @@ const PatientDetails = () => {
                                                             <span className="material-symbols-outlined text-sm">delete</span>
                                                         </button>
 
-                                                        <div className="flex justify-between items-center flex-wrap gap-2 pr-8">
+                                                        <div className="flex justify-between items-center flex-wrap gap-2 pr-12">
                                                             <div className="flex items-center gap-3">
                                                                 <span className="w-8 h-8 rounded-full bg-indigo-600 text-white text-xs font-black flex items-center justify-center">
                                                                     {idx + 1}
@@ -958,9 +958,30 @@ const PatientDetails = () => {
                                                                     <span>⏱ {log.durationMinutes} min</span>
                                                                 )}
                                                                 <span>{new Date(log.callDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
-                                                                <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full font-bold text-[10px]">AI Generated</span>
+                                                                <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full font-bold text-[10px]">{log.summary ? 'AI Generated' : 'Transcript Log'}</span>
                                                             </div>
                                                         </div>
+
+                                                        {!log.summary && log.transcript && (
+                                                            <div className="mt-2">
+                                                                <button
+                                                                    onClick={async () => {
+                                                                        try {
+                                                                            toast.loading('Generating AI summary...', { id: 'ai-summary' });
+                                                                            const res = await api.post(`/consultations/${consultationRequestId}/video-summary/${log._id}/generate-ai`);
+                                                                            setVideoCallLogs(prev => prev.map(l => l._id === log._id ? res.data.data.log : l));
+                                                                            toast.success('AI summary generated!', { id: 'ai-summary' });
+                                                                        } catch (err) {
+                                                                            toast.error('Failed to generate AI summary.', { id: 'ai-summary' });
+                                                                        }
+                                                                    }}
+                                                                    className="flex items-center gap-2 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 text-xs font-bold rounded-lg transition"
+                                                                >
+                                                                    <span className="material-symbols-outlined text-[16px]">smart_toy</span>
+                                                                    Generate AI Summary
+                                                                </button>
+                                                            </div>
+                                                        )}
 
                                                         {log.summary && (
                                                             <div className="space-y-1.5 mb-2">
