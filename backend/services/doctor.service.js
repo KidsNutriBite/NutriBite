@@ -119,7 +119,9 @@ export const getPatientDetails = async (doctorId, profileId) => {
         meals,
         status: 'active',
         consultationRequestId: access._id,
-        consultationStatus: access.status
+        consultationStatus: access.status,
+        doctorNotes: access.doctorNotes || '',
+        videoCallLogs: access.videoCallLogs || []
     };
 };
 
