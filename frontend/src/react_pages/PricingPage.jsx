@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from 'react';
 import Link from 'next/link';
@@ -96,7 +96,7 @@ const PricingPage = () => {
         { name: "Child Profile Management", free: true, premium: true, clinical: true },
         { name: "Meal Logging & Basic Tracking", free: true, premium: true, clinical: true },
         { name: "Growth Records History", free: true, premium: true, clinical: true },
-        { name: "AI Nutrition Assistant (Gemini)", free: false, premium: true, clinical: true },
+        { name: "AI Nutrition Assistant & Care Plans", free: false, premium: true, clinical: true },
         { name: "Nutrition Gap Analysis", free: false, premium: true, clinical: true },
         { name: "Personalized Meal Suggestions", free: false, premium: true, clinical: true },
         { name: "Advanced Growth Analytics", free: false, premium: true, clinical: true },

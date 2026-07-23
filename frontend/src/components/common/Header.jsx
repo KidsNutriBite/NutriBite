@@ -66,6 +66,7 @@ const Header = () => {
     const isLinkActive = (href, targetSection) => {
         if (pathname === '/about' && href === '/about') return true;
         if (pathname === '/pricing' && href === '/pricing') return true;
+        if (pathname === '/features' && href === '/features') return true;
         if (pathname === '/' && href === '/') {
             if (targetSection) {
                 return activeSection === targetSection;
@@ -78,7 +79,7 @@ const Header = () => {
     // Navigation links configurations
     const navItems = [
         { label: 'Home', href: '/', sectionId: 'home' },
-        { label: 'Features', href: '/#features', sectionId: 'features' },
+        { label: 'Features', href: '/features' },
         { label: 'About Us', href: '/about' },
         { label: 'Pricing', href: '/pricing' }
     ];

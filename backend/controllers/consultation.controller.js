@@ -1,3 +1,4 @@
+import axios from 'axios';
 import ConsultationRequest from '../models/ConsultationRequest.model.js';
 import DietitianDoctorGroup from '../models/DietitianDoctorGroup.model.js';
 import User from '../models/User.model.js';
@@ -663,4 +664,164 @@ export const updateDoctorNotes = asyncHandler(async (req, res) => {
     await request.save();
 
     res.status(200).json(new ApiResponse(200, request, 'Doctor notes updated'));
+});
+
+// @desc    Auto-generate video call summary using Gemini AI from a speech transcript
+// @route   POST /api/consultations/:requestId/video-summary
+// @access  Protected (parent, doctor, dietitian)
+export const generateVideoCallSummary = asyncHandler(async (req, res) => {
+    const { requestId } = req.params;
+    const { transcript, durationMinutes } = req.body;
+
+    const request = await ConsultationRequest.findById(requestId);
+    if (!request) {
+        res.status(404);
+        throw new Error('Consultation request not found');
+    }
+
+    const newText = transcript ? transcript.trim() : '';
+    
+    // Find if there is an existing session created in the last 15 minutes
+    const FIFTEEN_MINUTES = 15 * 60 * 1000;
+    const now = new Date();
+    
+    let activeLog = null;
+    if (request.videoCallLogs.length > 0) {
+        const lastLog = request.videoCallLogs[request.videoCallLogs.length - 1];
+        if (now - new Date(lastLog.callDate) < FIFTEEN_MINUTES) {
+            activeLog = lastLog;
+        }
+    }
+
+    let fullTranscript = '';
+
+    if (activeLog) {
+        // Append to existing transcript
+        if (newText) {
+            const currentTranscript = activeLog.transcript || '';
+            if (!currentTranscript) {
+                activeLog.transcript = newText;
+            } else if (!currentTranscript.includes(newText)) {
+                // Avoid duplicating the exact same string if sent twice
+                activeLog.transcript = `${currentTranscript}\n\n${newText}`.trim();
+            }
+        }
+        activeLog.durationMinutes = Math.max(activeLog.durationMinutes, durationMinutes || 0);
+        fullTranscript = activeLog.transcript;
+    } else {
+        // Create new session
+        fullTranscript = newText;
+        request.videoCallLogs.push({
+            callDate: now,
+            durationMinutes: durationMinutes || 0,
+            transcript: fullTranscript,
+            summary: '', // To be filled
+            generatedBy: 'ai',
+        });
+        activeLog = request.videoCallLogs[request.videoCallLogs.length - 1];
+    }
+
+    await request.save();
+
+    res.status(200).json(new ApiResponse(200, {
+        log: activeLog,
+        totalCalls: request.videoCallLogs.length,
+    }, 'Video call transcript saved successfully'));
+});
+
+// @desc    Generate AI summary for a specific video call log
+// @route   POST /api/consultations/:requestId/video-summary/:logId/generate-ai
+// @access  Protected (doctor)
+export const generateAiSummary = asyncHandler(async (req, res) => {
+    const { requestId, logId } = req.params;
+
+    const request = await ConsultationRequest.findById(requestId);
+    if (!request) {
+        res.status(404);
+        throw new Error('Consultation request not found');
+    }
+
+    const log = request.videoCallLogs.id(logId);
+    if (!log) {
+        res.status(404);
+        throw new Error('Video call log not found');
+    }
+
+    if (!log.transcript || log.transcript.trim() === '') {
+        res.status(400);
+        throw new Error('No transcript available to summarize');
+    }
+
+    let aiSummary = '';
+    try {
+        const prompt = `You are a medical assistant summarizing a video consultation between a doctor and a parent.
+Below is the raw transcript of the call. Please provide a clear, concise paragraph summarizing what was discussed. Do not output anything else.
+
+Transcript:
+"${log.transcript}"`;
+
+        const response = await axios.post(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+            {
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: { maxOutputTokens: 250, temperature: 0.3 }
+            }
+        );
+
+        aiSummary = response.data.candidates[0].content.parts[0].text.trim();
+    } catch (error) {
+        console.error("Gemini API Error:", error?.response?.data || error.message);
+        res.status(500);
+        throw new Error('Failed to generate AI summary due to API error');
+    }
+
+    log.summary = aiSummary;
+    log.generatedBy = 'ai';
+    await request.save();
+
+    res.status(200).json(new ApiResponse(200, { log }, 'AI summary generated successfully'));
+});
+
+
+
+
+
+// Delete a specific video call log (for cleanup)
+export const deleteVideoCallLog = asyncHandler(async (req, res) => {
+    const { requestId, logId } = req.params;
+
+    const request = await ConsultationRequest.findById(requestId);
+    if (!request) {
+        res.status(404);
+        throw new Error('Consultation request not found');
+    }
+
+    const originalLength = request.videoCallLogs.length;
+    request.videoCallLogs = request.videoCallLogs.filter(
+        (log) => log._id.toString() !== logId
+    );
+
+    if (request.videoCallLogs.length === originalLength) {
+        res.status(404);
+        throw new Error('Video call log not found');
+    }
+
+    await request.save();
+    res.status(200).json(new ApiResponse(200, { totalCalls: request.videoCallLogs.length }, 'Video call log deleted'));
+});
+
+// Clear ALL video call logs for a consultation (dev/cleanup only)
+export const clearAllVideoCallLogs = asyncHandler(async (req, res) => {
+    const { requestId } = req.params;
+
+    const request = await ConsultationRequest.findById(requestId);
+    if (!request) {
+        res.status(404);
+        throw new Error('Consultation request not found');
+    }
+
+    request.videoCallLogs = [];
+    await request.save();
+
+    res.status(200).json(new ApiResponse(200, { totalCalls: 0 }, 'All video call logs cleared'));
 });

@@ -98,7 +98,19 @@ const ParentConsultations = () => {
                         consultationId={activeCall.consultationId}
                         userRole="parent"
                         userName={user?.name || 'Parent'}
-                        onClose={() => setActiveCall(null)}
+                        onClose={async (transcript, durationMinutes) => {
+                            setActiveCall(null);
+                            if (transcript && transcript.length > 0) {
+                                try {
+                                    await api.post(`/consultations/${activeCall.consultationId}/video-summary`, {
+                                        transcript,
+                                        durationMinutes,
+                                    });
+                                } catch (err) {
+                                    console.error('Failed to save parent transcript:', err);
+                                }
+                            }
+                        }}
                     />
                 )}
             </AnimatePresence>
@@ -310,6 +322,76 @@ const ParentConsultations = () => {
                                         {c.doctorNotes && (
                                             <p className="text-xs text-slate-500 dark:text-slate-400 italic">" {c.doctorNotes} "</p>
                                         )}
+                                    </div>
+                                )}
+
+                                {/* Video Call Logs */}
+                                {c.videoCallLogs && c.videoCallLogs.length > 0 && (
+                                    <div className="space-y-3">
+                                        <div className="flex items-center gap-2">
+                                            <span className="material-symbols-outlined text-indigo-500 text-lg">video_camera_front</span>
+                                            <h4 className="font-extrabold text-xs text-slate-700 dark:text-slate-200 uppercase tracking-wider">
+                                                Video Consultations ({c.videoCallLogs.length} {c.videoCallLogs.length === 1 ? 'Session' : 'Sessions'})
+                                            </h4>
+                                        </div>
+                                        {c.videoCallLogs.map((log, logIdx) => (
+                                            <div key={log._id || logIdx} className="p-4 bg-white border border-slate-200 rounded-2xl space-y-3 shadow-sm">
+                                                {/* Call Header */}
+                                                <div className="flex items-center justify-between flex-wrap gap-2">
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="w-6 h-6 rounded-full bg-indigo-600 text-white text-[10px] font-black flex items-center justify-center">
+                                                            {logIdx + 1}
+                                                        </span>
+                                                        <span className="text-xs font-bold text-indigo-800">Session {logIdx + 1}</span>
+                                                    </div>
+                                                    <div className="flex items-center gap-2 text-[10px] text-slate-400 font-medium">
+                                                        {log.durationMinutes > 0 && <span>⏱ {log.durationMinutes} min</span>}
+                                                        <span>{new Date(log.callDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                                                        <span className="px-2 py-0.5 bg-indigo-100 text-indigo-600 rounded-full font-bold">{log.summary ? 'AI Generated' : 'Transcript Log'}</span>
+                                                    </div>
+                                                </div>
+
+                                                {!log.summary && log.transcript && (
+                                                    <div className="mt-1">
+                                                        <button
+                                                            onClick={async () => {
+                                                                try {
+                                                                    toast.loading('Generating AI summary...', { id: 'ai-summary' });
+                                                                    const res = await api.post(`/consultations/${c._id}/video-summary/${log._id}/generate-ai`);
+                                                                    setHistory(prev => prev.map(req => {
+                                                                        if (req._id === c._id) {
+                                                                            return { ...req, videoCallLogs: req.videoCallLogs.map(l => l._id === log._id ? res.data.data.log : l) };
+                                                                        }
+                                                                        return req;
+                                                                    }));
+                                                                    toast.success('AI summary generated!', { id: 'ai-summary' });
+                                                                } catch (err) {
+                                                                    toast.error('Failed to generate AI summary.', { id: 'ai-summary' });
+                                                                }
+                                                            }}
+                                                            className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 text-[11px] font-bold rounded-lg transition"
+                                                        >
+                                                            <span className="material-symbols-outlined text-[14px]">smart_toy</span>
+                                                            Generate AI Summary
+                                                        </button>
+                                                    </div>
+                                                )}
+
+                                                {log.summary && (
+                                                    <div className="mb-2">
+                                                        <p className="text-[10px] font-black text-indigo-500 uppercase tracking-wider mb-1 flex items-center gap-1"><span className="material-symbols-outlined text-[12px]">smart_toy</span> AI Summary</p>
+                                                        <p className="text-xs text-slate-700 leading-relaxed font-medium">{log.summary}</p>
+                                                    </div>
+                                                )}
+                                                {log.transcript && (
+                                                    <div className="p-3 bg-slate-50 rounded-lg">
+                                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1">Raw Transcript</p>
+                                                        <p className="text-[11px] text-slate-500 leading-relaxed italic">{log.transcript}</p>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                        ))}
                                     </div>
                                 )}
                             </motion.div>

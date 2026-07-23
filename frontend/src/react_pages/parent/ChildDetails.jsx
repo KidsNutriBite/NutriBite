@@ -440,8 +440,19 @@ const ChildDetails = () => {
     return (
         <>
             <div className={`space-y-8 ${isGrowthModalOpen ? 'print:hidden' : ''}`}>
-            {/* Header / Profile Summary */}
-            <div className="glass-panel p-8 rounded-[2rem] relative overflow-hidden">
+                {/* Back to Home Button */}
+                <div className="flex justify-start">
+                    <button
+                        onClick={() => navigate('/parent/dashboard')}
+                        className="group flex items-center gap-1.5 text-xs md:text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-all bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-full px-4 py-2 shadow-md hover:shadow-lg cursor-pointer"
+                    >
+                        <span className="material-symbols-outlined text-base group-hover:-translate-x-0.5 transition-transform">arrow_back</span>
+                        <span>Back to Home</span>
+                    </button>
+                </div>
+
+                {/* Header / Profile Summary */}
+                <div className="glass-panel p-8 rounded-[2rem] relative overflow-hidden">
                 <div className="blob-bg top-0 right-0 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2"></div>
 
                 <div className="relative z-10 flex flex-col md:flex-row items-center md:items-start gap-8">

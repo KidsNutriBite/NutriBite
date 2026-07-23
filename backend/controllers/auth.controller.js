@@ -32,9 +32,7 @@ export const registerUser = asyncHandler(async (req, res) => {
     }
 
     // Default Avatar Logic
-    let profileImage = 'https://avatar.iran.liara.run/public';
-    if (title === 'Mr') profileImage = 'https://avatar.iran.liara.run/public/boy';
-    else if (['Ms', 'Mrs'].includes(title)) profileImage = 'https://avatar.iran.liara.run/public/girl';
+    let profileImage = '';
 
     // Construct user object based on role
     const userData = {
@@ -114,10 +112,10 @@ export const loginUser = asyncHandler(async (req, res) => {
         }
 
         // Determine if 2FA is required
-        const isDoctor = user.role === 'doctor';
+        const isDoctorEnabled = user.role === 'doctor' && user.is2FAEnabled;
         const isParentMandatory = user.role === 'parent' && env.PARENT_2FA_MANDATORY === 'true';
         const isParentEnabled = user.role === 'parent' && user.is2FAEnabled;
-        const requires2FA = isDoctor || isParentMandatory || isParentEnabled;
+        const requires2FA = isDoctorEnabled || isParentMandatory || isParentEnabled;
 
         if (requires2FA) {
             // Generate 6 digit OTP

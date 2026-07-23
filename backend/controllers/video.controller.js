@@ -1,5 +1,5 @@
 import asyncHandler from 'express-async-handler';
-import ApiResponse from '../utils/ApiResponse.js';
+import ApiResponse from '../utils/apiResponse.js';
 
 const DAILY_API_KEY = process.env.DAILY_API_KEY;
 const DAILY_API_URL = 'https://api.daily.co/v1';

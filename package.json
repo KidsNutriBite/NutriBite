@@ -8,6 +8,9 @@
     "server": "cd backend && npm run dev",
     "client": "cd frontend && npm run dev",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "start-project": "npm run dev",
+    "start-frontend": "npm run client",
+    "start-backend": "npm run server",
     "lint": "eslint .",
     "format": "prettier --write ."
   },

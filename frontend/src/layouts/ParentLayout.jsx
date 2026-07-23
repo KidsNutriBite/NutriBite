@@ -11,7 +11,7 @@ import FeedbackModal from '../components/parent/FeedbackModal';
 import { useTheme } from '../context/ThemeContext';
 
 const ParentLayout = ({ children }) => {
-    const { logout, user } = useAuth();
+    const { logout, user, loading } = useAuth();
     const router = useRouter();
     const navigate = (path) => typeof path === 'number' && path < 0 ? router.back() : router.push(path);
     const [notifications, setNotifications] = useState([]);
@@ -23,6 +23,22 @@ const ParentLayout = ({ children }) => {
     const [showDisclaimer, setShowDisclaimer] = useState(true);
     const { profiles, selectedProfileId, selectedProfile, changeProfile } = useProfile();
     const { theme, toggleTheme } = useTheme();
+
+    useEffect(() => {
+        if (!loading) {
+            if (!user) {
+                router.replace('/login');
+            } else if (user.role !== 'parent') {
+                if (user.role === 'doctor') {
+                    router.replace('/doctor/dashboard');
+                } else if (user.role === 'dietitian') {
+                    router.replace('/dietitian/dashboard');
+                } else {
+                    router.replace('/login');
+                }
+            }
+        }
+    }, [user, loading, router]);
 
     useEffect(() => {
         if (sessionStorage.getItem('disclaimerClosed') === 'true') {
@@ -97,8 +113,15 @@ const ParentLayout = ({ children }) => {
     const isActive = (path) => {
         return location.pathname === path || location.pathname.startsWith(`${path}/`);
     };
-
     const [showMobileMenu, setShowMobileMenu] = useState(false);
+
+    if (loading || !user || user.role !== 'parent') {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-background-light dark:bg-background-dark">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+            </div>
+        );
+    }
 
     return (
         <div className="bg-background-light dark:bg-background-dark font-display min-h-screen text-slate-800 dark:text-slate-200">
@@ -149,60 +172,7 @@ const ParentLayout = ({ children }) => {
                 </nav>
 
                 <div className="flex items-center gap-4">
-                    {/* Multi-Child Selector */}
-                    {profiles && profiles.length > 0 && (
-                        <div className="relative hidden md:block" ref={childRef}>
-                            <button
-                                onClick={() => setShowChildDropdown(!showChildDropdown)}
-                                className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 px-3 py-1.5 rounded-full transition-colors border border-slate-200 dark:border-slate-700 shadow-sm"
-                            >
-                                {selectedProfile?.profileImage ? (
-                                    <img src={selectedProfile.profileImage} alt="" className="w-6 h-6 rounded-full object-cover" />
-                                ) : (
-                                    <div className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs">
-                                        {selectedProfile?.avatar === 'lion' ? '🦁' : '👶'}
-                                    </div>
-                                )}
-                                <span className="text-sm font-bold text-slate-700 dark:text-slate-300 max-w-[100px] truncate">
-                                    {selectedProfile?.name || 'Select Child'}
-                                </span>
-                                <span className="material-symbols-outlined text-sm text-slate-400">expand_more</span>
-                            </button>
 
-                            {showChildDropdown && (
-                                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden z-50">
-                                    <div className="p-2 border-b border-slate-100 dark:border-slate-700">
-                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider px-2 py-1">Switch Profile</p>
-                                    </div>
-                                    <div className="max-h-60 overflow-y-auto p-1">
-                                        {profiles.map(p => (
-                                            <button
-                                                key={p._id}
-                                                onClick={() => {
-                                                    changeProfile(p._id);
-                                                    setShowChildDropdown(false);
-                                                    // Optional: If on child details, navigate to new child
-                                                    if (pathname.includes('/parent/child/')) {
-                                                        navigate(`/parent/child/${p._id}`);
-                                                    }
-                                                }}
-                                                className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-colors text-left ${selectedProfileId === p._id ? 'bg-primary/10 text-primary font-bold' : 'hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium'}`}
-                                            >
-                                                {p.profileImage ? (
-                                                    <img src={p.profileImage} alt="" className="w-6 h-6 rounded-full object-cover" />
-                                                ) : (
-                                                    <div className="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-600 flex items-center justify-center text-xs">
-                                                        👶
-                                                    </div>
-                                                )}
-                                                <span className="truncate">{p.name}</span>
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    )}
 
                     {/* Theme Toggle Button */}
                     <button
@@ -275,7 +245,7 @@ const ParentLayout = ({ children }) => {
                             </div>
                             <div
                                 className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 ring-2 ring-primary/20"
-                                style={{ backgroundImage: `url('${user?.profileImage || 'https://avatar.iran.liara.run/public'}')` }}
+                                style={{ backgroundImage: `url('${user?.profileImage || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23cccccc"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>'}')` }}
                             ></div>
                         </div>
 

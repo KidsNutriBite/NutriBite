@@ -455,19 +455,12 @@ const WellnessAnalysis = ({ profileId, profileData, onUpdate, hideHeader = false
                                     <p className="text-[10px] text-indigo-500 font-black uppercase tracking-wider">NutriKids Feature</p>
                                     <p className="font-bold text-gray-800 text-sm">{item.desc}</p>
                                 </div>
-                            </div>
-
-                            <div className="w-full md:w-64 border-t md:border-t-0 md:border-l border-red-200/60 pt-3 md:pt-0 md:pl-4 flex flex-col justify-between space-y-2 shrink-0">
-                                <div>
-                                    <span className="text-[9px] text-red-900 font-black uppercase tracking-wider">How to improve in NutriKid</span>
-                                    <p className="text-xs font-bold text-red-700 leading-normal mt-0.5">{item.action}</p>
-                                </div>
-                                <button
-                                    onClick={() => onNavigateTab && item.feature && onNavigateTab(item.feature.tab)}
-                                    className="w-full bg-red-800 text-white font-extrabold text-xs py-2 px-3 rounded-xl shadow hover:bg-red-950 transition flex items-center justify-center gap-1.5"
-                                >
-                                    <span>{item.feature?.emoji}</span> Go to {item.feature?.label} →
-                                </button>
+                                {item.expectedImprovement && (
+                                    <div className="space-y-1 pt-2 border-t border-slate-100/60">
+                                        <p className="text-[9px] text-indigo-700 font-black uppercase tracking-wider">Expected Impact</p>
+                                        <p className="text-xs font-semibold text-gray-700 leading-snug">{item.expectedImprovement}</p>
+                                    </div>
+                                )}
                             </div>
                         </motion.div>
                     ))}
