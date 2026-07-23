@@ -1,6 +1,9 @@
 import Profile from '../models/Profile.model.js';
 import MealLog from '../models/MealLog.model.js';
 import { computeDynamicWellnessScore } from '../utils/nutritionIntelligence.js';
+import { ResponseBuilder } from './nutritionIntelligenceEngine.js';
+import { MealPlannerService } from './mealPlannerEngine.js';
+import { GroceryOptimizerService } from './groceryOptimizerEngine.js';
 
 export const analyzeNutrition = async (profileId, sunlightMinutes = 0) => {
     // 1. Fetch Profile
@@ -9,64 +12,58 @@ export const analyzeNutrition = async (profileId, sunlightMinutes = 0) => {
         throw new Error('Profile not found');
     }
 
-    // 2. Fetch Meal Logs (Last 30 days)
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-    const dateString = thirtyDaysAgo.toISOString().split('T')[0];
+    // 2. Fetch Meal Logs (Last 7 days for weekly analysis)
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const dateString = sevenDaysAgo.toISOString().split('T')[0];
 
     const logs = await MealLog.find({
         profileId,
         date: { $gte: dateString }
     }).sort({ date: -1 });
 
-    // 3. Compute dynamic wellness & nutrition data using new engine
-    const analysis = computeDynamicWellnessScore(profile, logs);
+    // 3. Compute dynamic wellness using the new modular engine
+    const analysis = ResponseBuilder.build(profile, logs);
+    
+    // 4. Generate daily meal plan using MealPlannerService
+    const mealPlanData = MealPlannerService.generatePlan(profile, logs);
+
+    // 5. Optimize weekly groceries using GroceryOptimizerService
+    const groceryPlanData = GroceryOptimizerService.optimize(profile, logs, mealPlanData.dailyPlan, analysis.groceryList);
     
     // Extrapolate daily averages and target requirements for response
-    // The engine's deficits dictionary has consumed and target values for the 12 nutrients.
     const avg = {};
     const required = {};
     const uiDeficiencies = [];
     const uiSuggestions = [];
     const uiExplanations = [];
 
-    const nutrients = ['calories', 'protein', 'carbs', 'fats', 'fiber', 'iron', 'calcium', 'vitaminA', 'vitaminC', 'vitaminD', 'zinc', 'water'];
-    
-    nutrients.forEach(n => {
-        const item = analysis.deficiencies[n];
+    Object.keys(analysis.gaps).forEach(n => {
+        const item = analysis.gaps[n];
         avg[n] = item.consumed;
         required[n] = item.target;
 
-        // If nutrient met percentage is below 90% (meaning Yellow/Orange/Red severity)
-        if (item.metPercent < 90) {
+        if (item.severity !== 'Normal') {
             uiDeficiencies.push({
                 nutrient: n,
                 status: "low",
-                message: `${n.charAt(0).toUpperCase() + n.slice(1)} intake is below the recommended level (${item.metPercent}% met)`
+                message: `${item.label} intake is below the recommended level (${item.metPercent}% met)`
             });
         }
     });
 
     // Populate suggestions and explanations based on deficiency findings
     analysis.recommendations.forEach(rec => {
-        const rawNutrient = rec.concern.replace('Target Deficiency: ', '').toLowerCase();
-        // E.g., rec.solution is "AI Recommended Foods: Eggs, Chicken Breast, Fish Fillet"
-        const foods = rec.solution.replace('AI Recommended Foods: ', '').split(', ');
-        
         uiSuggestions.push({
-            nutrient: rawNutrient,
-            suggestedFoods: foods
+            nutrient: rec.nutrient,
+            suggestedFoods: [rec.recommendedFood]
         });
-
-        foods.forEach(food => {
-            uiExplanations.push(`${food} is a premium source of ${rawNutrient} recommended by pediatric guidelines to address this gap.`);
-        });
+        uiExplanations.push(rec.whyThisFood);
     });
 
-    // Generate predictive risk tags based on growth impacts
     const risks = analysis.growthImpacts.map(i => `${i.nutrient}: ${i.risk}`);
 
-    // Return payload matching the expected shape in nutrition.controller.js
+    // Return payload matching the expected shape in nutrition.controller.js with new features
     return {
         dailyAverages: avg,
         requiredDaily: required,
@@ -74,20 +71,73 @@ export const analyzeNutrition = async (profileId, sunlightMinutes = 0) => {
         suggestions: uiSuggestions,
         risks,
         score: {
-            value: analysis.score,
-            status: analysis.score >= 80 ? 'Excellent' : (analysis.score >= 60 ? 'Needs Improvement' : 'Needs Critical Attention')
+            value: analysis.overallScore,
+            status: analysis.scoreStatus
         },
-        groceryList: analysis.groceries,
+        groceryList: analysis.groceryList,
         explanations: uiExplanations,
         
         // Add sub-scores for enhanced UI display
-        nutritionScore: analysis.nutritionScore,
-        deficiencyScore: analysis.deficiencyScore,
-        growthRiskScore: analysis.growthRiskScore,
-        hydrationScore: analysis.hydrationScore,
-        mealQualityScore: analysis.mealQualityScore,
-        improvementPlan: analysis.improvementPlan,
+        nutritionScore: analysis.subScores.nutrition,
+        deficiencyScore: analysis.subScores.deficiency,
+        growthRiskScore: analysis.subScores.growthRisk,
+        hydrationScore: analysis.subScores.hydration,
+        mealQualityScore: analysis.subScores.mealQuality,
+        improvementPlan: generateLegacyPlan(analysis.overallScore, analysis.gaps),
         growthImpacts: analysis.growthImpacts,
-        aiExplanation: analysis.aiExplanation
+        aiExplanation: analysis.aiExplanation,
+
+        // Expose new modular engine payload directly for advanced frontend features
+        priorityActions: analysis.priorityActions,
+        recommendations: analysis.recommendations,
+        gaps: analysis.gaps,
+        
+        // Phase 2 Meal Planner integrations
+        mealPlan: mealPlanData.dailyPlan,
+        mealPlanSummary: mealPlanData.totalPlan,
+
+        // Phase 3 Grocery Optimizer integrations
+        groceryPlan: groceryPlanData.groceries,
+        groceryPlanSummary: groceryPlanData.summary,
+        groceryPlanInsights: groceryPlanData.insights
+    };
+};
+
+// Private legacy plan helper for backwards compatibility
+const generateLegacyPlan = (currentWellnessScore, gaps) => {
+    let worstDeficit = 'protein';
+    let maxGap = 0;
+    
+    const coreNutrients = ['protein', 'iron', 'calcium', 'vitaminD', 'fiber', 'water'];
+    coreNutrients.forEach(nut => {
+        const gapVal = gaps[nut] ? (100 - gaps[nut].metPercent) : 0;
+        if (gapVal > maxGap) {
+            maxGap = gapVal;
+            worstDeficit = nut;
+        }
+    });
+
+    return {
+        currentWellnessScore,
+        targetWellnessScore: Math.min(95, currentWellnessScore + Math.round(maxGap * 0.4)),
+        expectedDurationDays: maxGap > 50 ? 90 : (maxGap > 30 ? 45 : 30),
+        worstDeficit,
+        phases: {
+            day7: {
+                title: "7-Day Foundation Setup",
+                action: `Introduce 1 serving of ${worstDeficit === 'water' ? 'extra water glass' : 'rich food like Paneer/Spinach/Ragi'} daily. Keep complete logs of all meals.`,
+                improvement: `Sub-scores should show active stabilization and hydration score increases by +15%.`
+            },
+            day30: {
+                title: "30-Day Portion Consolidation",
+                action: `Balance portion counters to meet at least 70% (Yellow status) for all active deficiencies. Introduce healthy snacks.`,
+                improvement: `Overall Wellness Score targets +10 points increase. Parent logs should show zero red alert days.`
+            },
+            day90: {
+                title: "90-Day Clinical Maintenance",
+                action: `Steady RDA target met (>= 90% Green status). Height/weight verification checking.`,
+                improvement: `Full potential growth curve tracking.`
+            }
+        }
     };
 };

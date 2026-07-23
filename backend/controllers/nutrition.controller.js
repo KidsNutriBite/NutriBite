@@ -15,8 +15,8 @@ export const getNutritionAnalysis = async (req, res) => {
             deficiencies: analysis.deficiencies,
             suggestions: analysis.suggestions,
             risks: analysis.risks,
-            score: analysis.score.value,
-            scoreStatus: analysis.score.status,
+            score: analysis.score,
+            scoreStatus: analysis.scoreStatus || analysis.score.status,
             groceryList: analysis.groceryList,
             explanations: analysis.explanations,
             dailyAverages: analysis.dailyAverages,
@@ -30,7 +30,21 @@ export const getNutritionAnalysis = async (req, res) => {
             mealQualityScore: analysis.mealQualityScore,
             improvementPlan: analysis.improvementPlan,
             growthImpacts: analysis.growthImpacts,
-            aiExplanation: analysis.aiExplanation
+            aiExplanation: analysis.aiExplanation,
+
+            // Expose Phase 1 modular outputs
+            priorityActions: analysis.priorityActions,
+            recommendations: analysis.recommendations,
+            gaps: analysis.gaps,
+
+            // Expose Phase 2 Meal Planner outputs
+            mealPlan: analysis.mealPlan,
+            mealPlanSummary: analysis.mealPlanSummary,
+
+            // Expose Phase 3 Grocery Optimizer outputs
+            groceryPlan: analysis.groceryPlan,
+            groceryPlanSummary: analysis.groceryPlanSummary,
+            groceryPlanInsights: analysis.groceryPlanInsights
         };
 
         res.status(200).json(responseData);
