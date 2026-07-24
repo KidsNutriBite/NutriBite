@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Header from '../components/common/Header';
 import Footer from '../components/common/Footer';
-import Loader from '../components/common/Loader';
-import IntroductionSlides from '../components/common/IntroductionSlides';
+import { NutriKidsOnboardingEngine } from '../engine';
+import { SceneContainer } from '../engine/scenes/SceneContainer';
 import CartoonKid from '../components/common/CartoonKid';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -17,8 +17,6 @@ if (typeof window !== "undefined") {
 
 const LandingPage = () => {
     const [isLoaderMounted, setIsLoaderMounted] = useState(false);
-    const [showIntroSlides, setShowIntroSlides] = useState(false);
-    const [introMounted, setIntroMounted] = useState(true);
     const [showLandingPage, setShowLandingPage] = useState(false);
     const [activeStep, setActiveStep] = useState(0);
 
@@ -31,14 +29,10 @@ const LandingPage = () => {
             if (hasUrlParam || !hasLoadedSession) {
                 setIsLoaderMounted(true);
                 setShowLandingPage(false);
-                setShowIntroSlides(false);
-                setIntroMounted(true);
                 sessionStorage.setItem('has_loaded', 'true');
             } else {
                 setIsLoaderMounted(false);
                 setShowLandingPage(true);
-                setShowIntroSlides(false);
-                setIntroMounted(false);
             }
         }
     }, []);
@@ -86,19 +80,14 @@ const LandingPage = () => {
     return (
         <>
             {isLoaderMounted && (
-                <Loader 
-                    onAnimationComplete={() => setShowIntroSlides(true)}
-                    onFadeOutComplete={() => setIsLoaderMounted(false)}
-                />
-            )}
-
-            {showIntroSlides && introMounted && (
-                <IntroductionSlides 
-                    onComplete={() => {
+                <NutriKidsOnboardingEngine
+                    onCompleteOnboarding={() => {
                         setShowLandingPage(true);
-                        setIntroMounted(false);
+                        setIsLoaderMounted(false);
                     }}
-                />
+                >
+                    <SceneContainer />
+                </NutriKidsOnboardingEngine>
             )}
 
             {showLandingPage && (

@@ -22,29 +22,32 @@
   will-change: opacity;
 }
 
-/* ── CANVAS LAYER ── */
-.canvas3d {
-  position: fixed; inset: 0;
+.ambientGlow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 45%, rgba(56, 189, 248, 0.14) 0%, rgba(255, 255, 255, 1) 70%);
   pointer-events: none;
-  z-index: 0;
 }
 
-/* ── RIPPLE RINGS ── */
 .ringsWrap {
-  position: fixed; inset: 0;
-  display: flex; align-items: center; justify-content: center;
-  z-index: 1; pointer-events: none;
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  pointer-events: none;
 }
+
 .ring {
   position: absolute;
   border-radius: 50%;
-  border: 2.5px solid var(--sky-mid);
+  border: 2px solid var(--sky-mid);
   opacity: 0;
   transform: scale(0);
   will-change: transform, opacity;
 }
 
-/* ── FLOATING PARTICLES ── */
 .particle {
   position: fixed;
   border-radius: 50%;
@@ -53,126 +56,117 @@
   will-change: transform, opacity;
 }
 
-/* ── LOGO ── */
+.mainContent {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  padding: 0 24px;
+  text-align: center;
+}
+
 .logoShell {
   position: relative;
-  width: clamp(220px, 32vw, 380px);
-  height: clamp(220px, 32vw, 380px);
-  display: flex; align-items: center; justify-content: center;
+  width: clamp(180px, 26vw, 320px);
+  height: clamp(180px, 26vw, 320px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   z-index: 5;
   will-change: transform;
 }
-.logoShell img {
-  width: 100%; height: 100%;
+
+.logoImg {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+  filter: drop-shadow(0 16px 32px rgba(2, 132, 199, 0.22));
   will-change: transform;
 }
 
-/* 3-D spin shadow under logo */
 .logoShadow {
   position: absolute;
-  bottom: -18px;
-  left: 50%; transform: translateX(-50%);
-  width: 70%; height: 22px;
-  background: radial-gradient(ellipse, rgba(56,189,248,0.30) 0%, transparent 75%);
+  bottom: -16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 20px;
+  background: radial-gradient(ellipse, rgba(56, 189, 248, 0.35) 0%, transparent 75%);
   border-radius: 50%;
-  filter: blur(4px);
+  filter: blur(5px);
   will-change: transform, opacity;
 }
 
-/* ── HEADLINE ── */
 .headlineWrap {
-  margin-top: 36px;
+  margin-top: 24px;
   text-align: center;
   opacity: 0;
   will-change: transform, opacity;
 }
+
 .eyebrow {
-  font-family: 'Nunito', sans-serif;
-  font-size: clamp(11px, 1.6vw, 15px);
-  font-weight: 700;
+  font-size: clamp(11px, 1.4vw, 13px);
+  font-weight: 800;
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: var(--sky);
   margin-bottom: 8px;
 }
+
 .mainTitle {
   font-family: 'Fredoka One', cursive;
-  font-size: clamp(28px, 5.5vw, 62px);
-  line-height: 1.08;
-  color: var(--sky);
-  /* 3-D letter-press effect */
-  text-shadow:
-    0 2px 0 #0ea5e9,
-    0 4px 0 #0284c7,
-    0 6px 0 #0369a1,
-    0 8px 16px rgba(2,132,199,0.25);
-  letter-spacing: 0.02em;
-}
-.mainTitle span {
-  display: inline-block;
-  opacity: 0;
-  transform: translateY(40px) rotateX(-40deg);
-  will-change: transform, opacity;
+  font-size: clamp(26px, 4.5vw, 52px);
+  line-height: 1.1;
+  color: #0C1B2E;
+  letter-spacing: 0.01em;
 }
 
-/* ── SUB COPY ── */
 .subCopy {
-  margin-top: 20px;
-  max-width: clamp(280px, 44vw, 520px);
+  margin-top: 14px;
+  max-width: clamp(280px, 42vw, 480px);
   text-align: center;
-  font-size: clamp(13px, 1.8vw, 18px);
+  font-size: clamp(13px, 1.6vw, 16px);
   font-weight: 600;
-  color: var(--ink);
-  line-height: 1.6;
+  color: #4A6FA5;
+  line-height: 1.5;
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(15px);
   will-change: transform, opacity;
 }
-.subCopy strong { color: var(--sky); font-weight: 800; }
 
-/* ── PROGRESS BAR ── */
+.progressContainer {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
 .progressTrack {
-  margin-top: 44px;
-  width: clamp(160px, 28vw, 320px);
-  height: 7px;
+  width: clamp(180px, 28vw, 320px);
+  height: 8px;
   background: var(--sky-ghost);
+  border: 1px solid rgba(56, 189, 248, 0.3);
   border-radius: 99px;
   overflow: hidden;
-  opacity: 0;
 }
+
 .progressFill {
   height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, var(--sky-mid), var(--sky));
+  background: linear-gradient(90deg, #38bdf8, #10b981);
   border-radius: 99px;
-  box-shadow: 0 0 10px rgba(56,189,248,0.6);
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+  transition: width 0.3s ease-out;
 }
 
-/* ── DOTS ── */
-.dots {
-  margin-top: 18px;
-  display: flex; gap: 8px;
-  opacity: 0;
-}
-.dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--sky-mid);
-}
-
-/* ── SCAN SHIMMER on logo ── */
-@keyframes shimmerMove {
-  0%   { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-.logoShimmer {
-  position: absolute; inset: 0;
-  border-radius: 50%;
-  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.5) 50%, transparent 70%);
-  background-size: 200% 100%;
-  animation: shimmerMove 2.8s linear infinite;
-  pointer-events: none;
+.progressText {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #0ea5e9;
 }
 
 .tapToContinue {
@@ -180,62 +174,47 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 10px;
-  padding: 12px 32px;
-  background: linear-gradient(135deg, var(--sky) 0%, #0ea5e9 100%);
+  gap: 12px;
+  padding: 16px 40px;
+  background: linear-gradient(135deg, #38BDF8 0%, #0EA5E9 100%);
   color: var(--white);
   border: none;
   border-radius: 99px;
-  box-shadow: 0 8px 24px rgba(56, 189, 248, 0.3);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease, box-shadow 0.3s ease;
-  z-index: 20;
-  transform: translateY(15px);
+  box-shadow: 0 12px 32px rgba(56, 189, 248, 0.45);
   cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+  animation: buttonPulse 2.5s infinite ease-in-out;
 }
 
 .tapToContinue:hover {
-  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
-  box-shadow: 0 12px 28px rgba(56, 189, 248, 0.45);
-  transform: translateY(-2px);
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 16px 40px rgba(56, 189, 248, 0.6);
 }
 
 .tapToContinue:active {
-  transform: translateY(1px);
-}
-
-.tapToContinue.visible {
-  opacity: 1;
-  transform: translateY(0);
-  pointer-events: auto;
+  transform: translateY(0) scale(0.98);
 }
 
 .tapIcon {
   font-size: 20px;
   color: var(--white);
-  animation: tapPulse 1.8s infinite ease-in-out;
 }
 
 .tapText {
   font-family: 'Nunito', sans-serif;
-  font-size: clamp(14px, 1.8vw, 16px);
+  font-size: clamp(13px, 1.5vw, 15px);
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
   color: var(--white);
 }
 
-@keyframes tapPulse {
+@keyframes buttonPulse {
   0%, 100% {
-    transform: scale(1) translateY(0);
-    opacity: 0.7;
-    filter: drop-shadow(0 0 0px rgba(56, 189, 248, 0));
+    box-shadow: 0 12px 32px rgba(56, 189, 248, 0.45);
   }
   50% {
-    transform: scale(1.15) translateY(-4px);
-    opacity: 1;
-    filter: drop-shadow(0 4px 8px rgba(56, 189, 248, 0.4));
+    box-shadow: 0 18px 48px rgba(56, 189, 248, 0.65);
   }
 }
 
