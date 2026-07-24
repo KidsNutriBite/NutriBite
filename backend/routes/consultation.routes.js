@@ -18,9 +18,14 @@ import {
 import { protect } from '../middlewares/auth.middleware.js';
 import { authorize } from '../middlewares/role.middleware.js';
 
+import { getGrowthVelocityData } from '../controllers/doctor.controller.js';
+
 const router = express.Router();
 
 router.use(protect);
+
+// Shared growth velocity endpoint for dietitians & doctors
+router.get('/growth-velocity/:id', authorize('dietitian', 'doctor'), getGrowthVelocityData);
 
 // Parent routes
 router.post('/', authorize('parent'), createRequest);

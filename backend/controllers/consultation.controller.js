@@ -481,6 +481,8 @@ export const getDietitianCases = asyncHandler(async (req, res) => {
         status: { $in: ACTIVE_STATUSES }
     })
     .populate('profileId', 'name dob gender age height weight avatar')
+    .populate('doctorId', 'name email title')
+    .populate('prescriptionId', 'title date')
     .sort({ updatedAt: -1 });
 
     res.status(200).json(new ApiResponse(200, cases));

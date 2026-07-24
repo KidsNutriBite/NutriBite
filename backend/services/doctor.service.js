@@ -151,13 +151,21 @@ export const updateHealthNotes = async (doctorId, profileId, note) => {
  * Compute growth velocity analysis for a patient
  * Calls FastAPI /growth/velocity with the child's GrowthRecords
  */
-export const getGrowthVelocity = async (doctorId, profileId) => {
-    // 1. Validate consultation assignment. ConsultationRequest is the single source of truth.
-    const access = await ConsultationRequest.findOne({
-        doctorId,
-        profileId,
-        status: { $in: ['AssignedToDoctor', 'UnderDoctorReview', 'PrescriptionIssued'] }
-    });
+export const getGrowthVelocity = async (userId, profileId, userRole = 'doctor') => {
+    // 1. Validate consultation assignment for Doctor or Dietitian.
+    let access;
+    if (userRole === 'dietitian') {
+        access = await ConsultationRequest.findOne({
+            dietitianId: userId,
+            profileId,
+        });
+    } else {
+        access = await ConsultationRequest.findOne({
+            doctorId: userId,
+            profileId,
+            status: { $in: ['AssignedToDoctor', 'UnderDoctorReview', 'PrescriptionIssued', 'Closed'] }
+        });
+    }
     if (!access) throw new Error('Assigned consultation access required to view Growth Velocity data');
 
     // 2. Fetch child profile
