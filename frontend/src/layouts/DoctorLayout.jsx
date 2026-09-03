@@ -23,6 +23,8 @@ const DoctorLayout = ({ children }) => {
                     router.replace('/parent/dashboard');
                 } else if (user.role === 'dietitian') {
                     router.replace('/dietitian/dashboard');
+                } else if (user.role === 'admin') {
+                    router.replace('/admin/dashboard');
                 } else {
                     router.replace('/login');
                 }
