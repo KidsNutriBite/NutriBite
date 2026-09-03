@@ -42,3 +42,15 @@ export const analyzeMealImage = async (formData) => {
     });
     return response.data;
 };
+
+// RECORD AI CORRECTION (Self-learning from parent corrections)
+export const recordAiCorrection = async ({ originalFood, correctedFood, originalQuantity, correctedQuantity, mealType }) => {
+    const response = await api.post('/meals/correction', {
+        originalFood,
+        correctedFood,
+        originalQuantity,
+        correctedQuantity,
+        mealType
+    });
+    return response.data;
+};
