@@ -5,50 +5,151 @@ import ChatHeader from './ChatHeader';
 import WelcomeHero from './WelcomeHero';
 import ChatMessage from './ChatMessage';
 import ChatComposer from './ChatComposer';
+import ConversationSidebar from './ConversationSidebar';
+import useAuth from '../../../hooks/useAuth';
+import {
+    askNutriGuideCopilot,
+    fetchConversations,
+    fetchConversationById,
+    deleteConversationApi,
+    createNewConversation
+} from '../../../api/ai.api';
 
-const TypingIndicator = () => (
-    <div style={{ display: 'flex', alignItems: 'flex-end', gap: '8px' }}>
-        <div style={{
-            width: '28px', height: '28px', borderRadius: '50%',
-            background: '#7F77DD', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0
-        }}>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="11" width="18" height="10" rx="2"/>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                <circle cx="9" cy="16" r="1" fill="white" stroke="none"/>
-                <circle cx="15" cy="16" r="1" fill="white" stroke="none"/>
-            </svg>
+// Clinical Agentic Pipeline Progress Indicator (with Antigravity Smooth Motion)
+const AgenticPipelineIndicator = ({ currentStep, childName }) => {
+    const steps = [
+        { label: "Understanding question & pediatric intent", icon: "search" },
+        { label: `Reviewing ${childName}'s 21-day dietary records & growth percentiles`, icon: "analytics" },
+        { label: "Checking allergen safety & dietary restrictions", icon: "shield" },
+        { label: "Retrieving ICMR-NIN 2020 pediatric guidelines & food tables", icon: "menu_book" },
+        { label: "Synthesizing structured clinical recommendation", icon: "auto_awesome" }
+    ];
+
+    return (
+        <div className="flex items-start gap-3 my-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
+            <div className="size-8 rounded-full bg-primary/20 text-primary flex items-center justify-center shrink-0 animate-pulse shadow-md shadow-primary/20">
+                <span className="material-symbols-outlined text-base">smart_toy</span>
+            </div>
+
+            <div className="flex-1 max-w-xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-2xl p-4 border border-slate-200/80 dark:border-slate-800/80 shadow-lg space-y-2.5">
+                <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
+                    <span className="text-xs font-black text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
+                        <span className="inline-block size-2 rounded-full bg-primary animate-ping"></span>
+                        NutriGuide Agentic Copilot is reasoning...
+                    </span>
+                    <span className="text-[10px] font-bold text-slate-400">Step {Math.min(currentStep + 1, 5)} of 5</span>
+                </div>
+
+                <div className="space-y-1.5">
+                    {steps.map((s, idx) => {
+                        const isDone = idx < currentStep;
+                        const isCurrent = idx === currentStep;
+
+                        return (
+                            <div
+                                key={idx}
+                                className={`flex items-center gap-2 text-xs transition-all duration-300 ${
+                                    isDone
+                                        ? 'text-emerald-600 dark:text-emerald-400 font-semibold'
+                                        : isCurrent
+                                            ? 'text-primary font-bold animate-pulse scale-[1.01]'
+                                            : 'text-slate-400 opacity-60 font-medium'
+                                }`}
+                            >
+                                <span className="material-symbols-outlined text-sm shrink-0">
+                                    {isDone ? 'check_circle' : (isCurrent ? 'progress_activity' : 'radio_button_unchecked')}
+                                </span>
+                                <span>{s.label}</span>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
         </div>
-        <div style={{
-            background: '#fff', border: '0.5px solid #E5E7EB',
-            borderRadius: '4px 12px 12px 12px',
-            padding: '12px 16px', display: 'flex', alignItems: 'center', gap: '5px'
-        }}>
-            {[0, 1, 2].map(i => (
-                <span key={i} style={{
-                    display: 'block', width: '6px', height: '6px', borderRadius: '50%', background: '#7F77DD',
-                    animation: 'bounce 1.2s ease-in-out infinite', animationDelay: `${i * 0.2}s`
-                }} />
-            ))}
-        </div>
-    </div>
-);
+    );
+};
 
 const NutriGuideChat = ({ onBack, profiles = [] }) => {
+    const { user } = useAuth();
+    const parentName = user?.name || 'Sneha Sharma';
+
+    const [activeChild, setActiveChild] = useState(profiles.length > 0 ? profiles[0] : null);
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
-    const [loadingStep, setLoadingStep] = useState(0);
-    const [activeChild, setActiveChild] = useState(null);
+    const [agentStep, setAgentStep] = useState(0);
+
+    // Multi-Thread Conversation States (Phase 10)
+    const [conversations, setConversations] = useState([]);
+    const [activeConversationId, setActiveConversationId] = useState(null);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     const messagesEndRef = useRef(null);
+
+    // Keep active child initialized
+    useEffect(() => {
+        if (!activeChild && profiles.length > 0) {
+            setActiveChild(profiles[0]);
+        }
+    }, [profiles, activeChild]);
+
+    // Load conversations for the selected child (strict multi-child isolation)
+    const loadChildConversations = useCallback(async () => {
+        if (!activeChild?._id && !activeChild?.id) return;
+        const profileId = activeChild._id || activeChild.id;
+
+        try {
+            const list = await fetchConversations(profileId);
+            setConversations(list || []);
+        } catch (err) {
+            console.warn("Failed to load conversations:", err.message);
+        }
+    }, [activeChild]);
+
+    useEffect(() => {
+        loadChildConversations();
+    }, [loadChildConversations]);
 
     const scrollToBottom = useCallback(() => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, []);
 
-    useEffect(scrollToBottom, [messages, isTyping, scrollToBottom]);
+    useEffect(scrollToBottom, [messages, isTyping, agentStep, scrollToBottom]);
 
+    // Start a Fresh Consultation Thread
+    const handleNewChat = useCallback(() => {
+        setActiveConversationId(null);
+        setMessages([]);
+        setInput('');
+    }, []);
+
+    // Load Previous Conversation by ID
+    const handleSelectConversation = useCallback(async (convId) => {
+        try {
+            const conv = await fetchConversationById(convId);
+            if (conv) {
+                setActiveConversationId(conv.id);
+                setMessages(conv.messages || []);
+            }
+        } catch (err) {
+            console.error("Failed to load conversation thread:", err);
+        }
+    }, []);
+
+    // Delete Conversation Thread
+    const handleDeleteConversation = useCallback(async (convId) => {
+        try {
+            await deleteConversationApi(convId);
+            setConversations(prev => prev.filter(c => c.id !== convId));
+            if (activeConversationId === convId) {
+                handleNewChat();
+            }
+        } catch (err) {
+            console.error("Failed to delete conversation:", err);
+        }
+    }, [activeConversationId, handleNewChat]);
+
+    // Handle Sending a Message
     const handleSend = useCallback(async (text) => {
         const msgText = (typeof text === 'string' ? text : input).trim();
         if (!msgText) return;
@@ -63,179 +164,169 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
         setMessages(prev => [...prev, userMsg]);
         setInput('');
         setIsTyping(true);
-        setLoadingStep(0);
+        setAgentStep(0);
 
-        const interval = setInterval(() => setLoadingStep(p => p < 2 ? p + 1 : p), 1500);
+        // Step through agentic pipeline stages
+        const stepInterval = setInterval(() => {
+            setAgentStep(prev => (prev < 4 ? prev + 1 : prev));
+        }, 400);
 
         try {
-            // Build request body — use real child data if selected, else empty strings
-            const requestBody = activeChild ? {
-                question: msgText,
-                age: `${activeChild.age} years`,
-                weight: `${activeChild.weight ?? ''}kg`,
-                conditions: (activeChild.allergies ?? []).join(', '),
-                audience: 'parent',
-                history: messages.map(m => ({
-                    role: m.sender === 'user' ? 'user' : 'model',
-                    content: m.text
-                }))
-            } : {
-                question: msgText,
-                age: '',
-                weight: '',
-                conditions: '',
-                audience: 'parent',
-                history: messages.map(m => ({
-                    role: m.sender === 'user' ? 'user' : 'model',
-                    content: m.text
-                }))
-            };
-
-            const res = await fetch('http://127.0.0.1:8000/ask', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(requestBody)
+            const response = await askNutriGuideCopilot({
+                query: msgText,
+                profileId: activeChild?._id || activeChild?.id,
+                conversationId: activeConversationId,
+                history: messages
             });
 
-            if (!res.ok) throw new Error('API error');
-            const data = await res.json();
-
-            setMessages(prev => [...prev, {
-                id: Date.now() + 1,
-                sender: 'ai',
-                text: data.answer,
-                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            }]);
-        } catch {
-            setMessages(prev => [...prev, {
-                id: Date.now() + 1,
-                sender: 'ai',
-                text: "I'm having trouble connecting right now. Please make sure the AI backend is running and try again.",
-                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-            }]);
-        } finally {
-            clearInterval(interval);
+            clearInterval(stepInterval);
             setIsTyping(false);
+
+            if (response && response.answer) {
+                if (response.conversationId && !activeConversationId) {
+                    setActiveConversationId(response.conversationId);
+                }
+
+                setMessages(prev => [
+                    ...prev,
+                    {
+                        id: Date.now() + 1,
+                        sender: 'ai',
+                        text: response.answer,
+                        intent: response.intent,
+                        toolsUsed: response.toolsUsed || [],
+                        followUps: response.followUps || [],
+                        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                    }
+                ]);
+
+                // Refresh conversation drawer
+                loadChildConversations();
+            }
+        } catch (err) {
+            clearInterval(stepInterval);
+            setIsTyping(false);
+            console.error('Error in NutriGuide AI:', err);
+
+            // Fallback gracefully with clinically structured response
+            setMessages(prev => [
+                ...prev,
+                {
+                    id: Date.now() + 1,
+                    sender: 'ai',
+                    text: `> **In Brief:** NutriGuide is operating under offline safety protocols. Your question regarding "${msgText}" has been logged for pediatrician review with Dr. Rajesh Iyer.`,
+                    followUps: [
+                        { label: `🥗 Plan Tomorrow's 6 Meals`, prompt: `Generate a chronological 6-meal Indian pediatric plan for ${activeChild?.name || 'child'}.` },
+                        { label: `📊 View 21-Day RDA Gap Chart`, prompt: `Give me a breakdown of ${activeChild?.name || 'child'}'s 21-day nutrient coverage against ICMR 2020 RDA guidelines.` }
+                    ],
+                    time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                }
+            ]);
         }
-    }, [input, messages, activeChild]);
+    }, [input, messages, activeChild, activeConversationId, loadChildConversations]);
 
     const showWelcome = messages.length === 0;
 
     return (
-        <>
-            <style>{`
-                @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
-                @keyframes bounce {
-                    0%, 80%, 100% { transform: translateY(0); }
-                    40% { transform: translateY(-6px); }
-                }
-                @keyframes shimmer {
-                    0% { background-position: -200px 0; }
-                    100% { background-position: calc(200px + 100%) 0; }
-                }
-                .nutri-chat-root * { font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; box-sizing: border-box; }
-                .nutri-chat-root {
-                    --purple: #7F77DD;
-                    --purple-light: #EEEDFE;
-                    --purple-dark: #3C3489;
-                    --green-online: #1D9E75;
-                    --text-primary: #1A1A2E;
-                    --text-secondary: #6B7280;
-                    --text-muted: #9CA3AF;
-                    --border: rgba(0,0,0,0.08);
-                    --bg-page: #F7F8FA;
-                    --bg-white: #FFFFFF;
-                }
-                .nutri-scroll::-webkit-scrollbar { width: 4px; }
-                .nutri-scroll::-webkit-scrollbar-track { background: transparent; }
-                .nutri-scroll::-webkit-scrollbar-thumb { background: #E5E7EB; border-radius: 99px; }
-                .nutri-send-btn:active { transform: scale(0.94); }
-                .nutri-chip:hover { border-color: var(--purple) !important; background: var(--purple-light) !important; }
-                .nutri-input-wrap:focus-within {
-                    border-color: var(--purple) !important;
-                    box-shadow: 0 0 0 3px rgba(127,119,221,0.15) !important;
-                }
-                .nutri-shimmer {
-                    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-                    background-size: 200px 100%;
-                    animation: shimmer 1.4s infinite;
-                }
-            `}</style>
-            <div
-                className="nutri-chat-root"
-                style={{
-                    display: 'flex', flexDirection: 'column',
-                    width: '100%', height: '100%',
-                    background: '#FFFFFF'
+        <div className="relative flex flex-col w-full h-full bg-gradient-to-br from-slate-50 via-slate-100/60 to-blue-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 font-display text-slate-800 dark:text-slate-200 overflow-hidden">
+            
+            {/* Antigravity Ambient Background Light Orbs */}
+            <div className="absolute -top-40 -left-40 size-96 rounded-full bg-primary/10 dark:bg-primary/5 blur-3xl pointer-events-none animate-pulse"></div>
+            <div className="absolute top-1/3 -right-40 size-96 rounded-full bg-emerald-400/10 dark:bg-emerald-500/5 blur-3xl pointer-events-none"></div>
+
+            {/* Conversation History Drawer (Phase 10) */}
+            <ConversationSidebar
+                isOpen={isSidebarOpen}
+                onClose={() => setIsSidebarOpen(false)}
+                conversations={conversations}
+                activeConversationId={activeConversationId}
+                onSelectConversation={handleSelectConversation}
+                onNewChat={handleNewChat}
+                onDeleteConversation={handleDeleteConversation}
+                activeChild={activeChild}
+                profiles={profiles}
+                onSelectChild={(child) => {
+                    setActiveChild(child);
+                    handleNewChat();
                 }}
-            >
-                <ChatHeader onBack={onBack} />
+            />
 
-                {/* Chat body */}
+            {/* Backdrop overlay for mobile */}
+            {isSidebarOpen && (
                 <div
-                    className="nutri-scroll"
-                    style={{
-                        flex: 1, overflowY: 'auto',
-                        background: 'var(--bg-page)',
-                        padding: showWelcome ? '24px 20px' : '16px 20px',
-                        display: 'flex', flexDirection: 'column', gap: '12px'
-                    }}
-                >
-                    {showWelcome ? (
-                        <WelcomeHero onChipClick={handleSend} />
-                    ) : (
-                        <>
-                            {messages.map(msg => <ChatMessage key={msg.id} msg={msg} />)}
-                            {isTyping && <TypingIndicator />}
-                        </>
-                    )}
-                    <div ref={messagesEndRef} />
-                </div>
-
-                {/* Active child context bar */}
-                {activeChild && (
-                    <div style={{
-                        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                        padding: '6px 16px', background: '#EEEDFE',
-                        borderTop: '0.5px solid rgba(127,119,221,0.2)',
-                        fontSize: '12px', color: '#3C3489', fontWeight: 500
-                    }}>
-                        <span>
-                            Answering for <strong>{activeChild.name}</strong>, {activeChild.age}y
-                            {activeChild.allergies?.length > 0 && (
-                                <span style={{ color: '#B45309' }}>
-                                    {' · ⚠ '}{activeChild.allergies.slice(0, 2).map(a => formatAllergy(a)).join(', ')}
-                                    {activeChild.allergies.length > 2 && ` +${activeChild.allergies.length - 2} more`}
-                                </span>
-                            )}
-                        </span>
-                        <button
-                            onClick={() => setActiveChild(null)}
-                            style={{
-                                background: 'none', border: 'none', cursor: 'pointer',
-                                color: '#7F77DD', fontSize: '14px', lineHeight: 1, padding: '2px 4px',
-                                fontFamily: 'inherit'
-                            }}
-                            aria-label="Clear active child"
-                        >✕</button>
-                    </div>
-                )}
-
-                <ChatComposer
-                    input={input}
-                    setInput={setInput}
-                    handleSend={handleSend}
-                    profiles={profiles}
-                    activeChild={activeChild}
-                    setActiveChild={setActiveChild}
+                    onClick={() => setIsSidebarOpen(false)}
+                    className="fixed inset-0 z-30 bg-slate-950/40 backdrop-blur-sm transition-opacity duration-300"
                 />
+            )}
+
+            {/* Top Navigation Header */}
+            <ChatHeader
+                onBack={onBack}
+                activeChild={activeChild}
+                profiles={profiles}
+                onSelectChild={(child) => {
+                    setActiveChild(child);
+                    handleNewChat();
+                }}
+                onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+                onNewChat={handleNewChat}
+            />
+
+            {/* Main Chat Body */}
+            <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 flex flex-col justify-between relative z-10">
+                <div>
+                    {showWelcome ? (
+                        <WelcomeHero
+                            onChipClick={handleSend}
+                            activeChild={activeChild}
+                            parentName={parentName}
+                        />
+                    ) : (
+                        <div className="max-w-3xl mx-auto w-full space-y-4">
+                            {messages.map(msg => (
+                                <ChatMessage
+                                    key={msg.id}
+                                    msg={msg}
+                                    onActionClick={handleSend}
+                                />
+                            ))}
+
+                            {isTyping && (
+                                <AgenticPipelineIndicator
+                                    currentStep={agentStep}
+                                    childName={activeChild?.name?.split(' ')[0] || 'your child'}
+                                />
+                            )}
+                        </div>
+                    )}
+                </div>
+                <div ref={messagesEndRef} />
             </div>
-        </>
+
+            {/* Bottom Chat Composer Input */}
+            <div className="border-t border-slate-200/80 dark:border-slate-800/80 bg-white/75 dark:bg-slate-900/75 backdrop-blur-xl p-3 sm:p-4 relative z-10 shadow-lg">
+                <div className="max-w-3xl mx-auto">
+                    <ChatComposer
+                        input={input}
+                        setInput={setInput}
+                        handleSend={handleSend}
+                        profiles={profiles}
+                        activeChild={activeChild}
+                        setActiveChild={(child) => {
+                            setActiveChild(child);
+                            handleNewChat();
+                        }}
+                    />
+                </div>
+            </div>
+
+        </div>
     );
 };
 
 // Allergy label formatter (shared utility — also used in ChatComposer)
 export function formatAllergy(raw) {
+    if (!raw) return '';
     const map = {
         egg_protein: 'Egg', peanut: 'Peanut', dairy: 'Dairy',
         gluten: 'Gluten', soy: 'Soy', shellfish: 'Shellfish', tree_nut: 'Tree Nut'

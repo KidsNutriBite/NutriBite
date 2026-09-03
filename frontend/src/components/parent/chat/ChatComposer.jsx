@@ -2,64 +2,32 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { formatAllergy } from './NutriGuideChat';
 
-// ─── Avatar mapping ───────────────────────────────────────────────────────────
+// Avatar mapping
 const AVATAR_MAP = {
-    lion:     { emoji: '🦁', bg: '#EEEDFE', text: '#3C3489' },
-    bear:     { emoji: '🐻', bg: '#E1F5EE', text: '#0F6E56' },
-    rabbit:   { emoji: '🐰', bg: '#FBEAF0', text: '#993556' },
-    tiger:    { emoji: '🐯', bg: '#FAEEDA', text: '#854F0B' },
-    elephant: { emoji: '🐘', bg: '#E6F1FB', text: '#185FA5' },
+    lion:     { emoji: '🦁', bg: '#eff6ff', text: '#1e40af' },
+    bear:     { emoji: '🐻', bg: '#f0fdf4', text: '#166534' },
+    rabbit:   { emoji: '🐰', bg: '#fdf2f8', text: '#9d174d' },
+    tiger:    { emoji: '🐯', bg: '#fffbeb', text: '#92400e' },
+    elephant: { emoji: '🐘', bg: '#f0f9ff', text: '#075985' },
 };
 
 function getAvatar(profile) {
-    const key = profile.avatar?.toLowerCase();
+    const key = profile?.avatar?.toLowerCase();
     if (AVATAR_MAP[key]) return AVATAR_MAP[key];
-    // Default: first letter
-    return { emoji: null, letter: profile.name?.charAt(0)?.toUpperCase() ?? '?', bg: '#F1EFE8', text: '#5F5E5A' };
+    const isFemale = profile?.gender === 'female';
+    return {
+        emoji: isFemale ? '👧' : '👦',
+        bg: isFemale ? '#fdf2f8' : '#eff6ff',
+        text: isFemale ? '#9d174d' : '#1e40af'
+    };
 }
 
-// ─── Mic icon ─────────────────────────────────────────────────────────────────
-const MicIcon = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
-        <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
-        <line x1="12" y1="19" x2="12" y2="23"/>
-        <line x1="8" y1="23" x2="16" y2="23"/>
-    </svg>
-);
-
-// ─── Send icon ────────────────────────────────────────────────────────────────
-const SendIcon = () => (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-        <line x1="12" y1="19" x2="12" y2="5"/>
-        <polyline points="5 12 12 5 19 12"/>
-    </svg>
-);
-
-// ─── Shimmer skeleton row ─────────────────────────────────────────────────────
-const SkeletonRow = () => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '10px 14px' }}>
-        <div className="nutri-shimmer" style={{ width: '34px', height: '34px', borderRadius: '50%', flexShrink: 0 }} />
-        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '6px' }}>
-            <div className="nutri-shimmer" style={{ height: '11px', width: '60%', borderRadius: '6px' }} />
-            <div className="nutri-shimmer" style={{ height: '9px', width: '40%', borderRadius: '6px' }} />
-        </div>
-    </div>
-);
-
-// ─── Allergy badge ────────────────────────────────────────────────────────────
 const AllergyBadge = ({ label }) => (
-    <span style={{
-        display: 'inline-block', fontSize: '10px', fontWeight: 500,
-        background: '#FEF3C7', color: '#B45309',
-        border: '0.5px solid #FDE68A', borderRadius: '4px',
-        padding: '1px 5px', whiteSpace: 'nowrap'
-    }}>
+    <span className="inline-block text-[10px] font-bold bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 rounded px-1.5 py-0.5 whitespace-nowrap">
         ⚠ {label}
     </span>
 );
 
-// ─── Profile row in picker ────────────────────────────────────────────────────
 const ProfileRow = ({ profile, onSelect }) => {
     const av = getAvatar(profile);
     const allergies = profile.allergies ?? [];
@@ -69,38 +37,24 @@ const ProfileRow = ({ profile, onSelect }) => {
     return (
         <button
             onClick={() => onSelect(profile)}
-            style={{
-                display: 'flex', alignItems: 'center', gap: '10px',
-                padding: '9px 14px', width: '100%', border: 'none',
-                background: 'transparent', cursor: 'pointer', textAlign: 'left',
-                fontFamily: 'inherit', transition: 'background 0.1s'
-            }}
-            onMouseEnter={e => e.currentTarget.style.background = '#F7F8FA'}
-            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+            className="flex items-center gap-3 px-3.5 py-2.5 w-full text-left transition-colors hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer border-b border-slate-100 dark:border-slate-800 last:border-none"
         >
-            {/* Avatar */}
-            <div style={{
-                width: '34px', height: '34px', borderRadius: '50%',
-                background: av.bg, display: 'flex', alignItems: 'center',
-                justifyContent: 'center', fontSize: av.emoji ? '17px' : '14px',
-                fontWeight: 700, color: av.text, flexShrink: 0
-            }}>
-                {av.emoji ?? av.letter}
+            <div className="size-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 bg-slate-100 dark:bg-slate-800">
+                {av.emoji}
             </div>
 
-            {/* Info */}
-            <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+            <div className="flex-1 min-w-0">
+                <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5 flex-wrap">
                     <span>{profile.name}</span>
-                    <span style={{ fontSize: '11px', fontWeight: 400, color: 'var(--text-muted)' }}>
-                        {profile.age}y{profile.weight ? ` · ${profile.weight}kg` : ''}
+                    <span className="text-[10px] font-normal text-slate-400">
+                        {profile.age}y {profile.weight ? `· ${profile.weight}kg` : ''}
                     </span>
                 </div>
                 {shown.length > 0 && (
-                    <div style={{ display: 'flex', gap: '4px', marginTop: '4px', flexWrap: 'wrap' }}>
+                    <div className="flex gap-1 mt-1 flex-wrap">
                         {shown.map(a => <AllergyBadge key={a} label={formatAllergy(a)} />)}
                         {extra > 0 && (
-                            <span style={{ fontSize: '10px', color: 'var(--text-muted)', alignSelf: 'center' }}>+{extra} more</span>
+                            <span className="text-[10px] text-slate-400 self-center">+{extra} more</span>
                         )}
                     </div>
                 )}
@@ -109,7 +63,6 @@ const ProfileRow = ({ profile, onSelect }) => {
     );
 };
 
-// ─── Main ChatComposer ────────────────────────────────────────────────────────
 const ChatComposer = ({
     input, setInput, handleSend,
     profiles = [],
@@ -124,7 +77,7 @@ const ChatComposer = ({
     const charCount = input.length;
     const isOverLimit = charCount > 420;
 
-    // ── Speech recognition setup ──────────────────────────────────────────────
+    // Speech recognition setup
     useEffect(() => {
         if (typeof window === 'undefined') return;
         const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -142,11 +95,17 @@ const ChatComposer = ({
     }, [setInput]);
 
     const toggleMic = () => {
-        if (isListening) { recognitionRef.current?.stop(); setIsListening(false); }
-        else { try { recognitionRef.current?.start(); setIsListening(true); } catch {} }
+        if (isListening) {
+            recognitionRef.current?.stop();
+            setIsListening(false);
+        } else {
+            try {
+                recognitionRef.current?.start();
+                setIsListening(true);
+            } catch {}
+        }
     };
 
-    // ── Textarea auto-resize ──────────────────────────────────────────────────
     const autoResize = () => {
         const el = textareaRef.current;
         if (!el) return;
@@ -159,13 +118,15 @@ const ChatComposer = ({
         const val = e.target.value;
         setInput(val);
         autoResize();
-        // Show picker when @ is typed
         if (val.endsWith('@')) setShowPicker(true);
         else if (!val.includes('@')) setShowPicker(false);
     };
 
     const handleKeyDown = (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); onSend(); }
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            onSend();
+        }
         if (e.key === 'Escape') setShowPicker(false);
     };
 
@@ -176,16 +137,13 @@ const ChatComposer = ({
         setShowPicker(false);
     };
 
-    // ── Select profile from @ picker ──────────────────────────────────────────
     const handleSelectProfile = (profile) => {
         setActiveChild(profile);
-        // Replace trailing @ with @Name
         setInput(prev => prev.replace(/@[^@]*$/, `@${profile.name} `));
         setShowPicker(false);
         setTimeout(() => textareaRef.current?.focus(), 0);
     };
 
-    // Close picker on outside click
     useEffect(() => {
         const handler = (e) => {
             if (pickerRef.current && !pickerRef.current.contains(e.target)) setShowPicker(false);
@@ -195,129 +153,79 @@ const ChatComposer = ({
     }, []);
 
     return (
-        <div style={{ background: '#FFFFFF', borderTop: '0.5px solid rgba(0,0,0,0.08)', padding: '10px 16px 14px', flexShrink: 0, position: 'relative' }}>
-
-            {/* ── @ picker popup ─────────────────────────────────────────────── */}
+        <div className="relative w-full">
+            {/* Profile Mention Popup */}
             {showPicker && (
                 <div
                     ref={pickerRef}
-                    style={{
-                        position: 'absolute', bottom: 'calc(100% + 8px)', left: '16px', right: '16px',
-                        background: '#FFFFFF', border: '0.5px solid rgba(0,0,0,0.1)',
-                        borderRadius: '12px', overflow: 'hidden',
-                        boxShadow: '0 4px 20px rgba(0,0,0,0.08)', zIndex: 50
-                    }}
+                    className="absolute bottom-full mb-2 left-0 right-0 max-w-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl overflow-hidden z-50 animate-in fade-in slide-in-from-bottom-2 duration-150"
                 >
-                    {/* Header */}
-                    <div style={{
-                        padding: '8px 14px', background: '#F7F8FA',
-                        borderBottom: '0.5px solid rgba(0,0,0,0.06)',
-                        fontSize: '11px', fontWeight: 600, color: 'var(--text-muted)',
-                        textTransform: 'uppercase', letterSpacing: '0.06em'
-                    }}>
-                        Child profiles
+                    <div className="px-3.5 py-2 bg-slate-50 dark:bg-slate-800/60 border-b border-slate-100 dark:border-slate-800 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                        Select Child Profile
                     </div>
 
-                    {/* Empty state — no profiles yet on this account */}
-                    {profiles.length === 0 && (
-                        <div style={{ padding: '20px 14px', textAlign: 'center' }}>
-                            <p style={{ fontSize: '13px', color: 'var(--text-secondary)', margin: '0 0 4px', fontWeight: 500 }}>No child profiles yet</p>
-                            <p style={{ fontSize: '12px', color: 'var(--text-muted)', margin: '0 0 12px' }}>Add a child from your dashboard</p>
-                            <button
-                                onClick={() => { handleSend('I want to add a child profile'); setShowPicker(false); }}
-                                style={{
-                                    fontSize: '12px', fontWeight: 600, color: '#7F77DD',
-                                    background: '#EEEDFE', border: '0.5px solid rgba(127,119,221,0.3)',
-                                    borderRadius: '8px', padding: '6px 14px', cursor: 'pointer', fontFamily: 'inherit'
-                                }}
-                            >
-                                + Add first child
-                            </button>
-                        </div>
-                    )}
-
-                    {/* Profile list */}
-                    {profiles.length > 0 && (
-                        <div style={{ maxHeight: '220px', overflowY: 'auto' }}>
-                            {profiles.map(p => (
-                                <ProfileRow
-                                    key={p._id ?? p.id}
-                                    profile={p}
-                                    onSelect={handleSelectProfile}
-                                />
-                            ))}
-                        </div>
-                    )}
+                    <div className="max-h-52 overflow-y-auto">
+                        {profiles.map(p => (
+                            <ProfileRow
+                                key={p._id ?? p.id}
+                                profile={p}
+                                onSelect={handleSelectProfile}
+                            />
+                        ))}
+                    </div>
                 </div>
             )}
 
-            {/* ── Main input pill ───────────────────────────────────────────── */}
-            <div
-                className="nutri-input-wrap"
-                style={{
-                    display: 'flex', alignItems: 'flex-end', gap: '8px',
-                    background: '#F3F4F6', border: '1px solid transparent',
-                    borderRadius: '14px', padding: '8px 10px 8px 14px',
-                    transition: 'border-color 0.2s, box-shadow 0.2s'
-                }}
-            >
+            {/* Input Pill Container */}
+            <div className="flex items-end gap-2 bg-slate-100 dark:bg-slate-850 p-2 sm:p-2.5 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all shadow-inner">
                 <textarea
                     ref={textareaRef}
                     value={input}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
-                    placeholder="Ask about nutrition, meals, or growth…"
+                    placeholder={`Ask about nutrition, 6-meal plans, or growth for ${activeChild?.name ? activeChild.name.split(' ')[0] : 'your child'}...`}
                     rows={1}
-                    style={{
-                        flex: 1, background: 'transparent', border: 'none', outline: 'none',
-                        resize: 'none', fontSize: '13.5px', color: 'var(--text-primary)',
-                        fontFamily: 'inherit', lineHeight: '22px',
-                        minHeight: '22px', maxHeight: '82px', overflowY: 'auto', padding: 0
-                    }}
+                    className="flex-1 bg-transparent border-none outline-none resize-none text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 leading-relaxed min-h-[24px] max-h-[88px] overflow-y-auto px-2 py-1"
                 />
 
-                {/* Mic */}
+                {/* Voice Input Mic Button */}
                 <button
                     type="button"
                     onClick={toggleMic}
-                    style={{
-                        background: isListening ? '#EEEDFE' : 'none', border: 'none',
-                        cursor: 'pointer', color: isListening ? '#7F77DD' : '#9CA3AF',
-                        padding: '5px', borderRadius: '8px', display: 'flex',
-                        alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.15s'
-                    }}
-                    aria-label={isListening ? 'Stop listening' : 'Start voice input'}
+                    className={`size-9 rounded-xl flex items-center justify-center shrink-0 transition-colors cursor-pointer ${
+                        isListening
+                            ? 'bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400 animate-pulse'
+                            : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800'
+                    }`}
+                    aria-label={isListening ? 'Stop recording' : 'Record voice query'}
                 >
-                    <MicIcon />
+                    <span className="material-symbols-outlined text-lg">
+                        {isListening ? 'mic' : 'mic_none'}
+                    </span>
                 </button>
 
-                {/* Send */}
+                {/* Send Button */}
                 <button
                     type="button"
-                    className="nutri-send-btn"
                     onClick={onSend}
                     disabled={!input.trim()}
-                    style={{
-                        width: '34px', height: '34px', borderRadius: '50%', border: 'none',
-                        background: input.trim() ? '#7F77DD' : '#D1D5DB',
-                        cursor: input.trim() ? 'pointer' : 'not-allowed',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        flexShrink: 0, transition: 'background 0.15s, transform 0.1s'
-                    }}
-                    aria-label="Send message"
+                    className={`size-9 rounded-xl flex items-center justify-center shrink-0 transition-all shadow-sm ${
+                        input.trim()
+                            ? 'bg-primary text-white hover:bg-primary/90 cursor-pointer active:scale-95'
+                            : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
+                    }`}
+                    aria-label="Send query"
                 >
-                    <SendIcon />
+                    <span className="material-symbols-outlined text-lg">arrow_upward</span>
                 </button>
             </div>
 
-            {/* ── Bottom row: hint + char counter ──────────────────────────── */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '6px', padding: '0 2px' }}>
-                <span style={{ fontSize: '11px', color: '#9CA3AF' }}>
-                    Type{' '}
-                    <code style={{ fontFamily: 'monospace', background: '#F3F4F6', padding: '0 3px', borderRadius: '3px' }}>@</code>
-                    {' '}to mention a child profile
+            {/* Bottom Counter & Quick Hint */}
+            <div className="flex justify-between items-center mt-1.5 px-1 text-[11px] text-slate-400">
+                <span>
+                    Type <code className="px-1 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-mono text-slate-600 dark:text-slate-300">@</code> to switch child context
                 </span>
-                <span style={{ fontSize: '11px', color: isOverLimit ? '#F59E0B' : '#9CA3AF', fontVariantNumeric: 'tabular-nums' }}>
+                <span className={`tabular-nums ${isOverLimit ? 'text-amber-500 font-bold' : ''}`}>
                     {charCount} / {MAX_CHARS}
                 </span>
             </div>

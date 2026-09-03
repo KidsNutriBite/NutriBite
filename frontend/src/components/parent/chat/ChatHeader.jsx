@@ -1,118 +1,93 @@
+"use client";
 import React from 'react';
 
-const BotIcon = ({ size = 18 }) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="11" width="18" height="10" rx="2"/>
-        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-        <circle cx="9" cy="16" r="1" fill="white" stroke="none"/>
-        <circle cx="15" cy="16" r="1" fill="white" stroke="none"/>
-        <path d="M12 3v2" strokeWidth="2"/>
-    </svg>
-);
-
-const MenuIcon = () => (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-        <circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/>
-    </svg>
-);
-
 const ShieldCheckIcon = () => (
-    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#1D9E75" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
         <polyline points="9 12 11 14 15 10"/>
     </svg>
 );
 
-const ChatHeader = ({ onBack }) => {
+const ChatHeader = ({ onBack, activeChild, profiles = [], onSelectChild, onToggleSidebar, onNewChat }) => {
     return (
-        <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            padding: '14px 18px',
-            background: '#FFFFFF',
-            borderBottom: '0.5px solid rgba(0,0,0,0.08)',
-            flexShrink: 0
-        }}>
-            {/* Left: back + avatar */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <header className="border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl px-4 sm:px-6 py-3 sticky top-0 z-30 flex items-center justify-between shadow-sm">
+            {/* Left: Back Button & History Toggle */}
+            <div className="flex items-center gap-2 sm:gap-3">
                 {onBack && (
                     <button
                         onClick={onBack}
-                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9CA3AF', padding: '4px', display: 'flex' }}
-                        aria-label="Go back"
+                        className="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 transition-all cursor-pointer flex items-center gap-1 text-xs font-bold"
+                        aria-label="Back to Parent Dashboard"
                     >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                            <polyline points="15 18 9 12 15 6"/>
-                        </svg>
+                        <span className="material-symbols-outlined text-lg">arrow_back</span>
+                        <span className="hidden md:inline">Dashboard</span>
                     </button>
                 )}
-                {/* Avatar */}
-                <div style={{ position: 'relative', flexShrink: 0 }}>
-                    <div style={{
-                        width: '38px',
-                        height: '38px',
-                        borderRadius: '50%',
-                        background: '#7F77DD',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center'
-                    }}>
-                        <BotIcon size={18} />
+
+                {/* History Drawer Toggle Button */}
+                <button
+                    onClick={onToggleSidebar}
+                    className="p-2 rounded-xl text-slate-700 dark:text-slate-200 bg-slate-100/80 dark:bg-slate-800/80 hover:bg-primary hover:text-white transition-all cursor-pointer flex items-center gap-1.5 text-xs font-bold border border-slate-200/60 dark:border-slate-700/60 shadow-sm"
+                    title="Open Consultations Drawer"
+                >
+                    <span className="material-symbols-outlined text-base">forum</span>
+                    <span className="hidden sm:inline">Threads</span>
+                </button>
+
+                {/* New Chat Quick Button */}
+                <button
+                    onClick={onNewChat}
+                    className="p-2 rounded-xl text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-600 hover:text-white transition-all cursor-pointer flex items-center gap-1.5 text-xs font-bold border border-emerald-200/60 dark:border-emerald-800/60 shadow-sm"
+                    title="Start Fresh Consultation"
+                >
+                    <span className="material-symbols-outlined text-base">add</span>
+                    <span className="hidden sm:inline">New Chat</span>
+                </button>
+
+                {/* Branding & Status */}
+                <div className="hidden lg:flex items-center gap-2.5 pl-2 border-l border-slate-200 dark:border-slate-800">
+                    <div className="size-8 rounded-full bg-gradient-to-tr from-primary to-emerald-500 text-white flex items-center justify-center shadow-md shadow-primary/20">
+                        <span className="material-symbols-outlined text-lg">smart_toy</span>
                     </div>
-                    <div style={{
-                        position: 'absolute',
-                        bottom: '1px',
-                        right: '1px',
-                        width: '9px',
-                        height: '9px',
-                        borderRadius: '50%',
-                        background: '#1D9E75',
-                        border: '2px solid white'
-                    }} />
+                    <div>
+                        <div className="flex items-center gap-2">
+                            <h1 className="text-sm font-black text-slate-900 dark:text-white leading-none">
+                                NutriGuide Clinical Copilot
+                            </h1>
+                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 text-[9px] font-bold border border-emerald-200 dark:border-emerald-800">
+                                <ShieldCheckIcon />
+                                <span>Verified</span>
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            {/* Center: title + badge */}
-            <div style={{ textAlign: 'center', flex: 1, paddingLeft: onBack ? '0' : '0' }}>
-                <div style={{
-                    fontWeight: 600,
-                    fontSize: '14px',
-                    color: 'var(--text-primary)',
-                    lineHeight: '1.3'
-                }}>
-                    NutriGuide AI
-                </div>
-                <div style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    marginTop: '3px',
-                    background: '#ECFDF5',
-                    border: '0.5px solid #A7F3D0',
-                    borderRadius: '99px',
-                    padding: '2px 8px'
-                }}>
-                    <ShieldCheckIcon />
-                    <span style={{ fontSize: '11px', fontWeight: 500, color: '#1D9E75' }}>Safety checked</span>
-                </div>
+            {/* Right: Active Child Selector */}
+            <div className="flex items-center gap-2">
+                {profiles && profiles.length > 0 && (
+                    <div className="flex items-center gap-1 bg-slate-100/80 dark:bg-slate-800/80 p-1 rounded-xl border border-slate-200/60 dark:border-slate-700/60">
+                        {profiles.map(child => {
+                            const isSelected = child._id === activeChild?._id || child.id === activeChild?.id;
+                            return (
+                                <button
+                                    key={child._id || child.id}
+                                    onClick={() => onSelectChild && onSelectChild(child)}
+                                    className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
+                                        isSelected
+                                            ? 'bg-white dark:bg-slate-900 text-primary shadow-sm'
+                                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                                    }`}
+                                >
+                                    <span>👶</span>
+                                    <span>{child.name.split(' ')[0]}</span>
+                                </button>
+                            );
+                        })}
+                    </div>
+                )}
             </div>
-
-            {/* Right: menu */}
-            <button style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                color: '#9CA3AF',
-                padding: '6px',
-                borderRadius: '6px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }} aria-label="More options">
-                <MenuIcon />
-            </button>
-        </div>
+        </header>
     );
 };
 
