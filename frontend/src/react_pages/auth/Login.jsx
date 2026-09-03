@@ -354,6 +354,21 @@ const Login = () => {
                     )}
 
                     <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 text-center space-y-2.5">
+                        <div className="flex items-center justify-center gap-2">
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setEmail('parent@nutrikid.com');
+                                    setPassword('Password123!');
+                                }}
+                                className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-primary/10 hover:text-primary text-slate-700 dark:text-slate-300 text-xs font-bold transition-all border border-slate-200 dark:border-slate-700 flex items-center gap-1.5 cursor-pointer shadow-sm"
+                                title="Auto-fill Demo Parent Credentials (Sneha Sharma)"
+                            >
+                                <span className="material-symbols-outlined text-sm text-primary">key</span>
+                                <span>Quick Fill Parent Login</span>
+                            </button>
+                        </div>
+
                         <p className="text-xs text-[#4c799a] dark:text-slate-400 font-medium">
                             New to the NutriKid family?
                             <Link href="/register" className="text-primary font-bold hover:underline ml-1">Create an account</Link>

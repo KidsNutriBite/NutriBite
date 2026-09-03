@@ -867,6 +867,7 @@ const ChildDetails = () => {
                                             selectedDate={selectedDate}
                                             onSelect={setSelectedDate}
                                             streak={streak}
+                                            history={history}
                                         />
 
                                         <DailyMealCard
