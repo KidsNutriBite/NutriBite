@@ -52,3 +52,7 @@ backend/uploads/
 
 # OS
 Thumbs.db
+
+# Local database data
+backend/.db_data/
+.db_data/

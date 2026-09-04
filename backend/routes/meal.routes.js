@@ -1,6 +1,6 @@
 import express from 'express';
 import path from 'path';
-import { logMeal, getMealHistory, deleteFoodItem, getMealsByDate, getLastMealTime, analyzeMealImage, analyzeMealImageDebug } from '../controllers/meal.controller.js';
+import { logMeal, getMealHistory, deleteFoodItem, getMealsByDate, getLastMealTime, analyzeMealImage, analyzeMealImageDebug, saveAiCorrection } from '../controllers/meal.controller.js';
 import { protect } from '../middlewares/auth.middleware.js';
 import { authorize } from '../middlewares/role.middleware.js';
 import { checkProfileOwnership } from '../middlewares/ownership.middleware.js';
@@ -40,6 +40,9 @@ router.post('/', authorize('parent'), upload.any(), checkBodyOwnership, logMeal)
 
 // ANALYZE IMAGE
 router.post('/analyze-image', authorize('parent'), upload.any(), analyzeMealImage);
+
+// SAVE AI CORRECTION (Self-learning)
+router.post('/correction', authorize('parent'), saveAiCorrection);
 
 // DEBUG FOOD ANALYSIS (Task 5)
 router.post('/debug-food-analysis', authorize('parent'), upload.any(), analyzeMealImageDebug);

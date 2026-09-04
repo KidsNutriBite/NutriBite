@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect, useMemo, useRef } from 'react';
-import axios from 'axios';
-import { logMeal, analyzeMealImage } from '../../api/meal.api';
+import { logMeal, analyzeMealImage, recordAiCorrection } from '../../api/meal.api';
 import { FOOD_DATABASE, QUICK_ADDS } from '../../data/foodDatabase';
 import { useProfile } from '../../context/ProfileContext';
 
@@ -349,6 +348,12 @@ const MealLogForm = ({ profileId, initialData, onSuccess, onCancel }) => {
                         unit: unit,
                         baseAmount: amount > 0 ? amount : 1,
                         
+                        decision: food.decision || 'auto_accept',
+                        alternatives: food.alternatives || [],
+                        confirmed: food.decision === 'auto_accept',
+                        topCandidate: food.topCandidate || food.name,
+                        secondCandidate: food.secondCandidate || null,
+
                         baseCalories: caloriesVal,
                         baseProtein: proteinVal,
                         baseCarbs: carbsVal,
@@ -468,6 +473,35 @@ const MealLogForm = ({ profileId, initialData, onSuccess, onCancel }) => {
                 }
                 if (originalAnalysisResult) {
                     data.append('analysisResult', JSON.stringify(originalAnalysisResult));
+
+                    // Record corrections for AI self-learning
+                    try {
+                        const originalFoods = originalAnalysisResult.foods || [];
+                        aiFoods.forEach(f => {
+                            const match = originalFoods.find(orig => (orig.name || orig) === f.name);
+                            if (!match) {
+                                // Food name was changed or added
+                                recordAiCorrection({
+                                    originalFood: originalFoods[0]?.name || 'Unknown',
+                                    correctedFood: f.name,
+                                    originalQuantity: originalFoods[0]?.quantity || '1 serving',
+                                    correctedQuantity: f.quantity,
+                                    mealType: formData.mealType
+                                }).catch(() => {});
+                            } else if (match.quantity !== f.quantity) {
+                                // Portion was adjusted
+                                recordAiCorrection({
+                                    originalFood: match.name,
+                                    correctedFood: f.name,
+                                    originalQuantity: match.quantity,
+                                    correctedQuantity: f.quantity,
+                                    mealType: formData.mealType
+                                }).catch(() => {});
+                            }
+                        });
+                    } catch (corrErr) {
+                        console.warn("[MealLogForm] Failed to record correction:", corrErr.message);
+                    }
                 }
 
                 await logMeal(data);
@@ -800,139 +834,176 @@ const MealLogForm = ({ profileId, initialData, onSuccess, onCancel }) => {
                                     </button>
                                 </div>
 
-                                <div className="space-y-4">
-                                    {aiFoods.map((food, idx) => (
-                                        <div key={food.id} className="p-4 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl relative shadow-sm hover:border-primary/20 transition-all">
-                                            <button 
-                                                type="button" 
-                                                onClick={() => handleRemoveAiFood(idx)}
-                                                className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition"
-                                            >
-                                                <span className="material-symbols-outlined text-lg">delete</span>
-                                            </button>
-                                            
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pr-8">
-                                                <div>
-                                                    <label className="block text-[10px] font-black text-gray-400 uppercase tracking-wider mb-1">Food Name</label>
-                                                    <input
-                                                        type="text"
-                                                        value={food.name}
-                                                        onChange={(e) => handleAiFoodChange(idx, 'name', e.target.value)}
-                                                        className="w-full border border-gray-200 dark:border-slate-850 dark:bg-slate-950 rounded-xl px-3 py-2 text-xs font-bold outline-none focus:border-primary"
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <label className="block text-[10px] font-black text-gray-400 uppercase tracking-wider mb-1">Portion Quantity</label>
-                                                    <div className="flex items-center bg-gray-50 dark:bg-slate-850 border border-gray-200 dark:border-slate-800 rounded-xl p-1 h-9 max-w-[180px]">
-                                                        <button 
-                                                            type="button"
-                                                            onClick={() => updateAiFoodAmount(idx, - (food.unit === 'g' ? 10 : 1))}
-                                                            className="w-7 h-7 flex items-center justify-center text-gray-500 hover:text-primary hover:bg-white dark:hover:bg-slate-800 rounded-lg transition text-xs font-bold"
-                                                        >
-                                                            -
-                                                        </button>
-                                                        <span className="text-xs font-black text-gray-700 dark:text-gray-300 flex-1 text-center select-none whitespace-nowrap overflow-hidden text-ellipsis px-1">
-                                                            {food.amount} {food.unit}
-                                                        </span>
-                                                        <button 
-                                                            type="button"
-                                                            onClick={() => updateAiFoodAmount(idx, (food.unit === 'g' ? 10 : 1))}
-                                                            className="w-7 h-7 flex items-center justify-center text-gray-500 hover:text-primary hover:bg-white dark:hover:bg-slate-800 rounded-lg transition text-xs font-bold"
-                                                        >
-                                                            +
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                 <div className="space-y-4">
+                                     {aiFoods.map((food, idx) => (
+                                         <div key={food.id} className="p-4 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl relative shadow-sm hover:border-primary/20 transition-all">
+                                             <button 
+                                                 type="button" 
+                                                 onClick={() => handleRemoveAiFood(idx)}
+                                                 className="absolute top-4 right-4 text-gray-400 hover:text-red-500 transition cursor-pointer"
+                                             >
+                                                 <span className="material-symbols-outlined text-lg">delete</span>
+                                             </button>
+                                             
+                                             {/* Decision Prompt & Ambiguity Confirmation Banner */}
+                                             {food.decision === 'needs_confirmation' && !food.confirmed ? (
+                                                 <div className="mb-3.5 p-3 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/80 rounded-xl">
+                                                     <div className="flex items-center gap-2 text-xs font-bold text-amber-900 dark:text-amber-200 mb-2">
+                                                         <span className="material-symbols-outlined text-base text-amber-600">help</span>
+                                                         <span>AI Ambiguity Check: Did you have {food.alternatives?.[0]?.name} or {food.alternatives?.[1]?.name}?</span>
+                                                     </div>
+                                                     <div className="flex items-center gap-2 flex-wrap">
+                                                         {food.alternatives?.map((alt, aIdx) => (
+                                                             <button
+                                                                 key={aIdx}
+                                                                 type="button"
+                                                                 onClick={() => {
+                                                                     handleAiFoodChange(idx, 'name', alt.name);
+                                                                     const updated = [...aiFoods];
+                                                                     updated[idx].confirmed = true;
+                                                                     setAiFoods(updated);
+                                                                 }}
+                                                                 className="px-3 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-slate-800 border border-amber-300 dark:border-amber-700 text-slate-800 dark:text-white hover:bg-amber-100 dark:hover:bg-amber-900/50 transition cursor-pointer shadow-sm flex items-center gap-1.5"
+                                                             >
+                                                                 <span>{alt.name}</span>
+                                                                 <span className="text-[10px] text-amber-600 dark:text-amber-400 font-mono">({alt.confidence}%)</span>
+                                                             </button>
+                                                         ))}
+                                                     </div>
+                                                 </div>
+                                             ) : food.confirmed ? (
+                                                 <div className="flex items-center justify-between mb-2">
+                                                     <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800/50 px-2.5 py-0.5 rounded-full flex items-center gap-1">
+                                                         <span className="material-symbols-outlined text-xs">verified</span>
+                                                         {food.decision === 'auto_accept' ? `${Math.round(food.confidence * 100)}% Confident (Auto-accepted)` : 'Confirmed by Parent'}
+                                                     </span>
+                                                 </div>
+                                             ) : (
+                                                 <div className="mb-2 text-[11px] font-bold text-slate-500 dark:text-slate-400 flex items-center gap-1 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg">
+                                                     <span className="material-symbols-outlined text-xs text-amber-500">edit_note</span>
+                                                     Please confirm or adjust dish name and portion
+                                                 </div>
+                                             )}
 
-                                            <div className="grid grid-cols-4 gap-2 mt-3 pt-3 border-t border-gray-100 dark:border-slate-800">
-                                                <div>
-                                                    <label className="block text-[8px] font-bold text-gray-400 uppercase mb-0.5 text-center">Calories (kcal)</label>
-                                                    <input
-                                                        type="number"
-                                                        value={food.calories}
-                                                        onChange={(e) => handleAiFoodChange(idx, 'calories', parseFloat(e.target.value) || 0)}
-                                                        className="w-full border border-gray-250 dark:border-slate-850 dark:bg-slate-950 rounded-lg py-1 text-xs text-center font-bold outline-none focus:border-primary"
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <label className="block text-[8px] font-bold text-gray-400 uppercase mb-0.5 text-center">Protein (g)</label>
-                                                    <input
-                                                        type="number"
-                                                        value={food.protein}
-                                                        onChange={(e) => handleAiFoodChange(idx, 'protein', parseFloat(e.target.value) || 0)}
-                                                        className="w-full border border-gray-250 dark:border-slate-850 dark:bg-slate-950 rounded-lg py-1 text-xs text-center font-bold outline-none focus:border-primary"
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <label className="block text-[8px] font-bold text-gray-400 uppercase mb-0.5 text-center">Carbs (g)</label>
-                                                    <input
-                                                        type="number"
-                                                        value={food.carbs}
-                                                        onChange={(e) => handleAiFoodChange(idx, 'carbs', parseFloat(e.target.value) || 0)}
-                                                        className="w-full border border-gray-250 dark:border-slate-850 dark:bg-slate-950 rounded-lg py-1 text-xs text-center font-bold outline-none focus:border-primary"
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <label className="block text-[8px] font-bold text-gray-400 uppercase mb-0.5 text-center">Fats (g)</label>
-                                                    <input
-                                                        type="number"
-                                                        value={food.fats}
-                                                        onChange={(e) => handleAiFoodChange(idx, 'fats', parseFloat(e.target.value) || 0)}
-                                                        className="w-full border border-gray-250 dark:border-slate-850 dark:bg-slate-950 rounded-lg py-1 text-xs text-center font-bold outline-none focus:border-primary"
-                                                    />
-                                                </div>
-                                            </div>
+                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pr-8">
+                                                 <div>
+                                                     <label className="block text-[10px] font-black text-gray-400 uppercase tracking-wider mb-1">Food Name</label>
+                                                     <input
+                                                         type="text"
+                                                         value={food.name}
+                                                         onChange={(e) => {
+                                                             handleAiFoodChange(idx, 'name', e.target.value);
+                                                             const updated = [...aiFoods];
+                                                             updated[idx].confirmed = true;
+                                                             setAiFoods(updated);
+                                                         }}
+                                                         className="w-full border border-gray-200 dark:border-slate-850 dark:bg-slate-950 rounded-xl px-3 py-2 text-xs font-bold outline-none focus:border-primary"
+                                                     />
+                                                 </div>
+                                                 <div>
+                                                     <label className="block text-[10px] font-black text-gray-400 uppercase tracking-wider mb-1">Portion Quantity</label>
+                                                     <div className="flex items-center bg-gray-50 dark:bg-slate-850 border border-gray-200 dark:border-slate-800 rounded-xl p-1 h-9 max-w-[180px]">
+                                                         <button 
+                                                             type="button"
+                                                             onClick={() => updateAiFoodAmount(idx, - (food.unit === 'g' ? 10 : 1))}
+                                                             className="w-7 h-7 flex items-center justify-center text-gray-500 hover:text-primary hover:bg-white dark:hover:bg-slate-800 rounded-lg transition text-xs font-bold"
+                                                         >
+                                                             -
+                                                         </button>
+                                                         <span className="text-xs font-black text-gray-700 dark:text-gray-300 flex-1 text-center select-none whitespace-nowrap overflow-hidden text-ellipsis px-1">
+                                                             {food.amount} {food.unit}
+                                                         </span>
+                                                         <button 
+                                                             type="button"
+                                                             onClick={() => updateAiFoodAmount(idx, (food.unit === 'g' ? 10 : 1))}
+                                                             className="w-7 h-7 flex items-center justify-center text-gray-500 hover:text-primary hover:bg-white dark:hover:bg-slate-800 rounded-lg transition text-xs font-bold"
+                                                         >
+                                                             +
+                                                         </button>
+                                                     </div>
+                                                 </div>
+                                             </div>
 
-                                            <div className="grid grid-cols-4 gap-2 mt-2">
-                                                <div>
-                                                    <label className="block text-[8px] font-bold text-gray-400 uppercase mb-0.5 text-center">Fiber (g)</label>
-                                                    <input
-                                                        type="number"
-                                                        value={food.fiber || 0}
-                                                        onChange={(e) => handleAiFoodChange(idx, 'fiber', parseFloat(e.target.value) || 0)}
-                                                        className="w-full border border-gray-250 dark:border-slate-850 dark:bg-slate-950 rounded-lg py-1 text-xs text-center font-bold outline-none focus:border-primary"
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <label className="block text-[8px] font-bold text-gray-400 uppercase mb-0.5 text-center">Iron (mg)</label>
-                                                    <input
-                                                        type="number"
-                                                        value={food.iron || 0}
-                                                        onChange={(e) => handleAiFoodChange(idx, 'iron', parseFloat(e.target.value) || 0)}
-                                                        className="w-full border border-gray-250 dark:border-slate-850 dark:bg-slate-950 rounded-lg py-1 text-xs text-center font-bold outline-none focus:border-primary"
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <label className="block text-[8px] font-bold text-gray-400 uppercase mb-0.5 text-center">Calcium (mg)</label>
-                                                    <input
-                                                        type="number"
-                                                        value={food.calcium || 0}
-                                                        onChange={(e) => handleAiFoodChange(idx, 'calcium', parseFloat(e.target.value) || 0)}
-                                                        className="w-full border border-gray-250 dark:border-slate-850 dark:bg-slate-950 rounded-lg py-1 text-xs text-center font-bold outline-none focus:border-primary"
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <label className="block text-[8px] font-bold text-gray-400 uppercase mb-0.5 text-center">Vit C (mg)</label>
-                                                    <input
-                                                        type="number"
-                                                        value={food.vitaminC || 0}
-                                                        onChange={(e) => handleAiFoodChange(idx, 'vitaminC', parseFloat(e.target.value) || 0)}
-                                                        className="w-full border border-gray-250 dark:border-slate-850 dark:bg-slate-950 rounded-lg py-1 text-xs text-center font-bold outline-none focus:border-primary"
-                                                    />
-                                                </div>
-                                            </div>
+                                             <div className="grid grid-cols-4 gap-2 mt-3 pt-3 border-t border-gray-100 dark:border-slate-800">
+                                                 <div>
+                                                     <label className="block text-[8px] font-bold text-gray-400 uppercase mb-0.5 text-center">Calories (kcal)</label>
+                                                     <input
+                                                         type="number"
+                                                         value={food.calories}
+                                                         onChange={(e) => handleAiFoodChange(idx, 'calories', parseFloat(e.target.value) || 0)}
+                                                         className="w-full border border-gray-250 dark:border-slate-850 dark:bg-slate-950 rounded-lg py-1 text-xs text-center font-bold outline-none focus:border-primary"
+                                                     />
+                                                 </div>
+                                                 <div>
+                                                     <label className="block text-[8px] font-bold text-gray-400 uppercase mb-0.5 text-center">Protein (g)</label>
+                                                     <input
+                                                         type="number"
+                                                         value={food.protein}
+                                                         onChange={(e) => handleAiFoodChange(idx, 'protein', parseFloat(e.target.value) || 0)}
+                                                         className="w-full border border-gray-250 dark:border-slate-850 dark:bg-slate-950 rounded-lg py-1 text-xs text-center font-bold outline-none focus:border-primary"
+                                                     />
+                                                 </div>
+                                                 <div>
+                                                     <label className="block text-[8px] font-bold text-gray-400 uppercase mb-0.5 text-center">Carbs (g)</label>
+                                                     <input
+                                                         type="number"
+                                                         value={food.carbs}
+                                                         onChange={(e) => handleAiFoodChange(idx, 'carbs', parseFloat(e.target.value) || 0)}
+                                                         className="w-full border border-gray-250 dark:border-slate-850 dark:bg-slate-950 rounded-lg py-1 text-xs text-center font-bold outline-none focus:border-primary"
+                                                     />
+                                                 </div>
+                                                 <div>
+                                                     <label className="block text-[8px] font-bold text-gray-400 uppercase mb-0.5 text-center">Fats (g)</label>
+                                                     <input
+                                                         type="number"
+                                                         value={food.fats}
+                                                         onChange={(e) => handleAiFoodChange(idx, 'fats', parseFloat(e.target.value) || 0)}
+                                                         className="w-full border border-gray-250 dark:border-slate-850 dark:bg-slate-950 rounded-lg py-1 text-xs text-center font-bold outline-none focus:border-primary"
+                                                     />
+                                                 </div>
+                                             </div>
 
-                                            {food.confidence !== undefined && (
-                                                <div className="mt-3 text-right">
-                                                    <span className="text-[10px] px-2 py-0.5 bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 rounded-full font-bold">
-                                                        Confidence Score: {Math.round(food.confidence * 100)}%
-                                                    </span>
-                                                </div>
-                                            )}
-                                        </div>
-                                    ))}
-                                </div>
+                                             <div className="grid grid-cols-4 gap-2 mt-2">
+                                                 <div>
+                                                     <label className="block text-[8px] font-bold text-gray-400 uppercase mb-0.5 text-center">Fiber (g)</label>
+                                                     <input
+                                                         type="number"
+                                                         value={food.fiber || 0}
+                                                         onChange={(e) => handleAiFoodChange(idx, 'fiber', parseFloat(e.target.value) || 0)}
+                                                         className="w-full border border-gray-250 dark:border-slate-850 dark:bg-slate-950 rounded-lg py-1 text-xs text-center font-bold outline-none focus:border-primary"
+                                                     />
+                                                 </div>
+                                                 <div>
+                                                     <label className="block text-[8px] font-bold text-gray-400 uppercase mb-0.5 text-center">Iron (mg)</label>
+                                                     <input
+                                                         type="number"
+                                                         value={food.iron || 0}
+                                                         onChange={(e) => handleAiFoodChange(idx, 'iron', parseFloat(e.target.value) || 0)}
+                                                         className="w-full border border-gray-250 dark:border-slate-850 dark:bg-slate-950 rounded-lg py-1 text-xs text-center font-bold outline-none focus:border-primary"
+                                                     />
+                                                 </div>
+                                                 <div>
+                                                     <label className="block text-[8px] font-bold text-gray-400 uppercase mb-0.5 text-center">Calcium (mg)</label>
+                                                     <input
+                                                         type="number"
+                                                         value={food.calcium || 0}
+                                                         onChange={(e) => handleAiFoodChange(idx, 'calcium', parseFloat(e.target.value) || 0)}
+                                                         className="w-full border border-gray-250 dark:border-slate-850 dark:bg-slate-950 rounded-lg py-1 text-xs text-center font-bold outline-none focus:border-primary"
+                                                     />
+                                                 </div>
+                                                 <div>
+                                                     <label className="block text-[8px] font-bold text-gray-400 uppercase mb-0.5 text-center">Vit C (mg)</label>
+                                                     <input
+                                                         type="number"
+                                                         value={food.vitaminC || 0}
+                                                         onChange={(e) => handleAiFoodChange(idx, 'vitaminC', parseFloat(e.target.value) || 0)}
+                                                         className="w-full border border-gray-250 dark:border-slate-850 dark:bg-slate-950 rounded-lg py-1 text-xs text-center font-bold outline-none focus:border-primary"
+                                                     />
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     ))}
+                                 </div>
 
                                 <button
                                     type="button"

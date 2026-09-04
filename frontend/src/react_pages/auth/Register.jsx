@@ -452,11 +452,20 @@ const Register = () => {
                         </button>
                     </form>
 
-                    <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 text-center">
+                    <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 text-center space-y-2.5">
                         <p className="text-xs text-[#4c799a] dark:text-slate-400 font-medium">
                             Already have an account?
                             <Link href="/login" className="text-primary font-bold hover:underline ml-1">Sign In</Link>
                         </p>
+                        <div className="pt-1">
+                            <Link 
+                                href="/guest" 
+                                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/40 dark:hover:bg-amber-900/40 border border-amber-200 dark:border-amber-800/60 transition-all shadow-sm"
+                            >
+                                <span className="material-symbols-outlined text-sm">visibility</span>
+                                <span>Continue as Guest (Demo Mode)</span>
+                            </Link>
+                        </div>
                     </div>
 
                     <footer className="mt-6 flex justify-center gap-6 text-slate-400 text-[10px] font-semibold uppercase tracking-wider">

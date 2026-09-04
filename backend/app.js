@@ -29,6 +29,8 @@ import twinRoutes from './routes/twin.routes.js';
 import dietitianRoutes from './routes/dietitian.routes.js';
 import consultationRoutes from './routes/consultation.routes.js';
 import videoRoutes from './routes/video.routes.js';
+import adminRoutes from './routes/admin.routes.js';
+import aiRoutes from './routes/ai.routes.js';
 import { correlationMiddleware, requestLatencyLogger } from './utils/otel.js';
 import { protect } from './middlewares/auth.middleware.js';
 import { authorize } from './middlewares/role.middleware.js';
@@ -114,6 +116,8 @@ app.use('/api/twin', twinRoutes);
 app.use('/api/consultations', consultationRoutes);
 app.use('/api/dietitian', dietitianRoutes);
 app.use('/api/video', videoRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/ai', aiRoutes);
 
 // Debug Food Analysis Route (Task 5)
 const upload = multer();

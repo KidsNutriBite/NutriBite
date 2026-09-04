@@ -121,8 +121,8 @@ const Header = () => {
                     ))}
                 </div>
 
-                {/* Right Side Buttons: Theme Toggle & Login/Register */}
-                <div className="hidden md:flex items-center gap-4">
+                {/* Right Side Buttons: Theme Toggle & Login/Register/Guest */}
+                <div className="hidden md:flex items-center gap-3">
                     {/* Theme Toggle Button */}
                     <button
                         onClick={toggleTheme}
@@ -135,15 +135,23 @@ const Header = () => {
                     </button>
 
                     <Link 
+                        href="/guest" 
+                        className="px-3.5 py-2 rounded-full text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/40 dark:hover:bg-amber-900/40 border border-amber-200 dark:border-amber-800/60 transition-all flex items-center gap-1"
+                    >
+                        <span className="material-symbols-outlined text-sm">visibility</span>
+                        <span>Explore Demo</span>
+                    </Link>
+
+                    <Link 
                         href="/login" 
-                        className="text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary transition-colors"
+                        className="text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-primary dark:hover:text-primary transition-colors px-2"
                     >
                         Login
                     </Link>
 
                     <Link 
                         href="/register" 
-                        className="flex min-w-[110px] cursor-pointer items-center justify-center rounded-full h-10 px-5 bg-primary text-white text-sm font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 hover:scale-105 active:scale-95 transition-all duration-300"
+                        className="flex min-w-[100px] cursor-pointer items-center justify-center rounded-full h-10 px-5 bg-primary text-white text-sm font-bold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 hover:scale-105 active:scale-95 transition-all duration-300"
                     >
                         Register
                     </Link>
@@ -203,6 +211,14 @@ const Header = () => {
                         <div className="h-px bg-slate-100 dark:bg-slate-800 w-full" />
 
                         <div className="flex flex-col gap-3">
+                            <Link
+                                href="/guest"
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="flex h-11 items-center justify-center rounded-xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800/60 text-sm font-bold text-amber-700 dark:text-amber-300 transition-colors gap-1.5"
+                            >
+                                <span className="material-symbols-outlined text-lg">visibility</span>
+                                <span>Continue as Guest</span>
+                            </Link>
                             <Link
                                 href="/login"
                                 onClick={() => setIsMobileMenuOpen(false)}
