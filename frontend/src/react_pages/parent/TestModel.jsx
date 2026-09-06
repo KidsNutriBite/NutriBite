@@ -84,7 +84,7 @@ export default function TestModel() {
                 <div>
                     <h3 className="font-bold uppercase tracking-wider text-xs">Pipeline Mechanism</h3>
                     <p className="mt-1 leading-relaxed text-xs">
-                        This test playground runs plate images through our multi-stage pipeline: Local Hugging Face ViT classifier checks for Food-101 Western dishes. If confidence is low or an Indian plate is recognized, the system triggers our Google Gemini 2.5 Flash Vision parser, or falls back to rule-based pediatric plate defaults.
+                        This test playground runs plate images through our multi-stage pipeline: Local Hugging Face ViT classifier checks for Food-101 Western dishes. If confidence is low or an Indian plate is recognized, the system triggers our Cloud Vision Pediatric AI parser, or falls back to rule-based pediatric plate defaults.
                     </p>
                 </div>
             </div>

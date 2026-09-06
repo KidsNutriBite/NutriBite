@@ -6,60 +6,68 @@ import WelcomeHero from './WelcomeHero';
 import ChatMessage from './ChatMessage';
 import ChatComposer from './ChatComposer';
 import ConversationSidebar from './ConversationSidebar';
+import SavedDietPlansModal from './SavedDietPlansModal';
 import useAuth from '../../../hooks/useAuth';
+import toast from 'react-hot-toast';
+import { saveDietPlan } from '../../../api/nutrition.api';
 import {
     askNutriGuideCopilot,
     fetchConversations,
     fetchConversationById,
     deleteConversationApi,
-    createNewConversation
 } from '../../../api/ai.api';
 
-// Clinical Agentic Pipeline Progress Indicator (with Antigravity Smooth Motion)
+const SparkIcon = () => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+    </svg>
+);
+
+// Minimal Agentic Reasoning Progress Indicator
 const AgenticPipelineIndicator = ({ currentStep, childName }) => {
     const steps = [
-        { label: "Understanding question & pediatric intent", icon: "search" },
-        { label: `Reviewing ${childName}'s 21-day dietary records & growth percentiles`, icon: "analytics" },
-        { label: "Checking allergen safety & dietary restrictions", icon: "shield" },
-        { label: "Retrieving ICMR-NIN 2020 pediatric guidelines & food tables", icon: "menu_book" },
-        { label: "Synthesizing structured clinical recommendation", icon: "auto_awesome" }
+        "Analyzing dietary inquiry",
+        `Reviewing ${childName}'s 21-day meals and growth records`,
+        "Checking allergy and safety restrictions",
+        "Retrieving ICMR-NIN guidelines and food tables",
+        "Synthesizing clinical nutrition guidance"
     ];
 
     return (
-        <div className="flex items-start gap-3 my-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <div className="size-8 rounded-full bg-primary/20 text-primary flex items-center justify-center shrink-0 animate-pulse shadow-md shadow-primary/20">
-                <span className="material-symbols-outlined text-base">smart_toy</span>
+        <div className="flex items-start gap-3.5 my-6 animate-in fade-in duration-200">
+            <div className="size-8 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-950 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+                <SparkIcon />
             </div>
 
-            <div className="flex-1 max-w-xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl rounded-2xl p-4 border border-slate-200/80 dark:border-slate-800/80 shadow-lg space-y-2.5">
-                <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2">
-                    <span className="text-xs font-black text-slate-800 dark:text-slate-200 flex items-center gap-1.5">
-                        <span className="inline-block size-2 rounded-full bg-primary animate-ping"></span>
-                        NutriGuide Agentic Copilot is reasoning...
+            <div className="flex-1 max-w-xl bg-white dark:bg-slate-900 rounded-3xl p-5 border border-black/[0.06] dark:border-white/[0.08] shadow-[0_8px_30px_rgb(0_0_0/0.04)] space-y-3">
+                <div className="flex items-center justify-between border-b border-black/[0.04] dark:border-white/[0.06] pb-2.5">
+                    <span className="text-xs font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+                        <span className="size-1.5 rounded-full bg-slate-900 dark:bg-white animate-pulse"></span>
+                        NutriGuide is reasoning...
                     </span>
-                    <span className="text-[10px] font-bold text-slate-400">Step {Math.min(currentStep + 1, 5)} of 5</span>
+                    <span className="text-[11px] text-slate-400 font-mono">Step {Math.min(currentStep + 1, 5)} / 5</span>
                 </div>
 
                 <div className="space-y-1.5">
-                    {steps.map((s, idx) => {
+                    {steps.map((label, idx) => {
                         const isDone = idx < currentStep;
                         const isCurrent = idx === currentStep;
 
                         return (
                             <div
                                 key={idx}
-                                className={`flex items-center gap-2 text-xs transition-all duration-300 ${
+                                className={`flex items-center gap-2.5 text-xs transition-colors duration-200 ${
                                     isDone
-                                        ? 'text-emerald-600 dark:text-emerald-400 font-semibold'
+                                        ? 'text-emerald-700 dark:text-emerald-400 font-medium'
                                         : isCurrent
-                                            ? 'text-primary font-bold animate-pulse scale-[1.01]'
-                                            : 'text-slate-400 opacity-60 font-medium'
+                                            ? 'text-slate-900 dark:text-white font-medium'
+                                            : 'text-slate-400 opacity-60 font-normal'
                                 }`}
                             >
                                 <span className="material-symbols-outlined text-sm shrink-0">
-                                    {isDone ? 'check_circle' : (isCurrent ? 'progress_activity' : 'radio_button_unchecked')}
+                                    {isDone ? 'check' : (isCurrent ? 'radio_button_checked' : 'radio_button_unchecked')}
                                 </span>
-                                <span>{s.label}</span>
+                                <span>{label}</span>
                             </div>
                         );
                     })}
@@ -79,10 +87,11 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
     const [isTyping, setIsTyping] = useState(false);
     const [agentStep, setAgentStep] = useState(0);
 
-    // Multi-Thread Conversation States (Phase 10)
+    // Multi-Thread Conversation States
     const [conversations, setConversations] = useState([]);
     const [activeConversationId, setActiveConversationId] = useState(null);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isSavedPlansOpen, setIsSavedPlansOpen] = useState(false);
 
     const messagesEndRef = useRef(null);
 
@@ -93,7 +102,7 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
         }
     }, [profiles, activeChild]);
 
-    // Load conversations for the selected child (strict multi-child isolation)
+    // Load conversations for the selected child
     const loadChildConversations = useCallback(async () => {
         if (!activeChild?._id && !activeChild?.id) return;
         const profileId = activeChild._id || activeChild.id;
@@ -115,6 +124,23 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
     }, []);
 
     useEffect(scrollToBottom, [messages, isTyping, agentStep, scrollToBottom]);
+
+    // Save Diet Plan Handler for Chat
+    const handleSaveDietPlan = useCallback(async (dietPlan) => {
+        if (!activeChild) return;
+        const profileId = activeChild._id || activeChild.id;
+        try {
+            await saveDietPlan(profileId, {
+                dailyPlan: dietPlan.dailyPlan || dietPlan,
+                selectedTheme: dietPlan.title || 'Custom Diet Plan via NutriGuide AI',
+                savedAt: new Date().toISOString()
+            }, dietPlan.notes || 'Generated by NutriGuide AI based on clinical guidelines.');
+            toast.success(`Diet plan saved to ${activeChild.name}'s profile!`, { icon: '💾' });
+        } catch (err) {
+            console.error("Failed to save diet plan:", err);
+            toast.error("Failed to save diet plan. Please try again.");
+        }
+    }, [activeChild]);
 
     // Start a Fresh Consultation Thread
     const handleNewChat = useCallback(() => {
@@ -166,7 +192,7 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
         setIsTyping(true);
         setAgentStep(0);
 
-        // Step through agentic pipeline stages
+        // Step through reasoning stages
         const stepInterval = setInterval(() => {
             setAgentStep(prev => (prev < 4 ? prev + 1 : prev));
         }, 400);
@@ -196,11 +222,11 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
                         intent: response.intent,
                         toolsUsed: response.toolsUsed || [],
                         followUps: response.followUps || [],
+                        dietPlan: response.dietPlan || null,
                         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
                     }
                 ]);
 
-                // Refresh conversation drawer
                 loadChildConversations();
             }
         } catch (err) {
@@ -214,10 +240,10 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
                 {
                     id: Date.now() + 1,
                     sender: 'ai',
-                    text: `> **In Brief:** NutriGuide is operating under offline safety protocols. Your question regarding "${msgText}" has been logged for pediatrician review with Dr. Rajesh Iyer.`,
+                    text: `> 📌 **Parent Executive Summary:** NutriGuide is operating under safety protocols. Your question regarding "${msgText}" has been recorded for pediatrician follow-up.`,
                     followUps: [
-                        { label: `🥗 Plan Tomorrow's 6 Meals`, prompt: `Generate a chronological 6-meal Indian pediatric plan for ${activeChild?.name || 'child'}.` },
-                        { label: `📊 View 21-Day RDA Gap Chart`, prompt: `Give me a breakdown of ${activeChild?.name || 'child'}'s 21-day nutrient coverage against ICMR 2020 RDA guidelines.` }
+                        { label: `Plan Tomorrow's 6 Meals`, prompt: `Generate a chronological 6-meal Indian pediatric plan for ${activeChild?.name || 'child'}.` },
+                        { label: `View 21-Day RDA Gap Chart`, prompt: `Give me a breakdown of ${activeChild?.name || 'child'}'s 21-day nutrient coverage against ICMR 2020 RDA guidelines.` }
                     ],
                     time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
                 }
@@ -228,13 +254,12 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
     const showWelcome = messages.length === 0;
 
     return (
-        <div className="relative flex flex-col w-full h-full bg-gradient-to-br from-slate-50 via-slate-100/60 to-blue-50/30 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 font-display text-slate-800 dark:text-slate-200 overflow-hidden">
+        <div className="relative flex flex-col w-full h-full bg-[#FAFAFA] dark:bg-slate-950 font-display text-slate-900 dark:text-slate-100 overflow-hidden">
             
-            {/* Antigravity Ambient Background Light Orbs */}
-            <div className="absolute -top-40 -left-40 size-96 rounded-full bg-primary/10 dark:bg-primary/5 blur-3xl pointer-events-none animate-pulse"></div>
-            <div className="absolute top-1/3 -right-40 size-96 rounded-full bg-emerald-400/10 dark:bg-emerald-500/5 blur-3xl pointer-events-none"></div>
+            {/* Subtle Ambient Glows */}
+            <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-gradient-to-b from-slate-200/50 dark:from-slate-800/20 to-transparent blur-3xl pointer-events-none"></div>
 
-            {/* Conversation History Drawer (Phase 10) */}
+            {/* Conversation History Drawer */}
             <ConversationSidebar
                 isOpen={isSidebarOpen}
                 onClose={() => setIsSidebarOpen(false)}
@@ -251,15 +276,22 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
                 }}
             />
 
-            {/* Backdrop overlay for mobile */}
+            {/* Saved Diet Plans Modal */}
+            <SavedDietPlansModal
+                isOpen={isSavedPlansOpen}
+                onClose={() => setIsSavedPlansOpen(false)}
+                activeChild={activeChild}
+            />
+
+            {/* Mobile Backdrop */}
             {isSidebarOpen && (
                 <div
                     onClick={() => setIsSidebarOpen(false)}
-                    className="fixed inset-0 z-30 bg-slate-950/40 backdrop-blur-sm transition-opacity duration-300"
+                    className="fixed inset-0 z-30 bg-black/20 dark:bg-black/40 backdrop-blur-xs transition-opacity duration-300"
                 />
             )}
 
-            {/* Top Navigation Header */}
+            {/* Top Navigation Floating Navbar */}
             <ChatHeader
                 onBack={onBack}
                 activeChild={activeChild}
@@ -270,11 +302,12 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
                 }}
                 onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
                 onNewChat={handleNewChat}
+                onOpenSavedPlans={() => setIsSavedPlansOpen(true)}
             />
 
-            {/* Main Chat Body */}
-            <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-4 flex flex-col justify-between relative z-10">
-                <div>
+            {/* Main Chat Conversation Body */}
+            <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6 flex flex-col justify-between relative z-10 scrollbar-thin">
+                <div className="w-full">
                     {showWelcome ? (
                         <WelcomeHero
                             onChipClick={handleSend}
@@ -282,12 +315,13 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
                             parentName={parentName}
                         />
                     ) : (
-                        <div className="max-w-3xl mx-auto w-full space-y-4">
+                        <div className="max-w-3xl mx-auto w-full space-y-6 pb-4">
                             {messages.map(msg => (
                                 <ChatMessage
                                     key={msg.id}
                                     msg={msg}
                                     onActionClick={handleSend}
+                                    onSaveDietPlan={handleSaveDietPlan}
                                 />
                             ))}
 
@@ -303,9 +337,9 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
                 <div ref={messagesEndRef} />
             </div>
 
-            {/* Bottom Chat Composer Input */}
-            <div className="border-t border-slate-200/80 dark:border-slate-800/80 bg-white/75 dark:bg-slate-900/75 backdrop-blur-xl p-3 sm:p-4 relative z-10 shadow-lg">
-                <div className="max-w-3xl mx-auto">
+            {/* Bottom Floating Glass Composer */}
+            <div className="px-4 sm:px-6 pb-4 sm:pb-6 pt-2 relative z-10 w-full flex justify-center">
+                <div className="max-w-3xl w-full">
                     <ChatComposer
                         input={input}
                         setInput={setInput}
@@ -324,7 +358,7 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
     );
 };
 
-// Allergy label formatter (shared utility — also used in ChatComposer)
+// Allergy label formatter (shared utility)
 export function formatAllergy(raw) {
     if (!raw) return '';
     const map = {

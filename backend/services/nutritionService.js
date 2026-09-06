@@ -5,7 +5,7 @@ import { ResponseBuilder } from './nutritionIntelligenceEngine.js';
 import { MealPlannerService } from './mealPlannerEngine.js';
 import { GroceryOptimizerService } from './groceryOptimizerEngine.js';
 
-export const analyzeNutrition = async (profileId, sunlightMinutes = 0) => {
+export const analyzeNutrition = async (profileId, sunlightMinutes = 0, refreshNonce = 0, mode = 'daily', themeIndex = 0) => {
     // 1. Fetch Profile
     const profile = await Profile.findById(profileId);
     if (!profile) {
@@ -25,8 +25,8 @@ export const analyzeNutrition = async (profileId, sunlightMinutes = 0) => {
     // 3. Compute dynamic wellness using the new modular engine
     const analysis = ResponseBuilder.build(profile, logs);
     
-    // 4. Generate daily meal plan using MealPlannerService
-    const mealPlanData = MealPlannerService.generatePlan(profile, logs);
+    // 4. Generate daily & weekly meal plans using MealPlannerService with refresh rotation, location context, and themes
+    const mealPlanData = await MealPlannerService.generatePlan(profile, logs, refreshNonce, mode, themeIndex);
 
     // 5. Optimize weekly groceries using GroceryOptimizerService
     const groceryPlanData = GroceryOptimizerService.optimize(profile, logs, mealPlanData.dailyPlan, analysis.groceryList);
@@ -94,12 +94,47 @@ export const analyzeNutrition = async (profileId, sunlightMinutes = 0) => {
         
         // Phase 2 Meal Planner integrations
         mealPlan: mealPlanData.dailyPlan,
+        weeklyPlan: mealPlanData.weeklyPlan,
         mealPlanSummary: mealPlanData.totalPlan,
+        planThemes: mealPlanData.themes,
+        selectedTheme: mealPlanData.selectedTheme,
+        location: mealPlanData.location,
+        regionalFocus: mealPlanData.regionalFocus,
+        savedPlan: mealPlanData.savedPlan,
+        customDietNotes: mealPlanData.customDietNotes,
 
         // Phase 3 Grocery Optimizer integrations
         groceryPlan: groceryPlanData.groceries,
         groceryPlanSummary: groceryPlanData.summary,
         groceryPlanInsights: groceryPlanData.insights
+    };
+};
+
+export const suggestBlankSlotMeal = async (profileId, slotKey, currentPlan = {}, parentNotes = '') => {
+    const profile = await Profile.findById(profileId);
+    if (!profile) throw new Error('Profile not found');
+
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const dateString = sevenDaysAgo.toISOString().split('T')[0];
+    const logs = await MealLog.find({ profileId, date: { $gte: dateString } });
+
+    return await MealPlannerService.suggestSlot(profile, logs, slotKey, currentPlan, parentNotes);
+};
+
+export const saveChildDietPlan = async (profileId, planPayload, notes = '') => {
+    const profile = await Profile.findByIdAndUpdate(
+        profileId,
+        {
+            savedDietPlan: planPayload,
+            customDietNotes: notes
+        },
+        { new: true }
+    );
+    if (!profile) throw new Error('Profile not found');
+    return {
+        savedDietPlan: profile.savedDietPlan,
+        customDietNotes: profile.customDietNotes
     };
 };
 

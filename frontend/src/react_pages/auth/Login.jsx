@@ -354,19 +354,58 @@ const Login = () => {
                     )}
 
                     <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 text-center space-y-2.5">
-                        <div className="flex items-center justify-center gap-2">
-                            <button
-                                type="button"
-                                onClick={() => {
-                                    setEmail('parent@nutrikid.com');
-                                    setPassword('Password123!');
-                                }}
-                                className="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-primary/10 hover:text-primary text-slate-700 dark:text-slate-300 text-xs font-bold transition-all border border-slate-200 dark:border-slate-700 flex items-center gap-1.5 cursor-pointer shadow-sm"
-                                title="Auto-fill Demo Parent Credentials (Sneha Sharma)"
-                            >
-                                <span className="material-symbols-outlined text-sm text-primary">key</span>
-                                <span>Quick Fill Parent Login</span>
-                            </button>
+                        <div className="space-y-1.5">
+                            <p className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">Quick Fill Demo Roles</p>
+                            <div className="flex flex-wrap items-center justify-center gap-1.5">
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setEmail('parent@nutrikid.com');
+                                        setPassword('Password123!');
+                                    }}
+                                    className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-primary/10 hover:text-primary text-slate-700 dark:text-slate-300 text-[11px] font-bold transition-all border border-slate-200 dark:border-slate-700 flex items-center gap-1 cursor-pointer shadow-sm"
+                                    title="Auto-fill Parent Credentials (Sneha Sharma)"
+                                >
+                                    <span className="material-symbols-outlined text-xs text-primary">family_restroom</span>
+                                    <span>Parent</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setEmail('doctor@nutrikid.com');
+                                        setPassword('Password123!');
+                                    }}
+                                    className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-500/10 hover:text-blue-600 text-slate-700 dark:text-slate-300 text-[11px] font-bold transition-all border border-slate-200 dark:border-slate-700 flex items-center gap-1 cursor-pointer shadow-sm"
+                                    title="Auto-fill Doctor Credentials (Dr. Rajesh Iyer)"
+                                >
+                                    <span className="material-symbols-outlined text-xs text-blue-500">stethoscope</span>
+                                    <span>Doctor</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setEmail('dietitian@nutrikid.com');
+                                        setPassword('Password123!');
+                                    }}
+                                    className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-500/10 hover:text-emerald-600 text-slate-700 dark:text-slate-300 text-[11px] font-bold transition-all border border-slate-200 dark:border-slate-700 flex items-center gap-1 cursor-pointer shadow-sm"
+                                    title="Auto-fill Dietitian Credentials (Dt. Anjali Mehta)"
+                                >
+                                    <span className="material-symbols-outlined text-xs text-emerald-500">nutrition</span>
+                                    <span>Dietitian</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setEmail('admin@nutrikid.com');
+                                        setPassword('Admin@123456');
+                                    }}
+                                    className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-purple-500/10 hover:text-purple-600 text-slate-700 dark:text-slate-300 text-[11px] font-bold transition-all border border-slate-200 dark:border-slate-700 flex items-center gap-1 cursor-pointer shadow-sm"
+                                    title="Auto-fill Admin Credentials (Administrator)"
+                                >
+                                    <span className="material-symbols-outlined text-xs text-purple-500">admin_panel_settings</span>
+                                    <span>Admin</span>
+                                </button>
+                            </div>
                         </div>
 
                         <p className="text-xs text-[#4c799a] dark:text-slate-400 font-medium">

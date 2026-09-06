@@ -342,7 +342,7 @@
     "category": "protein",
     "energy_kcal_per_100g": 323,
     "protein_g": 22.8,
-    "fat_g": 3.0,
+    "fat_g": 3,
     "carbs_g": 49,
     "iron_mg": "",
     "portion_unit": "85g/day",
@@ -1015,10 +1015,10 @@
     "food_name": "potato_puree",
     "category": "infant_food",
     "energy_kcal_per_100g": 117,
-    "protein_g": 5.0,
+    "protein_g": 5,
     "fat_g": 1,
     "carbs_g": 25,
-    "iron_mg": 1.0,
+    "iron_mg": 1,
     "portion_unit": "55g",
     "portion_energy_kcal": 64,
     "portion_protein_g": 2.7,
@@ -1693,7 +1693,7 @@
     "energy_kcal_per_100g": 328,
     "protein_g": 7.3,
     "fat_g": 1.3,
-    "carbs_g": 72.0,
+    "carbs_g": 72,
     "iron_mg": 3.9,
     "portion_unit": "100g",
     "portion_energy_kcal": "",
@@ -1719,7 +1719,7 @@
       "energy_kcal": 328,
       "protein_g": 7.3,
       "fat_g": 1.3,
-      "carbs_g": 72.0,
+      "carbs_g": 72,
       "fiber_g": 3.6,
       "calcium_mg": 344,
       "iron_mg": 3.9
@@ -2229,7 +2229,7 @@
     "energy_kcal_per_100g": 67,
     "protein_g": 1.1,
     "fat_g": 3.5,
-    "carbs_g": 7.0,
+    "carbs_g": 7,
     "iron_mg": "",
     "portion_unit": "100ml",
     "portion_energy_kcal": "",
@@ -2253,7 +2253,7 @@
       "calories_kcal": 67,
       "protein_g": 1.1,
       "fat_g": 3.5,
-      "carbohydrate_g": 7.0
+      "carbohydrate_g": 7
     }
   },
   {
@@ -3148,7 +3148,7 @@
     "food_name": "dosa",
     "category": "cereal",
     "energy_kcal_per_100g": 165,
-    "protein_g": 4.0,
+    "protein_g": 4,
     "fat_g": 3.5,
     "carbs_g": 29,
     "iron_mg": 0.5,
@@ -3203,7 +3203,7 @@
     "food_name": "upma",
     "category": "cereal",
     "energy_kcal_per_100g": 132,
-    "protein_g": 3.0,
+    "protein_g": 3,
     "fat_g": 3.5,
     "carbs_g": 22,
     "iron_mg": 0.6,
@@ -3287,13 +3287,13 @@
     "food_name": "paneer_butter_masala",
     "category": "dairy",
     "energy_kcal_per_100g": 220,
-    "protein_g": 12.0,
-    "fat_g": 17.0,
+    "protein_g": 12,
+    "fat_g": 17,
     "carbs_g": 6,
     "iron_mg": 0.5,
     "portion_unit": "1 cup (~150g)",
     "portion_energy_kcal": 330,
-    "portion_protein_g": 18.0,
+    "portion_protein_g": 18,
     "digestibility_boiled": "medium",
     "digestibility_fried": "medium",
     "fat_level_fried": "high",
@@ -3318,8 +3318,8 @@
     "food_name": "sambar",
     "category": "pulse",
     "energy_kcal_per_100g": 80,
-    "protein_g": 3.0,
-    "fat_g": 2.0,
+    "protein_g": 3,
+    "fat_g": 2,
     "carbs_g": 12,
     "iron_mg": 0.6,
     "portion_unit": "1 cup (~150ml)",
@@ -3377,13 +3377,13 @@
     "food_name": "chicken_biryani",
     "category": "non-veg",
     "energy_kcal_per_100g": 180,
-    "protein_g": 12.0,
-    "fat_g": 7.0,
+    "protein_g": 12,
+    "fat_g": 7,
     "carbs_g": 18,
     "iron_mg": 0.9,
     "portion_unit": "1 plate (~200g)",
     "portion_energy_kcal": 360,
-    "portion_protein_g": 24.0,
+    "portion_protein_g": 24,
     "digestibility_boiled": "medium",
     "digestibility_fried": "medium",
     "fat_level_fried": "medium",
@@ -3434,13 +3434,13 @@
     "food_name": "dal_tadka",
     "category": "pulse",
     "energy_kcal_per_100g": 105,
-    "protein_g": 6.0,
+    "protein_g": 6,
     "fat_g": 3.5,
     "carbs_g": 13,
     "iron_mg": 1.1,
     "portion_unit": "1 cup (~150g)",
     "portion_energy_kcal": 157.5,
-    "portion_protein_g": 9.0,
+    "portion_protein_g": 9,
     "digestibility_boiled": "high",
     "digestibility_fried": "low",
     "fat_level_fried": "low",
@@ -3463,7 +3463,7 @@
     "category": "dairy",
     "energy_kcal_per_100g": 120,
     "protein_g": 7.5,
-    "fat_g": 9.0,
+    "fat_g": 9,
     "carbs_g": 4,
     "iron_mg": 1.6,
     "portion_unit": "1 cup (~150g)",
@@ -3493,8 +3493,8 @@
     "food_name": "dhokla",
     "category": "snack",
     "energy_kcal_per_100g": 160,
-    "protein_g": 6.0,
-    "fat_g": 4.0,
+    "protein_g": 6,
+    "fat_g": 4,
     "carbs_g": 25,
     "iron_mg": 0.7,
     "portion_unit": "2 pieces (~80g)",
@@ -3522,7 +3522,7 @@
     "category": "snack",
     "energy_kcal_per_100g": 262,
     "protein_g": 4.5,
-    "fat_g": 14.0,
+    "fat_g": 14,
     "carbs_g": 30,
     "iron_mg": 0.5,
     "portion_unit": "1 piece (~70g)",
@@ -3548,13 +3548,13 @@
     "food_name": "gulab_jamun",
     "category": "sweet",
     "energy_kcal_per_100g": 320,
-    "protein_g": 4.0,
-    "fat_g": 14.0,
+    "protein_g": 4,
+    "fat_g": 14,
     "carbs_g": 48,
     "iron_mg": 0.2,
     "portion_unit": "1 piece (~50g)",
     "portion_energy_kcal": 160,
-    "portion_protein_g": 2.0,
+    "portion_protein_g": 2,
     "digestibility_boiled": "low",
     "digestibility_fried": "low",
     "fat_level_fried": "high",
@@ -3572,5 +3572,1528 @@
       "dessert"
     ],
     "food_id": "F1271"
+  },
+  {
+    "food_id": "F_MIL_001",
+    "food_name": "ragi porridge",
+    "category": "cereal",
+    "energy_kcal_per_100g": 328,
+    "protein_g": 7.3,
+    "fat_g": 1.3,
+    "carbs_g": 72,
+    "iron_mg": 3.9,
+    "portion_unit": "1 small bowl (150g)",
+    "portion_energy_kcal": 140,
+    "portion_protein_g": 3.5,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 0.5,
+    "allergy_tags": [],
+    "meal_types": [
+      "breakfast",
+      "snack"
+    ],
+    "tags": [
+      "calcium_rich",
+      "iron_rich",
+      "weaning_food",
+      "gluten_free",
+      "finger_millet"
+    ]
+  },
+  {
+    "food_id": "F_MIL_002",
+    "food_name": "bajra roti",
+    "category": "cereal",
+    "energy_kcal_per_100g": 361,
+    "protein_g": 11.6,
+    "fat_g": 5,
+    "carbs_g": 67.5,
+    "iron_mg": 8,
+    "portion_unit": "1 medium roti (45g)",
+    "portion_energy_kcal": 160,
+    "portion_protein_g": 5.2,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "medium",
+    "fat_level_fried": "medium",
+    "glycemic_index": "medium",
+    "age_min": 1,
+    "allergy_tags": [],
+    "meal_types": [
+      "lunch",
+      "dinner"
+    ],
+    "tags": [
+      "pearl_millet",
+      "iron_rich",
+      "zinc_rich",
+      "winter_staple",
+      "gluten_free"
+    ]
+  },
+  {
+    "food_id": "F_MIL_003",
+    "food_name": "jowar bhakri",
+    "category": "cereal",
+    "energy_kcal_per_100g": 349,
+    "protein_g": 10.4,
+    "fat_g": 1.9,
+    "carbs_g": 72.6,
+    "iron_mg": 4.1,
+    "portion_unit": "1 medium bhakri (50g)",
+    "portion_energy_kcal": 175,
+    "portion_protein_g": 5.2,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 1,
+    "allergy_tags": [],
+    "meal_types": [
+      "lunch",
+      "dinner"
+    ],
+    "tags": [
+      "sorghum",
+      "gluten_free",
+      "fiber_rich",
+      "magnesium",
+      "maharashtra_staple"
+    ]
+  },
+  {
+    "food_id": "F_MIL_004",
+    "food_name": "foxtail millet pulao",
+    "category": "cereal",
+    "energy_kcal_per_100g": 351,
+    "protein_g": 12.3,
+    "fat_g": 4.3,
+    "carbs_g": 65.5,
+    "iron_mg": 2.8,
+    "portion_unit": "1 bowl (150g)",
+    "portion_energy_kcal": 185,
+    "portion_protein_g": 6.5,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 1,
+    "allergy_tags": [],
+    "meal_types": [
+      "lunch",
+      "dinner"
+    ],
+    "tags": [
+      "foxtail_millet",
+      "kangni",
+      "tenai",
+      "thiamine_rich",
+      "low_gi"
+    ]
+  },
+  {
+    "food_id": "F_CER_005",
+    "food_name": "vegetable dalia khichdi",
+    "category": "cereal",
+    "energy_kcal_per_100g": 120,
+    "protein_g": 4.2,
+    "fat_g": 2.5,
+    "carbs_g": 20,
+    "iron_mg": 1.8,
+    "portion_unit": "1 bowl (180g)",
+    "portion_energy_kcal": 215,
+    "portion_protein_g": 7.5,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 0.7,
+    "allergy_tags": [
+      "gluten"
+    ],
+    "meal_types": [
+      "breakfast",
+      "lunch",
+      "dinner"
+    ],
+    "tags": [
+      "broken_wheat",
+      "fiber_rich",
+      "toddler_dinner",
+      "convalescent_diet"
+    ]
+  },
+  {
+    "food_id": "F_CER_006",
+    "food_name": "poha with vegetables and peanuts",
+    "category": "cereal",
+    "energy_kcal_per_100g": 180,
+    "protein_g": 4.5,
+    "fat_g": 5,
+    "carbs_g": 28,
+    "iron_mg": 3.5,
+    "portion_unit": "1 plate (150g)",
+    "portion_energy_kcal": 270,
+    "portion_protein_g": 6.8,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "medium",
+    "fat_level_fried": "medium",
+    "glycemic_index": "medium",
+    "age_min": 1,
+    "allergy_tags": [
+      "peanuts"
+    ],
+    "meal_types": [
+      "breakfast",
+      "snack"
+    ],
+    "tags": [
+      "flattened_rice",
+      "iron_rich",
+      "quick_breakfast",
+      "tiffin_friendly"
+    ]
+  },
+  {
+    "food_id": "F_CER_007",
+    "food_name": "steamed idli",
+    "category": "cereal",
+    "energy_kcal_per_100g": 132,
+    "protein_g": 3.9,
+    "fat_g": 0.6,
+    "carbs_g": 27.5,
+    "iron_mg": 0.9,
+    "portion_unit": "2 medium idlis (80g)",
+    "portion_energy_kcal": 105,
+    "portion_protein_g": 3.1,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "medium",
+    "age_min": 0.6,
+    "allergy_tags": [],
+    "meal_types": [
+      "breakfast",
+      "dinner"
+    ],
+    "tags": [
+      "fermented_food",
+      "steamed",
+      "urad_dal_rice",
+      "easy_digest",
+      "weaning_food"
+    ]
+  },
+  {
+    "food_id": "F_CER_008",
+    "food_name": "plain dosa",
+    "category": "cereal",
+    "energy_kcal_per_100g": 168,
+    "protein_g": 4.2,
+    "fat_g": 3.5,
+    "carbs_g": 29.5,
+    "iron_mg": 1.1,
+    "portion_unit": "1 medium dosa (60g)",
+    "portion_energy_kcal": 120,
+    "portion_protein_g": 2.8,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "medium",
+    "fat_level_fried": "medium",
+    "glycemic_index": "medium",
+    "age_min": 0.8,
+    "allergy_tags": [],
+    "meal_types": [
+      "breakfast",
+      "dinner"
+    ],
+    "tags": [
+      "fermented_crepe",
+      "south_indian",
+      "crispy",
+      "finger_food"
+    ]
+  },
+  {
+    "food_id": "F_CER_009",
+    "food_name": "moong dal khichdi with ghee",
+    "category": "balanced_meal",
+    "energy_kcal_per_100g": 145,
+    "protein_g": 4.8,
+    "fat_g": 3.8,
+    "carbs_g": 22.5,
+    "iron_mg": 1.6,
+    "portion_unit": "1 bowl (180g)",
+    "portion_energy_kcal": 260,
+    "portion_protein_g": 8.6,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 0.6,
+    "allergy_tags": [],
+    "meal_types": [
+      "lunch",
+      "dinner"
+    ],
+    "tags": [
+      "comfort_food",
+      "weaning_standard",
+      "complete_protein",
+      "ghee_enriched",
+      "illness_recovery"
+    ]
+  },
+  {
+    "food_id": "F_CER_010",
+    "food_name": "whole wheat roti",
+    "category": "cereal",
+    "energy_kcal_per_100g": 297,
+    "protein_g": 10.5,
+    "fat_g": 1.7,
+    "carbs_g": 60,
+    "iron_mg": 4.2,
+    "portion_unit": "1 medium chapati (35g)",
+    "portion_energy_kcal": 105,
+    "portion_protein_g": 3.6,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "medium",
+    "age_min": 0.8,
+    "allergy_tags": [
+      "gluten"
+    ],
+    "meal_types": [
+      "lunch",
+      "dinner"
+    ],
+    "tags": [
+      "whole_wheat",
+      "staple_bread",
+      "fiber_rich",
+      "b_vitamins"
+    ]
+  },
+  {
+    "food_id": "F_CER_011",
+    "food_name": "methi thepla",
+    "category": "cereal",
+    "energy_kcal_per_100g": 265,
+    "protein_g": 8.2,
+    "fat_g": 6.5,
+    "carbs_g": 43,
+    "iron_mg": 3.8,
+    "portion_unit": "1 medium thepla (40g)",
+    "portion_energy_kcal": 115,
+    "portion_protein_g": 3.3,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "medium",
+    "fat_level_fried": "medium",
+    "glycemic_index": "low",
+    "age_min": 1,
+    "allergy_tags": [
+      "gluten"
+    ],
+    "meal_types": [
+      "breakfast",
+      "lunch",
+      "snack"
+    ],
+    "tags": [
+      "fenugreek_iron",
+      "gujarati_thepla",
+      "portable_tiffin",
+      "shelf_stable"
+    ]
+  },
+  {
+    "food_id": "F_CER_012",
+    "food_name": "pesarattu (green gram dosa)",
+    "category": "pulse",
+    "energy_kcal_per_100g": 185,
+    "protein_g": 9.5,
+    "fat_g": 4,
+    "carbs_g": 27.5,
+    "iron_mg": 2.6,
+    "portion_unit": "1 medium crepe (70g)",
+    "portion_energy_kcal": 130,
+    "portion_protein_g": 6.6,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "medium",
+    "fat_level_fried": "medium",
+    "glycemic_index": "low",
+    "age_min": 0.9,
+    "allergy_tags": [],
+    "meal_types": [
+      "breakfast",
+      "dinner"
+    ],
+    "tags": [
+      "green_moong_crepe",
+      "high_protein",
+      "andhra_specialty",
+      "iron_folate"
+    ]
+  },
+  {
+    "food_id": "F_CER_013",
+    "food_name": "vegetable ven pongal",
+    "category": "balanced_meal",
+    "energy_kcal_per_100g": 155,
+    "protein_g": 4.5,
+    "fat_g": 4.8,
+    "carbs_g": 23,
+    "iron_mg": 1.4,
+    "portion_unit": "1 bowl (160g)",
+    "portion_energy_kcal": 250,
+    "portion_protein_g": 7.2,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "medium",
+    "age_min": 0.7,
+    "allergy_tags": [
+      "tree_nuts"
+    ],
+    "meal_types": [
+      "breakfast"
+    ],
+    "tags": [
+      "rice_moong_mash",
+      "cumin_pepper",
+      "ghee_tempered",
+      "comfort_meal"
+    ]
+  },
+  {
+    "food_id": "F_PUL_001",
+    "food_name": "yellow moong dal soup",
+    "category": "pulse",
+    "energy_kcal_per_100g": 85,
+    "protein_g": 5.5,
+    "fat_g": 1.2,
+    "carbs_g": 12.8,
+    "iron_mg": 1.5,
+    "portion_unit": "1 small cup (120g)",
+    "portion_energy_kcal": 100,
+    "portion_protein_g": 6.6,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 0.5,
+    "allergy_tags": [],
+    "meal_types": [
+      "lunch",
+      "dinner"
+    ],
+    "tags": [
+      "moong_soup",
+      "weaning_dal",
+      "high_digestibility",
+      "infant_first_food"
+    ]
+  },
+  {
+    "food_id": "F_PUL_002",
+    "food_name": "toor dal sambar with vegetables",
+    "category": "pulse",
+    "energy_kcal_per_100g": 95,
+    "protein_g": 4.8,
+    "fat_g": 2.1,
+    "carbs_g": 14,
+    "iron_mg": 1.7,
+    "portion_unit": "1 medium bowl (150g)",
+    "portion_energy_kcal": 142,
+    "portion_protein_g": 7.2,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 0.8,
+    "allergy_tags": [],
+    "meal_types": [
+      "breakfast",
+      "lunch",
+      "dinner"
+    ],
+    "tags": [
+      "sambar",
+      "drumstick_carrots",
+      "vegetable_lentil",
+      "south_indian"
+    ]
+  },
+  {
+    "food_id": "F_PUL_003",
+    "food_name": "sprouted moong salad with lemon",
+    "category": "pulse",
+    "energy_kcal_per_100g": 105,
+    "protein_g": 7.8,
+    "fat_g": 1,
+    "carbs_g": 16.5,
+    "iron_mg": 2.9,
+    "portion_unit": "1 cup (100g)",
+    "portion_energy_kcal": 105,
+    "portion_protein_g": 7.8,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 1,
+    "allergy_tags": [],
+    "meal_types": [
+      "snack",
+      "breakfast"
+    ],
+    "tags": [
+      "sprouted_moong",
+      "vitamin_c_iron_synergy",
+      "germinated_pulses",
+      "crunchy_snack"
+    ]
+  },
+  {
+    "food_id": "F_PUL_004",
+    "food_name": "boiled chickpea sundal (chana sundal)",
+    "category": "pulse",
+    "energy_kcal_per_100g": 160,
+    "protein_g": 8.5,
+    "fat_g": 3.5,
+    "carbs_g": 23.5,
+    "iron_mg": 3.2,
+    "portion_unit": "1 small cup (100g)",
+    "portion_energy_kcal": 160,
+    "portion_protein_g": 8.5,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 1,
+    "allergy_tags": [],
+    "meal_types": [
+      "snack"
+    ],
+    "tags": [
+      "sundal",
+      "boiled_chickpeas",
+      "coconut_mustard",
+      "high_protein_snack"
+    ]
+  },
+  {
+    "food_id": "F_PUL_005",
+    "food_name": "rajma curry (kidney beans)",
+    "category": "pulse",
+    "energy_kcal_per_100g": 135,
+    "protein_g": 6.8,
+    "fat_g": 3.2,
+    "carbs_g": 19.5,
+    "iron_mg": 2.8,
+    "portion_unit": "1 bowl (150g)",
+    "portion_energy_kcal": 200,
+    "portion_protein_g": 10.2,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 1,
+    "allergy_tags": [],
+    "meal_types": [
+      "lunch",
+      "dinner"
+    ],
+    "tags": [
+      "rajma",
+      "kidney_beans",
+      "folate_rich",
+      "plant_iron",
+      "punjabi_curry"
+    ]
+  },
+  {
+    "food_id": "F_PUL_006",
+    "food_name": "chole (chickpea curry)",
+    "category": "pulse",
+    "energy_kcal_per_100g": 145,
+    "protein_g": 7.2,
+    "fat_g": 4.5,
+    "carbs_g": 19,
+    "iron_mg": 3,
+    "portion_unit": "1 bowl (150g)",
+    "portion_energy_kcal": 215,
+    "portion_protein_g": 10.8,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 1,
+    "allergy_tags": [],
+    "meal_types": [
+      "lunch",
+      "dinner"
+    ],
+    "tags": [
+      "chole",
+      "kabuli_chana",
+      "zinc_rich",
+      "fiber_rich"
+    ]
+  },
+  {
+    "food_id": "F_PUL_007",
+    "food_name": "khaman dhokla (steamed besan)",
+    "category": "pulse",
+    "energy_kcal_per_100g": 160,
+    "protein_g": 6.5,
+    "fat_g": 3.8,
+    "carbs_g": 24.5,
+    "iron_mg": 1.9,
+    "portion_unit": "2 pieces (70g)",
+    "portion_energy_kcal": 112,
+    "portion_protein_g": 4.5,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 1,
+    "allergy_tags": [],
+    "meal_types": [
+      "breakfast",
+      "snack"
+    ],
+    "tags": [
+      "dhokla",
+      "steamed_besan",
+      "fermented_snack",
+      "tiffin_friendly"
+    ]
+  },
+  {
+    "food_id": "F_PUL_008",
+    "food_name": "roasted sattu drink (savory)",
+    "category": "pulse",
+    "energy_kcal_per_100g": 80,
+    "protein_g": 5,
+    "fat_g": 1.2,
+    "carbs_g": 12,
+    "iron_mg": 2.2,
+    "portion_unit": "1 glass (200 mL)",
+    "portion_energy_kcal": 160,
+    "portion_protein_g": 10,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 1,
+    "allergy_tags": [],
+    "meal_types": [
+      "breakfast",
+      "snack"
+    ],
+    "tags": [
+      "sattu",
+      "roasted_gram",
+      "protein_drink",
+      "cooling_summer",
+      "bihar_staple"
+    ]
+  },
+  {
+    "food_id": "F_DAI_001",
+    "food_name": "pasteurized whole cow milk",
+    "category": "dairy",
+    "energy_kcal_per_100g": 62,
+    "protein_g": 3.2,
+    "fat_g": 3.5,
+    "carbs_g": 4.7,
+    "iron_mg": 0.1,
+    "portion_unit": "1 cup (150 mL)",
+    "portion_energy_kcal": 93,
+    "portion_protein_g": 4.8,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 1,
+    "allergy_tags": [
+      "milk"
+    ],
+    "meal_types": [
+      "breakfast",
+      "snack",
+      "dinner"
+    ],
+    "tags": [
+      "cow_milk",
+      "calcium_rich",
+      "vitamin_b12",
+      "child_dairy"
+    ]
+  },
+  {
+    "food_id": "F_DAI_002",
+    "food_name": "homemade dahi (curd/yogurt)",
+    "category": "dairy",
+    "energy_kcal_per_100g": 60,
+    "protein_g": 3.5,
+    "fat_g": 3.2,
+    "carbs_g": 4.4,
+    "iron_mg": 0.1,
+    "portion_unit": "1 small bowl (100g)",
+    "portion_energy_kcal": 60,
+    "portion_protein_g": 3.5,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 0.6,
+    "allergy_tags": [
+      "milk"
+    ],
+    "meal_types": [
+      "breakfast",
+      "lunch",
+      "snack"
+    ],
+    "tags": [
+      "dahi",
+      "curd",
+      "probiotics",
+      "lactic_acid",
+      "calcium",
+      "weaning_food"
+    ]
+  },
+  {
+    "food_id": "F_DAI_003",
+    "food_name": "fresh paneer (cottage cheese)",
+    "category": "dairy",
+    "energy_kcal_per_100g": 265,
+    "protein_g": 18.3,
+    "fat_g": 20.8,
+    "carbs_g": 2.5,
+    "iron_mg": 0.4,
+    "portion_unit": "4-5 cubes (40g)",
+    "portion_energy_kcal": 106,
+    "portion_protein_g": 7.3,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "medium",
+    "fat_level_fried": "medium",
+    "glycemic_index": "low",
+    "age_min": 0.8,
+    "allergy_tags": [
+      "milk"
+    ],
+    "meal_types": [
+      "lunch",
+      "snack",
+      "dinner"
+    ],
+    "tags": [
+      "paneer",
+      "protein_dense",
+      "calcium_dense",
+      "finger_food",
+      "growth_food"
+    ]
+  },
+  {
+    "food_id": "F_DAI_004",
+    "food_name": "plain chaas (spiced buttermilk)",
+    "category": "dairy",
+    "energy_kcal_per_100g": 28,
+    "protein_g": 1.8,
+    "fat_g": 1,
+    "carbs_g": 2.8,
+    "iron_mg": 0.1,
+    "portion_unit": "1 glass (180 mL)",
+    "portion_energy_kcal": 50,
+    "portion_protein_g": 3.2,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 1,
+    "allergy_tags": [
+      "milk"
+    ],
+    "meal_types": [
+      "lunch",
+      "snack"
+    ],
+    "tags": [
+      "chaas",
+      "buttermilk",
+      "hydration",
+      "cooling",
+      "cumin_mint",
+      "probiotic"
+    ]
+  },
+  {
+    "food_id": "F_DAI_005",
+    "food_name": "pure cow ghee",
+    "category": "fat",
+    "energy_kcal_per_100g": 884,
+    "protein_g": 0,
+    "fat_g": 99.5,
+    "carbs_g": 0,
+    "iron_mg": 0,
+    "portion_unit": "1 teaspoon (5g)",
+    "portion_energy_kcal": 44,
+    "portion_protein_g": 0,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "high",
+    "fat_level_fried": "high",
+    "glycemic_index": "low",
+    "age_min": 0.6,
+    "allergy_tags": [
+      "milk"
+    ],
+    "meal_types": [
+      "breakfast",
+      "lunch",
+      "dinner"
+    ],
+    "tags": [
+      "ghee",
+      "butyric_acid",
+      "energy_density",
+      "fat_soluble_vitamins",
+      "weaning_fat"
+    ]
+  },
+  {
+    "food_id": "F_VEG_001",
+    "food_name": "steamed palak (spinach puree)",
+    "category": "vegetable",
+    "energy_kcal_per_100g": 26,
+    "protein_g": 2.9,
+    "fat_g": 0.4,
+    "carbs_g": 2.8,
+    "iron_mg": 2.7,
+    "portion_unit": "1 small cup (80g)",
+    "portion_energy_kcal": 21,
+    "portion_protein_g": 2.3,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 0.6,
+    "allergy_tags": [],
+    "meal_types": [
+      "lunch",
+      "dinner"
+    ],
+    "tags": [
+      "palak",
+      "spinach",
+      "folate",
+      "beta_carotene",
+      "leafy_greens"
+    ]
+  },
+  {
+    "food_id": "F_VEG_002",
+    "food_name": "sautéed moringa leaves (drumstick greens)",
+    "category": "vegetable",
+    "energy_kcal_per_100g": 64,
+    "protein_g": 6.7,
+    "fat_g": 1.4,
+    "carbs_g": 8.3,
+    "iron_mg": 4,
+    "portion_unit": "1/2 cup (60g)",
+    "portion_energy_kcal": 38,
+    "portion_protein_g": 4,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 0.8,
+    "allergy_tags": [],
+    "meal_types": [
+      "lunch",
+      "dinner"
+    ],
+    "tags": [
+      "moringa",
+      "drumstick_leaves",
+      "superfood",
+      "calcium_iron_rich",
+      "vitamin_a"
+    ]
+  },
+  {
+    "food_id": "F_VEG_003",
+    "food_name": "steamed carrot sticks",
+    "category": "vegetable",
+    "energy_kcal_per_100g": 41,
+    "protein_g": 0.9,
+    "fat_g": 0.2,
+    "carbs_g": 9.6,
+    "iron_mg": 0.3,
+    "portion_unit": "1/2 cup sticks (60g)",
+    "portion_energy_kcal": 25,
+    "portion_protein_g": 0.5,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 0.6,
+    "allergy_tags": [],
+    "meal_types": [
+      "snack",
+      "lunch"
+    ],
+    "tags": [
+      "carrots",
+      "beta_carotene",
+      "finger_food",
+      "vitamin_a",
+      "sweet_taste"
+    ]
+  },
+  {
+    "food_id": "F_VEG_004",
+    "food_name": "mashed orange pumpkin",
+    "category": "vegetable",
+    "energy_kcal_per_100g": 26,
+    "protein_g": 1,
+    "fat_g": 0.1,
+    "carbs_g": 6.5,
+    "iron_mg": 0.8,
+    "portion_unit": "1/2 cup mash (80g)",
+    "portion_energy_kcal": 21,
+    "portion_protein_g": 0.8,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 0.6,
+    "allergy_tags": [],
+    "meal_types": [
+      "lunch",
+      "dinner"
+    ],
+    "tags": [
+      "pumpkin",
+      "kaddu",
+      "beta_carotene",
+      "weaning_vegetable",
+      "soft_texture"
+    ]
+  },
+  {
+    "food_id": "F_VEG_005",
+    "food_name": "bottle gourd curry (lauki sabzi)",
+    "category": "vegetable",
+    "energy_kcal_per_100g": 15,
+    "protein_g": 0.6,
+    "fat_g": 1.2,
+    "carbs_g": 2.5,
+    "iron_mg": 0.4,
+    "portion_unit": "1 cup (120g)",
+    "portion_energy_kcal": 35,
+    "portion_protein_g": 0.7,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 0.6,
+    "allergy_tags": [],
+    "meal_types": [
+      "lunch",
+      "dinner"
+    ],
+    "tags": [
+      "lauki",
+      "bottle_gourd",
+      "hydration",
+      "easy_digest",
+      "gentle_vegetable"
+    ]
+  },
+  {
+    "food_id": "F_VEG_006",
+    "food_name": "steamed sweet potato cubes",
+    "category": "tuber",
+    "energy_kcal_per_100g": 86,
+    "protein_g": 1.6,
+    "fat_g": 0.1,
+    "carbs_g": 20.1,
+    "iron_mg": 0.6,
+    "portion_unit": "1/2 cup (80g)",
+    "portion_energy_kcal": 69,
+    "portion_protein_g": 1.3,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 0.6,
+    "allergy_tags": [],
+    "meal_types": [
+      "snack",
+      "breakfast"
+    ],
+    "tags": [
+      "sweet_potato",
+      "shakarkandi",
+      "beta_carotene",
+      "fiber_rich",
+      "finger_food"
+    ]
+  },
+  {
+    "food_id": "F_VEG_007",
+    "food_name": "boiled green peas mash",
+    "category": "vegetable",
+    "energy_kcal_per_100g": 81,
+    "protein_g": 5.4,
+    "fat_g": 0.4,
+    "carbs_g": 14.5,
+    "iron_mg": 1.5,
+    "portion_unit": "1/2 cup (70g)",
+    "portion_energy_kcal": 57,
+    "portion_protein_g": 3.8,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 0.7,
+    "allergy_tags": [],
+    "meal_types": [
+      "lunch",
+      "dinner"
+    ],
+    "tags": [
+      "green_peas",
+      "matar",
+      "plant_protein",
+      "vitamin_k",
+      "fiber"
+    ]
+  },
+  {
+    "food_id": "F_VEG_008",
+    "food_name": "steamed beetroot mash",
+    "category": "vegetable",
+    "energy_kcal_per_100g": 43,
+    "protein_g": 1.6,
+    "fat_g": 0.2,
+    "carbs_g": 9.6,
+    "iron_mg": 0.8,
+    "portion_unit": "1/2 cup (70g)",
+    "portion_energy_kcal": 30,
+    "portion_protein_g": 1.1,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "medium",
+    "age_min": 0.7,
+    "allergy_tags": [],
+    "meal_types": [
+      "lunch",
+      "dinner"
+    ],
+    "tags": [
+      "beetroot",
+      "nitrates",
+      "folate",
+      "colorful_vegetable",
+      "weaning_food"
+    ]
+  },
+  {
+    "food_id": "F_FRU_001",
+    "food_name": "mashed ripe banana",
+    "category": "fruit",
+    "energy_kcal_per_100g": 89,
+    "protein_g": 1.1,
+    "fat_g": 0.3,
+    "carbs_g": 22.8,
+    "iron_mg": 0.3,
+    "portion_unit": "1 small banana (80g)",
+    "portion_energy_kcal": 71,
+    "portion_protein_g": 0.9,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "medium",
+    "age_min": 0.5,
+    "allergy_tags": [],
+    "meal_types": [
+      "breakfast",
+      "snack"
+    ],
+    "tags": [
+      "banana",
+      "potassium",
+      "energy_dense",
+      "weaning_staple",
+      "bifidobacteria"
+    ]
+  },
+  {
+    "food_id": "F_FRU_002",
+    "food_name": "fresh ripe papaya cubes",
+    "category": "fruit",
+    "energy_kcal_per_100g": 43,
+    "protein_g": 0.5,
+    "fat_g": 0.3,
+    "carbs_g": 10.8,
+    "iron_mg": 0.2,
+    "portion_unit": "1 cup cubes (100g)",
+    "portion_energy_kcal": 43,
+    "portion_protein_g": 0.5,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "medium",
+    "age_min": 0.6,
+    "allergy_tags": [],
+    "meal_types": [
+      "breakfast",
+      "snack"
+    ],
+    "tags": [
+      "papaya",
+      "beta_carotene",
+      "papain",
+      "vitamin_c",
+      "constipation_relief"
+    ]
+  },
+  {
+    "food_id": "F_FRU_003",
+    "food_name": "fresh guava slices",
+    "category": "fruit",
+    "energy_kcal_per_100g": 68,
+    "protein_g": 2.6,
+    "fat_g": 1,
+    "carbs_g": 14.3,
+    "iron_mg": 0.3,
+    "portion_unit": "1 medium guava (100g)",
+    "portion_energy_kcal": 68,
+    "portion_protein_g": 2.6,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 0.8,
+    "allergy_tags": [],
+    "meal_types": [
+      "snack"
+    ],
+    "tags": [
+      "guava",
+      "amrood",
+      "vitamin_c_dense",
+      "pectin_fiber",
+      "immune_boost"
+    ]
+  },
+  {
+    "food_id": "F_FRU_004",
+    "food_name": "stewed apple puree",
+    "category": "fruit",
+    "energy_kcal_per_100g": 52,
+    "protein_g": 0.3,
+    "fat_g": 0.2,
+    "carbs_g": 13.8,
+    "iron_mg": 0.1,
+    "portion_unit": "1/2 cup (80g)",
+    "portion_energy_kcal": 42,
+    "portion_protein_g": 0.2,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 0.5,
+    "allergy_tags": [],
+    "meal_types": [
+      "breakfast",
+      "snack"
+    ],
+    "tags": [
+      "apple_puree",
+      "stewed_apple",
+      "pectin",
+      "first_weaning_food",
+      "soothing"
+    ]
+  },
+  {
+    "food_id": "F_FRU_005",
+    "food_name": "fresh pomegranate arils",
+    "category": "fruit",
+    "energy_kcal_per_100g": 83,
+    "protein_g": 1.7,
+    "fat_g": 1.2,
+    "carbs_g": 18.7,
+    "iron_mg": 0.3,
+    "portion_unit": "1/2 cup arils (75g)",
+    "portion_energy_kcal": 62,
+    "portion_protein_g": 1.3,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 1,
+    "allergy_tags": [],
+    "meal_types": [
+      "snack"
+    ],
+    "tags": [
+      "pomegranate",
+      "anar",
+      "antioxidants",
+      "punicalagin",
+      "folate"
+    ]
+  },
+  {
+    "food_id": "F_FRU_006",
+    "food_name": "sweet lime (mosambi) slices",
+    "category": "fruit",
+    "energy_kcal_per_100g": 43,
+    "protein_g": 0.8,
+    "fat_g": 0.3,
+    "carbs_g": 9.3,
+    "iron_mg": 0.7,
+    "portion_unit": "1 medium fruit (100g)",
+    "portion_energy_kcal": 43,
+    "portion_protein_g": 0.8,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 0.7,
+    "allergy_tags": [],
+    "meal_types": [
+      "snack"
+    ],
+    "tags": [
+      "mosambi",
+      "sweet_lime",
+      "vitamin_c",
+      "hydration",
+      "citrus_whole_fruit"
+    ]
+  },
+  {
+    "food_id": "F_FRU_007",
+    "food_name": "fresh amla (indian gooseberry)",
+    "category": "fruit",
+    "energy_kcal_per_100g": 44,
+    "protein_g": 0.9,
+    "fat_g": 0.1,
+    "carbs_g": 10.2,
+    "iron_mg": 1.2,
+    "portion_unit": "1 small fruit grated (20g)",
+    "portion_energy_kcal": 9,
+    "portion_protein_g": 0.2,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 0.8,
+    "allergy_tags": [],
+    "meal_types": [
+      "snack",
+      "lunch"
+    ],
+    "tags": [
+      "amla",
+      "vitamin_c_powerhouse",
+      "iron_absorption_enhancer",
+      "antioxidant"
+    ]
+  },
+  {
+    "food_id": "F_EGG_001",
+    "food_name": "boiled egg (whole)",
+    "category": "protein",
+    "energy_kcal_per_100g": 155,
+    "protein_g": 12.6,
+    "fat_g": 10.6,
+    "carbs_g": 1.1,
+    "iron_mg": 1.8,
+    "portion_unit": "1 large egg (50g)",
+    "portion_energy_kcal": 78,
+    "portion_protein_g": 6.3,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "medium",
+    "fat_level_fried": "medium",
+    "glycemic_index": "low",
+    "age_min": 0.6,
+    "allergy_tags": [
+      "egg"
+    ],
+    "meal_types": [
+      "breakfast",
+      "lunch",
+      "snack"
+    ],
+    "tags": [
+      "boiled_egg",
+      "complete_protein",
+      "choline",
+      "vitamin_d",
+      "lutein",
+      "growth_food"
+    ]
+  },
+  {
+    "food_id": "F_EGG_002",
+    "food_name": "vegetable egg bhurji (scramble)",
+    "category": "protein",
+    "energy_kcal_per_100g": 165,
+    "protein_g": 11.2,
+    "fat_g": 11.5,
+    "carbs_g": 3.5,
+    "iron_mg": 2.1,
+    "portion_unit": "1 serving (80g)",
+    "portion_energy_kcal": 132,
+    "portion_protein_g": 9,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "medium",
+    "fat_level_fried": "medium",
+    "glycemic_index": "low",
+    "age_min": 0.8,
+    "allergy_tags": [
+      "egg"
+    ],
+    "meal_types": [
+      "breakfast",
+      "lunch",
+      "dinner"
+    ],
+    "tags": [
+      "egg_bhurji",
+      "tomatoes_onions",
+      "high_protein",
+      "tiffin_filling"
+    ]
+  },
+  {
+    "food_id": "F_MEA_001",
+    "food_name": "minced chicken with vegetables",
+    "category": "protein",
+    "energy_kcal_per_100g": 140,
+    "protein_g": 18.5,
+    "fat_g": 5.5,
+    "carbs_g": 3,
+    "iron_mg": 1.3,
+    "portion_unit": "1 small bowl (80g)",
+    "portion_energy_kcal": 112,
+    "portion_protein_g": 14.8,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "medium",
+    "fat_level_fried": "medium",
+    "glycemic_index": "low",
+    "age_min": 0.7,
+    "allergy_tags": [],
+    "meal_types": [
+      "lunch",
+      "dinner"
+    ],
+    "tags": [
+      "minced_chicken",
+      "heme_iron",
+      "high_protein",
+      "toddler_soft_food"
+    ]
+  },
+  {
+    "food_id": "F_FIS_001",
+    "food_name": "steamed pomfret / rohu fish",
+    "category": "protein",
+    "energy_kcal_per_100g": 105,
+    "protein_g": 19,
+    "fat_g": 2.8,
+    "carbs_g": 0,
+    "iron_mg": 1,
+    "portion_unit": "1 deboned fillet (60g)",
+    "portion_energy_kcal": 63,
+    "portion_protein_g": 11.4,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 0.8,
+    "allergy_tags": [
+      "fish"
+    ],
+    "meal_types": [
+      "lunch",
+      "dinner"
+    ],
+    "tags": [
+      "fish",
+      "dha",
+      "omega_3",
+      "iodine",
+      "deboned",
+      "low_mercury"
+    ]
+  },
+  {
+    "food_id": "F_NUT_001",
+    "food_name": "soaked and peeled almonds (powdered)",
+    "category": "protein",
+    "energy_kcal_per_100g": 579,
+    "protein_g": 21.2,
+    "fat_g": 49.9,
+    "carbs_g": 21.6,
+    "iron_mg": 3.7,
+    "portion_unit": "1 tablespoon powder (10g)",
+    "portion_energy_kcal": 58,
+    "portion_protein_g": 2.1,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 0.6,
+    "allergy_tags": [
+      "tree_nuts"
+    ],
+    "meal_types": [
+      "breakfast",
+      "snack"
+    ],
+    "tags": [
+      "almond_powder",
+      "badam",
+      "vitamin_e",
+      "healthy_fats",
+      "choking_safe_powder"
+    ]
+  },
+  {
+    "food_id": "F_NUT_002",
+    "food_name": "crushed walnuts",
+    "category": "protein",
+    "energy_kcal_per_100g": 654,
+    "protein_g": 15.2,
+    "fat_g": 65.2,
+    "carbs_g": 13.7,
+    "iron_mg": 2.9,
+    "portion_unit": "1 tablespoon crushed (10g)",
+    "portion_energy_kcal": 65,
+    "portion_protein_g": 1.5,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 0.8,
+    "allergy_tags": [
+      "tree_nuts"
+    ],
+    "meal_types": [
+      "breakfast",
+      "snack"
+    ],
+    "tags": [
+      "walnuts",
+      "akhrot",
+      "plant_omega_3",
+      "ala",
+      "brain_food"
+    ]
+  },
+  {
+    "food_id": "F_SED_001",
+    "food_name": "roasted white sesame seeds (til)",
+    "category": "protein",
+    "energy_kcal_per_100g": 573,
+    "protein_g": 17.7,
+    "fat_g": 49.7,
+    "carbs_g": 23.4,
+    "iron_mg": 14.6,
+    "portion_unit": "1 teaspoon (5g)",
+    "portion_energy_kcal": 29,
+    "portion_protein_g": 0.9,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 0.8,
+    "allergy_tags": [
+      "sesame"
+    ],
+    "meal_types": [
+      "snack",
+      "lunch"
+    ],
+    "tags": [
+      "sesame",
+      "til",
+      "calcium_dense",
+      "iron_dense",
+      "seed_sprinkle"
+    ]
+  },
+  {
+    "food_id": "F_SED_002",
+    "food_name": "roasted pumpkin seed powder",
+    "category": "protein",
+    "energy_kcal_per_100g": 559,
+    "protein_g": 30.2,
+    "fat_g": 49.1,
+    "carbs_g": 10.7,
+    "iron_mg": 8.8,
+    "portion_unit": "1 tablespoon powder (10g)",
+    "portion_energy_kcal": 56,
+    "portion_protein_g": 3,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 0.8,
+    "allergy_tags": [],
+    "meal_types": [
+      "breakfast",
+      "snack"
+    ],
+    "tags": [
+      "pumpkin_seeds",
+      "zinc_rich",
+      "magnesium_rich",
+      "protein_boost",
+      "toddler_powder"
+    ]
+  },
+  {
+    "food_id": "F_SED_003",
+    "food_name": "roasted makhana (fox nuts)",
+    "category": "snack",
+    "energy_kcal_per_100g": 347,
+    "protein_g": 9.7,
+    "fat_g": 0.1,
+    "carbs_g": 76.9,
+    "iron_mg": 1.4,
+    "portion_unit": "1 bowl roasted (30g)",
+    "portion_energy_kcal": 104,
+    "portion_protein_g": 2.9,
+    "digestibility_boiled": "high",
+    "digestibility_fried": "low",
+    "fat_level_fried": "low",
+    "glycemic_index": "low",
+    "age_min": 1,
+    "allergy_tags": [],
+    "meal_types": [
+      "snack"
+    ],
+    "tags": [
+      "makhana",
+      "fox_nuts",
+      "healthy_snack",
+      "crunchy",
+      "calcium",
+      "magnesium"
+    ]
   }
 ]

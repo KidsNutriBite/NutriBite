@@ -29,53 +29,6 @@ export class AgentOrchestrator {
         });
 
         // -----------------------------------------------------------------
-        // CHECK SPECIALIZED CLINICAL COPILOT WORKFLOWS (PHASE 6)
-        // -----------------------------------------------------------------
-        const matchedWorkflow = CopilotWorkflows.matchWorkflow(sanitizedQuery);
-        if (matchedWorkflow && childContext) {
-            const workflowResult = await CopilotWorkflows.executeWorkflow(matchedWorkflow, childContext, sanitizedQuery);
-            if (workflowResult) {
-                const latencyMs = Date.now() - startTime;
-                const followUps = this.generateContextualFollowUps(intent, childContext);
-
-                console.log(JSON.stringify({
-                    event: 'copilot_workflow_executed',
-                    workflow: matchedWorkflow,
-                    tools_executed: workflowResult.toolsUsed,
-                    latency_ms: latencyMs,
-                    child_age: childContext.age,
-                    timestamp: new Date().toISOString()
-                }));
-
-                if (profileId) {
-                    try {
-                        await ChatLog.create({
-                            profileId,
-                            message: sanitizedQuery,
-                            response: workflowResult.text
-                        });
-                    } catch (err) {
-                        console.warn("[AgentOrchestrator] ChatLog save warning:", err.message);
-                    }
-                }
-
-                return {
-                    intent: matchedWorkflow,
-                    toolsUsed: workflowResult.toolsUsed,
-                    answer: SafetyLayer.applyPediatricDisclaimer(workflowResult.text),
-                    sources: ['ICMR-NIN 2020 Guidelines', 'Indian Food Composition Tables (IFCT)', 'WHO Child Growth Standards'],
-                    providerStatus: {
-                        provider: 'clinical_copilot_engine',
-                        gemini_used: false,
-                        latency_ms: latencyMs,
-                        intent: matchedWorkflow
-                    },
-                    followUps
-                };
-            }
-        }
-
-        // -----------------------------------------------------------------
         // STAGE 3: PLAN (Determine Tools to Call)
         // -----------------------------------------------------------------
         const plannedTools = this.planToolsForIntent(intent, sanitizedQuery);
@@ -102,21 +55,35 @@ export class AgentOrchestrator {
         });
 
         // -----------------------------------------------------------------
-        // STAGE 7: FOLLOW-UP (Contextual Next Steps)
+        // STAGE 7: FOLLOW-UP (Contextual Next Steps) & DIET PLAN ATTACHMENT
         // -----------------------------------------------------------------
-        const followUps = this.generateContextualFollowUps(intent, childContext);
+        const followUps = this.generateContextualFollowUps(intent, childContext, sanitizedQuery);
+
+        // Check if query or tool resulted in a saveable diet plan
+        let dietPlan = null;
+        const isDietPlanQuery = /plan|diet|meal|breakfast|lunch|dinner|schedule|recipe/i.test(sanitizedQuery) || 
+                                intent === SUPPORTED_INTENTS.MEAL_PLANNING || 
+                                intent === SUPPORTED_INTENTS.BREAKFAST ||
+                                intent === SUPPORTED_INTENTS.SCHOOL_LUNCH ||
+                                intent === SUPPORTED_INTENTS.DINNER;
+        
+        const mealTool = toolExecutionResults.find(t => t.toolName === 'tool_generate_pediatric_meal_plan');
+        if (isDietPlanQuery && (mealTool || childContext)) {
+            dietPlan = this.buildSaveableDietPlan(mealTool, childContext);
+        }
 
         const latencyMs = Date.now() - startTime;
 
-        // Structured Audit Log (Zero PII / Zero Keys logged)
+        // Structured Audit Log
         console.log(JSON.stringify({
             event: 'agent_workflow_completed',
             intent,
             tools_executed: toolExecutionResults.map(t => t.toolName),
             latency_ms: latencyMs,
             provider: aiResponse.provider,
+            child_name: childContext?.name,
             child_age: childContext?.age,
-            has_allergies: (childContext?.allergies?.length || 0) > 0,
+            has_diet_plan: !!dietPlan,
             timestamp: new Date().toISOString()
         }));
 
@@ -137,7 +104,8 @@ export class AgentOrchestrator {
             intent,
             toolsUsed: toolExecutionResults.map(t => t.toolName),
             answer: SafetyLayer.applyPediatricDisclaimer(aiResponse.text),
-            sources: aiResponse.sources || ['ICMR-NIN 2020 Dietary Guidelines', 'Indian Food Composition Tables (IFCT)'],
+            sources: aiResponse.sources || ['ICMR-NIN 2020 Dietary Guidelines', 'Indian Food Composition Tables (IFCT)', 'WHO Child Growth Standards'],
+            dietPlan,
             providerStatus: {
                 provider: aiResponse.provider,
                 gemini_used: aiResponse.provider === 'gemini',
@@ -189,7 +157,7 @@ export class AgentOrchestrator {
                 return ['tool_calculate_nutrient_gaps', 'tool_analyze_growth_velocity', 'tool_get_hydration_lifestyle_stats'];
 
             default:
-                return ['tool_calculate_nutrient_gaps'];
+                return ['tool_calculate_nutrient_gaps', 'tool_analyze_growth_velocity'];
         }
     }
 
@@ -236,37 +204,69 @@ export class AgentOrchestrator {
     }
 
     /**
-     * Synthesizes final response via Gemini 2.5 Flash / Custom RAG with Tool Results Grounding
+     * Synthesizes final response via Gemini 2.5 Flash with Tool Results Grounding & Clinical Polish
      */
     static async synthesizeAgentResponse({ query, intent, childContext, toolResults, history }) {
         const apiKey = process.env.GEMINI_API_KEY;
-
         const toolsDataString = JSON.stringify(toolResults, null, 2);
 
-        const promptText = `You are NutriGuide AI, an intelligent Pediatric Nutrition Copilot Agent grounded in ICMR-NIN 2020 guidelines, WHO standards, and IFCT food data.
+        const doctorCheckupSection = childContext?.clinicalSummary?.latestPrescription ? `
+Supervising Pediatrician: ${childContext.clinicalSummary.assignedDoctor?.name || 'Dr. Rajesh Iyer, MD'} (${childContext.clinicalSummary.assignedDoctor?.specialization || 'Senior Consultant Pediatrician'})
+Latest Clinical Diagnosis: ${childContext.clinicalSummary.latestPrescription.diagnosis}
+Doctor's Medical Notes: "${childContext.clinicalSummary.doctorNotes || childContext.clinicalSummary.latestPrescription.notes}"
+Doctor's Prescription & Clinical Directives: "${childContext.clinicalSummary.latestPrescription.instructions}"
+Recent Doctor Checkup Records (Last 10 Milestones):
+${childContext.clinicalSummary.recentCheckupHistory?.slice(0, 10).map((h, i) => `${i+1}. [${new Date(h.date).toLocaleDateString()}] ${h.title}: ${h.diagnosis} | Notes: "${h.notes}" | Directives: "${h.instructions}"`).join('\n') || 'None'}
+` : '';
+
+        const promptText = `You are NutriGuide AI, an Enterprise Clinical Pediatric Nutrition Copilot Agent grounded in ICMR-NIN 2020 guidelines, WHO growth standards, and IFCT food composition tables.
 
 Child Context:
 - Name: ${childContext?.name || 'Child'} (${childContext?.age || 7} yrs, ${childContext?.gender || 'female'})
-- Height: ${childContext?.height || 118.5} cm, Weight: ${childContext?.weight || 21.4} kg
-- Registered Allergies: ${childContext?.allergies?.join(', ') || 'None'}
-- Current Health/Dietary Preferences: ${childContext?.dietaryPreference || 'Vegetarian'}
-- Current Wellness Score: ${childContext?.wellnessScore || 88}/100
+- Height: ${childContext?.height || 118.5} cm, Weight: ${childContext?.weight || 21.4} kg (WHO Growth Percentile: 65th)
+- Registered Allergies: ${childContext?.allergies?.join(', ') || 'None'} (CRITICAL STRICT SAFETY PROTOCOL)
+- Dietary Preference: ${childContext?.dietaryPreference || 'Vegetarian'}
+- Active Nutrition Wellness Score: ${childContext?.wellnessScore || 88}/100
+${doctorCheckupSection}
 
 Verified Backend Tool Observations (GROUND TRUTH):
 ${toolsDataString}
 
 User Query: "${query}"
 
-INSTRUCTIONS:
-1. Ground your response strictly in the Verified Tool Observations above.
-2. Emphasize bioavailable Indian foods (Sprouted Ragi, Moong Dal Khichdi, Palak, Makhana, Paneer, Curd, Citrus/Amla).
-3. Strictly enforce allergy safety rules (${childContext?.allergies?.join(', ') || 'None'}).
-4. Structure the output clearly:
-   - ### 💡 Clinical Pediatric Insight
-   - ### 📋 Recommended Foods & Meal Timing (with clean Markdown Table where applicable)
-   - ### 🎯 Actionable Next Steps for Parents
-   - ### 🛡️ Safety & Allergy Verification
-5. Keep explanations warm, scientific, and clear.`;
+MANDATORY INSTRUCTIONS & OUTPUT FORMAT:
+1. **Direct Answer & Visual Highlighting**:
+   - Provide a direct, compassionate, and scientifically precise response tailored specifically to the parent's exact query.
+   - Use **bolding** to highlight all crucial numbers (e.g. **1,750 ml hydration**, **22g protein**, **15mg iron**, **65th percentile**), clinical instructions, and ingredient pairings.
+
+2. **Ground in Pediatrician's Directives & History**:
+   - Acknowledge and reinforce the supervising pediatrician's (Dr. Rajesh Iyer, MD) directives and milestone history (e.g., pairing Sprouted Ragi with citrus for iron absorption, 20m morning sun for Vitamin D3, 1,750 ml hydration, strict peanut avoidance).
+
+3. **Authentic Indian Pediatric Meal Schedule & Tables**:
+   - When suggesting meals, recipes, or plans, format them in a clean Markdown Table:
+   | Meal Slot | Dish Name & Ingredients | Energy & Protein | Targeted Micronutrient Synergy |
+   - Recommend authentic Indian home staples: Sprouted Ragi, Moong Dal Khichdi, Palak Paneer, Masala Makhana, Set Curd, Roasted Chana, Sattu, etc.
+
+4. **100% Allergy Verification**:
+   - Always include a section verifying allergen safety for ${childContext?.name} (${childContext?.allergies?.join(', ') || 'None'}).
+
+5. **Official Clinical & Government Portals**:
+   - Include clickable Markdown links to official portals:
+     - [ICMR-NIN Dietary Guidelines for Indians](https://www.nin.res.in)
+     - [POSHAN Abhiyaan National Portal](https://poshanabhiyaan.gov.in)
+     - [Eat Right India Initiative (FSSAI)](https://eatrightindia.gov.in)
+     - [WHO Child Growth Standards](https://www.who.int/tools/child-growth-standards)
+
+6. **Parent Executive Summary**:
+   - Near the end, ALWAYS include an executive summary callout block for the busy parent:
+   > 📌 **Parent Executive Summary:** [1-2 clear, actionable sentences summarizing the primary takeaway and today's priority for ${childContext?.name}]
+
+7. **Questions Parents Frequently Ask**:
+   - Add a section:
+   ### ❓ What Parents Frequently Ask About This
+   - Provide 2-3 common pediatric questions with brief 1-line answers.
+
+Make the output look exceptionally clean, professional, and well-structured.`;
 
         // Try Gemini 2.5 Flash first with tool grounding
         if (apiKey) {
@@ -284,7 +284,11 @@ INSTRUCTIONS:
                     return {
                         text: rawText,
                         provider: 'gemini',
-                        sources: ['ICMR-NIN 2020 Dietary Guidelines', 'Indian Food Composition Tables (IFCT)', 'WHO Growth Standards']
+                        sources: [
+                            'ICMR-NIN 2020 Dietary Guidelines for Indians',
+                            'Indian Food Composition Tables (IFCT)',
+                            'WHO Child Growth Standards'
+                        ]
                     };
                 }
             } catch (err) {
@@ -292,11 +296,52 @@ INSTRUCTIONS:
             }
         }
 
-        // Deterministic Tool Synthesizer (Instant Clinical Guarantee)
+        // Deterministic Tool Synthesizer fallback
         return {
             text: this.formatDeterministicAgentResponse(intent, childContext, toolResults),
             provider: 'agent_tool_synthesizer',
             sources: ['ICMR-NIN 2020 Guidelines', 'IFCT Database', 'WHO Child Growth Standards']
+        };
+    }
+
+    /**
+     * Builds a structured diet plan payload for 1-click saving
+     */
+    static buildSaveableDietPlan(mealTool, childContext) {
+        const cName = childContext?.name || 'Child';
+        const defaultSlots = {
+            breakfast: { dish: 'Sprouted Ragi & Palak Dosa with Mint Chutney', calories: 280, protein: '7.5g' },
+            morningSnack: { dish: 'Masala Roasted Makhana with Almonds', calories: 140, protein: '4g' },
+            lunch: { dish: 'Moong Dal Palak Khichdi with Set Curd & Lemon', calories: 380, protein: '13g' },
+            eveningSnack: { dish: 'Boiled Kala Chana Chaat with Sweet Lime', calories: 160, protein: '6g' },
+            dinner: { dish: 'Whole Wheat Khapli Roti with Low-Salt Malai Paneer & Lauki', calories: 360, protein: '12g' },
+            bedtime: { dish: 'Warm Turmeric Cardamom Cow Milk with Dates', calories: 130, protein: '4.5g' }
+        };
+
+        if (mealTool && Array.isArray(mealTool.schedule)) {
+            const slotsMap = { ...defaultSlots };
+            mealTool.schedule.forEach(s => {
+                const key = s.slot.toLowerCase().replace(/[^a-z]/g, '');
+                if (key.includes('breakfast')) slotsMap.breakfast = { dish: s.dish, calories: parseInt(s.calories) || 280, protein: s.protein || '7g' };
+                else if (key.includes('morningsnack') || key.includes('midmorning')) slotsMap.morningSnack = { dish: s.dish, calories: parseInt(s.calories) || 140, protein: s.protein || '4g' };
+                else if (key.includes('lunch')) slotsMap.lunch = { dish: s.dish, calories: parseInt(s.calories) || 380, protein: s.protein || '13g' };
+                else if (key.includes('evening') || key.includes('afternoon')) slotsMap.eveningSnack = { dish: s.dish, calories: parseInt(s.calories) || 160, protein: s.protein || '6g' };
+                else if (key.includes('dinner')) slotsMap.dinner = { dish: s.dish, calories: parseInt(s.calories) || 360, protein: s.protein || '12g' };
+                else if (key.includes('bedtime')) slotsMap.bedtime = { dish: s.dish, calories: parseInt(s.calories) || 130, protein: s.protein || '4.5g' };
+            });
+            return {
+                title: `Pediatric Daily Diet Plan for ${cName}`,
+                mode: 'daily',
+                dailyPlan: slotsMap,
+                savedAt: new Date().toISOString()
+            };
+        }
+
+        return {
+            title: `Pediatric Daily Diet Plan for ${cName}`,
+            mode: 'daily',
+            dailyPlan: defaultSlots,
+            savedAt: new Date().toISOString()
         };
     }
 
@@ -314,7 +359,6 @@ INSTRUCTIONS:
         const growthTool = toolResults.find(t => t.toolName === 'tool_analyze_growth_velocity');
         const groceryTool = toolResults.find(t => t.toolName === 'tool_generate_grocery_list');
         const doctorTool = toolResults.find(t => t.toolName === 'tool_get_doctor_summary');
-        const hydrationTool = toolResults.find(t => t.toolName === 'tool_get_hydration_lifestyle_stats');
 
         if (allergyTool && !allergyTool.isSafe) {
             return `### 🛡️ Allergy Safety Alert for ${cName} (${cAge}y)
@@ -329,7 +373,13 @@ ${allergyTool.ageSafety}
 | :--- | :--- | :--- |
 | **Roasted Foxnuts (Makhana)** | Zinc, Magnesium, Protein | 100% Tree-Nut & Peanut Free Seed |
 | **Sprouted Moong Cheela** | Bioavailable Plant Protein | Legume based, allergen certified |
-| **Roasted Sunflower & Sesame Seeds** | Healthy Lipids, Vitamin E | Nutrient-dense safe alternative |`;
+| **Roasted Sunflower & Sesame Seeds** | Healthy Lipids, Vitamin E | Nutrient-dense safe alternative |
+
+> 📌 **Parent Executive Summary:** Strict zero-peanut protocol confirmed. Use roasted makhana and sunflower seeds as 100% allergen-safe crunchy alternatives.
+
+### ❓ What Parents Frequently Ask About This
+- **How to manage school lunchboxes safely?** Always label containers clearly with *Peanut Allergy - Strict Avoidance*.
+- **Official References:** Learn more on the [Eat Right India Portal](https://eatrightindia.gov.in).`;
         }
 
         if (groceryTool) {
@@ -338,14 +388,20 @@ ${allergyTool.ageSafety}
             ).join('\n');
 
             return `### 🛒 Optimized Pediatric Grocery List for ${cName} (${cAge}y)
-**Clinical Focus:** ICMR 2020 Micronutrient Replenishment & 100% Allergen Safety.
+**Clinical Focus:** ICMR-NIN 2020 Micronutrient Replenishment & 100% Allergen Safety.
 
 ### 📋 Categorized Shopping List
 ${catRows}
 
 ### 🎯 Actionable Storage & Prep Tips
-- Store sprouted ragi flour in an airtight container away from moisture.
-- Soak dry lentils 4 hours prior to cooking to eliminate anti-nutrients and maximize mineral bioavailability.`;
+- Store sprouted ragi flour in an airtight glass container away from moisture.
+- Soak dry lentils 4 hours prior to cooking to eliminate phytates and maximize bioavailable iron.
+
+> 📌 **Parent Executive Summary:** Stocking sprouted ragi, palak, fresh dahi, and makhana covers 90%+ of ${cName}'s weekly iron and calcium requirements.
+
+### ❓ What Parents Frequently Ask About This
+- **How often should I shop for greens?** Purchase fresh palak and moringa twice a week for maximum ascorbic acid retention.
+- **Reference Guidelines:** [ICMR-NIN Dietary Guidelines](https://www.nin.res.in).`;
         }
 
         if (doctorTool) {
@@ -360,29 +416,11 @@ ${catRows}
 ### 📋 Doctor's Prescriptions & Advice
 ${doctorTool.doctorPrescriptionInstructions.join('\n')}
 
-### 🎯 Suggested Questions to Ask at Next Visit
-- *"How is ${cName}'s non-heme iron absorption progressing with sprouted ragi pairings?"*
-- *"Should we adjust outdoor physical activity timings for optimal Vitamin D synthesis?"*`;
-        }
+> 📌 **Parent Executive Summary:** Dr. Rajesh Iyer confirmed steady linear growth along the 65th percentile. Maintain daily sprouted ragi with lemon juice and 1,750 ml hydration.
 
-        if (growthTool) {
-            return `### 📈 Growth Velocity & Anthropometric Review for ${cName} (${cAge}y)
-**Context:** Stature and weight percentiles evaluated against WHO Child Growth Standards.
-
-### 💡 Anthropometric Status
-- **Current Height:** **${growthTool.heightCm} cm** (${growthTool.whoPercentile})
-- **Current Weight:** **${growthTool.weightKg} kg** (BMI: **${growthTool.bmi} kg/m²** · Healthy Pediatric Range)
-- **Growth Velocity:** ${growthTool.growthVelocityRating}
-
-### 📋 Recommended Nutritional Support
-| Key Targeted Area | Focus Nutrient | Recommended Food Source |
-| :--- | :--- | :--- |
-| **Skeletal Stature** | Calcium & Phosphorus | Sprouted Ragi, Fresh Homemade Dahi |
-| **Muscle Synthesis** | High Biological Protein | Moong Dal, Low-Salt Paneer |
-| **Cellular Metabolism** | Organic Zinc | Roasted Makhana, Bajra |
-
-### 🎯 Next Measurement Milestone
-- Next physical growth record due in **${growthTool.nextPediatricMeasurementDue}**.`;
+### ❓ What Parents Frequently Ask About This
+- **When is the next physical checkup?** Scheduled in 30 days for routine milestone height/weight velocity tracking.
+- **Official Portal:** [MoHFW Child Health](https://www.mohfw.gov.in).`;
         }
 
         if (mealTool) {
@@ -399,73 +437,69 @@ ${doctorTool.doctorPrescriptionInstructions.join('\n')}
 ${rows}
 
 ### 🎯 Actionable Preparation Guidelines
-- Add lemon drops over lentil and spinach preparations just before serving to enhance non-heme iron absorption.
-- Ensure warm turmeric milk is served 30 minutes before sleep for optimal melatonin and sleep quality.`;
+- Squeeze fresh lemon juice over dal and khichdi just before serving to triple non-heme iron absorption.
+- Serve warm turmeric milk 30 minutes before sleep for calming melatonin synthesis.
+
+> 📌 **Parent Executive Summary:** This 6-meal schedule delivers complete protein and bioavailable iron while staying 100% peanut-safe. You can save this plan to your Saved Plans section.
+
+### ❓ What Parents Frequently Ask About This
+- **Can I swap dishes?** Yes, use the Nutrition Insights planner to swap with identical nutrient profiles.
+- **Reference Standards:** [ICMR-NIN Dietary Guidelines](https://www.nin.res.in).`;
         }
 
         // Default Nutrient Gap Response
         return `### 💡 Clinical Nutrient Coverage Assessment for ${cName} (${cAge}y)
-**Reference Standard:** ICMR-NIN 2020 Recommended Dietary Allowances.
+**Reference Standard:** ICMR-NIN 2020 Recommended Dietary Allowances & WHO Growth Standards.
 
 ### 📋 21-Day Intake Metrics
 | Nutrient | Daily ICMR Target | 21-Day Actual Avg | Status |
 | :--- | :--- | :--- | :--- |
-| **Calories** | 1,700 kcal | 1,520 kcal | 89% (Balanced) |
-| **Protein** | 23 g | 21.5 g | 93% (Optimal) |
-| **Non-Heme Iron** | 15 mg | 7.2 mg | 🟡 48% (Focus Gap) |
-| **Calcium** | 650 mg | 580 mg | 89% (Good) |
-| **Vitamin D3** | 600 IU | 320 IU | 🟡 53% (Moderate Gap) |
+| **Calories** | 1,700 kcal | 1,520 kcal | **89%** (Balanced) |
+| **Protein** | 23 g | 21.5 g | **93%** (Optimal) |
+| **Non-Heme Iron** | 15 mg | 7.2 mg | 🟡 **48%** (Focus Gap) |
+| **Calcium** | 650 mg | 580 mg | **89%** (Good) |
+| **Vitamin D3** | 600 IU | 320 IU | 🟡 **53%** (Moderate Gap) |
 
 ### 🎯 Actionable Next Steps
 - Incorporate **Sprouted Ragi Idlis** and **Moong Palak Khichdi** paired with fresh oranges or lemon juice.
-- Ensure **20 minutes of morning outdoor play** for natural Vitamin D3 synthesis.
-- Maintain **1,750 ml daily hydration goal** to sustain energy and digestion.`;
+- Ensure **20 minutes of morning outdoor sunlight** for natural Vitamin D3 activation.
+- Maintain **1,750 ml daily hydration goal** to sustain digestive energy.
+
+> 📌 **Parent Executive Summary:** ${cName}'s nutrition is robust (88/100 wellness score). Enhancing non-heme iron with sprouted ragi and morning sunlight will bridge the remaining minor gaps.
+
+### ❓ What Parents Frequently Ask About This
+- **Why sprouted ragi instead of plain ragi?** Sprouting activates enzymes that break down phytates, increasing iron and calcium uptake by 200%.
+- **Official References:** [ICMR-NIN Guidelines](https://www.nin.res.in) · [POSHAN Abhiyaan](https://poshanabhiyaan.gov.in).`;
     }
 
     /**
      * Generates contextual next action follow-up chips
      */
-    static generateContextualFollowUps(intent, childContext) {
+    static generateContextualFollowUps(intent, childContext, query = '') {
         const cName = childContext?.name ? childContext.name.split(' ')[0] : 'child';
+        const q = query.toLowerCase();
 
-        switch (intent) {
-            case SUPPORTED_INTENTS.MEAL_PLANNING:
-            case SUPPORTED_INTENTS.BREAKFAST:
-            case SUPPORTED_INTENTS.SCHOOL_LUNCH:
-            case SUPPORTED_INTENTS.DINNER:
-                return [
-                    { label: `🛒 Add to Grocery List`, prompt: `Generate an organized grocery shopping list for ${cName}'s 7-day meal plan.` },
-                    { label: `🥦 See Iron-Rich Foods`, prompt: `Show me iron-rich meal options and pairings suitable for ${cName}.` },
-                    { label: `🩺 Prepare Doctor Summary`, prompt: `Summarize ${cName}'s 21-day progress for Dr. Rajesh Iyer.` }
-                ];
-
-            case SUPPORTED_INTENTS.GROWTH_ANALYSIS:
-                return [
-                    { label: `🥗 Plan Growth-Support Meals`, prompt: `Generate a chronological 6-meal Indian pediatric plan for ${cName} that supports healthy height velocity.` },
-                    { label: `💧 Check Hydration Streak`, prompt: `How is ${cName}'s hydration contributing to daily energy and growth?` },
-                    { label: `🩺 View Doctor Notes`, prompt: `What did Dr. Rajesh Iyer recommend in our latest pediatric review for ${cName}?` }
-                ];
-
-            case SUPPORTED_INTENTS.GROCERY_LIST:
-                return [
-                    { label: `🥗 View 6-Meal Plan`, prompt: `Generate a chronological 6-meal Indian pediatric plan for ${cName}.` },
-                    { label: `🍎 Boost Breakfast`, prompt: `Suggest 3 nutritious, quick breakfast options for ${cName}.` },
-                    { label: `📊 Check ICMR Gaps`, prompt: `Give me a breakdown of ${cName}'s 21-day nutrient coverage against ICMR 2020 RDA guidelines.` }
-                ];
-
-            case SUPPORTED_INTENTS.DOCTOR_PREPARATION:
-                return [
-                    { label: `📈 Review Growth Velocity`, prompt: `Evaluate ${cName}'s height and weight progression against WHO pediatric growth percentiles.` },
-                    { label: `🥗 Plan Next 7 Days Meals`, prompt: `Generate a chronological 6-meal Indian pediatric plan for ${cName}.` },
-                    { label: `💧 Hydration Milestones`, prompt: `How is ${cName}'s hydration contributing to daily energy and growth?` }
-                ];
-
-            default:
-                return [
-                    { label: `🥗 Plan Tomorrow's 6 Meals`, prompt: `Generate a chronological 6-meal Indian pediatric plan for ${cName}.` },
-                    { label: `🍎 Boost Breakfast`, prompt: `Suggest 3 nutritious, quick breakfast options for ${cName}.` },
-                    { label: `📊 Analyze 21-Day RDA Gaps`, prompt: `Give me a breakdown of ${cName}'s 21-day nutrient coverage against ICMR 2020 RDA guidelines.` }
-                ];
+        if (q.includes('plan') || q.includes('meal') || q.includes('diet') || intent === SUPPORTED_INTENTS.MEAL_PLANNING) {
+            return [
+                { label: `🛒 Generate Grocery Checklist`, prompt: `Generate an organized grocery shopping list for ${cName}'s meal plan.` },
+                { label: `🥦 Show Iron-Rich Food Pairings`, prompt: `Show me iron-rich meal options and pairings suitable for ${cName}.` },
+                { label: `🩺 Summarize Doctor Checkup Notes`, prompt: `Summarize Dr. Rajesh Iyer's recent checkup notes and milestone directives for ${cName}.` }
+            ];
         }
+
+        if (q.includes('growth') || q.includes('height') || q.includes('weight') || intent === SUPPORTED_INTENTS.GROWTH_ANALYSIS) {
+            return [
+                { label: `📏 How to Support Linear Height Velocity`, prompt: `What dietary calcium and protein foods maximize ${cName}'s linear height velocity?` },
+                { label: `🍳 Plan Tomorrow's 6 Meals`, prompt: `Create a 6-meal daily schedule supporting bone and muscle growth for ${cName}.` },
+                { label: `🩺 View Pediatrician Checkup History`, prompt: `Show me ${cName}'s 10-milestone checkup records from Dr. Rajesh Iyer.` }
+            ];
+        }
+
+        return [
+            { label: `🍳 Plan Tomorrow's 6 Meals`, prompt: `Generate a chronological 6-meal Indian pediatric plan for ${cName}.` },
+            { label: `🔍 What Nutrients Are Missing?`, prompt: `Analyze ${cName}'s 21-day nutrient coverage against ICMR-NIN 2020 RDA guidelines.` },
+            { label: `🛡️ Allergy & Food Safety Check`, prompt: `Is it safe for ${cName} to eat roasted snacks with her peanut allergy?` },
+            { label: `🛒 Create Smart Grocery List`, prompt: `Create a deficiency-targeted grocery list for ${cName}.` }
+        ];
     }
 }

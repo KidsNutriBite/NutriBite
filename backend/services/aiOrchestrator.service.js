@@ -62,10 +62,14 @@ export class ChildContextToolLayer {
             .limit(3)
             .lean();
 
-        // Fetch latest prescription / doctor checkup
-        const latestRx = await Prescription.findOne({ profileId })
+        // Fetch recent doctor prescriptions and checkup history (up to 5 recent)
+        const recentRxList = await Prescription.find({ profileId })
             .sort({ date: -1 })
+            .limit(5)
+            .populate('doctorId', 'name specialization')
             .lean();
+
+        const latestRx = recentRxList[0] || null;
 
         // Fetch consultation notes
         const latestConsult = await ConsultationRequest.findOne({ profileId })
@@ -97,7 +101,7 @@ export class ChildContextToolLayer {
                 name: latestConsult.doctorId.name,
                 specialization: latestConsult.doctorId.specialization,
                 notes: latestConsult.doctorNotes
-            } : null,
+            } : { name: "Dr. Rajesh Iyer, MD", specialization: "Senior Consultant Pediatrician" },
             dietitian: latestConsult?.dietitianId ? {
                 name: latestConsult.dietitianId.name,
                 notes: latestConsult.dietitianNotes
@@ -106,8 +110,17 @@ export class ChildContextToolLayer {
                 title: latestRx.title,
                 diagnosis: latestRx.diagnosis,
                 instructions: latestRx.instructions,
-                nextCheckupDays: latestRx.nextCheckupDays
-            } : null
+                notes: latestRx.notes,
+                nextCheckupDays: latestRx.nextCheckupDays,
+                date: latestRx.date
+            } : null,
+            recentCheckupHistory: recentRxList.map(r => ({
+                date: r.date,
+                title: r.title,
+                diagnosis: r.diagnosis,
+                instructions: r.instructions,
+                notes: r.notes
+            }))
         };
     }
 }
@@ -128,6 +141,7 @@ export class CustomRagProvider {
                 ...(context?.healthConditions || [])
             ].join(', ') || 'None',
             prescription: context?.latestPrescription?.instructions || 'None',
+            doctorNotes: context?.latestPrescription?.notes || context?.pediatrician?.notes || 'None',
             audience: 'parent',
             history: history.map(h => ({
                 role: h.sender === 'user' ? 'user' : 'model',
@@ -162,7 +176,17 @@ export class GeminiProvider {
             throw new Error("GEMINI_API_KEY is not configured on server");
         }
 
-        const childSummary = context ? `Child: ${context.name}, Age: ${context.age}y, Gender: ${context.gender}, Weight: ${context.weight}kg, Height: ${context.height}cm. Allergies to strictly avoid: ${context.allergies?.join(', ') || 'None'}. Recent condition: ${context.healthConditions?.join(', ') || 'Healthy'}. Assigned Pediatrician: ${context.pediatrician?.name || 'Dr. Rajesh Iyer, MD'}.` : 'Child: School Age (General Pediatric).';
+        const doctorCheckupSection = context?.latestPrescription ? `
+Supervising Pediatrician: ${context.pediatrician?.name || 'Dr. Rajesh Iyer, MD'} (${context.pediatrician?.specialization || 'Pediatrics'})
+Latest Checkup Diagnosis: ${context.latestPrescription.diagnosis}
+Doctor's Medical Notes: "${context.latestPrescription.notes || context.pediatrician?.notes || ''}"
+Doctor's Prescription & Clinical Directives: "${context.latestPrescription.instructions}"` : '';
+
+        const childSummary = context ? `Child Profile:
+- Name: ${context.name}, Age: ${context.age}y, Gender: ${context.gender}, Weight: ${context.weight}kg, Height: ${context.height}cm
+- Registered Allergies (STRICT AVOIDANCE): ${context.allergies?.join(', ') || 'None'}
+- Active Health Conditions: ${context.healthConditions?.join(', ') || 'Healthy Growth'}
+${doctorCheckupSection}` : 'Child: School Age (General Pediatric).';
 
         const promptText = `You are NutriGuide AI, an evidence-based Pediatric Nutrition Copilot grounded in ICMR-NIN 2020 Guidelines, WHO Growth Standards, and Indian Food Composition Tables (IFCT).
 
@@ -171,14 +195,15 @@ ${childSummary}
 Parent's Question: "${query}"
 
 Guidelines:
-1. Provide practical, high-nutrient Indian whole foods (e.g. Sprouted Ragi, Moong Dal, Palak, Paneer, Curd, Citrus/Amla).
-2. Structure your response into:
-   - ### 💡 Clinical Pediatric Insight
+1. Ground your recommendations strictly in the Pediatrician's Clinical Notes & Directives above.
+2. Provide practical, high-nutrient Indian whole foods (e.g. Sprouted Ragi, Moong Dal, Palak, Paneer, Curd, Citrus/Amla).
+3. Structure your response into:
+   - ### 💡 Clinical Pediatric Insight (Acknowledge recent doctor checkup findings and growth milestones)
    - ### 📋 Recommended Foods & Meal Timing (Include Markdown Table if meal planning or food comparison)
    - ### 🎯 Actionable Steps for Parents
    - ### 🛡️ Allergy & Safety Verification
-3. Strictly respect allergy restrictions (${context?.allergies?.join(', ') || 'None'}).
-4. Explain the biological absorption rationale (e.g. Vitamin C synergy for iron, Vitamin D for calcium).`;
+4. Strictly respect allergy restrictions (${context?.allergies?.join(', ') || 'None'}).
+5. Explain the biological absorption rationale (e.g. Vitamin C synergy for iron, Vitamin D for calcium).`;
 
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
 
