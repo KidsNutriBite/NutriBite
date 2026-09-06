@@ -7,10 +7,12 @@
     "start": "node backend/server.js",
     "server": "cd backend && npm run dev",
     "client": "cd frontend && npm run dev",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "ai": "cd nutrikid_Agentic && uvicorn api:app --reload --port 8000",
+    "dev": "concurrently \"npm run server\" \"npm run client\" \"npm run ai\"",
     "start-project": "npm run dev",
     "start-frontend": "npm run client",
     "start-backend": "npm run server",
+    "start-ai": "npm run ai",
     "lint": "eslint .",
     "format": "prettier --write ."
   },
