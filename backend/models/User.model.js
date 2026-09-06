@@ -37,9 +37,17 @@ const userSchema = new mongoose.Schema(
         },
         role: {
             type: String,
-            enum: ['parent', 'doctor', 'dietitian'],
+            enum: ['parent', 'doctor', 'dietitian', 'admin'],
             default: 'parent',
             required: true,
+        },
+        status: {
+            type: String,
+            enum: ['Active', 'Inactive', 'Suspended'],
+            default: 'Active',
+        },
+        lastLoginAt: {
+            type: Date,
         },
         availabilityStatus: {
             type: String,

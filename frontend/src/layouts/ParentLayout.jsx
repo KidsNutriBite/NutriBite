@@ -33,6 +33,8 @@ const ParentLayout = ({ children }) => {
                     router.replace('/doctor/dashboard');
                 } else if (user.role === 'dietitian') {
                     router.replace('/dietitian/dashboard');
+                } else if (user.role === 'admin') {
+                    router.replace('/admin/dashboard');
                 } else {
                     router.replace('/login');
                 }
@@ -210,23 +212,44 @@ const ParentLayout = ({ children }) => {
                                     {notifications.length === 0 ? (
                                         <div className="p-8 text-center text-gray-500 text-sm">No notifications</div>
                                     ) : (
-                                        notifications.map(notif => (
-                                            <div
-                                                key={notif._id}
-                                                onClick={() => !notif.isRead && markAsRead(notif._id)}
-                                                className={`p-4 border-b border-slate-50 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors cursor-pointer ${!notif.isRead ? 'bg-blue-50/50 dark:bg-blue-900/10' : ''}`}
-                                            >
-                                                <div className="flex gap-3">
-                                                    <div className={`mt-1 h-2 w-2 rounded-full shrink-0 ${!notif.isRead ? 'bg-blue-500' : 'bg-transparent'}`} />
-                                                    <div>
-                                                        <p className="text-sm text-gray-800 dark:text-gray-200 leading-snug">{notif.message}</p>
-                                                        <span className="text-xs text-gray-400 mt-1 block">
-                                                            {new Date(notif.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                                        </span>
+                                        notifications.map(notif => {
+                                            const isMeal = notif.type === 'meal_reminder';
+                                            const isWater = notif.type === 'hydration_reminder';
+                                            return (
+                                                <div
+                                                    key={notif._id}
+                                                    onClick={() => !notif.isRead && markAsRead(notif._id)}
+                                                    className={`p-3.5 border-b border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/60 transition-colors cursor-pointer ${!notif.isRead ? (isWater ? 'bg-cyan-50/40 dark:bg-cyan-950/20' : isMeal ? 'bg-amber-50/40 dark:bg-amber-950/20' : 'bg-blue-50/50 dark:bg-blue-900/10') : ''}`}
+                                                >
+                                                    <div className="flex gap-3 items-start">
+                                                        <div className={`mt-0.5 h-7 w-7 rounded-full flex items-center justify-center shrink-0 ${
+                                                            isWater 
+                                                                ? 'bg-cyan-100 dark:bg-cyan-900/50 text-cyan-600 dark:text-cyan-400' 
+                                                                : isMeal 
+                                                                ? 'bg-amber-100 dark:bg-amber-900/50 text-amber-600 dark:text-amber-400' 
+                                                                : 'bg-primary/10 text-primary'
+                                                        }`}>
+                                                            <span className="material-symbols-outlined text-base">
+                                                                {isWater ? 'water_drop' : isMeal ? 'restaurant' : 'notifications'}
+                                                            </span>
+                                                        </div>
+                                                        <div className="flex-1 min-w-0">
+                                                            <p className="text-xs font-medium text-slate-800 dark:text-slate-200 leading-snug">{notif.message}</p>
+                                                            <div className="flex items-center justify-between mt-1.5">
+                                                                <span className="text-[10px] text-slate-400 font-semibold">
+                                                                    {new Date(notif.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                                </span>
+                                                                {notif.isDynamic && (
+                                                                    <span className="text-[9px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-1.5 py-0.5 rounded">
+                                                                        Daily Goal
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        ))
+                                            );
+                                        })
                                     )}
                                 </div>
                             </div>

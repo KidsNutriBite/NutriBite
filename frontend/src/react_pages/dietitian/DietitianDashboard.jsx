@@ -148,14 +148,39 @@ const DietitianDashboard = () => {
                                     {!c.profileId?.avatar && '👶'}
                                 </div>
                                 <div>
-                                    <div className="flex items-center gap-3">
+                                    <div className="flex items-center gap-3 flex-wrap">
                                         <h3 className="font-extrabold text-slate-800 dark:text-white text-lg">{c.profileId?.name}</h3>
                                         <span className={getStatusBadge(c.status)}>{getStatusLabel(c.status)}</span>
                                     </div>
                                     <p className="text-xs text-slate-400 mt-0.5">Assigned: {new Date(c.createdAt).toLocaleDateString()} • ID: {c._id.slice(-6)}</p>
-                                    <p className="text-sm font-semibold text-slate-600 dark:text-slate-300 mt-2">
+                                    
+                                    <p className="text-sm font-semibold text-slate-600 dark:text-slate-300 mt-1.5">
                                         {c.profileId?.age} Years • {c.profileId?.gender} • {c.profileId?.weight}kg
                                     </p>
+
+                                    {/* Post-Assignment Doctor Activity Badges */}
+                                    <div className="flex flex-wrap gap-1.5 mt-2.5">
+                                        {c.doctorId && (
+                                            <span className="px-2.5 py-0.5 rounded-md bg-purple-50 text-purple-700 dark:bg-purple-950/40 dark:text-purple-300 text-[10px] font-bold border border-purple-100 dark:border-purple-900/30 flex items-center gap-1">
+                                                <span>👨‍⚕️</span> Dr. {c.doctorId.name}
+                                            </span>
+                                        )}
+                                        {c.doctorNotes && (
+                                            <span className="px-2 py-0.5 rounded-md bg-pink-50 text-pink-700 dark:bg-pink-950/40 dark:text-pink-300 text-[10px] font-bold border border-pink-100 dark:border-pink-900/30 flex items-center gap-1">
+                                                <span>📝</span> Doctor Notes
+                                            </span>
+                                        )}
+                                        {c.prescriptionId && (
+                                            <span className="px-2 py-0.5 rounded-md bg-green-50 text-green-700 dark:bg-green-950/40 dark:text-green-300 text-[10px] font-bold border border-green-100 dark:border-green-900/30 flex items-center gap-1">
+                                                <span>💊</span> Prescribed
+                                            </span>
+                                        )}
+                                        {c.videoCallLogs && c.videoCallLogs.length > 0 && (
+                                            <span className="px-2 py-0.5 rounded-md bg-indigo-50 text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-300 text-[10px] font-bold border border-indigo-100 dark:border-indigo-900/30 flex items-center gap-1">
+                                                <span>📹</span> {c.videoCallLogs.length} Call Log(s)
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
 

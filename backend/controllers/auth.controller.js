@@ -88,6 +88,8 @@ export const registerUser = asyncHandler(async (req, res) => {
     }
 });
 
+import logAuditEvent from '../utils/auditLogger.js';
+
 // @desc    Login user
 // @route   POST /api/auth/login
 // @access  Public
@@ -103,19 +105,59 @@ export const loginUser = asyncHandler(async (req, res) => {
 
     const user = await User.findOne({ email });
 
-    if (user && (await user.matchPassword(password))) {
+    if (!user) {
+        await logAuditEvent({
+            email,
+            action: 'LOGIN_FAILED',
+            status: 'FAILED',
+            details: 'User account not found',
+            req,
+        });
+        res.status(401);
+        throw new Error('Invalid email or password');
+    }
+
+    // Check account status
+    if (user.status === 'Inactive' || user.status === 'Suspended') {
+        await logAuditEvent({
+            userId: user._id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+            action: 'LOGIN_FAILED',
+            status: 'BLOCKED',
+            details: `Login blocked: account is ${user.status}`,
+            req,
+        });
+        res.status(403);
+        throw new Error(`Account is ${user.status.toLowerCase()}. Please contact an administrator.`);
+    }
+
+    if (await user.matchPassword(password)) {
         // Check account lockout
         if (user.accountLockedUntil && user.accountLockedUntil > Date.now()) {
             const waitTime = Math.ceil((user.accountLockedUntil - Date.now()) / 1000 / 60);
+            await logAuditEvent({
+                userId: user._id,
+                email: user.email,
+                name: user.name,
+                role: user.role,
+                action: 'LOGIN_FAILED',
+                status: 'BLOCKED',
+                details: `Account locked due to OTP failures (${waitTime}m left)`,
+                req,
+            });
             res.status(403);
             throw new Error(`Account locked due to multiple failed OTP attempts. Please try again in ${waitTime} minutes.`);
         }
 
         // Determine if 2FA is required
-        const isDoctor = user.role === 'doctor';
+        const isDoctorEnabled = user.role === 'doctor' && user.is2FAEnabled;
         const isParentMandatory = user.role === 'parent' && env.PARENT_2FA_MANDATORY === 'true';
         const isParentEnabled = user.role === 'parent' && user.is2FAEnabled;
-        const requires2FA = isDoctor || isParentMandatory || isParentEnabled;
+        const isAdminEnabled = user.role === 'admin' && user.is2FAEnabled;
+        const isDietitianEnabled = user.role === 'dietitian' && user.is2FAEnabled;
+        const requires2FA = isDoctorEnabled || isParentMandatory || isParentEnabled || isAdminEnabled || isDietitianEnabled;
 
         if (requires2FA) {
             // Generate 6 digit OTP
@@ -128,6 +170,17 @@ export const loginUser = asyncHandler(async (req, res) => {
             user.loginOTPAttempts = 0;
             user.loginOTPLastSentAt = Date.now();
             await user.save();
+
+            await logAuditEvent({
+                userId: user._id,
+                email: user.email,
+                name: user.name,
+                role: user.role,
+                action: '2FA_REQUESTED',
+                status: 'INFO',
+                details: '2FA OTP code generated and dispatched',
+                req,
+            });
 
             // Send OTP via Email
             const emailMessage = `
@@ -156,6 +209,21 @@ export const loginUser = asyncHandler(async (req, res) => {
             );
         }
 
+        // Record successful direct login
+        user.lastLoginAt = new Date();
+        await user.save();
+
+        await logAuditEvent({
+            userId: user._id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+            action: 'LOGIN_SUCCESS',
+            status: 'SUCCESS',
+            details: 'Direct credential login successful',
+            req,
+        });
+
         // Standard direct login (if 2FA is not required)
         const token = generateToken(user._id, user.role);
         res.json(
@@ -166,11 +234,23 @@ export const loginUser = asyncHandler(async (req, res) => {
                     email: user.email,
                     role: user.role,
                     availabilityStatus: user.availabilityStatus,
+                    status: user.status,
+                    is2FAEnabled: user.is2FAEnabled,
                 },
                 token,
             })
         );
     } else {
+        await logAuditEvent({
+            userId: user._id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+            action: 'LOGIN_FAILED',
+            status: 'FAILED',
+            details: 'Incorrect password provided',
+            req,
+        });
         res.status(401);
         throw new Error('Invalid email or password');
     }
@@ -298,6 +378,17 @@ export const verify2FA = asyncHandler(async (req, res) => {
     if (!isMatch) {
         user.loginOTPAttempts += 1;
         
+        await logAuditEvent({
+            userId: user._id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+            action: '2FA_FAILED',
+            status: 'FAILED',
+            details: `Invalid OTP attempt ${user.loginOTPAttempts}/5`,
+            req,
+        });
+
         if (user.loginOTPAttempts >= 5) {
             user.accountLockedUntil = Date.now() + 15 * 60 * 1000; // Lock for 15 mins
             user.loginOTPHash = undefined;
@@ -317,7 +408,30 @@ export const verify2FA = asyncHandler(async (req, res) => {
     user.loginOTPExpiresAt = undefined;
     user.loginOTPAttempts = 0;
     user.accountLockedUntil = undefined;
+    user.lastLoginAt = new Date();
     await user.save();
+
+    await logAuditEvent({
+        userId: user._id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        action: '2FA_SUCCESS',
+        status: 'SUCCESS',
+        details: '2FA verification completed successfully',
+        req,
+    });
+
+    await logAuditEvent({
+        userId: user._id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        action: 'LOGIN_SUCCESS',
+        status: 'SUCCESS',
+        details: '2FA authenticated session established',
+        req,
+    });
 
     // Generate JWT
     const token = generateToken(user._id, user.role);
@@ -330,6 +444,8 @@ export const verify2FA = asyncHandler(async (req, res) => {
                 email: user.email,
                 role: user.role,
                 availabilityStatus: user.availabilityStatus,
+                status: user.status,
+                is2FAEnabled: user.is2FAEnabled,
             },
             token,
         }, 'Login successful.')

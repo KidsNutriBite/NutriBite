@@ -64,6 +64,7 @@ const Login = () => {
                 if (result.role === 'parent') navigate('/parent/dashboard');
                 else if (result.role === 'doctor') navigate('/doctor/dashboard');
                 else if (result.role === 'dietitian') navigate('/dietitian/dashboard');
+                else if (result.role === 'admin') navigate('/admin/dashboard');
             }
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed');
@@ -80,6 +81,7 @@ const Login = () => {
             if (user.role === 'parent') navigate('/parent/dashboard');
             else if (user.role === 'doctor') navigate('/doctor/dashboard');
             else if (user.role === 'dietitian') navigate('/dietitian/dashboard');
+            else if (user.role === 'admin') navigate('/admin/dashboard');
         } catch (err) {
             setError(err.response?.data?.message || 'Verification failed');
         } finally {
@@ -351,11 +353,74 @@ const Login = () => {
                         </>
                     )}
 
-                    <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 text-center">
+                    <div className="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 text-center space-y-2.5">
+                        <div className="space-y-1.5">
+                            <p className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">Quick Fill Demo Roles</p>
+                            <div className="flex flex-wrap items-center justify-center gap-1.5">
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setEmail('parent@nutrikid.com');
+                                        setPassword('Password123!');
+                                    }}
+                                    className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-primary/10 hover:text-primary text-slate-700 dark:text-slate-300 text-[11px] font-bold transition-all border border-slate-200 dark:border-slate-700 flex items-center gap-1 cursor-pointer shadow-sm"
+                                    title="Auto-fill Parent Credentials (Sneha Sharma)"
+                                >
+                                    <span className="material-symbols-outlined text-xs text-primary">family_restroom</span>
+                                    <span>Parent</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setEmail('doctor@nutrikid.com');
+                                        setPassword('Password123!');
+                                    }}
+                                    className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-500/10 hover:text-blue-600 text-slate-700 dark:text-slate-300 text-[11px] font-bold transition-all border border-slate-200 dark:border-slate-700 flex items-center gap-1 cursor-pointer shadow-sm"
+                                    title="Auto-fill Doctor Credentials (Dr. Rajesh Iyer)"
+                                >
+                                    <span className="material-symbols-outlined text-xs text-blue-500">stethoscope</span>
+                                    <span>Doctor</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setEmail('dietitian@nutrikid.com');
+                                        setPassword('Password123!');
+                                    }}
+                                    className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-emerald-500/10 hover:text-emerald-600 text-slate-700 dark:text-slate-300 text-[11px] font-bold transition-all border border-slate-200 dark:border-slate-700 flex items-center gap-1 cursor-pointer shadow-sm"
+                                    title="Auto-fill Dietitian Credentials (Dt. Anjali Mehta)"
+                                >
+                                    <span className="material-symbols-outlined text-xs text-emerald-500">nutrition</span>
+                                    <span>Dietitian</span>
+                                </button>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setEmail('admin@nutrikid.com');
+                                        setPassword('Admin@123456');
+                                    }}
+                                    className="px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-purple-500/10 hover:text-purple-600 text-slate-700 dark:text-slate-300 text-[11px] font-bold transition-all border border-slate-200 dark:border-slate-700 flex items-center gap-1 cursor-pointer shadow-sm"
+                                    title="Auto-fill Admin Credentials (Administrator)"
+                                >
+                                    <span className="material-symbols-outlined text-xs text-purple-500">admin_panel_settings</span>
+                                    <span>Admin</span>
+                                </button>
+                            </div>
+                        </div>
+
                         <p className="text-xs text-[#4c799a] dark:text-slate-400 font-medium">
                             New to the NutriKid family?
                             <Link href="/register" className="text-primary font-bold hover:underline ml-1">Create an account</Link>
                         </p>
+                        <div className="pt-1">
+                            <Link 
+                                href="/guest" 
+                                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold text-amber-600 dark:text-amber-400 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/40 dark:hover:bg-amber-900/40 border border-amber-200 dark:border-amber-800/60 transition-all shadow-sm"
+                            >
+                                <span className="material-symbols-outlined text-sm">visibility</span>
+                                <span>Continue as Guest (Demo Mode)</span>
+                            </Link>
+                        </div>
                     </div>
 
                     <footer className="mt-6 flex justify-center gap-6 text-slate-400 text-[10px] font-semibold uppercase tracking-wider">

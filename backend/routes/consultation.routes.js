@@ -13,14 +13,23 @@ import {
     getAvailableDietitians,
     updateStatus,
     updateDietitianNotes,
-    updateDoctorNotes
+    updateDoctorNotes,
+    generateVideoCallSummary,
+    deleteVideoCallLog,
+    clearAllVideoCallLogs,
+    generateAiSummary
 } from '../controllers/consultation.controller.js';
 import { protect } from '../middlewares/auth.middleware.js';
 import { authorize } from '../middlewares/role.middleware.js';
 
+import { getGrowthVelocityData } from '../controllers/doctor.controller.js';
+
 const router = express.Router();
 
 router.use(protect);
+
+// Shared growth velocity endpoint for dietitians & doctors
+router.get('/growth-velocity/:id', authorize('dietitian', 'doctor'), getGrowthVelocityData);
 
 // Parent routes
 router.post('/', authorize('parent'), createRequest);
@@ -45,5 +54,11 @@ router.patch('/:requestId/status', authorize('dietitian', 'doctor'), updateStatu
 
 // Shared parent/dietitian/doctor details route
 router.get('/:requestId', getConsultationDetails);
+
+// Video call AI summary (accessible to all roles)
+router.post('/:requestId/video-summary', authorize('parent', 'doctor', 'dietitian'), generateVideoCallSummary);
+router.post('/:requestId/video-summary/:logId/generate-ai', authorize('parent', 'doctor', 'dietitian'), generateAiSummary);
+router.delete('/:requestId/video-summary/:logId', authorize('parent', 'doctor', 'dietitian'), deleteVideoCallLog);
+router.delete('/:requestId/video-summary', authorize('parent', 'doctor', 'dietitian'), clearAllVideoCallLogs);
 
 export default router;

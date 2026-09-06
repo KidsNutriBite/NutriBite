@@ -28,7 +28,12 @@ export const resolveEscalation = async (id) => {
 };
 
 export const getGrowthVelocity = async (profileId) => {
-    const response = await api.get(`/doctor/patients/${profileId}/growth-velocity`);
-    return response.data;
+    try {
+        const response = await api.get(`/consultations/growth-velocity/${profileId}`);
+        return response.data;
+    } catch (err) {
+        const response = await api.get(`/doctor/patients/${profileId}/growth-velocity`);
+        return response.data;
+    }
 };
 

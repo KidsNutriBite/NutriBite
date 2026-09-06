@@ -15,7 +15,7 @@ const notificationSchema = new mongoose.Schema(
         },
         type: {
             type: String,
-            enum: ['doctor_message', 'health_alert', 'appointment_update', 'system'],
+            enum: ['doctor_message', 'health_alert', 'appointment_update', 'system', 'reminder', 'meal_reminder', 'hydration_reminder'],
             required: true
         },
         message: {

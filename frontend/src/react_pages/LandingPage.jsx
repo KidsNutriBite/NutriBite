@@ -131,22 +131,38 @@ const LandingPage = () => {
                                             Leading AI-powered Pediatric Nutrition intelligence platform for Child Health and Growth Monitoring. Empowering families and doctors with an AI Nutrition Assistant for secure, clinical nutrition tracking.
                                         </p>
                                     </div>
-                                    <div className="flex flex-wrap gap-4">
-                                        <Link href="/register?role=parent" className="flex min-w-[160px] cursor-pointer items-center justify-center rounded-xl h-14 px-8 bg-primary text-white text-base font-bold shadow-xl shadow-primary/30 hover:scale-108 hover:shadow-2xl hover:shadow-primary/45 hover:-translate-y-1 active:scale-95 transition-all duration-300">
-                                            I'm a Parent
+                                    <div className="flex flex-wrap items-center gap-3.5">
+                                        <Link 
+                                            href="/register" 
+                                            className="flex min-w-[150px] cursor-pointer items-center justify-center rounded-2xl h-13 px-7 bg-primary text-white text-sm font-bold shadow-xl shadow-primary/30 hover:scale-105 hover:shadow-2xl hover:shadow-primary/40 active:scale-95 transition-all duration-300 gap-2"
+                                        >
+                                            <span className="material-symbols-outlined text-lg">person_add</span>
+                                            <span>Create Account</span>
                                         </Link>
-                                        <Link href="/register?role=doctor" className="flex min-w-[160px] cursor-pointer items-center justify-center rounded-xl h-14 px-8 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-base font-bold shadow-lg hover:bg-slate-50 dark:hover:bg-slate-700 hover:scale-108 hover:shadow-2xl hover:border-primary/50 hover:text-primary dark:hover:text-primary hover:-translate-y-1 active:scale-95 transition-all duration-300">
-                                            I'm a Doctor
+
+                                        <Link 
+                                            href="/login" 
+                                            className="flex min-w-[130px] cursor-pointer items-center justify-center rounded-2xl h-13 px-6 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-white text-sm font-bold shadow-md hover:bg-slate-50 dark:hover:bg-slate-700 hover:scale-105 hover:border-primary/50 hover:text-primary dark:hover:text-primary active:scale-95 transition-all duration-300 gap-2"
+                                        >
+                                            <span className="material-symbols-outlined text-lg">login</span>
+                                            <span>Sign In</span>
+                                        </Link>
+
+                                        <Link 
+                                            href="/guest" 
+                                            className="flex min-w-[160px] cursor-pointer items-center justify-center rounded-2xl h-13 px-6 bg-amber-500/10 hover:bg-amber-500/20 dark:bg-amber-500/15 dark:hover:bg-amber-500/25 border border-amber-400/40 text-amber-700 dark:text-amber-300 text-sm font-bold hover:scale-105 active:scale-95 transition-all duration-300 gap-2"
+                                        >
+                                            <span className="material-symbols-outlined text-lg">visibility</span>
+                                            <span>Continue as Guest</span>
                                         </Link>
                                     </div>
-                                    <div className="flex items-center gap-4 border-t border-slate-200 dark:border-slate-800 pt-8">
+                                    <div className="flex items-center gap-4 border-t border-slate-200 dark:border-slate-800 pt-6">
                                         <div className="flex -space-x-3">
-                                            <img className="h-10 w-10 rounded-full border-2 border-white dark:border-slate-900 object-cover hover:scale-110 hover:z-10 transition-transform duration-300" alt="Profile photo of a happy child" src="https://lh3.googleusercontent.com/aida-public/AB6AXu98q9K9PeEWGGkRaj-ucyMw-b7ysL2GHm2AdkQGxq-5IMXUYOYiH4JgbM04r6pW89fVa57I4wfwrvIhM8lkp4PxhJ90-GxZhGqUv7T18545FUc9KMNtyAiVm_oOEv9DhPXDc8BGJqw-JCC0jFjupB_dr-xrm16QfUWmRNT2iL8JEC8vPr8m9M74YsNuxg2mj-yGeh6mhew-VLm-gJDmbqL7w0kDDo3KUNH2WfztxmDtOEG0qQDTBrFnQwWG7z1UJn3j_wY1gT90AU" />
-                                            <img className="h-10 w-10 rounded-full border-2 border-white dark:border-slate-900 object-cover hover:scale-110 hover:z-10 transition-transform duration-300" alt="Profile photo of a pediatrician" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjxbpVec7oM5stO037YN3L_iI1s0Mi1hOOrueSuYbQN8Ai6xAfY0w3VIyFpTi2fot4M8aDQj7bnaUfou3M1i1Q2i8DQo74_4wH_gxE6eX35UYF4h7aCeF4pDPh-XBYbR3rHKG_xbhgeyx2joparnWR22TEW2P4Y7L_cVOnNOPH2hDdUfwD7FoiuGPOpkvbyrkbw4FhnJiryECMU_1PS_dbxEbtm9CXrAY3wUt-nmDuUGvb-fUAL8wG1Bq1vAJv1br9UTi9ZsUAeT0" />
-                                            <img className="h-10 w-10 rounded-full border-2 border-white dark:border-slate-900 object-cover hover:scale-110 hover:z-10 transition-transform duration-300" alt="Profile photo of a smiling parent" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhu1DdBc906cFOU1yGS6R0L2Kmh-0SkVGhijds4rQetykaAvnEPOO4A9etJFpnBddec9hp2hoK6Upyc1CxD3AJa9nCnkNy4Tf__TDSl3uFeHYGfB0hqCDH9Xg5Y09iXOYu7u8xv_wtXblkea9P-78RtsYpfLWrY9KR3clkMQD3yxG00zT3MeKJiOBFRjHB7luMo3W0ODpf7IjGPpDPwCVzunHNb8dnaYoIfw3rcUoYVeqzZbwY8hBKzs80lsPcK0-mRoIhWuz5Fis" />
-                                            <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-white bg-slate-100 text-xs font-bold text-slate-600 dark:border-slate-900 dark:bg-slate-800 dark:text-slate-400 hover:scale-110 hover:z-10 transition-transform duration-300">+2k</div>
+                                            <img className="h-9 w-9 rounded-full border-2 border-white dark:border-slate-900 object-cover" alt="Happy child" src="https://lh3.googleusercontent.com/aida-public/AB6AXu98q9K9PeEWGGkRaj-ucyMw-b7ysL2GHm2AdkQGxq-5IMXUYOYiH4JgbM04r6pW89fVa57I4wfwrvIhM8lkp4PxhJ90-GxZhGqUv7T18545FUc9KMNtyAiVm_oOEv9DhPXDc8BGJqw-JCC0jFjupB_dr-xrm16QfUWmRNT2iL8JEC8vPr8m9M74YsNuxg2mj-yGeh6mhew-VLm-gJDmbqL7w0kDDo3KUNH2WfztxmDtOEG0qQDTBrFnQwWG7z1UJn3j_wY1gT90AU" />
+                                            <img className="h-9 w-9 rounded-full border-2 border-white dark:border-slate-900 object-cover" alt="Pediatrician" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAjxbpVec7oM5stO037YN3L_iI1s0Mi1hOOrueSuYbQN8Ai6xAfY0w3VIyFpTi2fot4M8aDQj7bnaUfou3M1i1Q2i8DQo74_4wH_gxE6eX35UYF4h7aCeF4pDPh-XBYbR3rHKG_xbhgeyx2joparnWR22TEW2P4Y7L_cVOnNOPH2hDdUfwD7FoiuGPOpkvbyrkbw4FhnJiryECMU_1PS_dbxEbtm9CXrAY3wUt-nmDuUGvb-fUAL8wG1Bq1vAJv1br9UTi9ZsUAeT0" />
+                                            <img className="h-9 w-9 rounded-full border-2 border-white dark:border-slate-900 object-cover" alt="Smiling parent" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhu1DdBc906cFOU1yGS6R0L2Kmh-0SkVGhijds4rQetykaAvnEPOO4A9etJFpnBddec9hp2hoK6Upyc1CxD3AJa9nCnkNy4Tf__TDSl3uFeHYGfB0hqCDH9Xg5Y09iXOYu7u8xv_wtXblkea9P-78RtsYpfLWrY9KR3clkMQD3yxG00zT3MeKJiOBFRjHB7luMo3W0ODpf7IjGPpDPwCVzunHNb8dnaYoIfw3rcUoYVeqzZbwY8hBKzs80lsPcK0-mRoIhWuz5Fis" />
                                         </div>
-                                        <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Trusted by over <span className="text-slate-900 dark:text-white font-bold">2,500+</span> families and doctors worldwide.</p>
+                                        <p className="text-xs font-medium text-slate-500 dark:text-slate-400">Built for <span className="text-slate-900 dark:text-white font-bold">families and healthcare professionals</span>.</p>
                                     </div>
                                 </motion.div>
 

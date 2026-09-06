@@ -17,11 +17,21 @@ export const protect = asyncHandler(async (req, res, next) => {
 
             req.user = await User.findById(decoded.id).select('-password');
 
+            if (!req.user) {
+                res.status(401);
+                throw new Error('Not authorized, user no longer exists');
+            }
+
+            if (req.user.status === 'Inactive' || req.user.status === 'Suspended') {
+                res.status(403);
+                throw new Error(`Account is ${req.user.status.toLowerCase()}. Please contact an administrator.`);
+            }
+
             next();
         } catch (error) {
             console.error(error);
-            res.status(401);
-            throw new Error('Not authorized, token failed');
+            res.status(res.statusCode === 200 ? 401 : res.statusCode);
+            throw new Error(error.message || 'Not authorized, token failed');
         }
     }
 

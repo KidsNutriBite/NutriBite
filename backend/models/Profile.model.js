@@ -163,6 +163,14 @@ const profileSchema = new mongoose.Schema(
             type: String,
             default: ''
         },
+        savedDietPlan: {
+            type: mongoose.Schema.Types.Mixed,
+            default: null
+        },
+        customDietNotes: {
+            type: String,
+            default: ''
+        },
         avatar: {
             type: String,
             required: true,
@@ -174,6 +182,13 @@ const profileSchema = new mongoose.Schema(
         healthNotes: {
             type: String, // Doctor's notes
             default: ''
+        },
+        lastCheckup: {
+            date: { type: Date },
+            time: { type: String, default: '10:30 AM' },
+            doctorName: { type: String, default: 'Dr. Rajesh Iyer, MD' },
+            notes: { type: String, default: '' },
+            status: { type: String, default: 'Completed' }
         },
         level: {
             type: Number,

@@ -5,12 +5,17 @@ import {
     rejectRequest,
     inviteDoctor,
     getAccessList,
-    revokeAccess
+    revokeAccess,
+    generateShareablePass,
+    viewShareablePass
 } from '../controllers/access.controller.js';
 import { protect } from '../middlewares/auth.middleware.js';
 import { authorize } from '../middlewares/role.middleware.js';
 
 const router = express.Router();
+
+// Public token-authenticated doctor pass route
+router.get('/view-pass/:token', viewShareablePass);
 
 router.use(protect);
 router.use(authorize('parent'));
@@ -20,9 +25,10 @@ router.get('/requests', getPendingRequests);
 router.put('/approve/:requestId', approveRequest);
 router.put('/reject/:requestId', rejectRequest);
 
-// New routes for Doctor Access Management
+// Doctor Access Management
 router.post('/invite', inviteDoctor);
 router.get('/list', getAccessList);
 router.put('/revoke/:requestId', revokeAccess);
+router.post('/generate-pass', generateShareablePass);
 
 export default router;

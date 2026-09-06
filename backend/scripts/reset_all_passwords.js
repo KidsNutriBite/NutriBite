@@ -4,12 +4,13 @@ import mongoose from 'mongoose';
 import User from '../models/User.model.js';
 
 const updates = [
-    { email: 'arjun@gmail.com', newPassword: 'Test@123', role: 'dietitian' },
-    { email: 'pavanvigneshveluri@gmail.com', newPassword: 'Test@123', role: 'doctor' },
-    { email: 'doctor@test.com', newPassword: 'Test@123', role: 'doctor' },
-    { email: 'test_doctor_2fa@example.com', newPassword: 'Test@123', role: 'doctor' },
-    { email: 'doctor1@gmail.com', newPassword: 'Test@123', role: 'doctor' },
-    { email: 'dietitian@nutrikid.com', newPassword: 'Test@123', role: 'dietitian' },
+    { email: 'parent@nutrikid.com', newPassword: 'Password123!', role: 'parent' },
+    { email: 'parent.test@nutrikid.com', newPassword: 'Password123!', role: 'parent' },
+    { email: 'doctor@nutrikid.com', newPassword: 'Password123!', role: 'doctor' },
+    { email: 'doctor.test@nutrikid.com', newPassword: 'Password123!', role: 'doctor' },
+    { email: 'dietitian@nutrikid.com', newPassword: 'Password123!', role: 'dietitian' },
+    { email: 'admin@nutrikid.com', newPassword: 'Admin@123456', role: 'admin' },
+    { email: 'admin.test@nutrikid.com', newPassword: 'Admin@123456', role: 'admin' },
 ];
 
 await mongoose.connect(process.env.MONGO_URI);

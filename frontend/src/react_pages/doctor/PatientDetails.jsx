@@ -29,6 +29,7 @@ const PatientDetails = () => {
     const [savingDoctorNotes, setSavingDoctorNotes] = useState(false);
     const [activeTab, setActiveTab] = useState('overview');
     const [activeCall, setActiveCall] = useState(false);
+    const [videoCallLogs, setVideoCallLogs] = useState([]);
 
     // Clinician Specialization Check
     const [clinician, setClinician] = useState(null);
@@ -54,6 +55,7 @@ const PatientDetails = () => {
             setStatus(detailRes.data.data.status);
             setConsultationRequestId(detailRes.data.data.consultationRequestId || '');
             setDoctorNotes(detailRes.data.data.doctorNotes || '');
+            setVideoCallLogs(detailRes.data.data.videoCallLogs || []);
 
             // Fetch clinician details to check specialization
             try {
@@ -149,6 +151,7 @@ const PatientDetails = () => {
                 { id: 'suggested-plans', label: 'Suggested Meal Plans', icon: '📋' },
                 { id: 'growth-velocity', label: 'Growth Velocity',      icon: '📈' },
                 { id: 'twin',            label: 'Digital Twin View',    icon: '🤖' },
+                { id: 'video-calls',     label: 'Video Consultations',  icon: '📹' },
             ];
         } else {
             return [
@@ -159,6 +162,7 @@ const PatientDetails = () => {
                 { id: 'food-patterns',   label: 'Food Patterns',        icon: '🍉' },
                 { id: 'deficiency-risks',label: 'Deficiency Risks',     icon: '⚠️' },
                 { id: 'prescriptions',   label: 'Prescriptions',        icon: '📝' },
+                { id: 'video-calls',     label: 'Video Consultations',  icon: '📹' },
             ];
         }
     }, [status, isDietitian]);
@@ -308,7 +312,22 @@ const PatientDetails = () => {
                         consultationId={consultationRequestId}
                         userRole="doctor"
                         userName={user?.name || 'Doctor'}
-                        onClose={() => setActiveCall(false)}
+                        onClose={async (transcript, durationMinutes) => {
+                            setActiveCall(false);
+                            if (transcript && transcript.length > 0) {
+                                try {
+                                    await api.post(`/consultations/${consultationRequestId}/video-summary`, {
+                                        transcript,
+                                        durationMinutes,
+                                    });
+                                    toast.success('Transcript saved successfully!');
+                                } catch (err) {
+                                    console.error('Failed to save transcript:', err);
+                                    toast.error('Could not save transcript.');
+                                }
+                            }
+                            fetchAllData();
+                        }}
                     />
                 )}
             </AnimatePresence>
@@ -417,6 +436,42 @@ const PatientDetails = () => {
                             {/* TAB: Nutrition Intake (Dietitian Overview) */}
                             {activeTab === 'overview' && isDietitian && status === 'active' && (
                                 <div className="space-y-6">
+                                    {/* Child Growth Progression Details */}
+                                    <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm space-y-4">
+                                        <div>
+                                            <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                                                <span className="material-symbols-outlined text-indigo-500">monitoring</span>
+                                                Child Growth Progression Details
+                                            </h3>
+                                            <p className="text-xs text-gray-500 mt-1">Current child anthropometrics and growth indicators recorded in the system.</p>
+                                        </div>
+                                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                            <div className="p-4 bg-slate-50 dark:bg-slate-800/30 border rounded-2xl flex items-center gap-3">
+                                                <span className="text-2xl">📏</span>
+                                                <div>
+                                                    <p className="text-[10px] font-bold text-gray-400 uppercase">Height</p>
+                                                    <p className="font-extrabold text-slate-800 dark:text-white">{profile.height} cm</p>
+                                                </div>
+                                            </div>
+                                            <div className="p-4 bg-slate-50 dark:bg-slate-800/30 border rounded-2xl flex items-center gap-3">
+                                                <span className="text-2xl">⚖️</span>
+                                                <div>
+                                                    <p className="text-[10px] font-bold text-gray-400 uppercase">Weight</p>
+                                                    <p className="font-extrabold text-slate-800 dark:text-white">{profile.weight} kg</p>
+                                                </div>
+                                            </div>
+                                            <div className="p-4 bg-slate-50 dark:bg-slate-800/30 border rounded-2xl flex items-center gap-3">
+                                                <span className="text-2xl">📊</span>
+                                                <div>
+                                                    <p className="text-[10px] font-bold text-gray-400 uppercase">Body Mass Index (BMI)</p>
+                                                    <p className="font-extrabold text-slate-800 dark:text-white">
+                                                        {profile.height && profile.weight ? (profile.weight / Math.pow(profile.height / 100, 2)).toFixed(1) : '--'}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm space-y-6">
                                         <div>
                                             <h3 className="text-xl font-bold text-gray-900">Nutrition Intake Evaluation</h3>
@@ -823,6 +878,129 @@ const PatientDetails = () => {
                                             </div>
                                         </div>
                                     )}
+                                </div>
+                            )}
+
+                            {activeTab === 'video-calls' && status === 'active' && (
+                                <div className="space-y-6">
+                                    <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm space-y-6">
+                                        <div className="flex justify-between items-center pb-4 border-b border-gray-100 flex-wrap gap-3">
+                                            <div>
+                                                <h3 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                                                    <span className="material-symbols-outlined text-indigo-500">video_camera_front</span>
+                                                    Video Consultation Sessions
+                                                </h3>
+                                                <p className="text-xs text-gray-500 mt-1">Chronological timeline of video call summaries and recommendations generated by AI.</p>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <span className="px-3 py-1 bg-indigo-50 text-indigo-700 font-bold text-xs rounded-full">
+                                                    {videoCallLogs.length} Total Calls
+                                                </span>
+                                                {videoCallLogs.length > 0 && (
+                                                    <button
+                                                        onClick={async () => {
+                                                            if (!window.confirm(`Delete ALL ${videoCallLogs.length} sessions? This cannot be undone.`)) return;
+                                                            try {
+                                                                await api.delete(`/consultations/${consultationRequestId}/video-summary`);
+                                                                setVideoCallLogs([]);
+                                                                toast.success('All sessions cleared.');
+                                                            } catch (e) {
+                                                                toast.error('Failed to clear sessions.');
+                                                            }
+                                                        }}
+                                                        className="flex items-center gap-1 px-3 py-1 bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs rounded-full transition"
+                                                    >
+                                                        <span className="material-symbols-outlined text-sm">delete_sweep</span>
+                                                        Clear All
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+
+                                        {videoCallLogs.length === 0 ? (
+                                            <div className="text-center py-12 bg-gray-50/50 rounded-2xl border border-dashed border-gray-250">
+                                                <span className="material-symbols-outlined text-4xl text-gray-300">video_chat</span>
+                                                <p className="text-sm font-medium text-gray-500 mt-2">No video consultations have been conducted yet.</p>
+                                            </div>
+                                        ) : (
+                                            <div className="space-y-6">
+                                                {videoCallLogs.map((log, idx) => (
+                                                    <div key={log._id || idx} className="p-6 bg-slate-50 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-800 rounded-2xl space-y-4 relative">
+                                                        {/* Delete single session button */}
+                                                        <button
+                                                            onClick={async () => {
+                                                                if (!window.confirm(`Delete Session ${idx + 1}?`)) return;
+                                                                try {
+                                                                    await api.delete(`/consultations/${consultationRequestId}/video-summary/${log._id}`);
+                                                                    setVideoCallLogs(prev => prev.filter(l => l._id !== log._id));
+                                                                    toast.success(`Session ${idx + 1} deleted.`);
+                                                                } catch (e) {
+                                                                    toast.error('Failed to delete session.');
+                                                                }
+                                                            }}
+                                                            className="absolute top-4 right-4 w-7 h-7 flex items-center justify-center rounded-full bg-red-50 hover:bg-red-100 text-red-400 hover:text-red-600 transition"
+                                                            title="Delete this session"
+                                                        >
+                                                            <span className="material-symbols-outlined text-sm">delete</span>
+                                                        </button>
+
+                                                        <div className="flex justify-between items-center flex-wrap gap-2 pr-12">
+                                                            <div className="flex items-center gap-3">
+                                                                <span className="w-8 h-8 rounded-full bg-indigo-600 text-white text-xs font-black flex items-center justify-center">
+                                                                    {idx + 1}
+                                                                </span>
+                                                                <span className="font-extrabold text-slate-800 dark:text-white text-base">
+                                                                    Video Call Session #{idx + 1}
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex items-center gap-3 text-xs text-gray-400 font-medium">
+                                                                {log.durationMinutes > 0 && (
+                                                                    <span>⏱ {log.durationMinutes} min</span>
+                                                                )}
+                                                                <span>{new Date(log.callDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                                                                <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full font-bold text-[10px]">{log.summary ? 'AI Generated' : 'Transcript Log'}</span>
+                                                            </div>
+                                                        </div>
+
+                                                        {!log.summary && log.transcript && (
+                                                            <div className="mt-2">
+                                                                <button
+                                                                    onClick={async () => {
+                                                                        try {
+                                                                            toast.loading('Generating AI summary...', { id: 'ai-summary' });
+                                                                            const res = await api.post(`/consultations/${consultationRequestId}/video-summary/${log._id}/generate-ai`);
+                                                                            setVideoCallLogs(prev => prev.map(l => l._id === log._id ? res.data.data.log : l));
+                                                                            toast.success('AI summary generated!', { id: 'ai-summary' });
+                                                                        } catch (err) {
+                                                                            toast.error('Failed to generate AI summary.', { id: 'ai-summary' });
+                                                                        }
+                                                                    }}
+                                                                    className="flex items-center gap-2 px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-600 text-xs font-bold rounded-lg transition"
+                                                                >
+                                                                    <span className="material-symbols-outlined text-[16px]">smart_toy</span>
+                                                                    Generate AI Summary
+                                                                </button>
+                                                            </div>
+                                                        )}
+
+                                                        {log.summary && (
+                                                            <div className="space-y-1.5 mb-2">
+                                                                <h4 className="text-[10px] font-black text-indigo-500 uppercase tracking-widest flex items-center gap-1"><span className="material-symbols-outlined text-[14px]">smart_toy</span> AI Summary</h4>
+                                                                <p className="text-sm text-gray-700 leading-relaxed font-medium">{log.summary}</p>
+                                                            </div>
+                                                        )}
+                                                        {log.transcript && (
+                                                            <div className="space-y-1.5 p-3 bg-slate-50 rounded-lg">
+                                                                <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Raw Transcript</h4>
+                                                                <p className="text-xs text-slate-500 leading-relaxed italic">{log.transcript}</p>
+                                                            </div>
+                                                        )}
+
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             )}
 

@@ -5,7 +5,7 @@ import env from './config/env.js';
 import { setupVideoSignaling } from './socket/videoSignaling.js';
 
 // Connect to Database
-connectDB();
+await connectDB();
 
 const PORT = env.PORT || 5000;
 
