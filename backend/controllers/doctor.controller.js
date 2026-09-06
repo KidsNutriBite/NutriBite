@@ -141,6 +141,6 @@ export const getAllDoctors = asyncHandler(async (req, res) => {
 // @route   GET /api/doctor/patients/:id/growth-velocity
 // @access  Private (Doctor — Active Access Only)
 export const getGrowthVelocityData = asyncHandler(async (req, res) => {
-    const data = await getGrowthVelocityService(req.user._id, req.params.id);
+    const data = await getGrowthVelocityService(req.user._id, req.params.id, req.user.role);
     res.status(200).json(new ApiResponse(200, data));
 });
