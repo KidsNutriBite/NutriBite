@@ -1,3 +1,10 @@
+"use client";
+
+import { useState, useEffect } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
+import api from '../../api/axios';
+import { toast } from 'react-hot-toast';
 import GrowthVelocityCenter from '../../components/doctor/GrowthVelocityCenter';
 import DoctorTwinView from '../../components/doctor/DoctorTwinView';
 import { getGrowthVelocity } from '../../api/doctor.api';

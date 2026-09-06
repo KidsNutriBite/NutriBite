@@ -3,20 +3,22 @@ import AuditLog from '../models/AuditLog.model.js';
 import Profile from '../models/Profile.model.js';
 import MealLog from '../models/MealLog.model.js';
 import User from '../models/User.model.js';
+import DoctorAccess from '../models/DoctorAccess.model.js';
 import { createNotification } from './notification.service.js';
 
 /**
  * Get all patients (profiles) that the doctor has access to
  */
 export const getMyPatients = async (doctorId) => {
+    const Prescription = (await import('../models/Prescription.model.js')).default;
+    const profileMap = new Map();
+
+    // === SOURCE 1: Clinical consultation patients (assigned via dietitian workflow) ===
     const requests = await ConsultationRequest.find({
         doctorId,
         status: { $in: ['AssignedToDoctor', 'UnderDoctorReview', 'PrescriptionIssued', 'Closed'] }
     }).populate('profileId');
 
-    const Prescription = (await import('../models/Prescription.model.js')).default;
-    
-    const profileMap = new Map();
     for (const req of requests) {
         if (!req.profileId) continue;
         const profileIdStr = req.profileId._id.toString();
@@ -28,12 +30,40 @@ export const getMyPatients = async (doctorId) => {
             profileMap.set(profileIdStr, {
                 ...profileObj,
                 accessStatus: 'active',
+                accessType: 'clinical',
                 consultationRequestId: req._id,
                 consultationStatus: req.status,
                 lastCheckupDate: lastCheckup ? lastCheckup.date : null
             });
         }
     }
+
+    // === SOURCE 2: Family/Outside doctor patients (invited directly by parent via DoctorAccess) ===
+    const directAccess = await DoctorAccess.find({
+        doctorId,
+        status: { $in: ['restricted', 'active'] },
+        profileId: { $ne: null }
+    }).populate('profileId');
+
+    for (const access of directAccess) {
+        if (!access.profileId) continue;
+        const profileIdStr = access.profileId._id.toString();
+        if (!profileMap.has(profileIdStr)) {
+            const profileObj = access.profileId.toObject();
+            const lastCheckup = await Prescription.findOne({ profileId: access.profileId._id })
+                .sort({ date: -1 })
+                .lean();
+            profileMap.set(profileIdStr, {
+                ...profileObj,
+                accessStatus: access.status,
+                accessType: 'direct_invite',        // Family / outside doctor
+                doctorAccessId: access._id,
+                accessLevel: access.status === 'active' ? 'Full Access' : 'Restricted View',
+                lastCheckupDate: lastCheckup ? lastCheckup.date : null
+            });
+        }
+    }
+
     return Array.from(profileMap.values());
 };
 
