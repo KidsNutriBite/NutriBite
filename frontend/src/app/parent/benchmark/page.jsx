@@ -5,8 +5,8 @@ import { motion } from "framer-motion";
 
 // Hardcoded high-fidelity mock data derived from benchmark_framework.py output
 const benchmarkData = {
-  "Gemini 2.5 Flash": {
-    name: "Gemini 2.5 Flash",
+  "Enterprise Cloud AI": {
+    name: "Enterprise Cloud AI",
     type: "API / Cloud",
     memory: "Hosted (0.0 GB)",
     latency: 1100.0,
@@ -71,7 +71,7 @@ const promptRuns = [
 ];
 
 export default function BenchmarkDashboard() {
-  const [selectedModel, setSelectedModel] = useState("Gemini 2.5 Flash");
+  const [selectedModel, setSelectedModel] = useState("Enterprise Cloud AI");
   const current = benchmarkData[selectedModel];
 
   return (
@@ -95,7 +95,7 @@ export default function BenchmarkDashboard() {
               Enterprise LLM Benchmarking & Routing Dashboard
             </h1>
             <p className="text-slate-400 mt-2 text-sm md:text-base max-w-2xl">
-              Compare pediatric accuracy, private execution latencies, VRAM memory metrics, and live financial cost models between local Ollama models and Google Gemini API.
+              Compare pediatric accuracy, private execution latencies, VRAM memory metrics, and live financial cost models between local Ollama models and Enterprise Cloud AI.
             </p>
           </div>
           
@@ -260,7 +260,7 @@ export default function BenchmarkDashboard() {
               <tr className="border-b border-slate-700 text-slate-300 font-bold uppercase text-[10px] tracking-wider">
                 <th className="py-4 px-3">Test ID / Run</th>
                 <th className="py-4 px-3">Query</th>
-                <th className="py-4 px-3 text-center">Gemini 2.5 Flash</th>
+                <th className="py-4 px-3 text-center">Enterprise Cloud AI</th>
                 <th className="py-4 px-3 text-center">Llama 3 (8B)</th>
                 <th className="py-4 px-3 text-center">Mistral (7B)</th>
                 <th className="py-4 px-3 text-center">Phi-3 (3.8B)</th>

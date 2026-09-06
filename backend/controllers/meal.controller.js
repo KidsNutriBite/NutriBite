@@ -265,20 +265,99 @@ export const logMeal = asyncHandler(async (req, res) => {
     res.status(200).json(new ApiResponse(200, dailyLog, "Meal logged successfully"));
 });
 
+/**
+ * Helper to compute continuous meal streak and hydration streak
+ */
+export const calculateStreaks = (logs = [], targetWater = 1400) => {
+    if (!logs || logs.length === 0) {
+        return { mealStreak: 0, waterStreak: 0 };
+    }
+
+    const todayStr = new Date().toISOString().split('T')[0];
+    
+    // Map dates to their meal & water completion status
+    const dateMap = new Map();
+    logs.forEach(log => {
+        const dStr = typeof log.date === 'string' ? log.date.split('T')[0] : new Date(log.date).toISOString().split('T')[0];
+        
+        const slots = ['breakfast', 'morningSnack', 'lunch', 'afternoonSnack', 'dinner', 'eveningSnack'];
+        let hasMeals = (log.completedMealsCount && log.completedMealsCount > 0);
+        if (!hasMeals) {
+            hasMeals = slots.some(slot => Array.isArray(log[slot]) && log[slot].length > 0);
+        }
+
+        let dailyWater = 0;
+        slots.forEach(slot => {
+            const items = log[slot] || [];
+            items.forEach(item => {
+                dailyWater += (item.water || 0);
+            });
+        });
+
+        dateMap.set(dStr, {
+            hasMeals,
+            dailyWater,
+            hasWaterTargetMet: dailyWater >= targetWater
+        });
+    });
+
+    // 1. Calculate Meal Streak
+    let mealStreak = 0;
+    let checkDate = new Date();
+    const todayLog = dateMap.get(todayStr);
+    
+    if (!todayLog || !todayLog.hasMeals) {
+        // If today has no meals logged yet, check from yesterday so active streaks aren't broken before evening
+        checkDate.setDate(checkDate.getDate() - 1);
+    }
+
+    while (true) {
+        const dStr = checkDate.toISOString().split('T')[0];
+        const entry = dateMap.get(dStr);
+        if (entry && entry.hasMeals) {
+            mealStreak++;
+            checkDate.setDate(checkDate.getDate() - 1);
+        } else {
+            break;
+        }
+    }
+
+    // 2. Calculate Water Streak
+    let waterStreak = 0;
+    checkDate = new Date();
+    if (!todayLog || !todayLog.hasWaterTargetMet) {
+        checkDate.setDate(checkDate.getDate() - 1);
+    }
+
+    while (true) {
+        const dStr = checkDate.toISOString().split('T')[0];
+        const entry = dateMap.get(dStr);
+        if (entry && entry.hasWaterTargetMet) {
+            waterStreak++;
+            checkDate.setDate(checkDate.getDate() - 1);
+        } else {
+            break;
+        }
+    }
+
+    return { mealStreak, waterStreak };
+};
+
 // @desc    Get meal history (last 30 days)
 // @route   GET /api/meals/history/:id
 export const getMealHistory = asyncHandler(async (req, res) => {
     const { id } = req.params; // Profile ID
 
+    const profile = await Profile.findById(id);
+    const targetWater = profile?.preferences?.waterIntake || 1400;
+
     const logs = await MealLog.find({ profileId: id })
         .sort({ date: -1 })
         .limit(30);
 
-    // Calculate Streak (Simplified)
-    let streak = 0;
-    // ... logic to calculate streak based on completedMealsCount ...
+    const { mealStreak, waterStreak } = calculateStreaks(logs, targetWater);
 
-    res.status(200).json(new ApiResponse(200, { logs, streak }, "Meal history fetched"));
+    res.status(200).json(new ApiResponse(200, { logs, streak: mealStreak, mealStreak, waterStreak }, "Meal history fetched"));
 });
 
 // @desc    Get specific date log

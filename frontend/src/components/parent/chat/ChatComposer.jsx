@@ -2,34 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { formatAllergy } from './NutriGuideChat';
 
-// Avatar mapping
-const AVATAR_MAP = {
-    lion:     { emoji: '🦁', bg: '#eff6ff', text: '#1e40af' },
-    bear:     { emoji: '🐻', bg: '#f0fdf4', text: '#166534' },
-    rabbit:   { emoji: '🐰', bg: '#fdf2f8', text: '#9d174d' },
-    tiger:    { emoji: '🐯', bg: '#fffbeb', text: '#92400e' },
-    elephant: { emoji: '🐘', bg: '#f0f9ff', text: '#075985' },
-};
-
-function getAvatar(profile) {
-    const key = profile?.avatar?.toLowerCase();
-    if (AVATAR_MAP[key]) return AVATAR_MAP[key];
-    const isFemale = profile?.gender === 'female';
-    return {
-        emoji: isFemale ? '👧' : '👦',
-        bg: isFemale ? '#fdf2f8' : '#eff6ff',
-        text: isFemale ? '#9d174d' : '#1e40af'
-    };
-}
-
-const AllergyBadge = ({ label }) => (
-    <span className="inline-block text-[10px] font-bold bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800 rounded px-1.5 py-0.5 whitespace-nowrap">
-        ⚠ {label}
-    </span>
-);
-
 const ProfileRow = ({ profile, onSelect }) => {
-    const av = getAvatar(profile);
     const allergies = profile.allergies ?? [];
     const shown = allergies.slice(0, 2);
     const extra = allergies.length - shown.length;
@@ -37,22 +10,26 @@ const ProfileRow = ({ profile, onSelect }) => {
     return (
         <button
             onClick={() => onSelect(profile)}
-            className="flex items-center gap-3 px-3.5 py-2.5 w-full text-left transition-colors hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer border-b border-slate-100 dark:border-slate-800 last:border-none"
+            className="flex items-center gap-3 px-3.5 py-2.5 w-full text-left transition-colors hover:bg-[#F4F4F4] dark:hover:bg-slate-800 cursor-pointer border-b border-black/[0.04] dark:border-white/[0.04] last:border-none"
         >
-            <div className="size-8 rounded-full flex items-center justify-center text-sm font-bold shrink-0 bg-slate-100 dark:bg-slate-800">
-                {av.emoji}
+            <div className="size-7 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 bg-slate-100 dark:bg-slate-800">
+                👧
             </div>
 
             <div className="flex-1 min-w-0">
-                <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-1.5 flex-wrap">
+                <div className="text-xs font-medium text-slate-900 dark:text-white flex items-center gap-1.5 flex-wrap">
                     <span>{profile.name}</span>
-                    <span className="text-[10px] font-normal text-slate-400">
+                    <span className="text-[11px] font-normal text-slate-400">
                         {profile.age}y {profile.weight ? `· ${profile.weight}kg` : ''}
                     </span>
                 </div>
                 {shown.length > 0 && (
                     <div className="flex gap-1 mt-1 flex-wrap">
-                        {shown.map(a => <AllergyBadge key={a} label={formatAllergy(a)} />)}
+                        {shown.map(a => (
+                            <span key={a} className="text-[10px] font-normal text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 rounded-full border border-amber-200/60 dark:border-amber-800/60">
+                                ⚠ {formatAllergy(a)}
+                            </span>
+                        ))}
                         {extra > 0 && (
                             <span className="text-[10px] text-slate-400 self-center">+{extra} more</span>
                         )}
@@ -152,15 +129,17 @@ const ChatComposer = ({
         return () => document.removeEventListener('mousedown', handler);
     }, []);
 
+    const childName = activeChild?.name ? activeChild.name.split(' ')[0] : 'your child';
+
     return (
         <div className="relative w-full">
-            {/* Profile Mention Popup */}
+            {/* Child Mention Popup */}
             {showPicker && (
                 <div
                     ref={pickerRef}
-                    className="absolute bottom-full mb-2 left-0 right-0 max-w-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl overflow-hidden z-50 animate-in fade-in slide-in-from-bottom-2 duration-150"
+                    className="absolute bottom-full mb-3 left-0 right-0 max-w-sm bg-white dark:bg-slate-900 border border-black/[0.08] dark:border-white/[0.08] rounded-3xl shadow-[0_12px_40px_rgba(0,0,0,0.08)] overflow-hidden z-50 animate-in fade-in slide-in-from-bottom-2 duration-150"
                 >
-                    <div className="px-3.5 py-2 bg-slate-50 dark:bg-slate-800/60 border-b border-slate-100 dark:border-slate-800 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                    <div className="px-4 py-2.5 bg-[#F8F8F8] dark:bg-slate-800/70 border-b border-black/[0.04] dark:border-white/[0.04] text-[10px] font-semibold uppercase tracking-wider text-slate-400">
                         Select Child Profile
                     </div>
 
@@ -176,28 +155,29 @@ const ChatComposer = ({
                 </div>
             )}
 
-            {/* Input Pill Container */}
-            <div className="flex items-end gap-2 bg-slate-100 dark:bg-slate-850 p-2 sm:p-2.5 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 transition-all shadow-inner">
+            {/* Floating Glass Input Capsule */}
+            <div className="flex items-end gap-2 bg-white/90 dark:bg-slate-900/90 backdrop-blur-2xl p-2.5 sm:p-3 rounded-3xl border border-black/[0.08] dark:border-white/[0.08] focus-within:border-black/30 dark:focus-within:border-white/30 transition-all shadow-[0_8px_30px_rgb(0_0_0/0.04)]">
                 <textarea
                     ref={textareaRef}
                     value={input}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
-                    placeholder={`Ask about nutrition, 6-meal plans, or growth for ${activeChild?.name ? activeChild.name.split(' ')[0] : 'your child'}...`}
+                    placeholder={`Ask about nutrition, meals, growth, or food choices for ${childName}...`}
                     rows={1}
-                    className="flex-1 bg-transparent border-none outline-none resize-none text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 leading-relaxed min-h-[24px] max-h-[88px] overflow-y-auto px-2 py-1"
+                    className="flex-1 bg-transparent border-none outline-none resize-none text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 leading-relaxed min-h-[26px] max-h-[96px] overflow-y-auto px-3 py-1 font-normal"
                 />
 
-                {/* Voice Input Mic Button */}
+                {/* Voice Mic Button */}
                 <button
                     type="button"
                     onClick={toggleMic}
-                    className={`size-9 rounded-xl flex items-center justify-center shrink-0 transition-colors cursor-pointer ${
+                    className={`size-8 rounded-full flex items-center justify-center shrink-0 transition-all cursor-pointer ${
                         isListening
                             ? 'bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400 animate-pulse'
-                            : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-200/60 dark:hover:bg-slate-800'
+                            : 'text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-black/[0.04] dark:hover:bg-white/[0.06]'
                     }`}
-                    aria-label={isListening ? 'Stop recording' : 'Record voice query'}
+                    aria-label={isListening ? 'Stop recording' : 'Voice input'}
+                    title={isListening ? 'Stop recording' : 'Voice input'}
                 >
                     <span className="material-symbols-outlined text-lg">
                         {isListening ? 'mic' : 'mic_none'}
@@ -209,23 +189,23 @@ const ChatComposer = ({
                     type="button"
                     onClick={onSend}
                     disabled={!input.trim()}
-                    className={`size-9 rounded-xl flex items-center justify-center shrink-0 transition-all shadow-sm ${
+                    className={`size-8 rounded-full flex items-center justify-center shrink-0 transition-all ${
                         input.trim()
-                            ? 'bg-primary text-white hover:bg-primary/90 cursor-pointer active:scale-95'
-                            : 'bg-slate-200 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
+                            ? 'bg-slate-900 hover:bg-black dark:bg-white dark:hover:bg-slate-100 text-white dark:text-slate-950 shadow-sm cursor-pointer active:scale-95'
+                            : 'bg-slate-100 dark:bg-slate-800 text-slate-300 dark:text-slate-600 cursor-not-allowed'
                     }`}
-                    aria-label="Send query"
+                    aria-label="Send message"
                 >
-                    <span className="material-symbols-outlined text-lg">arrow_upward</span>
+                    <span className="material-symbols-outlined text-base">arrow_upward</span>
                 </button>
             </div>
 
-            {/* Bottom Counter & Quick Hint */}
-            <div className="flex justify-between items-center mt-1.5 px-1 text-[11px] text-slate-400">
-                <span>
-                    Type <code className="px-1 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-[10px] font-mono text-slate-600 dark:text-slate-300">@</code> to switch child context
+            {/* Micro Details & Type @ Mention Indicator */}
+            <div className="flex justify-between items-center mt-2 px-3 text-[11px] text-slate-400 font-normal">
+                <span className="flex items-center gap-1">
+                    Type <code className="px-1.5 py-0.5 rounded-full bg-[#F0F0F0] dark:bg-slate-800 text-[10px] font-mono text-slate-700 dark:text-slate-300">@</code> to select child context
                 </span>
-                <span className={`tabular-nums ${isOverLimit ? 'text-amber-500 font-bold' : ''}`}>
+                <span className={`tabular-nums ${isOverLimit ? 'text-amber-600 font-medium' : ''}`}>
                     {charCount} / {MAX_CHARS}
                 </span>
             </div>

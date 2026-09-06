@@ -194,7 +194,7 @@ export const getMyProfiles = asyncHandler(async (req, res) => {
                 date: lastCheckup.date,
                 time: lastCheckup.time,
                 doctorName: lastCheckup.hospitalName || 'Pediatrician'
-            } : null
+            } : (profile.lastCheckup || null)
         };
     }));
 
@@ -487,6 +487,30 @@ export const getChildDietPlan = asyncHandler(async (req, res) => {
     const activeDeficiencies = Object.keys(deficiencies).filter(
         key => deficiencies[key]?.severity === 'RED' || deficiencies[key]?.severity === 'ORANGE'
     );
+
+    // If parent has saved a customized diet plan for this child, return it
+    if (profile.savedDietPlan) {
+        const saved = profile.savedDietPlan;
+        if (saved.weeklyPlan && typeof saved.weeklyPlan === 'object') {
+            const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+            const formattedDays = days.map(d => {
+                const dayData = saved.weeklyPlan[d] || {};
+                const slots = dayData.slots || {};
+                return {
+                    day: d.charAt(0).toUpperCase() + d.slice(1),
+                    focus: saved.selectedTheme || 'Customized Pediatric Plan',
+                    rationale: profile.customDietNotes || 'Tailored to child nutrient targets and parent preferences.',
+                    meals: {
+                        breakfast: slots.breakfast?.name || 'Ragi Dosa with Coconut Chutney',
+                        lunch: slots.lunch?.name || 'Palak Dal & Rice',
+                        snack: slots.eveningSnack?.name || slots.morningSnack?.name || 'Roasted Makhana',
+                        dinner: slots.dinner?.name || 'Moong Dal Khichdi'
+                    }
+                };
+            });
+            return res.status(200).json(new ApiResponse(200, { weeklyPlan: formattedDays, savedDietPlan: saved, customDietNotes: profile.customDietNotes }, 'Child saved diet plan retrieved successfully'));
+        }
+    }
 
     const prompt = `
 You are a pediatric nutritionist specializing in traditional Indian cuisine.
