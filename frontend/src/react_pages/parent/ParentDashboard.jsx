@@ -10,6 +10,7 @@ import WellnessInsightsModal from '../../components/parent/WellnessInsightsModal
 import { motion, AnimatePresence } from 'framer-motion';
 import TipCard from '../../components/common/TipCard';
 import NutriGuideChat from '../../components/parent/chat/NutriGuideChat';
+import { getParentTeleconsultations } from '../../api/consultation.api';
 
 const ParentDashboard = () => {
     const { user } = useAuth();
@@ -20,6 +21,7 @@ const ParentDashboard = () => {
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [insightsProfile, setInsightsProfile] = useState(null);
     const [view, setView] = useState('dashboard'); // 'dashboard' | 'chat'
+    const [activeTeleconsult, setActiveTeleconsult] = useState(null);
 
     const getDaysSinceUpdate = (profile) => {
         const lastUpdated = profile.updatedAt || profile.createdAt;
@@ -42,8 +44,17 @@ const ParentDashboard = () => {
 
     const fetchData = async () => {
         try {
-            const profilesRes = await getMyProfiles();
-            setProfiles(Array.isArray(profilesRes) ? profilesRes : profilesRes.data || []);
+            const [profilesRes, consultsRes] = await Promise.allSettled([
+                getMyProfiles(),
+                getParentTeleconsultations()
+            ]);
+            if (profilesRes.status === 'fulfilled') {
+                setProfiles(Array.isArray(profilesRes.value) ? profilesRes.value : profilesRes.value.data || []);
+            }
+            if (consultsRes.status === 'fulfilled' && Array.isArray(consultsRes.value)) {
+                const active = consultsRes.value.find(c => ['STARTED', 'IN_PROGRESS'].includes(c.status));
+                setActiveTeleconsult(active || null);
+            }
         } catch (error) {
             console.error("Error fetching dashboard data", error);
         } finally {
@@ -77,19 +88,68 @@ const ParentDashboard = () => {
                     <p className="text-slate-500 dark:text-slate-400 text-lg">Here's a look at how your little ones are growing today.</p>
                 </div>
 
-                <button
-                    onClick={() => setView('chat')}
-                    className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white pl-4 pr-6 py-3 rounded-2xl shadow-lg shadow-indigo-500/30 flex items-center gap-3 transition-all transform hover:scale-105 active:scale-95 group"
-                >
-                    <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm group-hover:rotate-12 transition-transform">
-                        <span className="material-symbols-outlined text-2xl text-white">smart_toy</span>
-                    </div>
-                    <div className="text-left">
-                        <p className="text-[10px] font-bold uppercase tracking-widest opacity-80">AI Companion</p>
-                        <p className="text-sm font-bold leading-none">Open NutriGuide</p>
-                    </div>
-                </button>
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={() => navigate('/parent/consultations')}
+                        className="bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800 hover:bg-indigo-50 dark:hover:bg-indigo-950/30 px-5 py-3 rounded-2xl shadow-sm flex items-center gap-2.5 transition font-bold text-sm"
+                    >
+                        <span className="material-symbols-outlined text-xl">video_call</span>
+                        <span>Consultations</span>
+                    </button>
+
+                    <button
+                        onClick={() => setView('chat')}
+                        className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white pl-4 pr-6 py-3 rounded-2xl shadow-lg shadow-indigo-500/30 flex items-center gap-3 transition-all transform hover:scale-105 active:scale-95 group"
+                    >
+                        <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm group-hover:rotate-12 transition-transform">
+                            <span className="material-symbols-outlined text-2xl text-white">smart_toy</span>
+                        </div>
+                        <div className="text-left">
+                            <p className="text-[10px] font-bold uppercase tracking-widest opacity-80">AI Companion</p>
+                            <p className="text-sm font-bold leading-none">Open NutriGuide</p>
+                        </div>
+                    </button>
+                </div>
             </div>
+
+            {/* LIVE ACTIVE VIDEO CONSULTATION ALERT BANNER */}
+            <AnimatePresence>
+                {activeTeleconsult && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        className="mb-8 p-5 rounded-3xl bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-xl shadow-emerald-900/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+                    >
+                        <div className="flex items-center gap-3.5">
+                            <div className="size-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-2xl animate-bounce">
+                                📹
+                            </div>
+                            <div>
+                                <div className="flex items-center gap-2">
+                                    <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-white text-emerald-800">
+                                        Live Now
+                                    </span>
+                                    <span className="text-xs font-semibold text-emerald-100">
+                                        Child: {activeTeleconsult.profileId?.name || 'Child'}
+                                    </span>
+                                </div>
+                                <h3 className="font-black text-base mt-0.5">
+                                    Dr. {activeTeleconsult.doctorId?.name || 'Doctor'} has started your consultation!
+                                </h3>
+                            </div>
+                        </div>
+
+                        <button
+                            onClick={() => navigate('/parent/consultations')}
+                            className="px-6 py-2.5 rounded-xl bg-white text-emerald-800 hover:bg-emerald-50 font-black text-xs shadow-lg transition active:scale-95 flex items-center gap-2 shrink-0"
+                        >
+                            <span className="material-symbols-outlined text-base">arrow_forward</span>
+                            Join Consultation Room
+                        </button>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             {/* Birthday Banner */}
             <AnimatePresence>

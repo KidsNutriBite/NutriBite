@@ -4,16 +4,28 @@ import axios from 'axios';
 // AI Service is running on port 8000 (FastAPI)
 const AI_URL = 'http://localhost:8000';
 
-export const analyzeNutrition = async (age, gender, meals) => {
+export const analyzeNutrition = async (age, gender, meals = []) => {
     try {
-        const response = await axios.post(`${AI_URL}/analyze`, {
-            age: parseInt(age),
-            gender: gender || 'neutral',
-            meals: meals.map(m => ({
-                name: m.foodItems.map(f => f.name).join(', '),
-                portion: '1 serving'
-            }))
+        const formattedMeals = (meals || []).map(m => {
+            let mealName = 'Nutritious Meal';
+            if (typeof m === 'string') {
+                mealName = m;
+            } else if (m?.name) {
+                mealName = m.name;
+            } else if (Array.isArray(m?.foodItems) && m.foodItems.length > 0) {
+                mealName = m.foodItems.map(f => (typeof f === 'string' ? f : f?.name || '')).filter(Boolean).join(', ');
+            }
+            return {
+                name: mealName,
+                portion: m?.quantity || m?.portion || '1 serving'
+            };
         });
+
+        const response = await axios.post(`${AI_URL}/analyze`, {
+            age: parseInt(age) || 5,
+            gender: gender || 'neutral',
+            meals: formattedMeals
+        }, { timeout: 15000 });
         return response.data;
     } catch (error) {
         console.error("AI Analysis Failed:", error);

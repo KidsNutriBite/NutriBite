@@ -25,6 +25,17 @@ const consultationRequestSchema = new mongoose.Schema(
         status: {
             type: String,
             enum: [
+                // Primary Teleconsultation States
+                'REQUESTED',
+                'ACCEPTED',
+                'SCHEDULED',
+                'STARTED',
+                'IN_PROGRESS',
+                'COMPLETED',
+                'REJECTED',
+                'CANCELLED',
+                'EXPIRED',
+                // Legacy Clinical States (backward compatible)
                 'Pending',
                 'AssignedToDietitian',
                 'UnderDietitianReview',
@@ -33,7 +44,63 @@ const consultationRequestSchema = new mongoose.Schema(
                 'PrescriptionIssued',
                 'Closed'
             ],
-            default: 'Pending',
+            default: 'REQUESTED',
+        },
+        // Teleconsultation Request Details
+        reason: {
+            type: String,
+            default: '',
+        },
+        description: {
+            type: String,
+            default: '',
+        },
+        preferredDate: {
+            type: Date,
+            default: null,
+        },
+        preferredTime: {
+            type: String,
+            default: '',
+        },
+        // Teleconsultation Scheduling Details
+        scheduledDate: {
+            type: Date,
+            default: null,
+        },
+        scheduledTime: {
+            type: String,
+            default: '',
+        },
+        scheduledDuration: {
+            type: Number,
+            default: 30, // in minutes
+        },
+        scheduledNotes: {
+            type: String,
+            default: '',
+        },
+        rejectionReason: {
+            type: String,
+            default: '',
+        },
+        // Active Call Session Details
+        callRoomId: {
+            type: String,
+            default: null,
+            index: true,
+        },
+        startedAt: {
+            type: Date,
+            default: null,
+        },
+        endedAt: {
+            type: Date,
+            default: null,
+        },
+        actualDurationMinutes: {
+            type: Number,
+            default: 0,
         },
         dietitianNotes: {
             type: String,
@@ -147,6 +214,11 @@ consultationRequestSchema.index(
         partialFilterExpression: {
             status: {
                 $in: [
+                    'REQUESTED',
+                    'ACCEPTED',
+                    'SCHEDULED',
+                    'STARTED',
+                    'IN_PROGRESS',
                     'Pending',
                     'AssignedToDietitian',
                     'UnderDietitianReview',

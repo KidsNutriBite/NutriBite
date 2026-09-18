@@ -108,7 +108,9 @@ export class AgentOrchestrator {
             dietPlan,
             providerStatus: {
                 provider: aiResponse.provider,
+                agentic_used: aiResponse.provider === 'nutrikid_agentic',
                 gemini_used: aiResponse.provider === 'gemini',
+                model: aiResponse.model || (aiResponse.provider === 'nutrikid_agentic' ? 'NVIDIA DeepSeek V4 Flash' : (aiResponse.provider === 'gemini' ? 'Gemini 2.5 Flash' : 'Agent Tool Synthesizer')),
                 latency_ms: latencyMs,
                 intent
             },
@@ -268,38 +270,57 @@ MANDATORY INSTRUCTIONS & OUTPUT FORMAT:
 
 Make the output look exceptionally clean, professional, and well-structured.`;
 
-        // Try Gemini 2.5 Flash first with tool grounding
-        if (apiKey) {
-            try {
-                const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-                const res = await axios.post(url, {
-                    contents: [{ parts: [{ text: promptText }] }]
-                }, {
-                    headers: { 'Content-Type': 'application/json' },
-                    timeout: 25000
-                });
+        // 1. PRIMARY: Query NutriKid Agentic API Engine (NVIDIA NIM / DeepSeek + Hybrid RAG + Deterministic Pediatric Planner)
+        const aiServiceUrl = process.env.AI_SERVICE_URL || 'http://localhost:8000';
+        try {
+            const agenticPayload = {
+                question: query,
+                age: childContext?.age || 5.0,
+                weight: childContext?.weight || 18.0,
+                condition: childContext?.healthConditions?.[0] || 'healthy_growth',
+                conditions: [
+                    ...(childContext?.allergies || []),
+                    ...(childContext?.healthConditions || [])
+                ].join(', ') || 'None',
+                goal: childContext?.goals?.primary || 'balanced_nutrition',
+                allergies: childContext?.allergies || [],
+                audience: 'parent',
+                history: (history || []).map(h => ({
+                    role: h.sender === 'user' ? 'user' : 'assistant',
+                    content: h.text || h.message || ''
+                })),
+                model: 'nvidia_deepseek'
+            };
 
-                const rawText = res.data?.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (rawText) {
-                    return {
-                        text: rawText,
-                        provider: 'gemini',
-                        sources: [
-                            'ICMR-NIN 2020 Dietary Guidelines for Indians',
-                            'Indian Food Composition Tables (IFCT)',
-                            'WHO Child Growth Standards'
-                        ]
-                    };
-                }
-            } catch (err) {
-                console.warn("[AgentOrchestrator] Gemini LLM call timed out or failed, using deterministic tool synthesizer:", err.message);
+            const agenticRes = await axios.post(`${aiServiceUrl}/ask`, agenticPayload, {
+                headers: { 'Content-Type': 'application/json' },
+                timeout: 60000
+            });
+
+            if (agenticRes.data && agenticRes.data.answer) {
+                const ragSources = (agenticRes.data.contexts || []).map(c => typeof c === 'string' ? c.slice(0, 80) + '...' : c.source || 'NutriKid Hybrid RAG Knowledge Base');
+                return {
+                    text: agenticRes.data.answer,
+                    provider: 'nutrikid_agentic',
+                    model: agenticRes.data.model_used || 'nvidia_deepseek',
+                    sources: [
+                        'NutriKid Agentic RAG Engine (NVIDIA DeepSeek V4 Flash)',
+                        'ICMR-NIN 2020 Dietary Guidelines for Indians',
+                        'Indian Food Composition Tables (IFCT)',
+                        'WHO Child Growth Standards',
+                        ...ragSources
+                    ]
+                };
             }
+        } catch (err) {
+            console.warn("[AgentOrchestrator] NutriKid Agentic API call failed:", err.message);
         }
 
-        // Deterministic Tool Synthesizer fallback
+        // 2. Deterministic Tool Synthesizer fallback (ICMR-NIN 2020 / IFCT Pediatric Database)
         return {
             text: this.formatDeterministicAgentResponse(intent, childContext, toolResults),
             provider: 'agent_tool_synthesizer',
+            model: 'Pediatric Clinical Tool Synthesizer',
             sources: ['ICMR-NIN 2020 Guidelines', 'IFCT Database', 'WHO Child Growth Standards']
         };
     }

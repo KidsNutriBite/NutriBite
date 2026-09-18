@@ -16,6 +16,7 @@ const doctorSchema = z.object({
     registrationId: z.string().min(2, 'Medical License ID is required'),
 });
 
+
 const dietitianSchema = z.object({
     role: z.literal('dietitian'),
     specialization: z.string().min(2, 'Specialization is required'),

@@ -9,6 +9,7 @@ import { sendSMS } from '../services/sms.service.js';
 import env from '../config/env.js';
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
+import logAuditEvent from '../utils/auditLogger.js';
 
 // @desc    Register user
 // @route   POST /api/auth/register
@@ -87,8 +88,6 @@ export const registerUser = asyncHandler(async (req, res) => {
         throw new Error('Invalid user data');
     }
 });
-
-import logAuditEvent from '../utils/auditLogger.js';
 
 // @desc    Login user
 // @route   POST /api/auth/login

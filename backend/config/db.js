@@ -11,50 +11,62 @@ const dbPath = path.resolve(__dirname, '..', '.db_data');
 let mongodInstance = null;
 
 const connectDB = async () => {
-    try {
-        const conn = await mongoose.connect(env.MONGO_URI, {
-            serverSelectionTimeoutMS: 3000,
-        });
-        console.log(`[NutriKid] ✅ MongoDB Connected: ${conn.connection.host}`);
-        return conn;
-    } catch (error) {
-        console.warn(`[NutriKid] ⚠️ Direct connection to "${env.MONGO_URI}" failed: ${error.message}`);
+    const maxRetries = 3;
+    let lastError = null;
 
-        // If local instance, start embedded MongoMemoryServer with persistent .db_data storage
-        const isLocal = env.MONGO_URI.includes('127.0.0.1') || env.MONGO_URI.includes('localhost');
-        if (isLocal) {
-            try {
-                console.log(`[NutriKid] 🚀 Initializing embedded MongoDB (Port 27017) with storage at: ${dbPath}`);
-                if (!fs.existsSync(dbPath)) {
-                    fs.mkdirSync(dbPath, { recursive: true });
-                }
-
-                const { MongoMemoryServer } = await import('mongodb-memory-server');
-                mongodInstance = await MongoMemoryServer.create({
-                    instance: {
-                        port: 27017,
-                        dbPath: dbPath,
-                        storageEngine: 'wiredTiger',
-                    },
-                });
-
-                const uri = mongodInstance.getUri();
-                console.log(`[NutriKid] ✅ Embedded MongoDB instance active at: ${uri}`);
-
-                const conn = await mongoose.connect(env.MONGO_URI, {
-                    serverSelectionTimeoutMS: 5000,
-                });
-                console.log(`[NutriKid] ✅ MongoDB Connected to Embedded Instance: ${conn.connection.host}`);
-                return conn;
-            } catch (embeddedErr) {
-                console.error(`[NutriKid] ❌ Could not start embedded MongoDB: ${embeddedErr.message}`);
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+            console.log(`[NutriKid] 🔄 Connecting to MongoDB (Attempt ${attempt}/${maxRetries})...`);
+            const conn = await mongoose.connect(env.MONGO_URI, {
+                serverSelectionTimeoutMS: 20000,
+                connectTimeoutMS: 20000,
+                socketTimeoutMS: 45000,
+            });
+            console.log(`[NutriKid] ✅ MongoDB Connected: ${conn.connection.host}`);
+            return conn;
+        } catch (error) {
+            lastError = error;
+            console.warn(`[NutriKid] ⚠️ Attempt ${attempt} failed to connect to MongoDB: ${error.message}`);
+            if (attempt < maxRetries) {
+                await new Promise((r) => setTimeout(r, 2000 * attempt));
             }
         }
-
-        console.error(`MongoDB Connection Error: ${error.message}`);
-        console.warn(`[NutriKid] Warning: Could not connect to MongoDB at "${env.MONGO_URI}". If using local MongoDB, please ensure the mongod service is active, or configure a remote MONGO_URI in backend/.env.`);
-        try { fs.appendFileSync('server.log', `DB Connection Failed: ${error.message}\n`); } catch (e) { }
     }
+
+    // If local instance, start embedded MongoMemoryServer with persistent .db_data storage
+    const isLocal = env.MONGO_URI.includes('127.0.0.1') || env.MONGO_URI.includes('localhost');
+    if (isLocal) {
+        try {
+            console.log(`[NutriKid] 🚀 Initializing embedded MongoDB (Port 27017) with storage at: ${dbPath}`);
+            if (!fs.existsSync(dbPath)) {
+                fs.mkdirSync(dbPath, { recursive: true });
+            }
+
+            const { MongoMemoryServer } = await import('mongodb-memory-server');
+            mongodInstance = await MongoMemoryServer.create({
+                instance: {
+                    port: 27017,
+                    dbPath: dbPath,
+                    storageEngine: 'wiredTiger',
+                },
+            });
+
+            const uri = mongodInstance.getUri();
+            console.log(`[NutriKid] ✅ Embedded MongoDB instance active at: ${uri}`);
+
+            const conn = await mongoose.connect(env.MONGO_URI, {
+                serverSelectionTimeoutMS: 10000,
+            });
+            console.log(`[NutriKid] ✅ MongoDB Connected to Embedded Instance: ${conn.connection.host}`);
+            return conn;
+        } catch (embeddedErr) {
+            console.error(`[NutriKid] ❌ Could not start embedded MongoDB: ${embeddedErr.message}`);
+        }
+    }
+
+    console.error(`[NutriKid] ❌ Fatal MongoDB Connection Error: ${lastError?.message}`);
+    try { fs.appendFileSync('server.log', `DB Connection Failed: ${lastError?.message}\n`); } catch (e) { }
+    throw lastError;
 };
 
 const gracefulShutdown = async () => {

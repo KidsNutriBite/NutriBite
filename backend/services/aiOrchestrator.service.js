@@ -150,7 +150,7 @@ export class CustomRagProvider {
         };
 
         const res = await axios.post(`${aiServiceUrl}/ask`, payload, {
-            timeout: 1500, // Quick fail if local RAG server is down
+            timeout: 30000,
             headers: { 'Content-Type': 'application/json' }
         });
 
@@ -167,67 +167,10 @@ export class CustomRagProvider {
 }
 
 // ==========================================
-// 4. FALLBACK PROVIDER: GEMINI 2.5 FLASH
-// ==========================================
-export class GeminiProvider {
-    static async generate(query, context, history = []) {
-        const apiKey = process.env.GEMINI_API_KEY;
-        if (!apiKey) {
-            throw new Error("GEMINI_API_KEY is not configured on server");
-        }
-
-        const doctorCheckupSection = context?.latestPrescription ? `
-Supervising Pediatrician: ${context.pediatrician?.name || 'Dr. Rajesh Iyer, MD'} (${context.pediatrician?.specialization || 'Pediatrics'})
-Latest Checkup Diagnosis: ${context.latestPrescription.diagnosis}
-Doctor's Medical Notes: "${context.latestPrescription.notes || context.pediatrician?.notes || ''}"
-Doctor's Prescription & Clinical Directives: "${context.latestPrescription.instructions}"` : '';
-
-        const childSummary = context ? `Child Profile:
-- Name: ${context.name}, Age: ${context.age}y, Gender: ${context.gender}, Weight: ${context.weight}kg, Height: ${context.height}cm
-- Registered Allergies (STRICT AVOIDANCE): ${context.allergies?.join(', ') || 'None'}
-- Active Health Conditions: ${context.healthConditions?.join(', ') || 'Healthy Growth'}
-${doctorCheckupSection}` : 'Child: School Age (General Pediatric).';
-
-        const promptText = `You are NutriGuide AI, an evidence-based Pediatric Nutrition Copilot grounded in ICMR-NIN 2020 Guidelines, WHO Growth Standards, and Indian Food Composition Tables (IFCT).
-
-${childSummary}
-
-Parent's Question: "${query}"
-
-Guidelines:
-1. Ground your recommendations strictly in the Pediatrician's Clinical Notes & Directives above.
-2. Provide practical, high-nutrient Indian whole foods (e.g. Sprouted Ragi, Moong Dal, Palak, Paneer, Curd, Citrus/Amla).
-3. Structure your response into:
-   - ### 💡 Clinical Pediatric Insight (Acknowledge recent doctor checkup findings and growth milestones)
-   - ### 📋 Recommended Foods & Meal Timing (Include Markdown Table if meal planning or food comparison)
-   - ### 🎯 Actionable Steps for Parents
-   - ### 🛡️ Allergy & Safety Verification
-4. Strictly respect allergy restrictions (${context?.allergies?.join(', ') || 'None'}).
-5. Explain the biological absorption rationale (e.g. Vitamin C synergy for iron, Vitamin D for calcium).`;
-
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-
-        const res = await axios.post(url, {
-            contents: [{
-                parts: [{ text: promptText }]
-            }]
-        }, {
-            headers: { 'Content-Type': 'application/json' },
-            timeout: 30000
-        });
-
-        const rawText = res.data?.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (!rawText) {
-            throw new Error("Empty completion returned by Gemini API");
-        }
-
-        return {
-            text: rawText,
-            sources: ['ICMR-NIN 2020 Guidelines', 'Indian Food Composition Tables (IFCT)', 'WHO Growth Standards'],
-            model: 'gemini-2.5-flash'
-        };
-    }
-}
+// 4. PEDIATRIC CLINICAL FALLBACK ENGINE (ICMR-NIN 2020 / IFCT)
+// =============================================================
+// Deterministic clinical engine used if RAG service is unreachable.
+// No external proprietary fallbacks (Gemini eliminated).
 
 // ==========================================
 // 5. RESPONSE VALIDATOR LAYER
@@ -280,27 +223,12 @@ export class NutriGuideOrchestrator {
                 throw new Error(`Validation failed: ${validation.reason}`);
             }
         } catch (primaryErr) {
-            // 3. Fallback to Gemini Provider
+            // Fallback to Rule-Based ICMR Pediatric Clinical Engine
             fallbackOccurred = true;
             fallbackReason = primaryErr.message;
-            providerUsed = 'gemini';
-
-            try {
-                result = await GeminiProvider.generate(sanitizedQuery, childContext, history);
-
-                // Validate Gemini Result
-                const validation = ResponseValidator.validate(result, childContext);
-                if (!validation.valid) {
-                    console.warn(`[NutriGuide Safety] Gemini response flagged: ${validation.reason}`);
-                }
-            } catch (geminiErr) {
-                console.warn("[NutriGuide Warning] Gemini provider failed:", geminiErr.message);
-                
-                // 4. Clinical Engine Fallback (Rule-Based ICMR Engine)
-                providerUsed = 'clinical_rule_engine';
-                fallbackReason += ` | Gemini: ${geminiErr.message}`;
-                result = this.generateClinicalRuleFallback(sanitizedQuery, childContext);
-            }
+            providerUsed = 'clinical_rule_engine';
+            console.warn("[NutriGuide Warning] Primary RAG engine error, utilizing deterministic clinical rule engine:", primaryErr.message);
+            result = this.generateClinicalRuleFallback(sanitizedQuery, childContext);
         }
 
         const latencyMs = Date.now() - startTime;
@@ -339,7 +267,7 @@ export class NutriGuideOrchestrator {
             providerStatus: {
                 provider: providerUsed,
                 custom_rag_available: !fallbackOccurred,
-                gemini_used: providerUsed === 'gemini',
+                agentic_used: providerUsed === 'custom_rag',
                 fallback_reason: fallbackReason,
                 latency_ms: latencyMs
             },

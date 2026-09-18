@@ -269,7 +269,11 @@ const ChatMessage = ({ msg, onActionClick, onSaveDietPlan }) => {
                         <span className="text-[11px] text-slate-400 font-normal">· {msg.time || 'Just now'}</span>
                     </div>
 
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 text-[10px] font-bold border border-indigo-500/20">
+                            <span className="material-symbols-outlined text-[11px] leading-none text-indigo-600 dark:text-indigo-400">psychology</span>
+                            <span>NutriKid Agentic (NVIDIA NIM / Hybrid RAG)</span>
+                        </span>
                         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 text-[10px] font-bold border border-emerald-500/20">
                             <ShieldCheckIcon />
                             <span>Clinical Safety Verified</span>
@@ -333,9 +337,10 @@ const ChatMessage = ({ msg, onActionClick, onSaveDietPlan }) => {
 
                     {showSources && (
                         <div className="mt-3 p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-[11px] text-slate-600 dark:text-slate-400 space-y-1.5 animate-in fade-in duration-150">
-                            <p><strong>1. ICMR-NIN (2020):</strong> Recommended Dietary Allowances for Indian School-Age Children & Toddlers. <a href="https://www.nin.res.in" target="_blank" rel="noopener noreferrer" className="text-indigo-600 underline font-semibold">nin.res.in</a></p>
-                            <p><strong>2. IFCT (Indian Food Composition Tables):</strong> Bioavailability and nutrient synergies for non-heme iron and calcium.</p>
-                            <p><strong>3. WHO Pediatric Standards:</strong> Stature velocity and anthropometric percentiles. <a href="https://www.who.int/tools/child-growth-standards" target="_blank" rel="noopener noreferrer" className="text-indigo-600 underline font-semibold">who.int</a></p>
+                            <p><strong>1. NutriKid Agentic RAG Engine:</strong> Hybrid clinical retriever with NVIDIA NIM (DeepSeek V4 Flash) & deterministic pediatric calorie planner.</p>
+                            <p><strong>2. ICMR-NIN (2020):</strong> Recommended Dietary Allowances for Indian School-Age Children & Toddlers. <a href="https://www.nin.res.in" target="_blank" rel="noopener noreferrer" className="text-indigo-600 underline font-semibold">nin.res.in</a></p>
+                            <p><strong>3. IFCT (Indian Food Composition Tables):</strong> Bioavailability and nutrient synergies for non-heme iron and calcium.</p>
+                            <p><strong>4. WHO Pediatric Standards:</strong> Stature velocity and anthropometric percentiles. <a href="https://www.who.int/tools/child-growth-standards" target="_blank" rel="noopener noreferrer" className="text-indigo-600 underline font-semibold">who.int</a></p>
                         </div>
                     )}
                 </div>
