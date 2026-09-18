@@ -4,6 +4,8 @@ import DietitianDoctorGroup from '../models/DietitianDoctorGroup.model.js';
 import User from '../models/User.model.js';
 import Profile from '../models/Profile.model.js';
 import Prescription from '../models/Prescription.model.js';
+import Notification from '../models/Notification.model.js';
+import { emitToUser, emitToRoom } from '../socket/videoSignaling.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import ApiResponse from '../utils/apiResponse.js';
 
@@ -827,3 +829,547 @@ export const clearAllVideoCallLogs = asyncHandler(async (req, res) => {
 
     res.status(200).json(new ApiResponse(200, { totalCalls: 0 }, 'All video call logs cleared'));
 });
+
+// =========================================================================
+// NEW APPOINTMENT-BASED TELECONSULTATION WORKFLOW CONTROLLERS
+// =========================================================================
+
+/**
+ * 1. Parent requests video consultation
+ * POST /api/consultations/teleconsult/request
+ * Access: Private (Parent)
+ */
+export const requestTeleconsultation = asyncHandler(async (req, res) => {
+    const { profileId, doctorId, reason, description, preferredDate, preferredTime } = req.body;
+    const parentId = req.user._id;
+
+    if (!profileId || !doctorId || !reason) {
+        res.status(400);
+        throw new Error('Child profile, Doctor, and Reason for consultation are required');
+    }
+
+    // 1. Verify child belongs to parent
+    const child = await Profile.findOne({ _id: profileId, parentId });
+    if (!child) {
+        res.status(403);
+        throw new Error('Unauthorized: Child profile does not belong to you');
+    }
+
+    // 2. Verify doctor exists and has doctor role
+    const doctor = await User.findOne({ _id: doctorId, role: 'doctor' });
+    if (!doctor) {
+        res.status(404);
+        throw new Error('Selected doctor not found or invalid');
+    }
+
+    // 3. Check for existing active teleconsultation
+    const existingActive = await ConsultationRequest.findOne({
+        profileId,
+        doctorId,
+        status: { $in: ['REQUESTED', 'ACCEPTED', 'SCHEDULED', 'STARTED', 'IN_PROGRESS'] }
+    });
+
+    if (existingActive) {
+        res.status(400);
+        throw new Error(`An active consultation request (${existingActive.status}) already exists with Dr. ${doctor.name} for ${child.name}`);
+    }
+
+    // 4. Create consultation with status REQUESTED
+    const consultation = await ConsultationRequest.create({
+        profileId,
+        parentId,
+        doctorId,
+        reason: reason.trim(),
+        description: description ? description.trim() : '',
+        preferredDate: preferredDate ? new Date(preferredDate) : null,
+        preferredTime: preferredTime || '',
+        status: 'REQUESTED'
+    });
+
+    // 5. Notify doctor
+    const notificationMsg = `New video consultation requested for ${child.name} by ${req.user.name}. Reason: "${reason.slice(0, 50)}${reason.length > 50 ? '...' : ''}"`;
+    await Notification.create({
+        recipientId: doctor._id,
+        senderId: parentId,
+        type: 'doctor_message',
+        message: notificationMsg,
+    });
+
+    emitToUser(doctor._id, 'teleconsult-update', {
+        type: 'REQUESTED',
+        requestId: consultation._id,
+        message: notificationMsg
+    });
+
+    const populated = await ConsultationRequest.findById(consultation._id)
+        .populate('profileId', 'name age gender avatar allergies healthConditions')
+        .populate('doctorId', 'name email doctorProfile profileImage');
+
+    res.status(201).json(new ApiResponse(201, populated, 'Video consultation request submitted successfully'));
+});
+
+/**
+ * 2. Get Doctor's teleconsultations
+ * GET /api/consultations/teleconsult/doctor
+ * Access: Private (Doctor)
+ */
+export const getDoctorTeleconsultations = asyncHandler(async (req, res) => {
+    const doctorId = req.user._id;
+
+    const consultations = await ConsultationRequest.find({
+        doctorId,
+        status: { $in: ['REQUESTED', 'ACCEPTED', 'SCHEDULED', 'STARTED', 'IN_PROGRESS', 'COMPLETED', 'REJECTED', 'CANCELLED'] }
+    })
+        .populate('profileId', 'name age gender height weight avatar allergies healthConditions')
+        .populate('parentId', 'name email phone parentProfile')
+        .sort({ updatedAt: -1, createdAt: -1 });
+
+    res.status(200).json(new ApiResponse(200, consultations, 'Doctor teleconsultations retrieved'));
+});
+
+/**
+ * 3. Get Parent's teleconsultations
+ * GET /api/consultations/teleconsult/parent
+ * Access: Private (Parent)
+ */
+export const getParentTeleconsultations = asyncHandler(async (req, res) => {
+    const parentId = req.user._id;
+
+    const consultations = await ConsultationRequest.find({
+        parentId,
+        status: { $in: ['REQUESTED', 'ACCEPTED', 'SCHEDULED', 'STARTED', 'IN_PROGRESS', 'COMPLETED', 'REJECTED', 'CANCELLED'] }
+    })
+        .populate('profileId', 'name age gender height weight avatar allergies healthConditions')
+        .populate('doctorId', 'name email doctorProfile profileImage')
+        .sort({ updatedAt: -1, createdAt: -1 });
+
+    res.status(200).json(new ApiResponse(200, consultations, 'Parent teleconsultations retrieved'));
+});
+
+/**
+ * 4. Doctor Reviews Request (Accept / Reject)
+ * POST /api/consultations/teleconsult/:requestId/review
+ * Access: Private (Doctor)
+ */
+export const reviewTeleconsultation = asyncHandler(async (req, res) => {
+    const { requestId } = req.params;
+    const { action, rejectionReason } = req.body;
+    const doctorId = req.user._id;
+
+    if (!['ACCEPT', 'REJECT'].includes(action)) {
+        res.status(400);
+        throw new Error('Action must be either ACCEPT or REJECT');
+    }
+
+    const consultation = await ConsultationRequest.findOne({ _id: requestId, doctorId })
+        .populate('profileId', 'name')
+        .populate('doctorId', 'name');
+
+    if (!consultation) {
+        res.status(404);
+        throw new Error('Consultation request not found or unauthorized');
+    }
+
+    if (consultation.status !== 'REQUESTED') {
+        res.status(400);
+        throw new Error(`Cannot review consultation with status '${consultation.status}'. Must be 'REQUESTED'.`);
+    }
+
+    if (action === 'ACCEPT') {
+        consultation.status = 'ACCEPTED';
+        await consultation.save();
+
+        const msg = `Dr. ${consultation.doctorId.name} accepted your consultation request for ${consultation.profileId.name}. You will be notified once the appointment is scheduled.`;
+        await Notification.create({
+            recipientId: consultation.parentId,
+            senderId: doctorId,
+            type: 'appointment_update',
+            message: msg
+        });
+
+        emitToUser(consultation.parentId, 'teleconsult-update', {
+            type: 'ACCEPTED',
+            requestId: consultation._id,
+            message: msg
+        });
+
+        res.status(200).json(new ApiResponse(200, consultation, 'Consultation request accepted. Next: schedule appointment.'));
+    } else {
+        consultation.status = 'REJECTED';
+        consultation.rejectionReason = rejectionReason || 'Doctor unavailable at requested time';
+        await consultation.save();
+
+        const msg = `Dr. ${consultation.doctorId.name} declined the consultation request: "${consultation.rejectionReason}".`;
+        await Notification.create({
+            recipientId: consultation.parentId,
+            senderId: doctorId,
+            type: 'appointment_update',
+            message: msg
+        });
+
+        emitToUser(consultation.parentId, 'teleconsult-update', {
+            type: 'REJECTED',
+            requestId: consultation._id,
+            message: msg
+        });
+
+        res.status(200).json(new ApiResponse(200, consultation, 'Consultation request rejected'));
+    }
+});
+
+/**
+ * 5. Doctor Schedules Appointment
+ * POST /api/consultations/teleconsult/:requestId/schedule
+ * Access: Private (Doctor)
+ */
+export const scheduleTeleconsultation = asyncHandler(async (req, res) => {
+    const { requestId } = req.params;
+    const { scheduledDate, scheduledTime, scheduledDuration, scheduledNotes } = req.body;
+    const doctorId = req.user._id;
+
+    if (!scheduledDate || !scheduledTime) {
+        res.status(400);
+        throw new Error('Scheduled date and start time are required');
+    }
+
+    const consultation = await ConsultationRequest.findOne({ _id: requestId, doctorId })
+        .populate('profileId', 'name')
+        .populate('doctorId', 'name');
+
+    if (!consultation) {
+        res.status(404);
+        throw new Error('Consultation not found or unauthorized');
+    }
+
+    if (!['ACCEPTED', 'REQUESTED', 'SCHEDULED'].includes(consultation.status)) {
+        res.status(400);
+        throw new Error(`Cannot schedule consultation in status '${consultation.status}'`);
+    }
+
+    // Validate that schedule is not in the past
+    // scheduledDate can be "YYYY-MM-DD" and scheduledTime "HH:MM"
+    const parsedDate = new Date(`${scheduledDate.split('T')[0]}T${scheduledTime}`);
+    if (isNaN(parsedDate.getTime())) {
+        res.status(400);
+        throw new Error('Invalid date or time format');
+    }
+
+    // Allow a 5-minute grace period for immediate schedules
+    if (parsedDate.getTime() < Date.now() - 5 * 60 * 1000) {
+        res.status(400);
+        throw new Error('Scheduled appointment cannot be set in the past');
+    }
+
+    // Check for conflicting appointments for the same doctor at the same slot
+    const durationMins = Number(scheduledDuration) || 30;
+    const slotEnd = new Date(parsedDate.getTime() + durationMins * 60 * 1000);
+
+    const conflict = await ConsultationRequest.findOne({
+        _id: { $ne: consultation._id },
+        doctorId,
+        status: 'SCHEDULED',
+        scheduledDate: {
+            $gte: new Date(parsedDate.getTime() - 29 * 60 * 1000),
+            $lte: slotEnd
+        }
+    });
+
+    if (conflict) {
+        res.status(400);
+        throw new Error(`Schedule conflict: You already have another consultation scheduled around this time (${conflict.scheduledTime || 'same slot'}).`);
+    }
+
+    consultation.scheduledDate = parsedDate;
+    consultation.scheduledTime = scheduledTime;
+    consultation.scheduledDuration = durationMins;
+    consultation.scheduledNotes = scheduledNotes ? scheduledNotes.trim() : '';
+    consultation.status = 'SCHEDULED';
+    await consultation.save();
+
+    const formattedDate = parsedDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    const msg = `Video consultation with Dr. ${consultation.doctorId.name} scheduled for ${formattedDate} at ${scheduledTime} (${durationMins} mins).`;
+    await Notification.create({
+        recipientId: consultation.parentId,
+        senderId: doctorId,
+        type: 'appointment_update',
+        message: msg
+    });
+
+    emitToUser(consultation.parentId, 'teleconsult-update', {
+        type: 'SCHEDULED',
+        requestId: consultation._id,
+        scheduledDate: parsedDate,
+        scheduledTime,
+        message: msg
+    });
+
+    res.status(200).json(new ApiResponse(200, consultation, 'Consultation appointment scheduled successfully'));
+});
+
+/**
+ * 6. Doctor Starts Video Consultation (Gatekeeper Start)
+ * POST /api/consultations/teleconsult/:requestId/start
+ * Access: Private (Doctor ONLY)
+ */
+export const startTeleconsultation = asyncHandler(async (req, res) => {
+    const { requestId } = req.params;
+    const doctorId = req.user._id;
+
+    const consultation = await ConsultationRequest.findOne({ _id: requestId, doctorId })
+        .populate('profileId', 'name')
+        .populate('doctorId', 'name');
+
+    if (!consultation) {
+        res.status(404);
+        throw new Error('Consultation not found or unauthorized');
+    }
+
+    if (!['SCHEDULED', 'STARTED', 'IN_PROGRESS'].includes(consultation.status)) {
+        res.status(400);
+        throw new Error(`Cannot start consultation in status '${consultation.status}'. Must be 'SCHEDULED'.`);
+    }
+
+    // Start Window Validation:
+    // Allow doctor to start from 15 minutes before scheduled start time up to duration + 60 minutes after
+    if (consultation.scheduledDate) {
+        const scheduledStart = new Date(consultation.scheduledDate).getTime();
+        const now = Date.now();
+        const earlyWindowMs = 15 * 60 * 1000; // 15 mins early
+        const lateWindowMs = ((consultation.scheduledDuration || 30) + 60) * 60 * 1000;
+
+        if (now < scheduledStart - earlyWindowMs) {
+            const minsLeft = Math.ceil((scheduledStart - now) / 60000);
+            res.status(400);
+            throw new Error(`Cannot start consultation yet. Appointment is scheduled in ${minsLeft} minutes (${consultation.scheduledTime}). Window opens 15 mins prior.`);
+        }
+    }
+
+    // Generate room ID if not already generated
+    if (!consultation.callRoomId) {
+        consultation.callRoomId = `teleconsult-${consultation._id}-${Date.now()}`;
+    }
+
+    consultation.status = 'STARTED';
+    if (!consultation.startedAt) {
+        consultation.startedAt = new Date();
+    }
+    await consultation.save();
+
+    // Notify parent immediately
+    const alertMsg = `🔔 ACTION REQUIRED: Dr. ${consultation.doctorId.name} has started the video consultation for ${consultation.profileId.name}! Click to join now.`;
+    await Notification.create({
+        recipientId: consultation.parentId,
+        senderId: doctorId,
+        type: 'doctor_message',
+        message: alertMsg
+    });
+
+    emitToUser(consultation.parentId, 'consultation-started', {
+        requestId: consultation._id,
+        callRoomId: consultation.callRoomId,
+        doctorName: consultation.doctorId.name,
+        childName: consultation.profileId.name,
+        message: alertMsg
+    });
+
+    emitToUser(consultation.parentId, 'teleconsult-update', {
+        type: 'STARTED',
+        requestId: consultation._id,
+        callRoomId: consultation.callRoomId
+    });
+
+    res.status(200).json(new ApiResponse(200, {
+        callRoomId: consultation.callRoomId,
+        status: consultation.status,
+        startedAt: consultation.startedAt,
+        consultation
+    }, 'Video consultation started successfully. Waiting for parent to join.'));
+});
+
+/**
+ * 7. Join Video Consultation (Strict Gatekeeper Join)
+ * POST /api/consultations/teleconsult/:requestId/join
+ * Access: Private (Doctor or Parent belonging to consultation)
+ */
+export const joinTeleconsultation = asyncHandler(async (req, res) => {
+    const { requestId } = req.params;
+    const userId = req.user._id.toString();
+    const userRole = req.user.role;
+
+    const consultation = await ConsultationRequest.findById(requestId)
+        .populate('profileId', 'name')
+        .populate('doctorId', 'name')
+        .populate('parentId', 'name');
+
+    if (!consultation) {
+        res.status(404);
+        throw new Error('Consultation not found');
+    }
+
+    const isAssignedDoctor = consultation.doctorId?._id?.toString() === userId;
+    const isChildParent = consultation.parentId?._id?.toString() === userId;
+
+    if (!isAssignedDoctor && !isChildParent) {
+        res.status(403);
+        throw new Error('Access Denied: You do not belong to this consultation session');
+    }
+
+    // STRICT PARENT JOIN GATE:
+    // Parent CANNOT join before Doctor has started the consultation!
+    if (userRole === 'parent') {
+        if (['REQUESTED', 'ACCEPTED'].includes(consultation.status)) {
+            res.status(403);
+            throw new Error('Access Denied: This consultation is not scheduled or started yet.');
+        }
+
+        if (consultation.status === 'SCHEDULED') {
+            res.status(403);
+            throw new Error('Access Denied: The doctor has not started the video consultation yet. Please wait until your doctor starts the call.');
+        }
+
+        if (['COMPLETED', 'REJECTED', 'CANCELLED', 'EXPIRED'].includes(consultation.status)) {
+            res.status(403);
+            throw new Error('Access Denied: This video consultation has already ended or is no longer active.');
+        }
+    }
+
+    // When parent joins an already STARTED consultation, move to IN_PROGRESS
+    if (consultation.status === 'STARTED' && userRole === 'parent') {
+        consultation.status = 'IN_PROGRESS';
+        await consultation.save();
+
+        emitToUser(consultation.doctorId._id, 'teleconsult-update', {
+            type: 'IN_PROGRESS',
+            requestId: consultation._id,
+            message: `${consultation.parentId.name} has joined the consultation.`
+        });
+    }
+
+    res.status(200).json(new ApiResponse(200, {
+        callRoomId: consultation.callRoomId,
+        status: consultation.status,
+        consultation
+    }, 'Access granted to video consultation'));
+});
+
+/**
+ * 8. Doctor Ends Consultation
+ * POST /api/consultations/teleconsult/:requestId/end
+ * Access: Private (Doctor ONLY)
+ */
+export const endTeleconsultation = asyncHandler(async (req, res) => {
+    const { requestId } = req.params;
+    const { doctorNotes, summary, recommendations, medicinesDiscussed } = req.body;
+    const doctorId = req.user._id;
+
+    const consultation = await ConsultationRequest.findOne({ _id: requestId, doctorId })
+        .populate('profileId', 'name')
+        .populate('doctorId', 'name');
+
+    if (!consultation) {
+        res.status(404);
+        throw new Error('Consultation not found or unauthorized');
+    }
+
+    if (!['STARTED', 'IN_PROGRESS', 'SCHEDULED'].includes(consultation.status)) {
+        res.status(400);
+        throw new Error(`Cannot end consultation in status '${consultation.status}'`);
+    }
+
+    const now = new Date();
+    const durationMs = consultation.startedAt ? now.getTime() - consultation.startedAt.getTime() : 0;
+    const durationMinutes = Math.max(1, Math.round(durationMs / 60000));
+
+    consultation.status = 'COMPLETED';
+    consultation.endedAt = now;
+    consultation.actualDurationMinutes = durationMinutes;
+    if (doctorNotes) consultation.doctorNotes = doctorNotes.trim();
+
+    // Also persist into videoCallLogs so all clinical audit logs remain populated
+    consultation.videoCallLogs.push({
+        callDate: now,
+        durationMinutes,
+        doctorNotes: doctorNotes || '',
+        summary: summary || `Teleconsultation conducted by Dr. ${consultation.doctorId.name} for ${consultation.profileId.name}. Reason: ${consultation.reason}`,
+        recommendations: recommendations || [],
+        medicinesDiscussed: medicinesDiscussed || [],
+        generatedBy: 'Doctor'
+    });
+
+    await consultation.save();
+
+    // Emit call-ended to video room via Socket.IO
+    if (consultation.callRoomId) {
+        emitToRoom(consultation.callRoomId, 'call-ended', {
+            notes: doctorNotes || '',
+            durationMinutes
+        });
+    }
+
+    // Notify parent
+    const finishMsg = `Your video consultation with Dr. ${consultation.doctorId.name} has concluded. Total duration: ${durationMinutes} mins.`;
+    await Notification.create({
+        recipientId: consultation.parentId,
+        senderId: doctorId,
+        type: 'appointment_update',
+        message: finishMsg
+    });
+
+    emitToUser(consultation.parentId, 'teleconsult-update', {
+        type: 'COMPLETED',
+        requestId: consultation._id,
+        message: finishMsg
+    });
+
+    res.status(200).json(new ApiResponse(200, consultation, 'Consultation completed and locked successfully.'));
+});
+
+/**
+ * 9. Get Live Consultation Status & Permissions
+ * GET /api/consultations/teleconsult/:requestId/status
+ * Access: Private (Doctor or Parent)
+ */
+export const getTeleconsultationStatus = asyncHandler(async (req, res) => {
+    const { requestId } = req.params;
+    const userId = req.user._id.toString();
+    const userRole = req.user.role;
+
+    const consultation = await ConsultationRequest.findById(requestId)
+        .populate('profileId', 'name avatar')
+        .populate('doctorId', 'name doctorProfile profileImage')
+        .populate('parentId', 'name');
+
+    if (!consultation) {
+        res.status(404);
+        throw new Error('Consultation not found');
+    }
+
+    const isAssignedDoctor = consultation.doctorId?._id?.toString() === userId;
+    const isChildParent = consultation.parentId?._id?.toString() === userId;
+
+    if (!isAssignedDoctor && !isChildParent) {
+        res.status(403);
+        throw new Error('Unauthorized');
+    }
+
+    const isStarted = ['STARTED', 'IN_PROGRESS'].includes(consultation.status);
+    const canJoin = isStarted || (userRole === 'doctor' && consultation.status === 'SCHEDULED');
+
+    res.status(200).json(new ApiResponse(200, {
+        _id: consultation._id,
+        status: consultation.status,
+        callRoomId: isStarted ? consultation.callRoomId : null,
+        isDoctorStarted: isStarted,
+        canJoin,
+        scheduledDate: consultation.scheduledDate,
+        scheduledTime: consultation.scheduledTime,
+        scheduledDuration: consultation.scheduledDuration,
+        doctorNotes: consultation.doctorNotes,
+        rejectionReason: consultation.rejectionReason,
+        actualDurationMinutes: consultation.actualDurationMinutes,
+        doctor: consultation.doctorId,
+        child: consultation.profileId,
+        parent: consultation.parentId
+    }, 'Status retrieved'));
+});
+

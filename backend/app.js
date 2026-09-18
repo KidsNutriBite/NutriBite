@@ -31,6 +31,8 @@ import consultationRoutes from './routes/consultation.routes.js';
 import videoRoutes from './routes/video.routes.js';
 import adminRoutes from './routes/admin.routes.js';
 import aiRoutes from './routes/ai.routes.js';
+import accessRoutes from './routes/access.routes.js';
+import feedbackRoutes from './routes/feedback.routes.js';
 import { correlationMiddleware, requestLatencyLogger } from './utils/otel.js';
 import { protect } from './middlewares/auth.middleware.js';
 import { authorize } from './middlewares/role.middleware.js';
@@ -118,6 +120,8 @@ app.use('/api/dietitian', dietitianRoutes);
 app.use('/api/video', videoRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/access', accessRoutes);
+app.use('/api/feedback', feedbackRoutes);
 
 // Debug Food Analysis Route (Task 5)
 const upload = multer();

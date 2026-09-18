@@ -17,7 +17,16 @@ import {
     generateVideoCallSummary,
     deleteVideoCallLog,
     clearAllVideoCallLogs,
-    generateAiSummary
+    generateAiSummary,
+    requestTeleconsultation,
+    getDoctorTeleconsultations,
+    getParentTeleconsultations,
+    reviewTeleconsultation,
+    scheduleTeleconsultation,
+    startTeleconsultation,
+    joinTeleconsultation,
+    endTeleconsultation,
+    getTeleconsultationStatus
 } from '../controllers/consultation.controller.js';
 import { protect } from '../middlewares/auth.middleware.js';
 import { authorize } from '../middlewares/role.middleware.js';
@@ -60,5 +69,24 @@ router.post('/:requestId/video-summary', authorize('parent', 'doctor', 'dietitia
 router.post('/:requestId/video-summary/:logId/generate-ai', authorize('parent', 'doctor', 'dietitian'), generateAiSummary);
 router.delete('/:requestId/video-summary/:logId', authorize('parent', 'doctor', 'dietitian'), deleteVideoCallLog);
 router.delete('/:requestId/video-summary', authorize('parent', 'doctor', 'dietitian'), clearAllVideoCallLogs);
+
+// =========================================================================
+// NEW RELIABLE APPOINTMENT-BASED TELECONSULTATION ROUTES
+// =========================================================================
+
+// Parent Teleconsultation endpoints
+router.post('/teleconsult/request', authorize('parent'), requestTeleconsultation);
+router.get('/teleconsult/parent', authorize('parent'), getParentTeleconsultations);
+
+// Doctor Teleconsultation endpoints
+router.get('/teleconsult/doctor', authorize('doctor'), getDoctorTeleconsultations);
+router.post('/teleconsult/:requestId/review', authorize('doctor'), reviewTeleconsultation);
+router.post('/teleconsult/:requestId/schedule', authorize('doctor'), scheduleTeleconsultation);
+router.post('/teleconsult/:requestId/start', authorize('doctor'), startTeleconsultation);
+router.post('/teleconsult/:requestId/end', authorize('doctor'), endTeleconsultation);
+
+// Shared Teleconsultation endpoints (Strict join & status gatekeeping)
+router.post('/teleconsult/:requestId/join', authorize('parent', 'doctor'), joinTeleconsultation);
+router.get('/teleconsult/:requestId/status', authorize('parent', 'doctor'), getTeleconsultationStatus);
 
 export default router;

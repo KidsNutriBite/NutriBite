@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { getMyPatients, getEscalations, resolveEscalation } from '../../api/doctor.api';
+import { getDoctorTeleconsultations } from '../../api/consultation.api';
 
 const avatarMap = { lion: '🦁', bear: '🐻', rabbit: '🐰', fox: '🦊', cat: '🐱', dog: '🐶' };
 
@@ -14,6 +15,9 @@ const DoctorDashboard = () => {
     // Escalation State
     const [escalations, setEscalations] = useState([]);
     const [alertLoading, setAlertLoading] = useState(true);
+
+    // Teleconsultations State
+    const [consultations, setConsultations] = useState([]);
 
     const router = useRouter();
     const navigate = (path) => typeof path === 'number' && path < 0 ? router.back() : router.push(path);
@@ -49,11 +53,24 @@ const DoctorDashboard = () => {
         }
     };
 
+    const fetchConsultations = async () => {
+        try {
+            const data = await getDoctorTeleconsultations();
+            setConsultations(data || []);
+        } catch (e) {
+            console.warn("Could not fetch teleconsultations:", e);
+        }
+    };
+
     useEffect(() => {
         fetchPatients();
         fetchEscalations();
+        fetchConsultations();
 
-        const interval = setInterval(fetchEscalations, 30000);
+        const interval = setInterval(() => {
+            fetchEscalations();
+            fetchConsultations();
+        }, 30000);
         return () => clearInterval(interval);
     }, []);
 
@@ -160,7 +177,36 @@ const DoctorDashboard = () => {
                     <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">My Cases & Patients</h1>
                     <p className="text-slate-500 font-medium font-sans">Clinical assignments and family-invited profiles</p>
                 </div>
+
+                <button
+                    onClick={() => navigate('/doctor/appointments')}
+                    className="px-5 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs shadow-md shadow-indigo-600/30 flex items-center gap-2.5 transition active:scale-95"
+                >
+                    <span className="material-symbols-outlined text-lg">video_camera_front</span>
+                    <span>Video Consultations</span>
+                    {consultations.filter(c => c.status === 'REQUESTED').length > 0 && (
+                        <span className="size-5 rounded-full bg-amber-400 text-slate-950 font-extrabold text-[10px] flex items-center justify-center">
+                            {consultations.filter(c => c.status === 'REQUESTED').length}
+                        </span>
+                    )}
+                </button>
             </div>
+
+            {/* Active Teleconsultation Banner */}
+            {consultations.some(c => ['STARTED', 'IN_PROGRESS'].includes(c.status)) && (
+                <div className="p-5 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-700 text-white shadow-lg flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        <span className="size-3 rounded-full bg-white animate-ping"></span>
+                        <p className="font-black text-sm">A video consultation session is currently active.</p>
+                    </div>
+                    <button
+                        onClick={() => navigate('/doctor/appointments')}
+                        className="px-4 py-2 bg-white text-emerald-800 font-bold rounded-xl text-xs hover:bg-emerald-50 transition"
+                    >
+                        Enter Consultation
+                    </button>
+                </div>
+            )}
 
             {/* Escalation Alerts Panel */}
             {escalations.length > 0 && (

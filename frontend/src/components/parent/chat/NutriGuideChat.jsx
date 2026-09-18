@@ -223,6 +223,8 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
                         toolsUsed: response.toolsUsed || [],
                         followUps: response.followUps || [],
                         dietPlan: response.dietPlan || null,
+                        providerStatus: response.providerStatus || null,
+                        sources: response.sources || [],
                         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
                     }
                 ]);

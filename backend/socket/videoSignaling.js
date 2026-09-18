@@ -1,5 +1,7 @@
 import { Server } from 'socket.io';
 
+let ioInstance = null;
+
 export const setupVideoSignaling = (httpServer) => {
     const io = new Server(httpServer, {
         cors: {
@@ -11,14 +13,27 @@ export const setupVideoSignaling = (httpServer) => {
         transports: ['polling', 'websocket'],
     });
 
+    ioInstance = io;
+
     // Track rooms: roomId -> Set of socket IDs
     const rooms = new Map();
 
     io.on('connection', (socket) => {
         console.log(`[Video] Socket connected: ${socket.id}`);
 
+        // Register user for targeted real-time alerts
+        socket.on('register-user', (userId) => {
+            if (userId) {
+                const userRoom = `user_${userId}`;
+                socket.join(userRoom);
+                socket.data.userId = userId;
+                console.log(`[Socket] Registered user ${userId} to room: ${userRoom}`);
+            }
+        });
+
         // Join a call room based on consultation ID
-        socket.on('join-room', ({ roomId, userRole, userName }) => {
+        socket.on('join-room', ({ roomId, userRole, userName, userId }) => {
+            if (!roomId) return;
             socket.join(roomId);
 
             if (!rooms.has(roomId)) rooms.set(roomId, new Set());
@@ -34,11 +49,13 @@ export const setupVideoSignaling = (httpServer) => {
                 peerId: socket.id,
                 userRole,
                 userName,
+                userId,
             });
 
             socket.data.roomId = roomId;
             socket.data.userRole = userRole;
             socket.data.userName = userName;
+            if (userId) socket.data.userId = userId;
             console.log(`[Video] ${userName} (${userRole}) joined room: ${roomId}`);
         });
 
@@ -78,11 +95,24 @@ export const setupVideoSignaling = (httpServer) => {
         });
 
         // Call ended by one party
-        socket.on('end-call', ({ roomId }) => {
-            socket.to(roomId).emit('call-ended');
+        socket.on('end-call', ({ roomId, notes }) => {
+            io.to(roomId).emit('call-ended', { notes });
         });
     });
 
     return io;
+};
+
+export const getIO = () => ioInstance;
+
+export const emitToUser = (userId, event, data) => {
+    if (!ioInstance || !userId) return;
+    const userRoom = `user_${userId.toString()}`;
+    ioInstance.to(userRoom).emit(event, data);
+};
+
+export const emitToRoom = (roomId, event, data) => {
+    if (!ioInstance || !roomId) return;
+    ioInstance.to(roomId).emit(event, data);
 };
 
