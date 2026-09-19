@@ -22,7 +22,7 @@
         "mongoose": "^8.2.1",
         "multer": "^2.0.2",
         "node-cache": "^5.1.2",
-        "nodemailer": "^8.0.1",
+        "nodemailer": "^10.0.10",
         "rbush": "^4.0.1",
         "socket.io": "^4.8.3",
         "zod": "^3.22.4"

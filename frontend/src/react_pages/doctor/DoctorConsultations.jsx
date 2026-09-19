@@ -74,12 +74,14 @@ export default function DoctorConsultations() {
         };
     }, [user?._id, fetchConsultations]);
 
-    // Filter consultations by state
-    const requestedList = consultations.filter((c) => c.status === 'REQUESTED');
-    const acceptedList = consultations.filter((c) => c.status === 'ACCEPTED');
-    const scheduledList = consultations.filter((c) => c.status === 'SCHEDULED');
-    const activeList = consultations.filter((c) => ['STARTED', 'IN_PROGRESS'].includes(c.status));
-    const completedList = consultations.filter((c) => ['COMPLETED', 'REJECTED', 'CANCELLED'].includes(c.status));
+    // Filter consultations by state (Prioritizing emergencies at the top)
+    const sortedRequests = [...consultations].sort((a, b) => (b.isEmergency ? 1 : 0) - (a.isEmergency ? 1 : 0));
+    const requestedList = sortedRequests.filter((c) => c.status === 'REQUESTED');
+    const acceptedList = sortedRequests.filter((c) => c.status === 'ACCEPTED');
+    const scheduledList = sortedRequests.filter((c) => c.status === 'SCHEDULED');
+    const activeList = sortedRequests.filter((c) => ['STARTED', 'IN_PROGRESS'].includes(c.status));
+    const completedList = sortedRequests.filter((c) => ['COMPLETED', 'REJECTED', 'CANCELLED'].includes(c.status));
+    const emergencyCount = requestedList.filter(c => c.isEmergency).length;
 
     // Handle Accept Click -> Open Scheduling Modal
     const handleAcceptClick = (consultation) => {
@@ -105,9 +107,14 @@ export default function DoctorConsultations() {
 
         setScheduling(true);
         try {
-            // First accept if it was REQUESTED
+            // First accept if it was in REQUESTED status
             if (selectedRequestForSchedule.status === 'REQUESTED') {
-                await reviewTeleconsultation(selectedRequestForSchedule._id, { action: 'ACCEPT' });
+                try {
+                    await reviewTeleconsultation(selectedRequestForSchedule._id, { action: 'ACCEPT' });
+                } catch (reviewErr) {
+                    // If already accepted, continue smoothly to schedule
+                    console.warn('Review step:', reviewErr?.response?.data?.message || reviewErr.message);
+                }
             }
 
             // Then schedule
@@ -194,6 +201,12 @@ export default function DoctorConsultations() {
                 </div>
 
                 <div className="flex gap-2 bg-white/10 p-1.5 rounded-2xl backdrop-blur-sm border border-white/10 shrink-0">
+                    {emergencyCount > 0 && (
+                        <div className="px-4 py-2 text-center border-r border-white/10 bg-rose-500/20 rounded-xl animate-pulse">
+                            <p className="text-[10px] uppercase font-black text-rose-300">🚨 Emergency</p>
+                            <p className="text-lg font-black text-rose-200">{emergencyCount}</p>
+                        </div>
+                    )}
                     <div className="px-4 py-2 text-center border-r border-white/10">
                         <p className="text-[10px] uppercase font-bold text-slate-300">Requests</p>
                         <p className="text-lg font-black">{requestedList.length}</p>
@@ -251,13 +264,15 @@ export default function DoctorConsultations() {
                     onClick={() => setActiveTab('requests')}
                     className={`px-5 py-2.5 rounded-2xl text-xs font-black uppercase tracking-wider transition flex items-center gap-2 ${
                         activeTab === 'requests'
-                            ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
+                            ? (emergencyCount > 0 ? 'bg-rose-600 text-white shadow-md shadow-rose-600/30' : 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30')
                             : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
                     }`}
                 >
                     <span>Consultation Requests</span>
                     {requestedList.length > 0 && (
-                        <span className="size-5 rounded-full bg-white text-indigo-600 text-[10px] flex items-center justify-center font-bold">
+                        <span className={`size-5 rounded-full text-[10px] flex items-center justify-center font-bold ${
+                            emergencyCount > 0 ? 'bg-white text-rose-600 animate-pulse' : 'bg-white text-indigo-600'
+                        }`}>
                             {requestedList.length}
                         </span>
                     )}
@@ -324,39 +339,54 @@ export default function DoctorConsultations() {
                             {[...requestedList, ...acceptedList].map((c) => (
                                 <div
                                     key={c._id}
-                                    className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4 flex flex-col justify-between"
+                                    className={`p-6 rounded-3xl bg-white dark:bg-slate-900 border shadow-sm space-y-4 flex flex-col justify-between ${
+                                        c.isEmergency ? 'border-2 border-rose-500 dark:border-rose-600 bg-rose-50/20 shadow-rose-900/10' : 'border-slate-200 dark:border-slate-800'
+                                    }`}
                                 >
                                     <div className="space-y-3">
                                         <div className="flex justify-between items-start">
                                             <div className="flex items-center gap-3">
-                                                <div className="size-11 rounded-2xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 flex items-center justify-center font-bold text-lg">
-                                                    👶
+                                                <div className={`size-11 rounded-2xl flex items-center justify-center font-bold text-lg ${
+                                                    c.isEmergency ? 'bg-rose-600 text-white animate-pulse' : 'bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600'
+                                                }`}>
+                                                    {c.isEmergency ? '🚨' : '👶'}
                                                 </div>
                                                 <div>
-                                                    <h4 className="font-black text-slate-900 dark:text-white text-base">
-                                                        {c.profileId?.name} ({c.profileId?.age}y, {c.profileId?.gender})
-                                                    </h4>
+                                                    <div className="flex items-center gap-1.5">
+                                                        <h4 className="font-black text-slate-900 dark:text-white text-base">
+                                                            {c.profileId?.name} ({c.profileId?.age}y, {c.profileId?.gender})
+                                                        </h4>
+                                                    </div>
                                                     <p className="text-xs text-slate-400">
                                                         Parent: {c.parentId?.name} · {c.parentId?.phone || c.parentId?.email}
                                                     </p>
                                                 </div>
                                             </div>
 
-                                            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${
-                                                c.status === 'ACCEPTED'
-                                                    ? 'bg-indigo-50 text-indigo-600 border border-indigo-200'
-                                                    : 'bg-amber-50 text-amber-600 border border-amber-200'
-                                            }`}>
-                                                {c.status === 'ACCEPTED' ? 'Accepted' : 'Requested'}
-                                            </span>
+                                            <div className="flex flex-col items-end gap-1">
+                                                {c.isEmergency && (
+                                                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-rose-600 text-white animate-pulse">
+                                                        🚨 Urgent Emergency
+                                                    </span>
+                                                )}
+                                                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${
+                                                    c.status === 'ACCEPTED'
+                                                        ? 'bg-indigo-50 text-indigo-600 border border-indigo-200'
+                                                        : 'bg-amber-50 text-amber-600 border border-amber-200'
+                                                }`}>
+                                                    {c.status === 'ACCEPTED' ? 'Accepted' : 'Requested'}
+                                                </span>
+                                            </div>
                                         </div>
 
-                                        <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/40 text-xs space-y-1">
+                                        <div className={`p-3 rounded-2xl text-xs space-y-1 ${
+                                            c.isEmergency ? 'bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900' : 'bg-slate-50 dark:bg-slate-800/40'
+                                        }`}>
                                             <p className="font-bold text-slate-800 dark:text-slate-200">
-                                                Reason: <span className="font-normal text-slate-600 dark:text-slate-300">{c.reason}</span>
+                                                Reason: <span className="font-semibold text-slate-900 dark:text-white">{c.reason}</span>
                                             </p>
                                             {c.description && (
-                                                <p className="text-slate-500 italic">"{c.description}"</p>
+                                                <p className="text-slate-600 dark:text-slate-300 italic">"{c.description}"</p>
                                             )}
                                         </div>
 
@@ -365,29 +395,40 @@ export default function DoctorConsultations() {
                                                 Requested on: {new Date(c.createdAt).toLocaleDateString()}
                                             </span>
                                             {c.preferredTime && (
-                                                <span className="font-bold text-indigo-500">
-                                                    Prefers: {c.preferredTime}
+                                                <span className={`font-bold ${c.isEmergency ? 'text-rose-600' : 'text-indigo-500'}`}>
+                                                    {c.isEmergency ? '🚨 Immediate' : `Prefers: ${c.preferredTime}`}
                                                 </span>
                                             )}
                                         </div>
                                     </div>
 
                                     {/* Action Buttons */}
-                                    <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2">
+                                    <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end gap-2 flex-wrap">
                                         <button
                                             onClick={() => setSelectedRequestForReject(c)}
-                                            className="px-4 py-2 rounded-xl text-xs font-bold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 transition"
+                                            className="px-3.5 py-2 rounded-xl text-xs font-bold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/20 transition"
                                         >
                                             Decline
                                         </button>
 
-                                        <button
-                                            onClick={() => handleAcceptClick(c)}
-                                            className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs shadow-md shadow-indigo-600/30 flex items-center gap-1.5 transition active:scale-95"
-                                        >
-                                            <span className="material-symbols-outlined text-base">event</span>
-                                            {c.status === 'ACCEPTED' ? 'Set Schedule' : 'Accept & Schedule'}
-                                        </button>
+                                        {c.isEmergency ? (
+                                            <button
+                                                onClick={() => handleStartConsultation(c)}
+                                                disabled={startingId === c._id}
+                                                className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-black text-xs shadow-md shadow-rose-600/40 flex items-center gap-1.5 transition active:scale-95 animate-pulse"
+                                            >
+                                                <span className="material-symbols-outlined text-base">video_call</span>
+                                                {startingId === c._id ? 'Starting Call...' : '🚨 Start Emergency Call Now'}
+                                            </button>
+                                        ) : (
+                                            <button
+                                                onClick={() => handleAcceptClick(c)}
+                                                className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs shadow-md shadow-indigo-600/30 flex items-center gap-1.5 transition active:scale-95"
+                                            >
+                                                <span className="material-symbols-outlined text-base">event</span>
+                                                {c.status === 'ACCEPTED' ? 'Set Schedule' : 'Accept & Schedule'}
+                                            </button>
+                                        )}
                                     </div>
                                 </div>
                             ))}

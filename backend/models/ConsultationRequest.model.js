@@ -47,6 +47,15 @@ const consultationRequestSchema = new mongoose.Schema(
             default: 'REQUESTED',
         },
         // Teleconsultation Request Details
+        isEmergency: {
+            type: Boolean,
+            default: false,
+        },
+        priority: {
+            type: String,
+            enum: ['ROUTINE', 'EMERGENCY'],
+            default: 'ROUTINE',
+        },
         reason: {
             type: String,
             default: '',

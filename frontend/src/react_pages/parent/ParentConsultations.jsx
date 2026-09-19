@@ -23,6 +23,15 @@ const QUICK_REASONS = [
     'General Pediatric Wellness Checkup'
 ];
 
+const EMERGENCY_REASONS = [
+    'High Fever & Convulsions',
+    'Severe Allergic Reaction / Hives',
+    'Acute Vomiting & Severe Dehydration',
+    'Difficulty Breathing / Wheezing',
+    'Sudden Lethargy / Unresponsive',
+    'Accidental Ingestion / Toxicity'
+];
+
 export default function ParentConsultations() {
     const { selectedProfileId, selectedProfile, profiles } = useProfile();
     const { user } = useAuth();
@@ -44,6 +53,7 @@ export default function ParentConsultations() {
     const [description, setDescription] = useState('');
     const [preferredDate, setPreferredDate] = useState('');
     const [preferredTime, setPreferredTime] = useState('10:00 AM');
+    const [isEmergency, setIsEmergency] = useState(false);
     const [submitting, setSubmitting] = useState(false);
 
     // Fetch consultations
@@ -142,6 +152,22 @@ export default function ParentConsultations() {
         };
     }, [user?._id, fetchConsultations]);
 
+    // Open Modal helper
+    const openRequestModal = (emergencyMode = false) => {
+        if (selectedChildFilter && selectedChildFilter !== 'ALL') {
+            setTargetProfileId(selectedChildFilter);
+        } else if (profiles && profiles.length > 0) {
+            setTargetProfileId(profiles[0]._id);
+        }
+        setIsEmergency(emergencyMode);
+        if (emergencyMode) {
+            setReason('High Fever & Convulsions');
+        } else {
+            setReason('');
+        }
+        setIsRequestModalOpen(true);
+    };
+
     // Submit Request
     const handleRequestSubmit = async (e) => {
         e.preventDefault();
@@ -157,13 +183,15 @@ export default function ParentConsultations() {
                 doctorId: targetDoctorId,
                 reason,
                 description,
-                preferredDate: preferredDate || null,
-                preferredTime
+                preferredDate: isEmergency ? null : (preferredDate || null),
+                preferredTime: isEmergency ? 'IMMEDIATE / URGENT' : preferredTime,
+                isEmergency
             });
-            toast.success('Consultation request sent directly to assigned doctor!');
+            toast.success(isEmergency ? '🚨 Emergency consultation request sent! Doctor alerted immediately.' : 'Consultation request sent directly to assigned doctor!');
             setIsRequestModalOpen(false);
             setReason('');
             setDescription('');
+            setIsEmergency(false);
             fetchConsultations();
         } catch (err) {
             toast.error(err.response?.data?.message || 'Failed to submit consultation request');
@@ -218,22 +246,27 @@ export default function ParentConsultations() {
                     </div>
                     <h1 className="text-2xl md:text-3xl font-black">Video Teleconsultations</h1>
                     <p className="text-slate-300 text-sm mt-1 max-w-xl">
-                        Schedule and attend video consultations assigned specifically to each of your children's pediatricians.
+                        Schedule routine pediatric consultations or request immediate emergency video calls with your child's assigned doctor.
                     </p>
                 </div>
 
-                <button
-                    onClick={() => {
-                        if (selectedChildFilter && selectedChildFilter !== 'ALL') {
-                            setTargetProfileId(selectedChildFilter);
-                        }
-                        setIsRequestModalOpen(true);
-                    }}
-                    className="px-6 py-3.5 bg-indigo-500 hover:bg-indigo-400 text-white font-black rounded-2xl shadow-lg shadow-indigo-500/30 flex items-center gap-2 transition active:scale-95 text-sm shrink-0"
-                >
-                    <span className="material-symbols-outlined text-xl">add_circle</span>
-                    Request Video Consultation
-                </button>
+                <div className="flex flex-wrap gap-2.5 shrink-0">
+                    <button
+                        onClick={() => openRequestModal(true)}
+                        className="px-5 py-3 bg-rose-600 hover:bg-rose-500 text-white font-black rounded-2xl shadow-lg shadow-rose-600/30 flex items-center gap-2 transition active:scale-95 text-xs animate-pulse"
+                    >
+                        <span className="material-symbols-outlined text-lg">emergency</span>
+                        Emergency Video Request
+                    </button>
+
+                    <button
+                        onClick={() => openRequestModal(false)}
+                        className="px-5 py-3 bg-indigo-500 hover:bg-indigo-400 text-white font-black rounded-2xl shadow-lg shadow-indigo-500/30 flex items-center gap-2 transition active:scale-95 text-xs"
+                    >
+                        <span className="material-symbols-outlined text-lg">add_circle</span>
+                        Book Appointment
+                    </button>
+                </div>
             </div>
 
             {/* CHILD FILTER TABS */}
@@ -300,16 +333,24 @@ export default function ParentConsultations() {
                             key={c._id}
                             initial={{ opacity: 0, scale: 0.98 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            className="p-6 rounded-3xl bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent border-2 border-emerald-500/40 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6"
+                            className={`p-6 rounded-3xl border-2 shadow-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-6 ${
+                                c.isEmergency
+                                    ? 'bg-gradient-to-r from-rose-500/20 via-amber-500/10 to-transparent border-rose-500/60'
+                                    : 'bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-transparent border-emerald-500/40'
+                            }`}
                         >
                             <div className="flex items-center gap-4">
-                                <div className="size-14 rounded-2xl bg-emerald-500 text-white flex items-center justify-center text-3xl shadow-lg shadow-emerald-500/30">
-                                    📹
+                                <div className={`size-14 rounded-2xl text-white flex items-center justify-center text-3xl shadow-lg ${
+                                    c.isEmergency ? 'bg-rose-600 shadow-rose-600/40 animate-pulse' : 'bg-emerald-500 shadow-emerald-500/30'
+                                }`}>
+                                    {c.isEmergency ? '🚨' : '📹'}
                                 </div>
                                 <div>
                                     <div className="flex items-center gap-2">
-                                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-emerald-500 text-white animate-pulse">
-                                            Doctor Started Call
+                                        <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase text-white animate-pulse ${
+                                            c.isEmergency ? 'bg-rose-600' : 'bg-emerald-500'
+                                        }`}>
+                                            {c.isEmergency ? 'Emergency Call Live' : 'Doctor Started Call'}
                                         </span>
                                         <span className="text-xs font-bold text-slate-500">Child: {c.profileId?.name}</span>
                                     </div>
@@ -325,7 +366,11 @@ export default function ParentConsultations() {
                             <button
                                 onClick={() => handleJoinClick(c)}
                                 disabled={joiningId === c._id}
-                                className="px-8 py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm rounded-2xl shadow-xl shadow-emerald-600/30 flex items-center gap-2.5 transition active:scale-95 disabled:opacity-50"
+                                className={`px-8 py-3.5 text-white font-black text-sm rounded-2xl shadow-xl flex items-center gap-2.5 transition active:scale-95 disabled:opacity-50 ${
+                                    c.isEmergency
+                                        ? 'bg-rose-600 hover:bg-rose-500 shadow-rose-600/30 animate-pulse'
+                                        : 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-600/30'
+                                }`}
                             >
                                 <span className="material-symbols-outlined text-xl">video_call</span>
                                 {joiningId === c._id ? 'Connecting...' : 'Join Video Consultation'}
@@ -353,13 +398,22 @@ export default function ParentConsultations() {
                         {scheduledConsultations.map((c) => (
                             <div
                                 key={c._id}
-                                className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4"
+                                className={`p-6 rounded-3xl bg-white dark:bg-slate-900 border shadow-sm space-y-4 ${
+                                    c.isEmergency ? 'border-rose-300 dark:border-rose-900/50 bg-rose-50/20' : 'border-slate-200 dark:border-slate-800'
+                                }`}
                             >
                                 <div className="flex justify-between items-start">
                                     <div>
-                                        <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800">
-                                            Status: Scheduled
-                                        </span>
+                                        <div className="flex items-center gap-2">
+                                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800">
+                                                Status: Scheduled
+                                            </span>
+                                            {c.isEmergency && (
+                                                <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-rose-600 text-white">
+                                                    🚨 Emergency
+                                                </span>
+                                            )}
+                                        </div>
                                         <h4 className="font-black text-base text-slate-900 dark:text-white mt-2">
                                             Dr. {c.doctorId?.name || 'Assigned Doctor'}
                                         </h4>
@@ -418,24 +472,33 @@ export default function ParentConsultations() {
                         {pendingConsultations.map((c) => (
                             <div
                                 key={c._id}
-                                className="p-6 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3"
+                                className={`p-6 rounded-3xl bg-white dark:bg-slate-900 border shadow-sm space-y-3 ${
+                                    c.isEmergency ? 'border-rose-400 dark:border-rose-900 bg-rose-50/20' : 'border-slate-200 dark:border-slate-800'
+                                }`}
                             >
                                 <div className="flex justify-between items-start">
                                     <div>
-                                        <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-800">
-                                            {c.status === 'ACCEPTED' ? 'Accepted — Awaiting Schedule' : 'Awaiting Doctor Review'}
-                                        </span>
+                                        <div className="flex items-center gap-2">
+                                            <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border border-amber-200 dark:border-amber-800">
+                                                {c.status === 'ACCEPTED' ? 'Accepted — Awaiting Schedule' : 'Awaiting Doctor Review'}
+                                            </span>
+                                            {c.isEmergency && (
+                                                <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-rose-600 text-white animate-pulse">
+                                                    🚨 Emergency
+                                                </span>
+                                            )}
+                                        </div>
                                         <h4 className="font-black text-base text-slate-900 dark:text-white mt-2">
                                             Target Doctor: Dr. {c.doctorId?.name || 'Pediatric Consultant'}
                                         </h4>
                                         <p className="text-xs text-slate-500">Child: <span className="font-bold text-slate-700 dark:text-slate-300">{c.profileId?.name}</span></p>
                                     </div>
                                     <div className="text-right text-[11px] text-slate-400">
-                                        <p>Preferred Date:</p>
-                                        <p className="font-bold text-slate-700 dark:text-slate-300">
-                                            {c.preferredDate ? new Date(c.preferredDate).toLocaleDateString() : 'Flexible'}
+                                        <p>{c.isEmergency ? 'Urgency:' : 'Preferred Date:'}</p>
+                                        <p className={`font-bold ${c.isEmergency ? 'text-rose-600' : 'text-slate-700 dark:text-slate-300'}`}>
+                                            {c.isEmergency ? 'IMMEDIATE' : (c.preferredDate ? new Date(c.preferredDate).toLocaleDateString() : 'Flexible')}
                                         </p>
-                                        <p className="text-indigo-500 font-semibold">{c.preferredTime}</p>
+                                        <p className={c.isEmergency ? 'text-rose-600 font-bold' : 'text-indigo-500 font-semibold'}>{c.preferredTime}</p>
                                     </div>
                                 </div>
 
@@ -495,7 +558,7 @@ export default function ParentConsultations() {
                 )}
             </div>
 
-            {/* REQUEST CONSULTATION MODAL */}
+            {/* REQUEST MODAL */}
             <AnimatePresence>
                 {isRequestModalOpen && (
                     <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
@@ -503,15 +566,29 @@ export default function ParentConsultations() {
                             initial={{ opacity: 0, scale: 0.95 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0, scale: 0.95 }}
-                            className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 md:p-8 max-w-xl w-full shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto"
+                            className={`bg-white dark:bg-slate-900 border rounded-3xl p-6 md:p-8 max-w-xl w-full max-h-[90vh] overflow-y-auto shadow-2xl space-y-6 ${
+                                isEmergency ? 'border-rose-500 shadow-rose-900/20' : 'border-slate-200 dark:border-slate-800'
+                            }`}
                         >
-                            <div className="flex justify-between items-center border-b border-slate-100 dark:border-slate-800 pb-4">
+                            {/* Modal Header */}
+                            <div className="flex items-start justify-between">
                                 <div>
+                                    <div className="flex items-center gap-2 mb-1">
+                                        <span className={`material-symbols-outlined text-xl ${isEmergency ? 'text-rose-500 animate-pulse' : 'text-indigo-600'}`}>
+                                            {isEmergency ? 'emergency' : 'videocam'}
+                                        </span>
+                                        <span className={`text-[10px] font-black uppercase tracking-widest ${isEmergency ? 'text-rose-500' : 'text-indigo-600'}`}>
+                                            {isEmergency ? 'Urgent Pediatric Triage' : 'Telehealth Booking'}
+                                        </span>
+                                    </div>
                                     <h3 className="font-black text-xl text-slate-900 dark:text-white">
-                                        Request Video Consultation
+                                        {isEmergency ? 'Request Emergency Video Consultation' : 'Request Video Consultation'}
                                     </h3>
                                     <p className="text-xs text-slate-500 mt-0.5">
-                                        Your request is automatically routed to the child's assigned pediatrician.
+                                        {isEmergency
+                                            ? 'Immediate alert sent directly to doctor. Bypasses regular queue even if routine visits exist.'
+                                            : "Your request is automatically routed to the child's assigned pediatrician."
+                                        }
                                     </p>
                                 </div>
                                 <button
@@ -519,6 +596,51 @@ export default function ParentConsultations() {
                                     className="text-slate-400 hover:text-slate-600 p-1"
                                 >
                                     <span className="material-symbols-outlined">close</span>
+                                </button>
+                            </div>
+
+                            {/* EMERGENCY TOGGLE BANNER */}
+                            <div className={`p-4 rounded-2xl border transition flex items-center justify-between gap-4 ${
+                                isEmergency
+                                    ? 'bg-rose-50 dark:bg-rose-950/40 border-rose-200 dark:border-rose-900'
+                                    : 'bg-slate-50 dark:bg-slate-800/60 border-slate-200 dark:border-slate-700'
+                            }`}>
+                                <div className="flex items-center gap-3">
+                                    <div className={`size-10 rounded-xl flex items-center justify-center text-xl shrink-0 ${
+                                        isEmergency ? 'bg-rose-600 text-white animate-pulse' : 'bg-slate-200 dark:bg-slate-700 text-slate-500'
+                                    }`}>
+                                        🚨
+                                    </div>
+                                    <div>
+                                        <p className="text-xs font-black text-slate-900 dark:text-white">
+                                            Emergency / Urgent Request
+                                        </p>
+                                        <p className="text-[11px] text-slate-500">
+                                            {isEmergency
+                                                ? 'Active: Bypasses standard appointment queue & alerts doctor immediately'
+                                                : 'Turn on for acute symptoms requiring immediate doctor attention'}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        const next = !isEmergency;
+                                        setIsEmergency(next);
+                                        if (next && (!reason || QUICK_REASONS.includes(reason))) {
+                                            setReason('High Fever & Convulsions');
+                                        }
+                                    }}
+                                    className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                                        isEmergency ? 'bg-rose-600' : 'bg-slate-300 dark:bg-slate-700'
+                                    }`}
+                                >
+                                    <span
+                                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${
+                                            isEmergency ? 'translate-x-5' : 'translate-x-0'
+                                        }`}
+                                    />
                                 </button>
                             </div>
 
@@ -589,17 +711,17 @@ export default function ParentConsultations() {
                                 {/* Quick Reason Pills */}
                                 <div>
                                     <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
-                                        Primary Reason for Consultation
+                                        {isEmergency ? 'Emergency Clinical Reason' : 'Primary Reason for Consultation'}
                                     </label>
                                     <div className="flex flex-wrap gap-1.5 mb-2">
-                                        {QUICK_REASONS.map((qr) => (
+                                        {(isEmergency ? EMERGENCY_REASONS : QUICK_REASONS).map((qr) => (
                                             <button
                                                 type="button"
                                                 key={qr}
                                                 onClick={() => setReason(qr)}
                                                 className={`px-3 py-1 rounded-full text-xs font-semibold transition ${
                                                     reason === qr
-                                                        ? 'bg-indigo-600 text-white'
+                                                        ? (isEmergency ? 'bg-rose-600 text-white' : 'bg-indigo-600 text-white')
                                                         : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
                                                 }`}
                                             >
@@ -611,7 +733,7 @@ export default function ParentConsultations() {
                                         type="text"
                                         value={reason}
                                         onChange={(e) => setReason(e.target.value)}
-                                        placeholder="Or enter custom consultation topic..."
+                                        placeholder={isEmergency ? "e.g. Sudden severe allergy / chest pain / high fever" : "Or enter custom consultation topic..."}
                                         className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-indigo-500"
                                         required
                                     />
@@ -620,50 +742,59 @@ export default function ParentConsultations() {
                                 {/* Additional Details */}
                                 <div>
                                     <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
-                                        Additional Symptoms / Description (Optional)
+                                        Symptoms / Observations {isEmergency && '(Provide immediate details)'}
                                     </label>
                                     <textarea
                                         rows={3}
                                         value={description}
                                         onChange={(e) => setDescription(e.target.value)}
-                                        placeholder="Describe symptoms or concerns for the assigned doctor to review..."
+                                        placeholder={isEmergency ? "Describe what is happening right now, temperature, breathing, or visible symptoms..." : "Describe symptoms or concerns for the assigned doctor to review..."}
                                         className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-sm text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:border-indigo-500"
                                     />
                                 </div>
 
-                                {/* Preferred Date & Time */}
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
-                                            Preferred Date
-                                        </label>
-                                        <input
-                                            type="date"
-                                            value={preferredDate}
-                                            min={new Date().toISOString().split('T')[0]}
-                                            onChange={(e) => setPreferredDate(e.target.value)}
-                                            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
-                                        />
-                                    </div>
+                                {/* Preferred Date & Time (Only for non-emergency) */}
+                                {!isEmergency ? (
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                                                Preferred Date
+                                            </label>
+                                            <input
+                                                type="date"
+                                                value={preferredDate}
+                                                min={new Date().toISOString().split('T')[0]}
+                                                onChange={(e) => setPreferredDate(e.target.value)}
+                                                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
+                                            />
+                                        </div>
 
-                                    <div>
-                                        <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
-                                            Preferred Time Slot
-                                        </label>
-                                        <select
-                                            value={preferredTime}
-                                            onChange={(e) => setPreferredTime(e.target.value)}
-                                            className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
-                                        >
-                                            <option value="09:00 AM">09:00 AM – 10:00 AM</option>
-                                            <option value="10:00 AM">10:00 AM – 11:00 AM</option>
-                                            <option value="11:30 AM">11:30 AM – 12:30 PM</option>
-                                            <option value="02:00 PM">02:00 PM – 03:00 PM</option>
-                                            <option value="04:00 PM">04:00 PM – 05:00 PM</option>
-                                            <option value="06:00 PM">06:00 PM – 07:00 PM</option>
-                                        </select>
+                                        <div>
+                                            <label className="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">
+                                                Preferred Time Slot
+                                            </label>
+                                            <select
+                                                value={preferredTime}
+                                                onChange={(e) => setPreferredTime(e.target.value)}
+                                                className="w-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-3 text-sm text-slate-900 dark:text-white focus:outline-none focus:border-indigo-500"
+                                            >
+                                                <option value="09:00 AM">09:00 AM – 10:00 AM</option>
+                                                <option value="10:00 AM">10:00 AM – 11:00 AM</option>
+                                                <option value="11:30 AM">11:30 AM – 12:30 PM</option>
+                                                <option value="02:00 PM">02:00 PM – 03:00 PM</option>
+                                                <option value="04:00 PM">04:00 PM – 05:00 PM</option>
+                                                <option value="06:00 PM">06:00 PM – 07:00 PM</option>
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
+                                ) : (
+                                    <div className="p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-xs text-rose-600 dark:text-rose-400 flex items-center gap-2.5">
+                                        <span className="material-symbols-outlined text-lg">bolt</span>
+                                        <p className="font-bold">
+                                            Timing: Immediate (Doctor will be notified with high-priority audio/visual alert).
+                                        </p>
+                                    </div>
+                                )}
 
                                 <div className="flex justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
                                     <button
@@ -676,9 +807,13 @@ export default function ParentConsultations() {
                                     <button
                                         type="submit"
                                         disabled={submitting}
-                                        className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-black rounded-xl shadow-lg shadow-indigo-600/30 flex items-center gap-1.5 transition disabled:opacity-50"
+                                        className={`px-6 py-2.5 text-white text-xs font-black rounded-xl shadow-lg flex items-center gap-1.5 transition disabled:opacity-50 ${
+                                            isEmergency
+                                                ? 'bg-rose-600 hover:bg-rose-500 shadow-rose-600/30 animate-pulse'
+                                                : 'bg-indigo-600 hover:bg-indigo-500 shadow-indigo-600/30'
+                                        }`}
                                     >
-                                        {submitting ? 'Submitting...' : 'Send Request to Doctor'}
+                                        {submitting ? 'Submitting...' : isEmergency ? '🚨 Send Emergency Request Now' : 'Send Request to Doctor'}
                                     </button>
                                 </div>
                             </form>

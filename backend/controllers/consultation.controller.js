@@ -840,7 +840,7 @@ export const clearAllVideoCallLogs = asyncHandler(async (req, res) => {
  * Access: Private (Parent)
  */
 export const requestTeleconsultation = asyncHandler(async (req, res) => {
-    const { profileId, doctorId, reason, description, preferredDate, preferredTime } = req.body;
+    const { profileId, doctorId, reason, description, preferredDate, preferredTime, isEmergency } = req.body;
     const parentId = req.user._id;
 
     if (!profileId || !doctorId || !reason) {
@@ -863,15 +863,33 @@ export const requestTeleconsultation = asyncHandler(async (req, res) => {
     }
 
     // 3. Check for existing active teleconsultation
-    const existingActive = await ConsultationRequest.findOne({
-        profileId,
-        doctorId,
-        status: { $in: ['REQUESTED', 'ACCEPTED', 'SCHEDULED', 'STARTED', 'IN_PROGRESS'] }
-    });
+    if (isEmergency) {
+        // For Emergency requests: Allow even if a regular scheduled appointment exists!
+        // Only block if an emergency request is already active in progress
+        const existingActiveEmergency = await ConsultationRequest.findOne({
+            profileId,
+            doctorId,
+            isEmergency: true,
+            status: { $in: ['REQUESTED', 'ACCEPTED', 'STARTED', 'IN_PROGRESS'] }
+        });
 
-    if (existingActive) {
-        res.status(400);
-        throw new Error(`An active consultation request (${existingActive.status}) already exists with Dr. ${doctor.name} for ${child.name}`);
+        if (existingActiveEmergency) {
+            res.status(400);
+            throw new Error(`An emergency consultation (${existingActiveEmergency.status}) is already active with Dr. ${doctor.name} for ${child.name}. Please wait for doctor response or join the active call.`);
+        }
+    } else {
+        // For standard routine requests: check if an active non-emergency request exists
+        const existingActive = await ConsultationRequest.findOne({
+            profileId,
+            doctorId,
+            isEmergency: { $ne: true },
+            status: { $in: ['REQUESTED', 'ACCEPTED', 'SCHEDULED', 'STARTED', 'IN_PROGRESS'] }
+        });
+
+        if (existingActive) {
+            res.status(400);
+            throw new Error(`An active consultation request (${existingActive.status}) already exists with Dr. ${doctor.name} for ${child.name}. For immediate urgent assistance, toggle '🚨 Emergency Consultation'.`);
+        }
     }
 
     // 4. Create consultation with status REQUESTED
@@ -881,31 +899,39 @@ export const requestTeleconsultation = asyncHandler(async (req, res) => {
         doctorId,
         reason: reason.trim(),
         description: description ? description.trim() : '',
-        preferredDate: preferredDate ? new Date(preferredDate) : null,
-        preferredTime: preferredTime || '',
+        preferredDate: isEmergency ? new Date() : (preferredDate ? new Date(preferredDate) : null),
+        preferredTime: isEmergency ? 'IMMEDIATE / URGENT' : (preferredTime || ''),
+        isEmergency: !!isEmergency,
+        priority: isEmergency ? 'EMERGENCY' : 'ROUTINE',
         status: 'REQUESTED'
     });
 
     // 5. Notify doctor
-    const notificationMsg = `New video consultation requested for ${child.name} by ${req.user.name}. Reason: "${reason.slice(0, 50)}${reason.length > 50 ? '...' : ''}"`;
+    const notificationMsg = isEmergency
+        ? `🚨 URGENT EMERGENCY: Video consultation requested IMMEDIATELY for ${child.name} by ${req.user.name}! Reason: "${reason.slice(0, 50)}"`
+        : `New video consultation requested for ${child.name} by ${req.user.name}. Reason: "${reason.slice(0, 50)}${reason.length > 50 ? '...' : ''}"`;
+
     await Notification.create({
         recipientId: doctor._id,
         senderId: parentId,
-        type: 'doctor_message',
+        type: isEmergency ? 'emergency_alert' : 'doctor_message',
         message: notificationMsg,
     });
 
     emitToUser(doctor._id, 'teleconsult-update', {
-        type: 'REQUESTED',
+        type: isEmergency ? 'EMERGENCY_REQUESTED' : 'REQUESTED',
+        isEmergency: !!isEmergency,
         requestId: consultation._id,
-        message: notificationMsg
+        message: notificationMsg,
+        childName: child.name,
+        doctorName: doctor.name
     });
 
     const populated = await ConsultationRequest.findById(consultation._id)
         .populate('profileId', 'name age gender avatar allergies healthConditions')
         .populate('doctorId', 'name email doctorProfile profileImage');
 
-    res.status(201).json(new ApiResponse(201, populated, 'Video consultation request submitted successfully'));
+    res.status(201).json(new ApiResponse(201, populated, isEmergency ? 'Emergency consultation request submitted. Doctor alerted immediately!' : 'Video consultation request submitted successfully'));
 });
 
 /**
@@ -971,6 +997,9 @@ export const reviewTeleconsultation = asyncHandler(async (req, res) => {
     }
 
     if (consultation.status !== 'REQUESTED') {
+        if (action === 'ACCEPT' && consultation.status === 'ACCEPTED') {
+            return res.status(200).json(new ApiResponse(200, consultation, 'Consultation request is already accepted. Next: schedule appointment.'));
+        }
         res.status(400);
         throw new Error(`Cannot review consultation with status '${consultation.status}'. Must be 'REQUESTED'.`);
     }
@@ -1046,12 +1075,34 @@ export const scheduleTeleconsultation = asyncHandler(async (req, res) => {
         throw new Error(`Cannot schedule consultation in status '${consultation.status}'`);
     }
 
-    // Validate that schedule is not in the past
-    // scheduledDate can be "YYYY-MM-DD" and scheduledTime "HH:MM"
-    const parsedDate = new Date(`${scheduledDate.split('T')[0]}T${scheduledTime}`);
+    // Robustly parse scheduled date + time (handles "10:00 AM", "02:30 PM", "14:30", ISO strings, etc.)
+    const dateStr = scheduledDate ? scheduledDate.toString().split('T')[0] : '';
+    const dateParts = dateStr.split('-').map(Number);
+    if (dateParts.length !== 3 || dateParts.some(isNaN)) {
+        res.status(400);
+        throw new Error('Invalid scheduled date format (expected YYYY-MM-DD)');
+    }
+
+    let hours = 0;
+    let minutes = 0;
+    const timeMatch = scheduledTime.toString().trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i);
+    if (timeMatch) {
+        hours = parseInt(timeMatch[1], 10);
+        minutes = parseInt(timeMatch[2], 10);
+        const meridiem = timeMatch[3] ? timeMatch[3].toUpperCase() : null;
+        if (meridiem === 'PM' && hours < 12) hours += 12;
+        if (meridiem === 'AM' && hours === 12) hours = 0;
+    } else {
+        res.status(400);
+        throw new Error('Invalid scheduled time format (expected HH:MM or HH:MM AM/PM)');
+    }
+
+    const [year, month, day] = dateParts;
+    const parsedDate = new Date(year, month - 1, day, hours, minutes, 0, 0);
+
     if (isNaN(parsedDate.getTime())) {
         res.status(400);
-        throw new Error('Invalid date or time format');
+        throw new Error('Invalid date or time');
     }
 
     // Allow a 5-minute grace period for immediate schedules
@@ -1124,23 +1175,30 @@ export const startTeleconsultation = asyncHandler(async (req, res) => {
         throw new Error('Consultation not found or unauthorized');
     }
 
-    if (!['SCHEDULED', 'STARTED', 'IN_PROGRESS'].includes(consultation.status)) {
-        res.status(400);
-        throw new Error(`Cannot start consultation in status '${consultation.status}'. Must be 'SCHEDULED'.`);
-    }
-
-    // Start Window Validation:
-    // Allow doctor to start from 15 minutes before scheduled start time up to duration + 60 minutes after
-    if (consultation.scheduledDate) {
-        const scheduledStart = new Date(consultation.scheduledDate).getTime();
-        const now = Date.now();
-        const earlyWindowMs = 15 * 60 * 1000; // 15 mins early
-        const lateWindowMs = ((consultation.scheduledDuration || 30) + 60) * 60 * 1000;
-
-        if (now < scheduledStart - earlyWindowMs) {
-            const minsLeft = Math.ceil((scheduledStart - now) / 60000);
+    if (consultation.isEmergency) {
+        if (!['REQUESTED', 'ACCEPTED', 'SCHEDULED', 'STARTED', 'IN_PROGRESS'].includes(consultation.status)) {
             res.status(400);
-            throw new Error(`Cannot start consultation yet. Appointment is scheduled in ${minsLeft} minutes (${consultation.scheduledTime}). Window opens 15 mins prior.`);
+            throw new Error(`Cannot start emergency consultation in status '${consultation.status}'`);
+        }
+    } else {
+        if (!['SCHEDULED', 'STARTED', 'IN_PROGRESS'].includes(consultation.status)) {
+            res.status(400);
+            throw new Error(`Cannot start consultation in status '${consultation.status}'. Must be 'SCHEDULED'.`);
+        }
+
+        // Start Window Validation for regular appointments:
+        // Allow doctor to start from 15 minutes before scheduled start time up to duration + 60 minutes after
+        if (consultation.scheduledDate) {
+            const scheduledStart = new Date(consultation.scheduledDate).getTime();
+            const now = Date.now();
+            const earlyWindowMs = 15 * 60 * 1000; // 15 mins early
+            const lateWindowMs = ((consultation.scheduledDuration || 30) + 60) * 60 * 1000;
+
+            if (now < scheduledStart - earlyWindowMs) {
+                const minsLeft = Math.ceil((scheduledStart - now) / 60000);
+                res.status(400);
+                throw new Error(`Cannot start consultation yet. Appointment is scheduled in ${minsLeft} minutes (${consultation.scheduledTime}). Window opens 15 mins prior.`);
+            }
         }
     }
 
