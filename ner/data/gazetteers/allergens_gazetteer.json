@@ -1,0 +1,121 @@
+[
+  {
+    "surface_form": "peanut allergy",
+    "canonical_form": "peanut allergy",
+    "entity_type": "ALLERGEN",
+    "source": "allergies.json / WAO Guidelines",
+    "allergen_id": "ALLERG_PEANUT",
+    "aliases": [
+      "peanut allergic",
+      "groundnut allergy",
+      "peanut hypersensitivity"
+    ]
+  },
+  {
+    "surface_form": "egg allergy",
+    "canonical_form": "egg allergy",
+    "entity_type": "ALLERGEN",
+    "source": "allergies.json / WAO Guidelines",
+    "allergen_id": "ALLERG_EGG",
+    "aliases": [
+      "egg protein allergy",
+      "egg hypersensitivity",
+      "allergic to eggs"
+    ]
+  },
+  {
+    "surface_form": "lactose intolerance",
+    "canonical_form": "lactose intolerance",
+    "entity_type": "ALLERGEN",
+    "source": "allergies.json / WAO Guidelines",
+    "allergen_id": "ALLERG_LACTOSE",
+    "aliases": [
+      "lactose-intolerant",
+      "milk lactose intolerance",
+      "lactase deficiency"
+    ]
+  },
+  {
+    "surface_form": "cow milk protein allergy",
+    "canonical_form": "cow milk protein allergy",
+    "entity_type": "ALLERGEN",
+    "source": "allergies.json / WAO Guidelines",
+    "allergen_id": "ALLERG_CMPA",
+    "aliases": [
+      "CMPA",
+      "cow's milk protein allergy",
+      "milk allergy",
+      "milk protein allergy"
+    ]
+  },
+  {
+    "surface_form": "celiac disease",
+    "canonical_form": "celiac disease",
+    "entity_type": "ALLERGEN",
+    "source": "allergies.json / WAO Guidelines",
+    "allergen_id": "ALLERG_CELIAC",
+    "aliases": [
+      "coeliac disease",
+      "celiac sprue",
+      "gluten enteropathy"
+    ]
+  },
+  {
+    "surface_form": "gluten sensitivity",
+    "canonical_form": "gluten sensitivity",
+    "entity_type": "ALLERGEN",
+    "source": "allergies.json / WAO Guidelines",
+    "allergen_id": "ALLERG_GLUTEN",
+    "aliases": [
+      "non-celiac gluten sensitivity",
+      "NCGS",
+      "gluten intolerance"
+    ]
+  },
+  {
+    "surface_form": "tree nut allergy",
+    "canonical_form": "tree nut allergy",
+    "entity_type": "ALLERGEN",
+    "source": "allergies.json / WAO Guidelines",
+    "allergen_id": "ALLERG_TREENUT",
+    "aliases": [
+      "nut allergy",
+      "allergic to nuts",
+      "walnut allergy",
+      "almond allergy"
+    ]
+  },
+  {
+    "surface_form": "fish allergy",
+    "canonical_form": "fish allergy",
+    "entity_type": "ALLERGEN",
+    "source": "allergies.json / WAO Guidelines",
+    "allergen_id": "ALLERG_FISH",
+    "aliases": [
+      "seafood allergy",
+      "allergic to fish"
+    ]
+  },
+  {
+    "surface_form": "soy allergy",
+    "canonical_form": "soy allergy",
+    "entity_type": "ALLERGEN",
+    "source": "allergies.json / WAO Guidelines",
+    "allergen_id": "ALLERG_SOY",
+    "aliases": [
+      "soya allergy",
+      "soy protein allergy"
+    ]
+  },
+  {
+    "surface_form": "anaphylaxis",
+    "canonical_form": "anaphylaxis",
+    "entity_type": "ALLERGEN",
+    "source": "allergies.json / WAO Guidelines",
+    "allergen_id": "ALLERG_ANAPHYLAXIS",
+    "aliases": [
+      "anaphylactic reaction",
+      "anaphylactic shock"
+    ]
+  }
+]

@@ -1,0 +1,179 @@
+{
+  "schema_version": "2.0",
+  "evaluation_date": "2026-09-19",
+  "annotator_count": 1,
+  "annotator_id": "domain_expert_v1",
+  "dataset_statistics": {
+    "candidate_sentences": 150,
+    "annotated_sentences": 150,
+    "zero_entity_sentences": 10,
+    "total_gold_entities": 387,
+    "class_distribution": {
+      "NUTRIENT": 87,
+      "FOOD_GROUP": 58,
+      "DIETARY_PROPERTY": 10,
+      "FOOD": 76,
+      "HEALTH_CONDITION": 42,
+      "AGE_GROUP": 48,
+      "FEEDING_METHOD": 18,
+      "ALLERGEN": 9,
+      "MEAL_TYPE": 22,
+      "GROWTH_METRIC": 17
+    }
+  },
+  "silver_test_metrics": {
+    "Micro_P": 94.68,
+    "Micro_R": 91.83,
+    "Micro_F1": 93.23,
+    "Macro_F1": 82.76,
+    "Nutrient_F1": 92.4,
+    "Nutrient_P": 92.94,
+    "Nutrient_R": 91.86,
+    "Nutrient_Support": 172
+  },
+  "challenge_metrics": {
+    "Micro_P": 52.38,
+    "Micro_R": 34.92,
+    "Micro_F1": 41.9,
+    "Support": 63
+  },
+  "human_gold_metrics": {
+    "Micro_P": 63.84,
+    "Micro_R": 58.4,
+    "Micro_F1": 61.0,
+    "Macro_F1": 47.8,
+    "Total_Gold_Spans": 387,
+    "Total_Pred_Spans": 354,
+    "Total_TP": 226,
+    "Total_FP": 128,
+    "Total_FN": 161,
+    "Per_Class": {
+      "FOOD": {
+        "Precision": 58.0,
+        "Recall": 38.16,
+        "F1": 46.03,
+        "Support": 76,
+        "TP": 29,
+        "FP": 21,
+        "FN": 47
+      },
+      "NUTRIENT": {
+        "Precision": 71.58,
+        "Recall": 78.16,
+        "F1": 74.73,
+        "Support": 87,
+        "TP": 68,
+        "FP": 27,
+        "FN": 19
+      },
+      "HEALTH_CONDITION": {
+        "Precision": 28.3,
+        "Recall": 35.71,
+        "F1": 31.58,
+        "Support": 42,
+        "TP": 15,
+        "FP": 38,
+        "FN": 27
+      },
+      "ALLERGEN": {
+        "Precision": 16.67,
+        "Recall": 33.33,
+        "F1": 22.22,
+        "Support": 9,
+        "TP": 3,
+        "FP": 15,
+        "FN": 6
+      },
+      "AGE_GROUP": {
+        "Precision": 76.92,
+        "Recall": 83.33,
+        "F1": 80.0,
+        "Support": 48,
+        "TP": 40,
+        "FP": 12,
+        "FN": 8
+      },
+      "MEAL_TYPE": {
+        "Precision": 93.75,
+        "Recall": 68.18,
+        "F1": 78.95,
+        "Support": 22,
+        "TP": 15,
+        "FP": 1,
+        "FN": 7
+      },
+      "GROWTH_METRIC": {
+        "Precision": 50.0,
+        "Recall": 47.06,
+        "F1": 48.48,
+        "Support": 17,
+        "TP": 8,
+        "FP": 8,
+        "FN": 9
+      },
+      "FOOD_GROUP": {
+        "Precision": 90.38,
+        "Recall": 81.03,
+        "F1": 85.45,
+        "Support": 58,
+        "TP": 47,
+        "FP": 5,
+        "FN": 11
+      },
+      "DIETARY_PROPERTY": {
+        "Precision": 0.0,
+        "Recall": 0.0,
+        "F1": 0,
+        "Support": 10,
+        "TP": 0,
+        "FP": 1,
+        "FN": 10
+      },
+      "FEEDING_METHOD": {
+        "Precision": 100.0,
+        "Recall": 5.56,
+        "F1": 10.53,
+        "Support": 18,
+        "TP": 1,
+        "FP": 0,
+        "FN": 17
+      }
+    }
+  },
+  "generalization_metrics": {
+    "Overall_Seen": {
+      "Precision": 64.66,
+      "Recall": 94.54,
+      "F1": 76.79,
+      "Support": 238
+    },
+    "Overall_Unseen": {
+      "Precision": 16.67,
+      "Recall": 0.67,
+      "F1": 1.29,
+      "Support": 149
+    },
+    "Nutrient_Seen": {
+      "Precision": 72.34,
+      "Recall": 98.55,
+      "F1": 83.44,
+      "Support": 69
+    },
+    "Nutrient_Unseen": {
+      "Precision": 0.0,
+      "Recall": 0.0,
+      "F1": 0,
+      "Support": 18
+    }
+  },
+  "error_counts": {
+    "Boundary errors": 41,
+    "Entity-type errors": 22,
+    "Unseen entity errors": 97,
+    "Synonym errors": 0,
+    "Ambiguity errors": 7,
+    "Multi-word errors": 78,
+    "Nested/overlap errors": 0,
+    "New-schema errors": 35
+  }
+}

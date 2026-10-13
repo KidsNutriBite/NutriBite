@@ -89,6 +89,8 @@ export const registerUser = asyncHandler(async (req, res) => {
     }
 });
 
+import logAuditEvent from '../utils/auditLogger.js';
+
 // @desc    Login user
 // @route   POST /api/auth/login
 // @access  Public

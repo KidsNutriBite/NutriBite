@@ -1,0 +1,1969 @@
+{
+  "CAND_SUPPLEMENT_F9A2E23C": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.709116+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_SUPPLEMENT_F3BE5C25": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.718237+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_SUPPLEMENT_A8780390": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.718237+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_SUPPLEMENT_B4E48B2D": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.718237+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_SUPPLEMENT_0480DD31": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.709116+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_SUPPLEMENT_0916038E": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.728255+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_SUPPLEMENT_D933AEB9": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.737821+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_7D68C740": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.646687+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_C71C6212": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.635330+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_FEC3143E": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.635330+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_9B361D56": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.637946+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_2A25CE36": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.641658+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_6BE67786": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.633095+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_6CF93090": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.633095+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_13F74B2B": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.633095+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_B2A97401": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.633095+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_272D4E27": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.633095+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_3CDAFF12": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.633095+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_4789D772": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_887C3C28": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_B1C23C33": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.646687+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_25AA1E21": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.665179+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_0716E86F": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.665179+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_999390A4": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_66B4BC7C": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.688215+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_2D4C1EDA": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.688215+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_075744BF": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.700398+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_A488FFC5": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.641658+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_A07A8FF2": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.679065+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_61FE3020": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.641658+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_E9380064": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.679065+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_C8F8882B": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.637946+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_0CC724F7": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_12A33356": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.641658+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_106964AC": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.641658+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_06BB010E": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.641658+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_24778327": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.641658+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_B67B8AAA": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.700398+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_492F393A": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.637946+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_E01447C0": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.641658+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_CD31431C": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.700398+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_1C56AC8A": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.637946+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_33ECECC9": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.637946+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_18F7451A": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.641658+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_95FC1026": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.700398+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_25E9931D": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_9845B9D2": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.641658+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_2750273C": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.637946+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_499C06A9": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.641658+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_704C12CE": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_1589D620": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.700398+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_4865C6F8": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.637946+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_37F771DE": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.637946+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_AFEAD937": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.700398+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_0B029515": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.637946+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_37FBBACB": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.637946+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_47BE1440": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_46A01FFC": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_6091CA5D": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_71D27FDB": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.646687+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_E0745465": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.646687+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_1B51F9C1": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_0C1F06B0": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_4609EB90": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.635330+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_ED2CA4F0": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.685064+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_BD546AE7": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.665179+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_F445F5D4": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.700398+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_B6A0B444": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_48E1487A": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.646687+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_CC702572": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.688215+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_69B6FDFA": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.672166+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_2AB08959": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.635330+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_1EECC22E": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.635330+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_D436DE7A": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.665179+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_53AAFA4F": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_54CBF484": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.646687+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_0350FC7D": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.685064+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_DE29B6D3": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_454726F6": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_FE16264C": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.679065+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_FBDD273E": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.672166+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_0F4D1E5C": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.679065+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_BC9AF0AB": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.641658+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_F629B086": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.688215+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_F8D8FB2D": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.688215+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_82804C61": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.700398+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_785C5270": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.637946+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_FB7926A7": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.635330+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_1DF908AF": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_B66C73CF": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.700398+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_05890A32": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_BDF67E15": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.637946+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_16EC21FB": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.700398+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_658D8131": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.700398+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_D8F9BCF1": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_2A3A515C": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_D612D472": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.700398+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_CB0DCD26": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_8F44085D": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.700398+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_A2DA9F7A": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_68637511": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.700398+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_BE7ED46D": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_9071ADC4": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.646687+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_7E259F7F": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_320AC3F5": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.688215+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_E1C17F59": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.637946+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_6669AAC6": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.641658+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_80EC3B7F": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.700398+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_FD0630C7": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.700398+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_241D61B9": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.700398+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_49579832": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.637946+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_2EA1A436": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.700398+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_96D5A8F6": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.637946+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_C294A0E9": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_63FB15D9": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.688215+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_59546AC4": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_4B463C33": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_8C4F6142": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_23B0852F": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.641658+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_1D007219": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.646687+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_DE844B8A": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.688215+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_AC18D1C1": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.688215+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_B0C3FF26": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.637946+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_5FB30FF5": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.700398+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_058A7ECC": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_F9F910CA": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.700398+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_3A619E5E": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_A94B5E3B": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.637946+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_6556AC17": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.641658+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_0447A27C": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_4FA8FB03": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.637946+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_8CD494DF": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.700398+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_7353455B": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.637946+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_801DA0A9": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.700398+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_DF7A34DC": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.646687+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_50A2E974": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.635330+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_1C0C9CC1": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.637946+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_00AC1CD4": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.650018+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_DIET_PATTERN_185B7210": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.765447+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_DIET_PATTERN_64E168AF": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.765447+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_DIET_PATTERN_BD0D12EE": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.765447+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_DIET_PATTERN_B98BC941": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.765447+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_DIET_PATTERN_F0B48DC1": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.765447+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_DIET_PATTERN_65FED5D3": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.765447+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_DIET_PATTERN_A1CEA8E9": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.765447+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_DIET_PATTERN_64739615": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.765447+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_DIET_PATTERN_5F092504": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.765447+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_DIET_PATTERN_160AE312": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.765447+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_DIET_PATTERN_AD9913EA": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.765447+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_DIET_PATTERN_BA69943E": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.765447+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_DIET_PATTERN_D7093431": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.765447+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_DIET_PATTERN_7A38A8D6": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.765447+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_SUPPLEMENT_FD61F027": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:44.800511+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_5B19DE18": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:44.808016+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_35E3F631": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:44.817655+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_3FC6B08B": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:44.817655+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_BBCFC5B7": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:44.832180+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_2BA06D1D": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:44.832837+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_D00C4BC1": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:44.851890+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_5131DD0D": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:44.865634+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_AC2DD2CC": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:44.878143+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_25BE5312": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:44.889020+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_7305D95C": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.750795+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_ABC93FA1": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:44.901373+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_720D034F": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:44.912321+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_382F0C05": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:44.919237+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_CC7775AA": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:44.934860+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_EAB0593D": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:44.951083+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_61C4C91C": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:44.966896+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_1AF954D4": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:44.966896+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_D0D3CB90": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:44.967847+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_E5E73257": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:44.984267+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_CC680326": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.000845+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_874A207B": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.008701+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_99090DE0": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.020433+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_DD01C035": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.029752+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_9B6F0627": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.037151+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_246FDC05": {
+    "decision": "SKIPPED",
+    "status": "SKIPPED",
+    "reviewer_id": "senior_pediatric_board",
+    "reviewed_at": "2026-09-30T05:14:53.821780+00:00",
+    "reviewer_note": "Deferred to multidisciplinary nutrition committee for guideline terminology verification."
+  },
+  "CAND_COOKING_METHOD_33926AF5": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.054959+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_F1A6772F": {
+    "decision": "SKIPPED",
+    "status": "SKIPPED",
+    "reviewer_id": "senior_pediatric_board",
+    "reviewed_at": "2026-09-30T05:14:53.832991+00:00",
+    "reviewer_note": "Deferred to multidisciplinary nutrition committee for guideline terminology verification."
+  },
+  "CAND_COOKING_METHOD_2931A0E9": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.065216+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_2BD10C1C": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.074216+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_0645C165": {
+    "decision": "SKIPPED",
+    "status": "SKIPPED",
+    "reviewer_id": "senior_pediatric_board",
+    "reviewed_at": "2026-09-30T05:14:53.846833+00:00",
+    "reviewer_note": "Deferred to multidisciplinary nutrition committee for guideline terminology verification."
+  },
+  "CAND_COOKING_METHOD_480F4759": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.089316+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_828C9F6A": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.747325+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_DIET_PATTERN_A70386CE": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.782658+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_DIET_PATTERN_87C01BE5": {
+    "decision": "ACCEPTED",
+    "status": "ACCEPTED",
+    "reviewer_id": "dr_pediatric_nutritionist",
+    "reviewed_at": "2026-09-30T05:14:44.782658+00:00",
+    "reviewer_note": "Validated clinical dynamic entity: standard pediatric terminology."
+  },
+  "CAND_COOKING_METHOD_D4FBE578": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.102001+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_C36AC6BF": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.111408+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_E2216F0F": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.122941+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_87FA0482": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.134204+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_F953F2AA": {
+    "decision": "SKIPPED",
+    "status": "SKIPPED",
+    "reviewer_id": "senior_pediatric_board",
+    "reviewed_at": "2026-09-30T05:14:53.847839+00:00",
+    "reviewer_note": "Deferred to multidisciplinary nutrition committee for guideline terminology verification."
+  },
+  "CAND_COOKING_METHOD_C4DAABA2": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.144727+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_31E4A2A3": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.151075+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_8B62FADC": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.151075+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_65D8DEE3": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.167579+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_DEA2585E": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.178149+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_B8EA25FC": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.180484+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_4A7F3C32": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.197369+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_3FFE2DF1": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.203553+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_70E897D5": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.217876+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_7A017BA8": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.217876+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_9426933D": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.217876+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_1718AE54": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.217876+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_BEC74663": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.217876+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_C83BE660": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.217876+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_32E58FB0": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.217876+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_25052CF5": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.217876+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_AAF3F969": {
+    "decision": "SKIPPED",
+    "status": "SKIPPED",
+    "reviewer_id": "senior_pediatric_board",
+    "reviewed_at": "2026-09-30T05:14:53.861765+00:00",
+    "reviewer_note": "Deferred to multidisciplinary nutrition committee for guideline terminology verification."
+  },
+  "CAND_DIET_PATTERN_F4670FC5": {
+    "decision": "SKIPPED",
+    "status": "SKIPPED",
+    "reviewer_id": "senior_pediatric_board",
+    "reviewed_at": "2026-09-30T05:14:53.877882+00:00",
+    "reviewer_note": "Deferred to multidisciplinary nutrition committee for guideline terminology verification."
+  },
+  "CAND_COOKING_METHOD_49FC6AF1": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.227881+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_7D2A5233": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.230140+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_209CA124": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.247948+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_05072C6A": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.264486+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_E15EA0BB": {
+    "decision": "SKIPPED",
+    "status": "SKIPPED",
+    "reviewer_id": "senior_pediatric_board",
+    "reviewed_at": "2026-09-30T05:14:53.878655+00:00",
+    "reviewer_note": "Deferred to multidisciplinary nutrition committee for guideline terminology verification."
+  },
+  "CAND_COOKING_METHOD_FCD5AFCB": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.274019+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_B137EDD4": {
+    "decision": "SKIPPED",
+    "status": "SKIPPED",
+    "reviewer_id": "senior_pediatric_board",
+    "reviewed_at": "2026-09-30T05:14:53.895265+00:00",
+    "reviewer_note": "Deferred to multidisciplinary nutrition committee for guideline terminology verification."
+  },
+  "CAND_COOKING_METHOD_5693078F": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.284664+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_2DB677FE": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.294590+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_AB4ABBCC": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.302398+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_A76B0C32": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.316785+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_F25F422F": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.329166+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_059E59EE": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.329166+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_FD8DF881": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.329166+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_E9A3274D": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.329166+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_A68C02D2": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.329166+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_05AEA2AA": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.338171+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_11028FA1": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.338171+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_05793479": {
+    "decision": "SKIPPED",
+    "status": "SKIPPED",
+    "reviewer_id": "senior_pediatric_board",
+    "reviewed_at": "2026-09-30T05:14:53.910375+00:00",
+    "reviewer_note": "Deferred to multidisciplinary nutrition committee for guideline terminology verification."
+  },
+  "CAND_SUPPLEMENT_D1230D62": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.348352+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_A09C7ABB": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.348352+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_EB2BB2C4": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.348352+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_8C9295B8": {
+    "decision": "SKIPPED",
+    "status": "SKIPPED",
+    "reviewer_id": "senior_pediatric_board",
+    "reviewed_at": "2026-09-30T05:14:53.911791+00:00",
+    "reviewer_note": "Deferred to multidisciplinary nutrition committee for guideline terminology verification."
+  },
+  "CAND_SUPPLEMENT_6A2CE267": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.394734+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_4F102D03": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.417642+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_A74E91F6": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.449941+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_7E60312F": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.480456+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_C7C1F36E": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.498128+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_58CAB482": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.529021+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_COOKING_METHOD_55A08A83": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.547637+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_66EC5063": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.562589+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_43529A5C": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.569718+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_B88BAE57": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.569718+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_EE26281E": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.569718+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_7C94FA4F": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.569718+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_4757A747": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.569718+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_DCC92A23": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.589544+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_EBB4320F": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.599659+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_F0E2B03F": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.609665+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_DIET_PATTERN_56E13A79": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.609665+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_971FEAC8": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.619737+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_FD3A5F54": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.645882+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_0A0FD9C1": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.645882+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_3ECA83E8": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.669909+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_C9FFA3C6": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.679196+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_466EA3CC": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.679196+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_A27EF035": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.697025+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_E7B7F22C": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.697025+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_11FFA99A": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.697025+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_F9DF99E3": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.697025+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_618EE1EC": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.710369+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_6A21F6C0": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.724563+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_9939A79D": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.738438+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_5713DF99": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.749134+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_7B752C4C": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.763894+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_86E15718": {
+    "decision": "SKIPPED",
+    "status": "SKIPPED",
+    "reviewer_id": "senior_pediatric_board",
+    "reviewed_at": "2026-09-30T05:14:53.930047+00:00",
+    "reviewer_note": "Deferred to multidisciplinary nutrition committee for guideline terminology verification."
+  },
+  "CAND_SUPPLEMENT_FB16A085": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.770853+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_B3963E8D": {
+    "decision": "SKIPPED",
+    "status": "SKIPPED",
+    "reviewer_id": "senior_pediatric_board",
+    "reviewed_at": "2026-09-30T05:14:53.930047+00:00",
+    "reviewer_note": "Deferred to multidisciplinary nutrition committee for guideline terminology verification."
+  },
+  "CAND_SUPPLEMENT_25DC866D": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.781689+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_A70CB496": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.799605+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_E6C24899": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.819118+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_DF3233D6": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.829829+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_3AF4276E": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.836322+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_A82181E3": {
+    "decision": "SKIPPED",
+    "status": "SKIPPED",
+    "reviewer_id": "senior_pediatric_board",
+    "reviewed_at": "2026-09-30T05:14:53.948354+00:00",
+    "reviewer_note": "Deferred to multidisciplinary nutrition committee for guideline terminology verification."
+  },
+  "CAND_SUPPLEMENT_A8E03A46": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.847044+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_3E68AD84": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.863335+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_BAA716AD": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.880046+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_B44CAB80": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.895685+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_A96470F4": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.896678+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  },
+  "CAND_SUPPLEMENT_A26411E6": {
+    "decision": "SKIPPED",
+    "status": "SKIPPED",
+    "reviewer_id": "senior_pediatric_board",
+    "reviewed_at": "2026-09-30T05:14:53.962353+00:00",
+    "reviewer_note": "Deferred to multidisciplinary nutrition committee for guideline terminology verification."
+  },
+  "CAND_SUPPLEMENT_EE41F919": {
+    "decision": "REJECTED",
+    "status": "REJECTED",
+    "reviewer_id": "clinical_nlp_annotator",
+    "reviewed_at": "2026-09-30T05:14:45.919639+00:00",
+    "reviewer_note": "Rejected: invalid phrase boundary or trailing functional stopword."
+  }
+}

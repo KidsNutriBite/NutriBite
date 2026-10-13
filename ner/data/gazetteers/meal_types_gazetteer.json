@@ -1,0 +1,73 @@
+[
+  {
+    "surface_form": "breakfast",
+    "canonical_form": "breakfast",
+    "entity_type": "MEAL_TYPE",
+    "source": "NutriBite Meal Scheduler",
+    "meal_type_id": "MEAL_BREAKFAST",
+    "aliases": [
+      "morning meal",
+      "morning breakfast"
+    ]
+  },
+  {
+    "surface_form": "morning snack",
+    "canonical_form": "morning snack",
+    "entity_type": "MEAL_TYPE",
+    "source": "NutriBite Meal Scheduler",
+    "meal_type_id": "MEAL_MORNING_SNACK",
+    "aliases": [
+      "mid-morning snack",
+      "mid morning snack",
+      "10 AM snack"
+    ]
+  },
+  {
+    "surface_form": "lunch",
+    "canonical_form": "lunch",
+    "entity_type": "MEAL_TYPE",
+    "source": "NutriBite Meal Scheduler",
+    "meal_type_id": "MEAL_LUNCH",
+    "aliases": [
+      "midday meal",
+      "afternoon lunch"
+    ]
+  },
+  {
+    "surface_form": "evening snack",
+    "canonical_form": "evening snack",
+    "entity_type": "MEAL_TYPE",
+    "source": "NutriBite Meal Scheduler",
+    "meal_type_id": "MEAL_EVENING_SNACK",
+    "aliases": [
+      "afternoon snack",
+      "mid-afternoon snack",
+      "4 PM snack",
+      "tea-time snack"
+    ]
+  },
+  {
+    "surface_form": "dinner",
+    "canonical_form": "dinner",
+    "entity_type": "MEAL_TYPE",
+    "source": "NutriBite Meal Scheduler",
+    "meal_type_id": "MEAL_DINNER",
+    "aliases": [
+      "night meal",
+      "supper",
+      "evening dinner"
+    ]
+  },
+  {
+    "surface_form": "snack",
+    "canonical_form": "snack",
+    "entity_type": "MEAL_TYPE",
+    "source": "NutriBite Meal Scheduler",
+    "meal_type_id": "MEAL_SNACK_GENERAL",
+    "aliases": [
+      "snacks",
+      "healthy snacks",
+      "finger food snack"
+    ]
+  }
+]

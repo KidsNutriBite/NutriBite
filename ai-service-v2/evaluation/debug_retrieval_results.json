@@ -1,0 +1,102 @@
+{
+  "foods rich in iron": [
+    {
+      "rank": 1,
+      "score": 1.0,
+      "source": "ICMR Pediatric Nutrition Guidelines",
+      "text": "Vitamin C rich foods improve iron absorption and should be included in the diet."
+    },
+    {
+      "rank": 2,
+      "score": 0.9,
+      "source": "ICMR Pediatric Nutrition Guidelines",
+      "text": "Amylase-rich foods help liquefy cereals and improve digestion in infants."
+    },
+    {
+      "rank": 3,
+      "score": 0.8,
+      "source": "ICMR Pediatric Nutrition Guidelines",
+      "text": "Amylase rich foods improve digestibility and reduce thickness of infant foods."
+    }
+  ],
+  "child low calcium": [
+    {
+      "rank": 1,
+      "score": 1.0,
+      "source": "FSSAI",
+      "text": "A healthy child's tiffin should be balanced, low in sugar, and include fruits. Involving children in menu planning encourages them to finish their meal."
+    },
+    {
+      "rank": 2,
+      "score": 0.9,
+      "source": "ICMR Pediatric Nutrition Guidelines",
+      "text": "Calcium and vitamin D are essential for bone development of the fetus."
+    },
+    {
+      "rank": 3,
+      "score": 0.8,
+      "source": "ICMR Pediatric Nutrition Guidelines",
+      "text": "Mortality predictors in PEM: Low serum phospholipids and low total lipids observed as bad prognostic signs."
+    }
+  ],
+  "vitamin d deficiency": [
+    {
+      "rank": 1,
+      "score": 1.0,
+      "source": "ICMR-NIN 2020",
+      "text": "Recommended daily intake for other vitamins (Adult Men/Women): Vitamin C 80/65 mg, Vitamin A 1000/840 \u00b5g, Vitamin D 600/600 IU."
+    },
+    {
+      "rank": 2,
+      "score": 0.9,
+      "source": "ICMR Pediatric Nutrition Guidelines",
+      "text": "Calcium and vitamin D are essential for bone development of the fetus."
+    },
+    {
+      "rank": 3,
+      "score": 0.8,
+      "source": "ICMR Pediatric Nutrition Guidelines",
+      "text": "Vitamin B12 is the 'red vitamin', present only in animal foods. It is essential for myelin synthesis; deficiency leads to CNS degeneration and knuckle pigmentation."
+    }
+  ],
+  "protein rich foods": [
+    {
+      "rank": 1,
+      "score": 1.0,
+      "source": "ICMR Pediatric Nutrition Guidelines",
+      "text": "Amylase rich foods improve digestibility and reduce thickness of infant foods."
+    },
+    {
+      "rank": 2,
+      "score": 0.9,
+      "source": "ICMR Pediatric Nutrition Guidelines",
+      "text": "Colostrum is rich in protein and immunoglobulins, providing early immunity."
+    },
+    {
+      "rank": 3,
+      "score": 0.8,
+      "source": "ICMR Pediatric Nutrition Guidelines",
+      "text": "Amylase-rich foods increase energy density of infant foods and improve digestibility."
+    }
+  ],
+  "healthy breakfast for kids": [
+    {
+      "rank": 1,
+      "score": 1.0,
+      "source": "ICMR Pediatric Nutrition Guidelines",
+      "text": "Breakfast is Brain Food: Missing breakfast significantly affects classroom performance and cognitive function in adolescents due to prolonged overnight fasting."
+    },
+    {
+      "rank": 2,
+      "score": 0.9,
+      "source": "ICMR Pediatric Nutrition Guidelines",
+      "text": "Responsive feeding helps children develop healthy eating habits."
+    },
+    {
+      "rank": 3,
+      "score": 0.8,
+      "source": "ICMR Pediatric Nutrition Guidelines",
+      "text": "The WHO Multicentre Growth Reference Study (MGRS) established breastfeeding as the biological norm for growth, involving healthy children from six diverse countries."
+    }
+  ]
+}

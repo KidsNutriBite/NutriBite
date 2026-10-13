@@ -1,0 +1,45 @@
+{
+  "lang":"en",
+  "name":"pipeline",
+  "version":"0.0.0",
+  "spacy_version":">=3.8.16,<3.9.0",
+  "description":"",
+  "author":"",
+  "email":"",
+  "url":"",
+  "license":"",
+  "spacy_git_version":"26b4d1d",
+  "vectors":{
+    "width":0,
+    "vectors":0,
+    "keys":0,
+    "name":null,
+    "mode":"default"
+  },
+  "labels":{
+    "entity_ruler":[
+      "AGE_GROUP",
+      "ALLERGEN",
+      "COOKING_METHOD",
+      "DIETARY_PROPERTY",
+      "DIET_PATTERN",
+      "FEEDING_METHOD",
+      "FOOD",
+      "FOOD_GROUP",
+      "GROWTH_METRIC",
+      "HEALTH_CONDITION",
+      "MEAL_TYPE",
+      "NUTRIENT",
+      "SUPPLEMENT"
+    ]
+  },
+  "pipeline":[
+    "entity_ruler"
+  ],
+  "components":[
+    "entity_ruler"
+  ],
+  "disabled":[
+
+  ]
+}

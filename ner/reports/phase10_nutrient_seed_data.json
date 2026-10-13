@@ -1,0 +1,108 @@
+{
+  "seed_summary": {
+    "Baseline": {
+      "Micro_F1_mean": 61.62,
+      "Micro_F1_std": 0.48,
+      "Nutrient_F1_mean": 74.73,
+      "Nutrient_F1_std": 0.0,
+      "Unseen_F1_mean": 1.3,
+      "Unseen_F1_std": 0.01,
+      "Nutrient_Unseen_F1_mean": 0.0,
+      "Nutrient_Unseen_F1_std": 0.0
+    },
+    "Knowledge_Hybrid": {
+      "Micro_F1_mean": 62.03,
+      "Micro_F1_std": 0.04,
+      "Nutrient_F1_mean": 75.82,
+      "Nutrient_F1_std": 0.0,
+      "Unseen_F1_mean": 10.04,
+      "Unseen_F1_std": 0.03,
+      "Nutrient_Unseen_F1_mean": 10.53,
+      "Nutrient_Unseen_F1_std": 0.0
+    }
+  },
+  "seed_raw": {
+    "Baseline": [
+      {
+        "Micro_P": 63.84,
+        "Micro_R": 58.4,
+        "Micro_F1": 61.0,
+        "Macro_F1": 47.8,
+        "Nutrient_P": 71.58,
+        "Nutrient_R": 78.16,
+        "Nutrient_F1": 74.73,
+        "Seen_F1": 76.79,
+        "Unseen_F1": 1.29,
+        "Nutrient_Seen_F1": 83.44,
+        "Nutrient_Unseen_F1": 0
+      },
+      {
+        "Micro_P": 64.77,
+        "Micro_R": 58.91,
+        "Micro_F1": 61.71,
+        "Macro_F1": 50.5,
+        "Nutrient_P": 71.58,
+        "Nutrient_R": 78.16,
+        "Nutrient_F1": 74.73,
+        "Seen_F1": 77.61,
+        "Unseen_F1": 1.3,
+        "Nutrient_Seen_F1": 83.95,
+        "Nutrient_Unseen_F1": 0
+      },
+      {
+        "Micro_P": 65.16,
+        "Micro_R": 59.43,
+        "Micro_F1": 62.16,
+        "Macro_F1": 52.46,
+        "Nutrient_P": 71.58,
+        "Nutrient_R": 78.16,
+        "Nutrient_F1": 74.73,
+        "Seen_F1": 77.89,
+        "Unseen_F1": 1.32,
+        "Nutrient_Seen_F1": 83.44,
+        "Nutrient_Unseen_F1": 0
+      }
+    ],
+    "Knowledge_Hybrid": [
+      {
+        "Micro_P": 62.24,
+        "Micro_R": 61.76,
+        "Micro_F1": 62.0,
+        "Macro_F1": 53.09,
+        "Nutrient_P": 72.63,
+        "Nutrient_R": 79.31,
+        "Nutrient_F1": 75.82,
+        "Seen_F1": 77.83,
+        "Unseen_F1": 10.0,
+        "Nutrient_Seen_F1": 83.44,
+        "Nutrient_Unseen_F1": 10.53
+      },
+      {
+        "Micro_P": 62.4,
+        "Micro_R": 61.76,
+        "Micro_F1": 62.08,
+        "Macro_F1": 53.05,
+        "Nutrient_P": 72.63,
+        "Nutrient_R": 79.31,
+        "Nutrient_F1": 75.82,
+        "Seen_F1": 77.83,
+        "Unseen_F1": 10.06,
+        "Nutrient_Seen_F1": 83.44,
+        "Nutrient_Unseen_F1": 10.53
+      },
+      {
+        "Micro_P": 62.24,
+        "Micro_R": 61.76,
+        "Micro_F1": 62.0,
+        "Macro_F1": 52.97,
+        "Nutrient_P": 72.63,
+        "Nutrient_R": 79.31,
+        "Nutrient_F1": 75.82,
+        "Seen_F1": 77.7,
+        "Unseen_F1": 10.06,
+        "Nutrient_Seen_F1": 83.44,
+        "Nutrient_Unseen_F1": 10.53
+      }
+    ]
+  }
+}

@@ -1,0 +1,386 @@
+{
+  "schema_version": "2.1.0",
+  "model_name": "nutribite_dynamic_perceptron_v1",
+  "architecture": "Structured Averaged Sequence Perceptron with BIO Transition Constraints",
+  "num_classes": 13,
+  "labels": [
+    "O",
+    "B-FOOD",
+    "I-FOOD",
+    "B-NUTRIENT",
+    "I-NUTRIENT",
+    "B-HEALTH_CONDITION",
+    "I-HEALTH_CONDITION",
+    "B-ALLERGEN",
+    "I-ALLERGEN",
+    "B-AGE_GROUP",
+    "I-AGE_GROUP",
+    "B-MEAL_TYPE",
+    "I-MEAL_TYPE",
+    "B-GROWTH_METRIC",
+    "I-GROWTH_METRIC",
+    "B-FOOD_GROUP",
+    "I-FOOD_GROUP",
+    "B-DIETARY_PROPERTY",
+    "I-DIETARY_PROPERTY",
+    "B-FEEDING_METHOD",
+    "I-FEEDING_METHOD",
+    "B-COOKING_METHOD",
+    "I-COOKING_METHOD",
+    "B-SUPPLEMENT",
+    "I-SUPPLEMENT",
+    "B-DIET_PATTERN",
+    "I-DIET_PATTERN"
+  ],
+  "epochs": 8,
+  "seed": 42,
+  "baseline_comparison": {
+    "baseline_micro_f1": 92.81,
+    "dynamic_micro_f1": 92.7,
+    "delta_micro_f1": -0.11,
+    "baseline_macro_f1": 85.07,
+    "dynamic_macro_f1": 78.32,
+    "delta_macro_f1": -6.75,
+    "baseline_nutrient_f1": 92.08,
+    "dynamic_nutrient_f1": 92.17,
+    "delta_nutrient_f1": 0.09
+  },
+  "test_metrics": {
+    "Micro_P": 93.96,
+    "Micro_R": 91.48,
+    "Micro_F1": 92.7,
+    "Macro_F1_All": 78.32,
+    "Macro_F1_Original10": 85.81,
+    "Macro_F1_Dynamic3": 53.33,
+    "Nutrient_F1": 92.17,
+    "Class_Metrics": {
+      "FOOD": {
+        "Precision": 92.11,
+        "Recall": 88.61,
+        "F1": 90.32,
+        "Support": 79,
+        "TP": 70,
+        "FP": 6,
+        "FN": 9
+      },
+      "NUTRIENT": {
+        "Precision": 91.91,
+        "Recall": 92.44,
+        "F1": 92.17,
+        "Support": 172,
+        "TP": 159,
+        "FP": 14,
+        "FN": 13
+      },
+      "HEALTH_CONDITION": {
+        "Precision": 97.3,
+        "Recall": 87.8,
+        "F1": 92.31,
+        "Support": 41,
+        "TP": 36,
+        "FP": 1,
+        "FN": 5
+      },
+      "ALLERGEN": {
+        "Precision": 66.67,
+        "Recall": 40.0,
+        "F1": 50.0,
+        "Support": 5,
+        "TP": 2,
+        "FP": 1,
+        "FN": 3
+      },
+      "AGE_GROUP": {
+        "Precision": 100.0,
+        "Recall": 98.75,
+        "F1": 99.37,
+        "Support": 80,
+        "TP": 79,
+        "FP": 0,
+        "FN": 1
+      },
+      "MEAL_TYPE": {
+        "Precision": 85.71,
+        "Recall": 85.71,
+        "F1": 85.71,
+        "Support": 7,
+        "TP": 6,
+        "FP": 1,
+        "FN": 1
+      },
+      "GROWTH_METRIC": {
+        "Precision": 66.67,
+        "Recall": 50.0,
+        "F1": 57.14,
+        "Support": 8,
+        "TP": 4,
+        "FP": 2,
+        "FN": 4
+      },
+      "FOOD_GROUP": {
+        "Precision": 96.49,
+        "Recall": 100.0,
+        "F1": 98.21,
+        "Support": 55,
+        "TP": 55,
+        "FP": 2,
+        "FN": 0
+      },
+      "DIETARY_PROPERTY": {
+        "Precision": 92.86,
+        "Recall": 92.86,
+        "F1": 92.86,
+        "Support": 14,
+        "TP": 13,
+        "FP": 1,
+        "FN": 1
+      },
+      "FEEDING_METHOD": {
+        "Precision": 100.0,
+        "Recall": 100.0,
+        "F1": 100.0,
+        "Support": 4,
+        "TP": 4,
+        "FP": 0,
+        "FN": 0
+      },
+      "COOKING_METHOD": {
+        "Precision": 95.45,
+        "Recall": 91.3,
+        "F1": 93.33,
+        "Support": 23,
+        "TP": 21,
+        "FP": 1,
+        "FN": 2
+      },
+      "SUPPLEMENT": {
+        "Precision": 0.0,
+        "Recall": 0.0,
+        "F1": 0.0,
+        "Support": 1,
+        "TP": 0,
+        "FP": 0,
+        "FN": 1
+      },
+      "DIET_PATTERN": {
+        "Precision": 100.0,
+        "Recall": 50.0,
+        "F1": 66.67,
+        "Support": 4,
+        "TP": 2,
+        "FP": 0,
+        "FN": 2
+      }
+    }
+  },
+  "validation_metrics": {
+    "Micro_P": 95.43,
+    "Micro_R": 90.87,
+    "Micro_F1": 93.1,
+    "Macro_F1_All": 79.9,
+    "Macro_F1_Original10": 84.82,
+    "Macro_F1_Dynamic3": 63.49,
+    "Nutrient_F1": 97.32,
+    "Class_Metrics": {
+      "FOOD": {
+        "Precision": 91.67,
+        "Recall": 79.52,
+        "F1": 85.16,
+        "Support": 83,
+        "TP": 66,
+        "FP": 6,
+        "FN": 17
+      },
+      "NUTRIENT": {
+        "Precision": 95.49,
+        "Recall": 99.22,
+        "F1": 97.32,
+        "Support": 128,
+        "TP": 127,
+        "FP": 6,
+        "FN": 1
+      },
+      "HEALTH_CONDITION": {
+        "Precision": 96.3,
+        "Recall": 83.87,
+        "F1": 89.66,
+        "Support": 31,
+        "TP": 26,
+        "FP": 1,
+        "FN": 5
+      },
+      "ALLERGEN": {
+        "Precision": 100.0,
+        "Recall": 87.5,
+        "F1": 93.33,
+        "Support": 8,
+        "TP": 7,
+        "FP": 0,
+        "FN": 1
+      },
+      "AGE_GROUP": {
+        "Precision": 98.8,
+        "Recall": 97.62,
+        "F1": 98.2,
+        "Support": 84,
+        "TP": 82,
+        "FP": 1,
+        "FN": 2
+      },
+      "MEAL_TYPE": {
+        "Precision": 100.0,
+        "Recall": 100.0,
+        "F1": 100.0,
+        "Support": 12,
+        "TP": 12,
+        "FP": 0,
+        "FN": 0
+      },
+      "GROWTH_METRIC": {
+        "Precision": 100.0,
+        "Recall": 16.67,
+        "F1": 28.57,
+        "Support": 6,
+        "TP": 1,
+        "FP": 0,
+        "FN": 5
+      },
+      "FOOD_GROUP": {
+        "Precision": 95.16,
+        "Recall": 96.72,
+        "F1": 95.93,
+        "Support": 61,
+        "TP": 59,
+        "FP": 3,
+        "FN": 2
+      },
+      "DIETARY_PROPERTY": {
+        "Precision": 100.0,
+        "Recall": 66.67,
+        "F1": 80.0,
+        "Support": 12,
+        "TP": 8,
+        "FP": 0,
+        "FN": 4
+      },
+      "FEEDING_METHOD": {
+        "Precision": 100.0,
+        "Recall": 66.67,
+        "F1": 80.0,
+        "Support": 6,
+        "TP": 4,
+        "FP": 0,
+        "FN": 2
+      },
+      "COOKING_METHOD": {
+        "Precision": 86.36,
+        "Recall": 95.0,
+        "F1": 90.48,
+        "Support": 20,
+        "TP": 19,
+        "FP": 3,
+        "FN": 1
+      },
+      "SUPPLEMENT": {
+        "Precision": 0.0,
+        "Recall": 0.0,
+        "F1": 0.0,
+        "Support": 2,
+        "TP": 0,
+        "FP": 0,
+        "FN": 2
+      },
+      "DIET_PATTERN": {
+        "Precision": 100.0,
+        "Recall": 100.0,
+        "F1": 100.0,
+        "Support": 7,
+        "TP": 7,
+        "FP": 0,
+        "FN": 0
+      }
+    }
+  },
+  "retention_analysis": [
+    {
+      "Entity": "FOOD",
+      "Baseline_F1": 90.45,
+      "Dynamic_F1": 90.32,
+      "Delta_F1": -0.13,
+      "Retention_Pct": 99.86,
+      "Support": 79
+    },
+    {
+      "Entity": "NUTRIENT",
+      "Baseline_F1": 92.08,
+      "Dynamic_F1": 92.17,
+      "Delta_F1": 0.09,
+      "Retention_Pct": 100.1,
+      "Support": 172
+    },
+    {
+      "Entity": "HEALTH_CONDITION",
+      "Baseline_F1": 92.31,
+      "Dynamic_F1": 92.31,
+      "Delta_F1": 0.0,
+      "Retention_Pct": 100.0,
+      "Support": 41
+    },
+    {
+      "Entity": "ALLERGEN",
+      "Baseline_F1": 50.0,
+      "Dynamic_F1": 50.0,
+      "Delta_F1": 0.0,
+      "Retention_Pct": 100.0,
+      "Support": 5
+    },
+    {
+      "Entity": "AGE_GROUP",
+      "Baseline_F1": 98.75,
+      "Dynamic_F1": 99.37,
+      "Delta_F1": 0.62,
+      "Retention_Pct": 100.63,
+      "Support": 80
+    },
+    {
+      "Entity": "MEAL_TYPE",
+      "Baseline_F1": 92.31,
+      "Dynamic_F1": 85.71,
+      "Delta_F1": -6.6,
+      "Retention_Pct": 92.85,
+      "Support": 7
+    },
+    {
+      "Entity": "GROWTH_METRIC",
+      "Baseline_F1": 42.86,
+      "Dynamic_F1": 57.14,
+      "Delta_F1": 14.28,
+      "Retention_Pct": 133.32,
+      "Support": 8
+    },
+    {
+      "Entity": "FOOD_GROUP",
+      "Baseline_F1": 99.1,
+      "Dynamic_F1": 98.21,
+      "Delta_F1": -0.89,
+      "Retention_Pct": 99.1,
+      "Support": 55
+    },
+    {
+      "Entity": "DIETARY_PROPERTY",
+      "Baseline_F1": 92.86,
+      "Dynamic_F1": 92.86,
+      "Delta_F1": 0.0,
+      "Retention_Pct": 100.0,
+      "Support": 14
+    },
+    {
+      "Entity": "FEEDING_METHOD",
+      "Baseline_F1": 100.0,
+      "Dynamic_F1": 100.0,
+      "Delta_F1": 0.0,
+      "Retention_Pct": 100.0,
+      "Support": 4
+    }
+  ]
+}

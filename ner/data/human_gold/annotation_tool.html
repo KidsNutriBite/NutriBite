@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NutriBite NER — Human Gold Annotation Tool (Schema v2.0)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --surface-border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #38bdf8;
+      
+      --c-food: #f59e0b;
+      --c-nutrient: #10b981;
+      --c-condition: #ef4444;
+      --c-allergen: #8b5cf6;
+      --c-age: #3b82f6;
+      --c-meal: #06b6d4;
+      --c-growth: #ec4899;
+      --c-foodgroup: #84cc16;
+      --c-dietprop: #eab308;
+      --c-feedmethod: #14b8a6;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: #090d16;
+      border-bottom: 1px solid var(--surface-border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header-title h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .header-title .tag {
+      background: #0284c7;
+      color: #fff;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .header-stats {
+      display: flex;
+      gap: 1.5rem;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .header-stats span strong {
+      color: var(--primary);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    button {
+      font-family: inherit;
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-primary { background: #0284c7; color: #fff; border-color: #0369a1; }
+    .btn-primary:hover { background: #0369a1; }
+    .btn-secondary { background: var(--surface); color: var(--text); border-color: var(--surface-border); }
+    .btn-secondary:hover { background: #273549; }
+    .btn-success { background: #059669; color: #fff; }
+    .btn-success:hover { background: #047857; }
+
+    main {
+      flex: 1;
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.5rem 2rem;
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 1024px) {
+      main { grid-template-columns: 1fr; }
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--surface-border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--surface-border);
+      padding-bottom: 1rem;
+    }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .nav-index {
+      font-weight: 600;
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .nav-jump {
+      background: #090d16;
+      border: 1px solid var(--surface-border);
+      color: #fff;
+      padding: 0.3rem 0.5rem;
+      border-radius: 4px;
+      width: 60px;
+      font-family: inherit;
+    }
+
+    .sentence-container {
+      background: #090d16;
+      border: 1px solid var(--surface-border);
+      border-radius: 6px;
+      padding: 1.5rem;
+      min-height: 140px;
+      font-size: 1.2rem;
+      line-height: 1.8;
+      user-select: text;
+      position: relative;
+    }
+
+    .meta-info {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .selection-banner {
+      background: #1e1b4b;
+      border: 1px solid #4338ca;
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.875rem;
+    }
+
+    .selection-banner strong {
+      color: #818cf8;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .entity-buttons {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.5rem;
+    }
+
+    .btn-entity {
+      padding: 0.55rem 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #fff;
+      border-radius: 6px;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+    }
+    .btn-entity .hotkey { font-size: 0.65rem; opacity: 0.85; font-weight: normal; }
+
+    .btn-food { background: var(--c-food); }
+    .btn-nutrient { background: var(--c-nutrient); }
+    .btn-condition { background: var(--c-condition); }
+    .btn-allergen { background: var(--c-allergen); }
+    .btn-age { background: var(--c-age); }
+    .btn-meal { background: var(--c-meal); }
+    .btn-growth { background: var(--c-growth); }
+    .btn-foodgroup { background: var(--c-foodgroup); color: #000; }
+    .btn-dietprop { background: var(--c-dietprop); color: #000; }
+    .btn-feedmethod { background: var(--c-feedmethod); }
+
+    .btn-entity:hover { filter: brightness(1.15); transform: translateY(-1px); }
+    .btn-entity:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    .annotations-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .annotations-list h3 {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--surface-border);
+      padding-bottom: 0.4rem;
+    }
+
+    .annotation-chip {
+      background: #090d16;
+      border: 1px solid var(--surface-border);
+      border-radius: 6px;
+      padding: 0.4rem 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .chip-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+      color: #fff;
+    }
+
+    .chip-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.875rem;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .chip-offsets {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .chip-del {
+      background: transparent;
+      border: none;
+      color: #ef4444;
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 0 0.25rem;
+    }
+    .chip-del:hover { color: #f87171; }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .guideline-panel {
+      font-size: 0.8rem;
+      line-height: 1.6;
+      color: #cbd5e1;
+      max-height: 600px;
+      overflow-y: auto;
+    }
+
+    .guideline-panel h4 {
+      color: #fff;
+      font-size: 0.825rem;
+      margin-top: 0.6rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .annotator-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .annotator-field label { font-size: 0.8rem; color: var(--text-muted); }
+    .annotator-field input {
+      background: #090d16;
+      border: 1px solid var(--surface-border);
+      color: #fff;
+      padding: 0.5rem;
+      border-radius: 4px;
+      font-family: inherit;
+    }
+
+    .highlight {
+      border-radius: 3px;
+      padding: 0.1rem 0.2rem;
+      color: #fff;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-title">
+      <h1>NutriBite NER <span class="tag">Schema v2.0 (10 Classes)</span></h1>
+    </div>
+    <div class="header-stats">
+      <span>Total Sentences: <strong id="stat-total">150</strong></span>
+      <span>Annotated: <strong id="stat-annotated">0</strong></span>
+      <span>Progress: <strong id="stat-progress">0%</strong></span>
+    </div>
+    <div class="header-actions">
+      <button class="btn-secondary" id="btn-import">📂 Import JSONL</button>
+      <button class="btn-success" id="btn-export">💾 Export human_gold.jsonl</button>
+      <input type="file" id="file-input" style="display: none;" accept=".jsonl,.json">
+    </div>
+  </header>
+
+  <main>
+    <section class="card">
+      <div class="nav-bar">
+        <div class="nav-controls">
+          <button class="btn-secondary" id="btn-prev">⬅️ Prev (Alt+A)</button>
+          <span class="nav-index">Sentence <span id="current-index">1</span> / <span id="total-count">150</span></span>
+          <button class="btn-secondary" id="btn-next">Next (Alt+D) ➡️</button>
+        </div>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Jump:</span>
+          <input type="number" id="jump-input" class="nav-jump" min="1" max="150" value="1">
+          <button class="btn-secondary" id="btn-jump" style="padding: 0.3rem 0.6rem;">Go</button>
+        </div>
+      </div>
+
+      <div class="meta-info">
+        <span>ID: <strong id="meta-id" style="color: #38bdf8;">GOLD_CAND_001</strong></span>
+        <span>Source: <strong id="meta-source" style="color: #cbd5e1;">RAG_SCENARIO_4</strong></span>
+        <span>Status: <strong id="meta-status" style="color: #f59e0b;">Unannotated</strong></span>
+      </div>
+
+      <div class="sentence-container" id="sentence-display">
+        Select text in this box to create an entity annotation.
+      </div>
+
+      <div class="selection-banner" id="selection-banner">
+        <span>Selected text: <strong id="selected-text-preview">None</strong> <span id="selected-offsets-preview" style="color: var(--text-muted); font-size: 0.75rem;"></span></span>
+        <button class="btn-secondary" id="btn-clear-selection" style="padding: 0.2rem 0.5rem; font-size: 0.75rem;">Clear Selection</button>
+      </div>
+
+      <div>
+        <span style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 0.5rem;">Assign Entity Label (Hotkeys 1-9, 0):</span>
+        <div class="entity-buttons">
+          <button class="btn-entity btn-food" data-label="FOOD"><span>FOOD</span><span class="hotkey">[1]</span></button>
+          <button class="btn-entity btn-nutrient" data-label="NUTRIENT"><span>NUTRIENT</span><span class="hotkey">[2]</span></button>
+          <button class="btn-entity btn-condition" data-label="HEALTH_CONDITION"><span>HEALTH_COND</span><span class="hotkey">[3]</span></button>
+          <button class="btn-entity btn-allergen" data-label="ALLERGEN"><span>ALLERGEN</span><span class="hotkey">[4]</span></button>
+          <button class="btn-entity btn-age" data-label="AGE_GROUP"><span>AGE_GROUP</span><span class="hotkey">[5]</span></button>
+          <button class="btn-entity btn-meal" data-label="MEAL_TYPE"><span>MEAL_TYPE</span><span class="hotkey">[6]</span></button>
+          <button class="btn-entity btn-growth" data-label="GROWTH_METRIC"><span>GROWTH_METRIC</span><span class="hotkey">[7]</span></button>
+          <button class="btn-entity btn-foodgroup" data-label="FOOD_GROUP"><span>FOOD_GROUP</span><span class="hotkey">[8]</span></button>
+          <button class="btn-entity btn-dietprop" data-label="DIETARY_PROPERTY"><span>DIET_PROP</span><span class="hotkey">[9]</span></button>
+          <button class="btn-entity btn-feedmethod" data-label="FEEDING_METHOD"><span>FEED_METHOD</span><span class="hotkey">[0]</span></button>
+        </div>
+      </div>
+
+      <div class="annotations-list">
+        <h3>Current Sentence Annotations</h3>
+        <div id="annotations-container" style="display: flex; flex-direction: column; gap: 0.4rem;">
+          <span style="color: var(--text-muted); font-size: 0.85rem; font-style: italic;">No entities in this sentence yet.</span>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 1rem; border-top: 1px solid var(--surface-border); padding-top: 1rem;">
+        <button class="btn-secondary" id="btn-mark-empty" style="flex: 1;">✔️ Mark as Negative (0 Entities)</button>
+        <button class="btn-primary" id="btn-save-next" style="flex: 1;">Save & Next ➡️</button>
+      </div>
+    </section>
+
+    <aside class="sidebar">
+      <div class="card">
+        <div class="annotator-field">
+          <label for="annotator-input">Annotator Identifier / Name:</label>
+          <input type="text" id="annotator-input" value="Human_Expert_1" placeholder="Enter your name">
+        </div>
+        <div class="annotator-field">
+          <label for="sentence-notes">Sentence Notes (Optional):</label>
+          <input type="text" id="sentence-notes" placeholder="Boundary notes, edge cases...">
+        </div>
+      </div>
+
+      <div class="card guideline-panel">
+        <h3 style="font-size: 0.95rem; color: #fff; border-bottom: 1px solid var(--surface-border); padding-bottom: 0.4rem;">Schema v2 Guidelines</h3>
+        <h4>1. FOOD vs 8. FOOD_GROUP</h4>
+        <p>• <strong>FOOD:</strong> <em>curd, paneer, apple, ragi porridge, khichdi</em>.<br>• <strong>FOOD_GROUP:</strong> <em>pulses, cereals, millets, green leafy vegetables, fruits</em>.</p>
+
+        <h4>2. NUTRIENT</h4>
+        <p>• <em>iron, calcium, vitamin D, vitamin B12, zinc, omega-3 fatty acids, dietary fiber</em>.<br>• Exclude quantities: "400 IU vitamin D" → label only <em>vitamin D</em>.</p>
+
+        <h4>9. DIETARY_PROPERTY</h4>
+        <p>• <em>energy-dense, nutrient-rich, easily digestible, fortified, semi-solid, soft textured</em>.</p>
+
+        <h4>0. FEEDING_METHOD</h4>
+        <p>• <em>exclusive breastfeeding, complementary feeding, spoon feeding, finger foods</em>.</p>
+
+        <h4>3. HEALTH_CONDITION</h4>
+        <p>• <em>iron deficiency anemia, stunting, wasting, severe acute malnutrition, rickets</em>.</p>
+
+        <h4>4. ALLERGEN</h4>
+        <p>• <em>cow's milk protein allergy, peanut allergy, soy allergy, gluten</em>.</p>
+
+        <h4>5. AGE_GROUP</h4>
+        <p>• <em>infants, toddlers, 6 to 12 months, first 1000 days</em>.</p>
+
+        <h4>6. MEAL_TYPE & 7. GROWTH_METRIC</h4>
+        <p>• <strong>MEAL:</strong> <em>breakfast, snack, lunch</em>.<br>• <strong>GROWTH:</strong> <em>MUAC, length-for-age, weight, height</em>.</p>
+      </div>
+    </aside>
+  </main>
+
+  <script>
+    let dataset = [];
+    let currentIndex = 0;
+    let selectedSpan = null;
+
+    const labelColors = {
+      'FOOD': '#f59e0b',
+      'NUTRIENT': '#10b981',
+      'HEALTH_CONDITION': '#ef4444',
+      'ALLERGEN': '#8b5cf6',
+      'AGE_GROUP': '#3b82f6',
+      'MEAL_TYPE': '#06b6d4',
+      'GROWTH_METRIC': '#ec4899',
+      'FOOD_GROUP': '#84cc16',
+      'DIETARY_PROPERTY': '#eab308',
+      'FEEDING_METHOD': '#14b8a6'
+    };
+
+    async function init() {
+      const saved = localStorage.getItem('nutribite_human_gold_v2');
+      if (saved) {
+        try {
+          dataset = JSON.parse(saved);
+          render();
+          return;
+        } catch(e) {}
+      }
+
+      try {
+        const res = await fetch('human_gold_template.jsonl');
+        if (res.ok) {
+          const text = await res.text();
+          dataset = text.split('\n')
+            .filter(line => line.trim().length > 0)
+            .map(line => JSON.parse(line));
+        }
+      } catch (e) {}
+
+      if (!dataset || dataset.length === 0) {
+        dataset = [
+          {"sentence_id": "GOLD_CAND_001", "source_id": "RAG_SCENARIO_4", "text": "Dietary diversification helps reduce micronutrient deficiencies such as iron and folate deficiency.", "entities": [], "annotator": "", "notes": ""}
+        ];
+      }
+      render();
+    }
+
+    function saveState() {
+      localStorage.setItem('nutribite_human_gold_v2', JSON.stringify(dataset));
+      updateStats();
+    }
+
+    function updateStats() {
+      document.getElementById('stat-total').innerText = dataset.length;
+      document.getElementById('total-count').innerText = dataset.length;
+      const annotated = dataset.filter(d => (d.entities && d.entities.length > 0) || d.is_zero_entity_verified || (d.annotator && d.annotator.length > 0)).length;
+      document.getElementById('stat-annotated').innerText = annotated;
+      const pct = dataset.length > 0 ? Math.round((annotated / dataset.length) * 100) : 0;
+      document.getElementById('stat-progress').innerText = `${pct}%`;
+    }
+
+    function render() {
+      if (dataset.length === 0) return;
+      const item = dataset[currentIndex];
+
+      document.getElementById('current-index').innerText = currentIndex + 1;
+      document.getElementById('jump-input').value = currentIndex + 1;
+      document.getElementById('meta-id').innerText = item.sentence_id || `GOLD_CAND_${currentIndex + 1}`;
+      document.getElementById('meta-source').innerText = item.source_id || 'RAG_CORPUS';
+
+      const isAnnotated = (item.entities && item.entities.length > 0) || item.is_zero_entity_verified || (item.annotator && item.annotator.length > 0);
+      const statusElem = document.getElementById('meta-status');
+      if (item.entities && item.entities.length > 0) {
+        statusElem.innerText = `${item.entities.length} Entities Annotated`;
+        statusElem.style.color = '#10b981';
+      } else if (item.is_zero_entity_verified) {
+        statusElem.innerText = 'Verified 0 Entities (Negative Example)';
+        statusElem.style.color = '#38bdf8';
+      } else {
+        statusElem.innerText = 'Unannotated';
+        statusElem.style.color = '#f59e0b';
+      }
+
+      document.getElementById('annotator-input').value = item.annotator || localStorage.getItem('last_annotator_name') || 'Human_Expert_1';
+      document.getElementById('sentence-notes').value = item.notes || '';
+
+      const displayElem = document.getElementById('sentence-display');
+      displayElem.innerHTML = '';
+      
+      const rawText = item.text;
+      const entities = [...(item.entities || [])].sort((a, b) => a.start - b.start);
+
+      let lastIdx = 0;
+      const frag = document.createDocumentFragment();
+
+      entities.forEach((ent) => {
+        if (ent.start > lastIdx) {
+          frag.appendChild(document.createTextNode(rawText.substring(lastIdx, ent.start)));
+        }
+        const span = document.createElement('span');
+        span.className = 'highlight';
+        span.style.backgroundColor = labelColors[ent.label] || '#475569';
+        span.innerText = rawText.substring(ent.start, ent.end);
+        span.title = `${ent.label} [${ent.start}:${ent.end}]`;
+        frag.appendChild(span);
+        lastIdx = ent.end;
+      });
+
+      if (lastIdx < rawText.length) {
+        frag.appendChild(document.createTextNode(rawText.substring(lastIdx)));
+      }
+
+      displayElem.appendChild(frag);
+
+      const container = document.getElementById('annotations-container');
+      container.innerHTML = '';
+      if (!item.entities || item.entities.length === 0) {
+        container.innerHTML = `<span style="color: var(--text-muted); font-size: 0.85rem; font-style: italic;">${item.is_zero_entity_verified ? 'Verified Negative: 0 entities.' : 'No entities annotated yet.'}</span>`;
+      } else {
+        item.entities.forEach((ent, idx) => {
+          const chip = document.createElement('div');
+          chip.className = 'annotation-chip';
+          chip.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span class="chip-label" style="background-color: ${labelColors[ent.label] || '#334155'};">${ent.label}</span>
+              <span class="chip-text">"${ent.text}"</span>
+              <span class="chip-offsets">[${ent.start}:${ent.end}]</span>
+            </div>
+            <button class="chip-del" data-idx="${idx}" title="Delete annotation">×</button>
+          `;
+          container.appendChild(chip);
+        });
+      }
+
+      clearSelection();
+      updateStats();
+    }
+
+    document.getElementById('sentence-display').addEventListener('mouseup', handleTextSelection);
+    document.getElementById('sentence-display').addEventListener('touchend', handleTextSelection);
+
+    function handleTextSelection() {
+      const selection = window.getSelection();
+      if (!selection || selection.isCollapsed || selection.rangeCount === 0) return;
+
+      const range = selection.getRangeAt(0);
+      const container = document.getElementById('sentence-display');
+      
+      if (!container.contains(range.commonAncestorContainer)) return;
+
+      const rawText = dataset[currentIndex].text;
+      const selectedStr = selection.toString().trim();
+      if (!selectedStr) return;
+
+      const preRange = document.createRange();
+      preRange.selectNodeContents(container);
+      preRange.setEnd(range.startContainer, range.startOffset);
+      const preText = preRange.toString();
+      
+      const start = preText.length;
+      const end = start + selection.toString().length;
+      const exactText = rawText.substring(start, end).trim();
+
+      const actualStart = rawText.indexOf(exactText, start);
+      const actualEnd = actualStart + exactText.length;
+
+      if (actualStart === -1 || actualStart >= actualEnd) return;
+
+      selectedSpan = {
+        start: actualStart,
+        end: actualEnd,
+        text: exactText
+      };
+
+      document.getElementById('selected-text-preview').innerText = `"${exactText}"`;
+      document.getElementById('selected-offsets-preview').innerText = `(offsets [${actualStart}:${actualEnd}])`;
+      document.getElementById('selection-banner').style.display = 'flex';
+    }
+
+    function clearSelection() {
+      selectedSpan = null;
+      document.getElementById('selected-text-preview').innerText = 'None';
+      document.getElementById('selected-offsets-preview').innerText = '';
+      window.getSelection().removeAllRanges();
+    }
+
+    document.getElementById('btn-clear-selection').addEventListener('click', clearSelection);
+
+    document.querySelectorAll('.btn-entity').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const label = btn.getAttribute('data-label');
+        assignLabel(label);
+      });
+    });
+
+    function assignLabel(label) {
+      if (!selectedSpan) {
+        alert("Please select a text span in the sentence first!");
+        return;
+      }
+
+      const item = dataset[currentIndex];
+      if (!item.entities) item.entities = [];
+
+      const overlap = item.entities.find(e => 
+        (selectedSpan.start >= e.start && selectedSpan.start < e.end) ||
+        (selectedSpan.end > e.start && selectedSpan.end <= e.end) ||
+        (selectedSpan.start <= e.start && selectedSpan.end >= e.end)
+      );
+
+      if (overlap) {
+        alert(`Span overlaps with existing entity "${overlap.text}" [${overlap.label}]. Please delete or adjust the existing span first.`);
+        return;
+      }
+
+      item.entities.push({
+        start: selectedSpan.start,
+        end: selectedSpan.end,
+        label: label,
+        text: selectedSpan.text
+      });
+
+      item.is_zero_entity_verified = false;
+      item.annotator = document.getElementById('annotator-input').value.trim() || 'Human_Expert_1';
+      localStorage.setItem('last_annotator_name', item.annotator);
+      item.notes = document.getElementById('sentence-notes').value.trim();
+
+      saveState();
+      render();
+    }
+
+    document.getElementById('annotations-container').addEventListener('click', (e) => {
+      if (e.target.classList.contains('chip-del')) {
+        const idx = parseInt(e.target.getAttribute('data-idx'));
+        dataset[currentIndex].entities.splice(idx, 1);
+        saveState();
+        render();
+      }
+    });
+
+    document.getElementById('btn-mark-empty').addEventListener('click', () => {
+      const item = dataset[currentIndex];
+      item.entities = [];
+      item.is_zero_entity_verified = true;
+      item.annotator = document.getElementById('annotator-input').value.trim() || 'Human_Expert_1';
+      localStorage.setItem('last_annotator_name', item.annotator);
+      item.notes = document.getElementById('sentence-notes').value.trim();
+      saveState();
+      render();
+      if (currentIndex < dataset.length - 1) {
+        currentIndex++;
+        render();
+      }
+    });
+
+    document.getElementById('btn-prev').addEventListener('click', () => {
+      if (currentIndex > 0) {
+        saveCurrentMeta();
+        currentIndex--;
+        render();
+      }
+    });
+
+    document.getElementById('btn-next').addEventListener('click', () => {
+      if (currentIndex < dataset.length - 1) {
+        saveCurrentMeta();
+        currentIndex++;
+        render();
+      }
+    });
+
+    document.getElementById('btn-save-next').addEventListener('click', () => {
+      saveCurrentMeta();
+      if (currentIndex < dataset.length - 1) {
+        currentIndex++;
+        render();
+      } else {
+        alert("Reached final sentence! Click 'Export human_gold.jsonl' to save your work.");
+      }
+    });
+
+    document.getElementById('btn-jump').addEventListener('click', () => {
+      const val = parseInt(document.getElementById('jump-input').value);
+      if (val >= 1 && val <= dataset.length) {
+        saveCurrentMeta();
+        currentIndex = val - 1;
+        render();
+      }
+    });
+
+    function saveCurrentMeta() {
+      const item = dataset[currentIndex];
+      if (item) {
+        item.annotator = document.getElementById('annotator-input').value.trim() || 'Human_Expert_1';
+        localStorage.setItem('last_annotator_name', item.annotator);
+        item.notes = document.getElementById('sentence-notes').value.trim();
+        saveState();
+      }
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.target.tagName === 'INPUT') return;
+
+      const hotkeyMap = {
+        '1': 'FOOD',
+        '2': 'NUTRIENT',
+        '3': 'HEALTH_CONDITION',
+        '4': 'ALLERGEN',
+        '5': 'AGE_GROUP',
+        '6': 'MEAL_TYPE',
+        '7': 'GROWTH_METRIC',
+        '8': 'FOOD_GROUP',
+        '9': 'DIETARY_PROPERTY',
+        '0': 'FEEDING_METHOD'
+      };
+
+      if (hotkeyMap[e.key]) {
+        e.preventDefault();
+        assignLabel(hotkeyMap[e.key]);
+      } else if (e.altKey && (e.key === 'a' || e.key === 'A')) {
+        e.preventDefault();
+        document.getElementById('btn-prev').click();
+      } else if (e.altKey && (e.key === 'd' || e.key === 'D')) {
+        e.preventDefault();
+        document.getElementById('btn-next').click();
+      }
+    });
+
+    document.getElementById('btn-export').addEventListener('click', () => {
+      saveCurrentMeta();
+      const lines = dataset.map(item => JSON.stringify({
+        sentence_id: item.sentence_id,
+        source_id: item.source_id,
+        text: item.text,
+        entities: item.entities || [],
+        annotator: item.annotator || "Human_Expert_1",
+        notes: item.notes || ""
+      }));
+      const blob = new Blob([lines.join('\n') + '\n'], { type: 'application/jsonl' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'human_gold.jsonl';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById('btn-import').addEventListener('click', () => {
+      document.getElementById('file-input').click();
+    });
+
+    document.getElementById('file-input').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const lines = event.target.result.split('\n').filter(l => l.trim().length > 0);
+          dataset = lines.map(l => JSON.parse(l));
+          currentIndex = 0;
+          saveState();
+          render();
+          alert(`Successfully imported ${dataset.length} sentences!`);
+        } catch (err) {
+          alert("Error parsing JSONL file: " + err.message);
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    window.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+[
+  {
+    "model_name": "Baseline (Phase 9 Perceptron)",
+    "mode": "baseline",
+    "post_normalize": false,
+    "metrics": {
+      "Micro_P": 63.84,
+      "Micro_R": 58.4,
+      "Micro_F1": 61.0,
+      "Macro_F1": 47.8,
+      "Nutrient_P": 71.58,
+      "Nutrient_R": 78.16,
+      "Nutrient_F1": 74.73,
+      "Seen_F1": 76.79,
+      "Unseen_F1": 1.29,
+      "Nutrient_Seen_F1": 83.44,
+      "Nutrient_Unseen_F1": 0
+    }
+  },
+  {
+    "model_name": "Knowledge-Enhanced Perceptron",
+    "mode": "knowledge",
+    "post_normalize": false,
+    "metrics": {
+      "Micro_P": 63.84,
+      "Micro_R": 58.4,
+      "Micro_F1": 61.0,
+      "Macro_F1": 47.8,
+      "Nutrient_P": 71.58,
+      "Nutrient_R": 78.16,
+      "Nutrient_F1": 74.73,
+      "Seen_F1": 76.79,
+      "Unseen_F1": 1.29,
+      "Nutrient_Seen_F1": 83.44,
+      "Nutrient_Unseen_F1": 0
+    }
+  },
+  {
+    "model_name": "Normalization-Aware NER",
+    "mode": "normalization",
+    "post_normalize": true,
+    "metrics": {
+      "Micro_P": 62.11,
+      "Micro_R": 60.98,
+      "Micro_F1": 61.54,
+      "Macro_F1": 51.57,
+      "Nutrient_P": 70.83,
+      "Nutrient_R": 78.16,
+      "Nutrient_F1": 74.32,
+      "Seen_F1": 77.21,
+      "Unseen_F1": 10.06,
+      "Nutrient_Seen_F1": 82.72,
+      "Nutrient_Unseen_F1": 9.52
+    }
+  },
+  {
+    "model_name": "Subword-Enhanced Perceptron",
+    "mode": "subword",
+    "post_normalize": false,
+    "metrics": {
+      "Micro_P": 64.43,
+      "Micro_R": 59.43,
+      "Micro_F1": 61.83,
+      "Macro_F1": 52.32,
+      "Nutrient_P": 70.83,
+      "Nutrient_R": 78.16,
+      "Nutrient_F1": 74.32,
+      "Seen_F1": 77.76,
+      "Unseen_F1": 1.29,
+      "Nutrient_Seen_F1": 83.44,
+      "Nutrient_Unseen_F1": 0
+    }
+  },
+  {
+    "model_name": "Contextual Representation Model",
+    "mode": "contextual",
+    "post_normalize": false,
+    "metrics": {
+      "Micro_P": 64.8,
+      "Micro_R": 59.95,
+      "Micro_F1": 62.28,
+      "Macro_F1": 53.18,
+      "Nutrient_P": 72.34,
+      "Nutrient_R": 78.16,
+      "Nutrient_F1": 75.14,
+      "Seen_F1": 78.31,
+      "Unseen_F1": 1.29,
+      "Nutrient_Seen_F1": 83.44,
+      "Nutrient_Unseen_F1": 0
+    }
+  },
+  {
+    "model_name": "Knowledge-Grounded Contextual Hybrid",
+    "mode": "hybrid",
+    "post_normalize": true,
+    "metrics": {
+      "Micro_P": 62.24,
+      "Micro_R": 61.76,
+      "Micro_F1": 62.0,
+      "Macro_F1": 53.09,
+      "Nutrient_P": 72.63,
+      "Nutrient_R": 79.31,
+      "Nutrient_F1": 75.82,
+      "Seen_F1": 77.83,
+      "Unseen_F1": 10.0,
+      "Nutrient_Seen_F1": 83.44,
+      "Nutrient_Unseen_F1": 10.53
+    }
+  }
+]

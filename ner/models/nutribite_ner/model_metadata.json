@@ -1,0 +1,26 @@
+{
+  "model_name": "nutribite_fast_averaged_sequence_perceptron",
+  "architecture": "Structured_Averaged_Perceptron_BIO_Classifier",
+  "labels": [
+    "O",
+    "B-FOOD",
+    "I-FOOD",
+    "B-NUTRIENT",
+    "I-NUTRIENT",
+    "B-HEALTH_CONDITION",
+    "I-HEALTH_CONDITION",
+    "B-ALLERGEN",
+    "I-ALLERGEN",
+    "B-AGE_GROUP",
+    "I-AGE_GROUP",
+    "B-MEAL_TYPE",
+    "I-MEAL_TYPE",
+    "B-GROWTH_METRIC",
+    "I-GROWTH_METRIC"
+  ],
+  "num_active_features": 6567,
+  "train_instances": 1223,
+  "val_instances": 262,
+  "test_instances": 263,
+  "seed": 42
+}

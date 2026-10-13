@@ -1,0 +1,216 @@
+[
+  {
+    "surface_form": "iron",
+    "canonical_form": "iron",
+    "entity_type": "NUTRIENT",
+    "source": "ICMR-NIN RDA Taxonomy",
+    "nutrient_id": "NUT_IRON",
+    "aliases": [
+      "elemental iron",
+      "ferrous iron",
+      "non-heme iron",
+      "heme iron"
+    ]
+  },
+  {
+    "surface_form": "calcium",
+    "canonical_form": "calcium",
+    "entity_type": "NUTRIENT",
+    "source": "ICMR-NIN RDA Taxonomy",
+    "nutrient_id": "NUT_CALCIUM",
+    "aliases": [
+      "dietary calcium"
+    ]
+  },
+  {
+    "surface_form": "zinc",
+    "canonical_form": "zinc",
+    "entity_type": "NUTRIENT",
+    "source": "ICMR-NIN RDA Taxonomy",
+    "nutrient_id": "NUT_ZINC",
+    "aliases": [
+      "elemental zinc"
+    ]
+  },
+  {
+    "surface_form": "protein",
+    "canonical_form": "protein",
+    "entity_type": "NUTRIENT",
+    "source": "ICMR-NIN RDA Taxonomy",
+    "nutrient_id": "NUT_PROTEIN",
+    "aliases": [
+      "proteins",
+      "dietary protein",
+      "high biological value protein"
+    ]
+  },
+  {
+    "surface_form": "vitamin A",
+    "canonical_form": "vitamin a",
+    "entity_type": "NUTRIENT",
+    "source": "ICMR-NIN RDA Taxonomy",
+    "nutrient_id": "NUT_VIT_A",
+    "aliases": [
+      "Vitamin A",
+      "vit A",
+      "retinol",
+      "beta-carotene"
+    ]
+  },
+  {
+    "surface_form": "vitamin D",
+    "canonical_form": "vitamin d",
+    "entity_type": "NUTRIENT",
+    "source": "ICMR-NIN RDA Taxonomy",
+    "nutrient_id": "NUT_VIT_D",
+    "aliases": [
+      "Vitamin D",
+      "vit D",
+      "Vit D",
+      "vitamin D3",
+      "cholecalciferol"
+    ]
+  },
+  {
+    "surface_form": "vitamin C",
+    "canonical_form": "vitamin c",
+    "entity_type": "NUTRIENT",
+    "source": "ICMR-NIN RDA Taxonomy",
+    "nutrient_id": "NUT_VIT_C",
+    "aliases": [
+      "Vitamin C",
+      "vit C",
+      "ascorbic acid"
+    ]
+  },
+  {
+    "surface_form": "vitamin B12",
+    "canonical_form": "vitamin b12",
+    "entity_type": "NUTRIENT",
+    "source": "ICMR-NIN RDA Taxonomy",
+    "nutrient_id": "NUT_VIT_B12",
+    "aliases": [
+      "Vitamin B12",
+      "vit B12",
+      "cobalamin",
+      "cyanocobalamin"
+    ]
+  },
+  {
+    "surface_form": "folate",
+    "canonical_form": "folate",
+    "entity_type": "NUTRIENT",
+    "source": "ICMR-NIN RDA Taxonomy",
+    "nutrient_id": "NUT_FOLATE",
+    "aliases": [
+      "folic acid",
+      "vitamin B9",
+      "folates"
+    ]
+  },
+  {
+    "surface_form": "iodine",
+    "canonical_form": "iodine",
+    "entity_type": "NUTRIENT",
+    "source": "ICMR-NIN RDA Taxonomy",
+    "nutrient_id": "NUT_IODINE",
+    "aliases": [
+      "iodide"
+    ]
+  },
+  {
+    "surface_form": "fiber",
+    "canonical_form": "fiber",
+    "entity_type": "NUTRIENT",
+    "source": "ICMR-NIN RDA Taxonomy",
+    "nutrient_id": "NUT_FIBER",
+    "aliases": [
+      "dietary fiber",
+      "insoluble fiber",
+      "soluble fiber",
+      "roughage"
+    ]
+  },
+  {
+    "surface_form": "carbohydrates",
+    "canonical_form": "carbohydrates",
+    "entity_type": "NUTRIENT",
+    "source": "ICMR-NIN RDA Taxonomy",
+    "nutrient_id": "NUT_CARBS",
+    "aliases": [
+      "carbs",
+      "carbohydrate",
+      "complex carbohydrates"
+    ]
+  },
+  {
+    "surface_form": "fat",
+    "canonical_form": "fat",
+    "entity_type": "NUTRIENT",
+    "source": "ICMR-NIN RDA Taxonomy",
+    "nutrient_id": "NUT_FAT",
+    "aliases": [
+      "fats",
+      "dietary fat",
+      "lipids",
+      "essential fatty acids"
+    ]
+  },
+  {
+    "surface_form": "energy",
+    "canonical_form": "energy",
+    "entity_type": "NUTRIENT",
+    "source": "ICMR-NIN RDA Taxonomy",
+    "nutrient_id": "NUT_ENERGY",
+    "aliases": [
+      "calories",
+      "caloric energy",
+      "kilocalories",
+      "kcal"
+    ]
+  },
+  {
+    "surface_form": "omega-3 fatty acids",
+    "canonical_form": "omega-3 fatty acids",
+    "entity_type": "NUTRIENT",
+    "source": "ICMR-NIN RDA Taxonomy",
+    "nutrient_id": "NUT_OMEGA3",
+    "aliases": [
+      "omega-3",
+      "n-3 fatty acids",
+      "DHA",
+      "ALA",
+      "EPA"
+    ]
+  },
+  {
+    "surface_form": "magnesium",
+    "canonical_form": "magnesium",
+    "entity_type": "NUTRIENT",
+    "source": "ICMR-NIN RDA Taxonomy",
+    "nutrient_id": "NUT_MAGNESIUM",
+    "aliases": [
+      "elemental magnesium"
+    ]
+  },
+  {
+    "surface_form": "potassium",
+    "canonical_form": "potassium",
+    "entity_type": "NUTRIENT",
+    "source": "ICMR-NIN RDA Taxonomy",
+    "nutrient_id": "NUT_POTASSIUM",
+    "aliases": [
+      "dietary potassium"
+    ]
+  },
+  {
+    "surface_form": "phosphorus",
+    "canonical_form": "phosphorus",
+    "entity_type": "NUTRIENT",
+    "source": "ICMR-NIN RDA Taxonomy",
+    "nutrient_id": "NUT_PHOSPHORUS",
+    "aliases": [
+      "phosphate"
+    ]
+  }
+]

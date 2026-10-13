@@ -1,0 +1,2061 @@
+{
+  "G_contextual_ambiguity": [
+    {
+      "sentence_id": "GOLD_CAND_002",
+      "text": "Cereals contribute a large portion of daily energy intake, but over-reliance can reduce micronutrient intake.",
+      "span": "energy",
+      "label": "NUTRIENT",
+      "is_unseen": false
+    },
+    {
+      "sentence_id": "GOLD_CAND_010",
+      "text": "Cereals provide a major portion of daily energy intake.",
+      "span": "energy",
+      "label": "NUTRIENT",
+      "is_unseen": false
+    },
+    {
+      "sentence_id": "GOLD_CAND_016",
+      "text": "Carbohydrates are the primary source of energy and should form the largest portion of the diet.",
+      "span": "energy",
+      "label": "NUTRIENT",
+      "is_unseen": false
+    },
+    {
+      "sentence_id": "GOLD_CAND_019",
+      "text": "Fats provide concentrated energy and help in absorption of fat-soluble vitamins.",
+      "span": "energy",
+      "label": "NUTRIENT",
+      "is_unseen": false
+    },
+    {
+      "sentence_id": "GOLD_CAND_081",
+      "text": "During the first six months of lactation, additional 600 kcal energy is required daily.",
+      "span": "energy",
+      "label": "NUTRIENT",
+      "is_unseen": false
+    },
+    {
+      "sentence_id": "GOLD_CAND_116",
+      "text": "High energy snacks between meals.",
+      "span": "energy",
+      "label": "NUTRIENT",
+      "is_unseen": false
+    },
+    {
+      "sentence_id": "GOLD_CAND_140",
+      "text": "Pediatric energy requirements fluctuate dynamically based on chronological age, gender, basal metabolic rate (BMR), growth velocity, and daily physical activity levels.",
+      "span": "energy",
+      "label": "NUTRIENT",
+      "is_unseen": false
+    }
+  ],
+  "A_unseen_lexical_forms": [
+    {
+      "sentence_id": "GOLD_CAND_004",
+      "text": "Vegetables and fruits provide vitamins, minerals, fiber, and antioxidants essential for health.",
+      "span": "vitamins",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_004",
+      "text": "Vegetables and fruits provide vitamins, minerals, fiber, and antioxidants essential for health.",
+      "span": "minerals",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_005",
+      "text": "Ultra-processed foods high in fat, sugar, and salt should be avoided for better health.",
+      "span": "salt",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_007",
+      "text": "Limiting added fat, salt, and sugar intake is essential for maintaining good health.",
+      "span": "salt",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_009",
+      "text": "Different food groups provide essential nutrients such as proteins, vitamins, minerals, and fiber.",
+      "span": "minerals",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_009",
+      "text": "Different food groups provide essential nutrients such as proteins, vitamins, minerals, and fiber.",
+      "span": "vitamins",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_011",
+      "text": "Pulses, beans, and meat provide important proteins and essential nutrients.",
+      "span": "beans",
+      "label": "FOOD_GROUP",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_011",
+      "text": "Pulses, beans, and meat provide important proteins and essential nutrients.",
+      "span": "meat",
+      "label": "FOOD_GROUP",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_012",
+      "text": "Fruits and vegetables provide vitamins, antioxidants, and fiber necessary for health.",
+      "span": "vitamins",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_018",
+      "text": "Combining cereals and pulses provides better quality protein due to complementary amino acids.",
+      "span": "amino acids",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_021",
+      "text": "Fat-soluble vitamins can be stored in the body, while water-soluble vitamins need regular intake.",
+      "span": "water-soluble vitamins",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_022",
+      "text": "Animal-based foods such as milk, eggs, and meat provide high-quality protein.",
+      "span": "meat",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_022",
+      "text": "Animal-based foods such as milk, eggs, and meat provide high-quality protein.",
+      "span": "eggs",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_023",
+      "text": "Fish and meat can be included as sources of high-quality protein and micronutrients.",
+      "span": "meat",
+      "label": "FOOD_GROUP",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_024",
+      "text": "Highly processed foods and foods high in sugar, fat, and salt should be avoided during pregnancy.",
+      "span": "salt",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_024",
+      "text": "Highly processed foods and foods high in sugar, fat, and salt should be avoided during pregnancy.",
+      "span": "Highly processed",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_030",
+      "text": "Nuts and oilseeds provide essential fatty acids important for fetal development.",
+      "span": "oilseeds",
+      "label": "FOOD_GROUP",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_036",
+      "text": "Fish and seeds like flax and chia are good sources of omega-3 fatty acids.",
+      "span": "chia",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_036",
+      "text": "Fish and seeds like flax and chia are good sources of omega-3 fatty acids.",
+      "span": "flax",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_044",
+      "text": "Breast milk contains Long Chain Polyunsaturated Fatty Acids (LCPUFAs) like DHA and Arachidonic acid for visual and neural development.",
+      "span": "Long Chain Polyunsaturated Fatty Acids",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_044",
+      "text": "Breast milk contains Long Chain Polyunsaturated Fatty Acids (LCPUFAs) like DHA and Arachidonic acid for visual and neural development.",
+      "span": "Arachidonic acid",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_045",
+      "text": "Preterm milk is nutrient-denser than term milk, containing higher protein, sodium, and IgA to support the baby's needs.",
+      "span": "IgA",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_045",
+      "text": "Preterm milk is nutrient-denser than term milk, containing higher protein, sodium, and IgA to support the baby's needs.",
+      "span": "nutrient-denser",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_045",
+      "text": "Preterm milk is nutrient-denser than term milk, containing higher protein, sodium, and IgA to support the baby's needs.",
+      "span": "sodium",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_052",
+      "text": "Pregnant women should consume a variety of foods including cereals, pulses, vegetables, fruits, nuts, and dairy.",
+      "span": "dairy",
+      "label": "FOOD_GROUP",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_053",
+      "text": "Green leafy vegetables and fruits are essential sources of vitamins and minerals during pregnancy.",
+      "span": "minerals",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_053",
+      "text": "Green leafy vegetables and fruits are essential sources of vitamins and minerals during pregnancy.",
+      "span": "vitamins",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_059",
+      "text": "Breast milk contains immunoglobulins, lactoferrin and protective factors against infections.",
+      "span": "immunoglobulins",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_059",
+      "text": "Breast milk contains immunoglobulins, lactoferrin and protective factors against infections.",
+      "span": "lactoferrin",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_061",
+      "text": "Frequent suckling and complete emptying of one breast ensures adequate milk production.",
+      "span": "breast",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_066",
+      "text": "India faces a dual burden of malnutrition where undernutrition and obesity coexist in the population.",
+      "span": "undernutrition",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_067",
+      "text": "High consumption of processed foods rich in sugar, fat, and salt leads to obesity and micronutrient deficiencies.",
+      "span": "processed foods",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_067",
+      "text": "High consumption of processed foods rich in sugar, fat, and salt leads to obesity and micronutrient deficiencies.",
+      "span": "salt",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_076",
+      "text": "Undernourished mothers have a higher risk of delivering low birth weight babies.",
+      "span": "Undernourished",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_079",
+      "text": "Highly processed foods high in fat, sugar, and salt should be avoided during pregnancy.",
+      "span": "salt",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_079",
+      "text": "Highly processed foods high in fat, sugar, and salt should be avoided during pregnancy.",
+      "span": "Highly processed",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_089",
+      "text": "Serving ragi as malted ragi porridge, ragi idlis, ragi dosas, or ragi rotis provides an outstanding plant-based calcium source for lactose-intolerant, vegan, or vegetarian children.",
+      "span": "ragi dosas",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_089",
+      "text": "Serving ragi as malted ragi porridge, ragi idlis, ragi dosas, or ragi rotis provides an outstanding plant-based calcium source for lactose-intolerant, vegan, or vegetarian children.",
+      "span": "ragi rotis",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_089",
+      "text": "Serving ragi as malted ragi porridge, ragi idlis, ragi dosas, or ragi rotis provides an outstanding plant-based calcium source for lactose-intolerant, vegan, or vegetarian children.",
+      "span": "ragi",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_089",
+      "text": "Serving ragi as malted ragi porridge, ragi idlis, ragi dosas, or ragi rotis provides an outstanding plant-based calcium source for lactose-intolerant, vegan, or vegetarian children.",
+      "span": "ragi idlis",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_091",
+      "text": "It can be IgE-mediated (immediate urticaria, angioedema, wheezing, anaphylaxis) or non-IgE-mediated (delayed proctocolitis with bloody stools, vomiting, severe eczema, failure to thrive).",
+      "span": "urticaria",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_091",
+      "text": "It can be IgE-mediated (immediate urticaria, angioedema, wheezing, anaphylaxis) or non-IgE-mediated (delayed proctocolitis with bloody stools, vomiting, severe eczema, failure to thrive).",
+      "span": "vomiting",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_091",
+      "text": "It can be IgE-mediated (immediate urticaria, angioedema, wheezing, anaphylaxis) or non-IgE-mediated (delayed proctocolitis with bloody stools, vomiting, severe eczema, failure to thrive).",
+      "span": "wheezing",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_091",
+      "text": "It can be IgE-mediated (immediate urticaria, angioedema, wheezing, anaphylaxis) or non-IgE-mediated (delayed proctocolitis with bloody stools, vomiting, severe eczema, failure to thrive).",
+      "span": "angioedema",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_091",
+      "text": "It can be IgE-mediated (immediate urticaria, angioedema, wheezing, anaphylaxis) or non-IgE-mediated (delayed proctocolitis with bloody stools, vomiting, severe eczema, failure to thrive).",
+      "span": "severe eczema",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_091",
+      "text": "It can be IgE-mediated (immediate urticaria, angioedema, wheezing, anaphylaxis) or non-IgE-mediated (delayed proctocolitis with bloody stools, vomiting, severe eczema, failure to thrive).",
+      "span": "proctocolitis",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_093",
+      "text": "Lactose intolerance is a non-immune enzyme deficiency (reduced intestinal mucosal lactase activity) causing osmotic diarrhea, abdominal bloating, and flatulence without systemic allergic manifestations.",
+      "span": "flatulence",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_093",
+      "text": "Lactose intolerance is a non-immune enzyme deficiency (reduced intestinal mucosal lactase activity) causing osmotic diarrhea, abdominal bloating, and flatulence without systemic allergic manifestations.",
+      "span": "abdominal bloating",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_097",
+      "text": "Lactose intolerance in children commonly occurs as a transient secondary lactase deficiency following acute viral gastroenteritis (such as rotavirus infection), where mucosal brush border enterocytes are temporarily denuded.",
+      "span": "secondary lactase deficiency",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_097",
+      "text": "Lactose intolerance in children commonly occurs as a transient secondary lactase deficiency following acute viral gastroenteritis (such as rotavirus infection), where mucosal brush border enterocytes are temporarily denuded.",
+      "span": "acute viral gastroenteritis",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_098",
+      "text": "Managing secondary lactose intolerance involves continuing breastfeeding, offering curd (which contains endogenous bacterial beta-galactosidase), or temporary low-lactose feeding during mucosal recovery.",
+      "span": "beta-",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_100",
+      "text": "Many children with egg allergy can safely tolerate extensively baked egg matrices (such as in thoroughly baked muffins or cakes), where high temperatures and wheat matrix interaction denature heat-labile ovalbumin proteins.",
+      "span": "muffins",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_100",
+      "text": "Many children with egg allergy can safely tolerate extensively baked egg matrices (such as in thoroughly baked muffins or cakes), where high temperatures and wheat matrix interaction denature heat-labile ovalbumin proteins.",
+      "span": "cakes",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_110",
+      "text": "Not breastfeeding increases risk of obesity, diabetes and infections in children.",
+      "span": "diabetes",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_112",
+      "text": "Breastfeeding reduces the risk of obesity, diabetes and infections in children.",
+      "span": "diabetes",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_114",
+      "text": "Infants aged 6 to 8 months should be given complementary foods at least twice a day along with breastfeeding.",
+      "span": "complementary foods",
+      "label": "FEEDING_METHOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_115",
+      "text": "Infants aged 9 to 12 months should receive complementary foods at least three times a day.",
+      "span": "complementary foods",
+      "label": "FEEDING_METHOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_116",
+      "text": "High energy snacks between meals.",
+      "span": "meals",
+      "label": "MEAL_TYPE",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_119",
+      "text": "Establishing a predictable daily feeding rhythm comprising 3 small main meals and 2 to 3 nutrient-dense snacks spaced every 2.",
+      "span": "nutrient-dense",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_119",
+      "text": "Establishing a predictable daily feeding rhythm comprising 3 small main meals and 2 to 3 nutrient-dense snacks spaced every 2.",
+      "span": "meals",
+      "label": "MEAL_TYPE",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_120",
+      "text": "Avoiding hyper-sweetened commercial infant cereals and packaged snacks prevents early habituation to extreme sweetness that can cause vegetable rejection later in childhood.",
+      "span": "childhood",
+      "label": "AGE_GROUP",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_121",
+      "text": "For infants aged 9 to 11 months, complementary feeding frequency should increase to 3 to 4 meals daily, plus 1 to 2 nutritious snacks offered between meals as desired, while continuing regular breastfeeding.",
+      "span": "meals",
+      "label": "MEAL_TYPE",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_121",
+      "text": "For infants aged 9 to 11 months, complementary feeding frequency should increase to 3 to 4 meals daily, plus 1 to 2 nutritious snacks offered between meals as desired, while continuing regular breastfeeding.",
+      "span": "meals",
+      "label": "MEAL_TYPE",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_122",
+      "text": "Iron-rich snacks for older infants aged 9 to 11 months can be prepared from traditional Indian staples: soft-cooked poha with mashed peas, sprouted ragi sheera prepared with water or expressed milk and mashed dates, and steamed sweet potato sticks lightly sprinkled with cumin powder.",
+      "span": "peas",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_122",
+      "text": "Iron-rich snacks for older infants aged 9 to 11 months can be prepared from traditional Indian staples: soft-cooked poha with mashed peas, sprouted ragi sheera prepared with water or expressed milk and mashed dates, and steamed sweet potato sticks lightly sprinkled with cumin powder.",
+      "span": "cumin powder",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_122",
+      "text": "Iron-rich snacks for older infants aged 9 to 11 months can be prepared from traditional Indian staples: soft-cooked poha with mashed peas, sprouted ragi sheera prepared with water or expressed milk and mashed dates, and steamed sweet potato sticks lightly sprinkled with cumin powder.",
+      "span": "dates",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_122",
+      "text": "Iron-rich snacks for older infants aged 9 to 11 months can be prepared from traditional Indian staples: soft-cooked poha with mashed peas, sprouted ragi sheera prepared with water or expressed milk and mashed dates, and steamed sweet potato sticks lightly sprinkled with cumin powder.",
+      "span": "ragi sheera",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_123",
+      "text": "A balanced daily meal structure comprises 3 main family meals and 2 nutritious snacks.",
+      "span": "meals",
+      "label": "MEAL_TYPE",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_124",
+      "text": "Nutrient-dense snacks for 1 to 2 year old toddlers should bridge energetic gaps between main meals without filling the stomach with empty calories.",
+      "span": "meals",
+      "label": "MEAL_TYPE",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_124",
+      "text": "Nutrient-dense snacks for 1 to 2 year old toddlers should bridge energetic gaps between main meals without filling the stomach with empty calories.",
+      "span": "Nutrient-dense",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_125",
+      "text": "Excellent Indian toddler snacks include soft ragi-halwa prepared with pure cow's ghee and mashed banana, soft paneer cubes, vegetable upma, boiled sweet potato mash, and fresh soft papaya cubes.",
+      "span": "papaya",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_125",
+      "text": "Excellent Indian toddler snacks include soft ragi-halwa prepared with pure cow's ghee and mashed banana, soft paneer cubes, vegetable upma, boiled sweet potato mash, and fresh soft papaya cubes.",
+      "span": "ragi-halwa",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_125",
+      "text": "Excellent Indian toddler snacks include soft ragi-halwa prepared with pure cow's ghee and mashed banana, soft paneer cubes, vegetable upma, boiled sweet potato mash, and fresh soft papaya cubes.",
+      "span": "cow's ghee",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_127",
+      "text": "Wholesome Indian snack options include roasted makhana (fox nuts), boiled sweet corn with lemon juice, steamed vegetable idlis with mild coconut chutney, and fresh seasonal fruit slices.",
+      "span": "sweet corn",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_127",
+      "text": "Wholesome Indian snack options include roasted makhana (fox nuts), boiled sweet corn with lemon juice, steamed vegetable idlis with mild coconut chutney, and fresh seasonal fruit slices.",
+      "span": "fresh seasonal fruit",
+      "label": "FOOD_GROUP",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_127",
+      "text": "Wholesome Indian snack options include roasted makhana (fox nuts), boiled sweet corn with lemon juice, steamed vegetable idlis with mild coconut chutney, and fresh seasonal fruit slices.",
+      "span": "coconut chutney",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_127",
+      "text": "Wholesome Indian snack options include roasted makhana (fox nuts), boiled sweet corn with lemon juice, steamed vegetable idlis with mild coconut chutney, and fresh seasonal fruit slices.",
+      "span": "vegetable idlis",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_127",
+      "text": "Wholesome Indian snack options include roasted makhana (fox nuts), boiled sweet corn with lemon juice, steamed vegetable idlis with mild coconut chutney, and fresh seasonal fruit slices.",
+      "span": "roasted makhana",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_129",
+      "text": "Nutritious snack choices include roasted makhana (fox nuts), boiled sweet corn with lemon and chaat masala, seasonal fruit chaat with pomegranate and guava, and a glass of plain lassi or warm turmeric milk.",
+      "span": "roasted makhana",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_129",
+      "text": "Nutritious snack choices include roasted makhana (fox nuts), boiled sweet corn with lemon and chaat masala, seasonal fruit chaat with pomegranate and guava, and a glass of plain lassi or warm turmeric milk.",
+      "span": "sweet corn",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_129",
+      "text": "Nutritious snack choices include roasted makhana (fox nuts), boiled sweet corn with lemon and chaat masala, seasonal fruit chaat with pomegranate and guava, and a glass of plain lassi or warm turmeric milk.",
+      "span": "fruit chaat",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_129",
+      "text": "Nutritious snack choices include roasted makhana (fox nuts), boiled sweet corn with lemon and chaat masala, seasonal fruit chaat with pomegranate and guava, and a glass of plain lassi or warm turmeric milk.",
+      "span": "lassi",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_129",
+      "text": "Nutritious snack choices include roasted makhana (fox nuts), boiled sweet corn with lemon and chaat masala, seasonal fruit chaat with pomegranate and guava, and a glass of plain lassi or warm turmeric milk.",
+      "span": "pomegranate",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_129",
+      "text": "Nutritious snack choices include roasted makhana (fox nuts), boiled sweet corn with lemon and chaat masala, seasonal fruit chaat with pomegranate and guava, and a glass of plain lassi or warm turmeric milk.",
+      "span": "guava",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_134",
+      "text": "Type 2 diabetes risk increases 10-fold once BMI exceeds 30 kg/m2.",
+      "span": "Type 2 diabetes",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_140",
+      "text": "Pediatric energy requirements fluctuate dynamically based on chronological age, gender, basal metabolic rate (BMR), growth velocity, and daily physical activity levels.",
+      "span": "Pediatric",
+      "label": "AGE_GROUP",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_142",
+      "text": "Preadolescence (ages 9 to 12 years) is characterized by accelerated linear growth velocity, increasing skeletal muscle mass in boys, physiological adipose redistribution in girls, and hormonal preparation for puberty.",
+      "span": "Preadolescence",
+      "label": "AGE_GROUP",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_144",
+      "text": "Evaluating longitudinal growth trajectories and growth velocity across multiple sequential time points is far more clinically informative than any single measurement.",
+      "span": "growth trajectories",
+      "label": "GROWTH_METRIC",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_145",
+      "text": "Growth velocity refers to the rate of physical growth over a specified time interval, typically expressed as centimeters per year for height or grams per month for weight.",
+      "span": "height",
+      "label": "GROWTH_METRIC",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_145",
+      "text": "Growth velocity refers to the rate of physical growth over a specified time interval, typically expressed as centimeters per year for height or grams per month for weight.",
+      "span": "weight",
+      "label": "GROWTH_METRIC",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_146",
+      "text": "Low food intake during critical life stages like childhood can negatively impact growth and development.",
+      "span": "childhood",
+      "label": "AGE_GROUP",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_147",
+      "text": "Water, honey, glucose or formula should not be given during the first six months.",
+      "span": "honey",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_147",
+      "text": "Water, honey, glucose or formula should not be given during the first six months.",
+      "span": "formula",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_148",
+      "text": "Sugar and salt should not be added to complementary foods for infants.",
+      "span": "complementary foods",
+      "label": "FEEDING_METHOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_148",
+      "text": "Sugar and salt should not be added to complementary foods for infants.",
+      "span": "salt",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_149",
+      "text": "Sugar and salt should not be added to infant foods.",
+      "span": "salt",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_150",
+      "text": "Salt and sugar should be avoided in infant food preparation.",
+      "span": "Salt",
+      "label": "FOOD",
+      "is_unseen": true
+    }
+  ],
+  "B_synonyms": [
+    {
+      "sentence_id": "GOLD_CAND_004",
+      "text": "Vegetables and fruits provide vitamins, minerals, fiber, and antioxidants essential for health.",
+      "span": "vitamins",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_004",
+      "text": "Vegetables and fruits provide vitamins, minerals, fiber, and antioxidants essential for health.",
+      "span": "minerals",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_009",
+      "text": "Different food groups provide essential nutrients such as proteins, vitamins, minerals, and fiber.",
+      "span": "minerals",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_009",
+      "text": "Different food groups provide essential nutrients such as proteins, vitamins, minerals, and fiber.",
+      "span": "vitamins",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_012",
+      "text": "Fruits and vegetables provide vitamins, antioxidants, and fiber necessary for health.",
+      "span": "vitamins",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_018",
+      "text": "Combining cereals and pulses provides better quality protein due to complementary amino acids.",
+      "span": "amino acids",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_021",
+      "text": "Fat-soluble vitamins can be stored in the body, while water-soluble vitamins need regular intake.",
+      "span": "water-soluble vitamins",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_053",
+      "text": "Green leafy vegetables and fruits are essential sources of vitamins and minerals during pregnancy.",
+      "span": "minerals",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_053",
+      "text": "Green leafy vegetables and fruits are essential sources of vitamins and minerals during pregnancy.",
+      "span": "vitamins",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    }
+  ],
+  "D_multi_word_errors": [
+    {
+      "sentence_id": "GOLD_CAND_005",
+      "text": "Ultra-processed foods high in fat, sugar, and salt should be avoided for better health.",
+      "span": "Ultra-processed",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": false
+    },
+    {
+      "sentence_id": "GOLD_CAND_018",
+      "text": "Combining cereals and pulses provides better quality protein due to complementary amino acids.",
+      "span": "amino acids",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_019",
+      "text": "Fats provide concentrated energy and help in absorption of fat-soluble vitamins.",
+      "predicted": "'fat' [NUTRIENT at 59:62]",
+      "gold": "'fat-soluble vitamins' [NUTRIENT at 59:79]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_021",
+      "text": "Fat-soluble vitamins can be stored in the body, while water-soluble vitamins need regular intake.",
+      "predicted": "'Fat' [NUTRIENT at 0:3]",
+      "gold": "'Fat-soluble vitamins' [NUTRIENT at 0:20]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_021",
+      "text": "Fat-soluble vitamins can be stored in the body, while water-soluble vitamins need regular intake.",
+      "span": "water-soluble vitamins",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_024",
+      "text": "Highly processed foods and foods high in sugar, fat, and salt should be avoided during pregnancy.",
+      "span": "Highly processed",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_027",
+      "text": "Nuts and seeds are rich in healthy fats, proteins, and micronutrients.",
+      "predicted": "'Nuts and seeds' [FOOD_GROUP at 0:14]",
+      "gold": "'seeds' [FOOD_GROUP at 9:14]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_027",
+      "text": "Nuts and seeds are rich in healthy fats, proteins, and micronutrients.",
+      "predicted": "'Nuts and seeds' [FOOD_GROUP at 0:14]",
+      "gold": "'Nuts' [FOOD_GROUP at 0:4]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_037",
+      "text": "Iron deficiency during pregnancy increases risk of maternal mortality and low birth weight in infants.",
+      "predicted": "'Iron' [NUTRIENT at 0:4]",
+      "gold": "'Iron deficiency' [HEALTH_CONDITION at 0:15]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_038",
+      "text": "Green leafy vegetables, pulses and dry fruits are plant sources of iron.",
+      "predicted": "'fruits' [FOOD_GROUP at 39:45]",
+      "gold": "'dry fruits' [FOOD_GROUP at 35:45]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_040",
+      "text": "Long-chain omega-3 fatty acids support fetal brain development.",
+      "predicted": "'omega-3 fatty acids' [NUTRIENT at 11:30]",
+      "gold": "'Long-chain omega-3 fatty acids' [NUTRIENT at 0:30]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_044",
+      "text": "Breast milk contains Long Chain Polyunsaturated Fatty Acids (LCPUFAs) like DHA and Arachidonic acid for visual and neural development.",
+      "span": "Long Chain Polyunsaturated Fatty Acids",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_044",
+      "text": "Breast milk contains Long Chain Polyunsaturated Fatty Acids (LCPUFAs) like DHA and Arachidonic acid for visual and neural development.",
+      "span": "Arachidonic acid",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_045",
+      "text": "Preterm milk is nutrient-denser than term milk, containing higher protein, sodium, and IgA to support the baby's needs.",
+      "predicted": "'milk' [FOOD at 8:12]",
+      "gold": "'Preterm milk' [FOOD at 0:12]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_045",
+      "text": "Preterm milk is nutrient-denser than term milk, containing higher protein, sodium, and IgA to support the baby's needs.",
+      "span": "nutrient-denser",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_058",
+      "text": "Breast milk is easily digested and better absorbed than formula milk.",
+      "predicted": "'milk' [FOOD at 64:68]",
+      "gold": "'formula milk' [FOOD at 56:68]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_067",
+      "text": "High consumption of processed foods rich in sugar, fat, and salt leads to obesity and micronutrient deficiencies.",
+      "span": "processed foods",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_069",
+      "text": "Infants require exclusive breastfeeding in the first six months for optimal growth and development.",
+      "predicted": "'breastfeeding' [HEALTH_CONDITION at 26:39]",
+      "gold": "'exclusive breastfeeding' [FEEDING_METHOD at 16:39]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_071",
+      "text": "Iron deficiency can lead to anemia and reduced oxygen transport in the body.",
+      "predicted": "'Iron' [NUTRIENT at 0:4]",
+      "gold": "'Iron deficiency' [HEALTH_CONDITION at 0:15]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_079",
+      "text": "Highly processed foods high in fat, sugar, and salt should be avoided during pregnancy.",
+      "span": "Highly processed",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_088",
+      "text": "Soya-Milk Cross Reactivity: Soya protein allergy often develops as a cross-reacting response in infants with cow's milk allergy.",
+      "predicted": "'protein' [NUTRIENT at 33:40]",
+      "gold": "'Soya protein allergy' [ALLERGEN at 28:48]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_088",
+      "text": "Soya-Milk Cross Reactivity: Soya protein allergy often develops as a cross-reacting response in infants with cow's milk allergy.",
+      "predicted": "'milk allergy' [ALLERGEN at 115:127]",
+      "gold": "'cow's milk allergy' [ALLERGEN at 109:127]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_089",
+      "text": "Serving ragi as malted ragi porridge, ragi idlis, ragi dosas, or ragi rotis provides an outstanding plant-based calcium source for lactose-intolerant, vegan, or vegetarian children.",
+      "predicted": "'ragi porridge' [FOOD at 23:36]",
+      "gold": "'malted ragi porridge' [FOOD at 16:36]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_089",
+      "text": "Serving ragi as malted ragi porridge, ragi idlis, ragi dosas, or ragi rotis provides an outstanding plant-based calcium source for lactose-intolerant, vegan, or vegetarian children.",
+      "span": "ragi dosas",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_089",
+      "text": "Serving ragi as malted ragi porridge, ragi idlis, ragi dosas, or ragi rotis provides an outstanding plant-based calcium source for lactose-intolerant, vegan, or vegetarian children.",
+      "span": "ragi rotis",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_089",
+      "text": "Serving ragi as malted ragi porridge, ragi idlis, ragi dosas, or ragi rotis provides an outstanding plant-based calcium source for lactose-intolerant, vegan, or vegetarian children.",
+      "span": "ragi idlis",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_090",
+      "text": "Cow's Milk Protein Allergy (CMPA) is an immunologically mediated adverse reaction to bovine milk proteins (primarily casein fractions alpha-s1, alpha-s2, beta, kappa-casein and whey proteins beta-lactoglobulin and alpha-lactalbumin).",
+      "predicted": "'Milk Protein Allergy' [ALLERGEN at 6:26]",
+      "gold": "'Cow's Milk Protein Allergy' [ALLERGEN at 0:26]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_091",
+      "text": "It can be IgE-mediated (immediate urticaria, angioedema, wheezing, anaphylaxis) or non-IgE-mediated (delayed proctocolitis with bloody stools, vomiting, severe eczema, failure to thrive).",
+      "span": "severe eczema",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_092",
+      "text": "Cow's Milk Protein Allergy is distinct from Lactose Intolerance.",
+      "predicted": "'Milk Protein Allergy' [ALLERGEN at 6:26]",
+      "gold": "'Cow's Milk Protein Allergy' [ALLERGEN at 0:26]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_093",
+      "text": "Lactose intolerance is a non-immune enzyme deficiency (reduced intestinal mucosal lactase activity) causing osmotic diarrhea, abdominal bloating, and flatulence without systemic allergic manifestations.",
+      "predicted": "'diarrhea' [HEALTH_CONDITION at 116:124]",
+      "gold": "'osmotic diarrhea' [HEALTH_CONDITION at 108:124]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_093",
+      "text": "Lactose intolerance is a non-immune enzyme deficiency (reduced intestinal mucosal lactase activity) causing osmotic diarrhea, abdominal bloating, and flatulence without systemic allergic manifestations.",
+      "span": "abdominal bloating",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_095",
+      "text": "In managing diagnosed Cow's Milk Protein Allergy in non-breastfed infants, standard mammalian milks (including goat's milk and buffalo's milk) are contraindicated due to high cross-reactivity (>90%).",
+      "predicted": "'milk' [FOOD at 118:122]",
+      "gold": "'goat's milk' [FOOD at 111:122]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_095",
+      "text": "In managing diagnosed Cow's Milk Protein Allergy in non-breastfed infants, standard mammalian milks (including goat's milk and buffalo's milk) are contraindicated due to high cross-reactivity (>90%).",
+      "predicted": "'Milk Protein Allergy' [ALLERGEN at 28:48]",
+      "gold": "'Cow's Milk Protein Allergy' [ALLERGEN at 22:48]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_095",
+      "text": "In managing diagnosed Cow's Milk Protein Allergy in non-breastfed infants, standard mammalian milks (including goat's milk and buffalo's milk) are contraindicated due to high cross-reactivity (>90%).",
+      "predicted": "'milk' [FOOD at 137:141]",
+      "gold": "'buffalo's milk' [FOOD at 127:141]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_096",
+      "text": "For older children with confirmed CMPA transitioning to family diets, alternative non-dairy calcium and protein sources must be systematically incorporated.",
+      "predicted": "'CMPA transitioning' [ALLERGEN at 34:52]",
+      "gold": "'CMPA' [ALLERGEN at 34:38]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_097",
+      "text": "Lactose intolerance in children commonly occurs as a transient secondary lactase deficiency following acute viral gastroenteritis (such as rotavirus infection), where mucosal brush border enterocytes are temporarily denuded.",
+      "span": "secondary lactase deficiency",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_097",
+      "text": "Lactose intolerance in children commonly occurs as a transient secondary lactase deficiency following acute viral gastroenteritis (such as rotavirus infection), where mucosal brush border enterocytes are temporarily denuded.",
+      "span": "acute viral gastroenteritis",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_102",
+      "text": "Children need nutrient-rich foods for growth, brain development, and cognition.",
+      "span": "nutrient-rich",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": false
+    },
+    {
+      "sentence_id": "GOLD_CAND_105",
+      "text": "Exclusive breastfeeding for the first six months ensures optimal infant growth.",
+      "predicted": "'breastfeeding' [HEALTH_CONDITION at 10:23]",
+      "gold": "'Exclusive breastfeeding' [FEEDING_METHOD at 0:23]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_111",
+      "text": "Exclusive breastfeeding for six months is essential for infant growth.",
+      "predicted": "'breastfeeding' [HEALTH_CONDITION at 10:23]",
+      "gold": "'Exclusive breastfeeding' [FEEDING_METHOD at 0:23]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_114",
+      "text": "Infants aged 6 to 8 months should be given complementary foods at least twice a day along with breastfeeding.",
+      "predicted": "'Infants' [AGE_GROUP at 0:7]",
+      "gold": "'Infants aged 6 to 8 months' [AGE_GROUP at 0:26]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_114",
+      "text": "Infants aged 6 to 8 months should be given complementary foods at least twice a day along with breastfeeding.",
+      "span": "complementary foods",
+      "label": "FEEDING_METHOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_115",
+      "text": "Infants aged 9 to 12 months should receive complementary foods at least three times a day.",
+      "predicted": "'Infants' [AGE_GROUP at 0:7]",
+      "gold": "'Infants aged 9 to 12 months' [AGE_GROUP at 0:27]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_115",
+      "text": "Infants aged 9 to 12 months should receive complementary foods at least three times a day.",
+      "span": "complementary foods",
+      "label": "FEEDING_METHOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_118",
+      "text": "Common causes of poor dietary diversity among Indian children include excessive reliance on energy-dense commercial packaged snacks, early introduction of ultra-processed sugary drinks, parental time constraints, and toddler food neophobia.",
+      "predicted": "'energy' [NUTRIENT at 92:98]",
+      "gold": "'energy-dense' [DIETARY_PROPERTY at 92:104]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_118",
+      "text": "Common causes of poor dietary diversity among Indian children include excessive reliance on energy-dense commercial packaged snacks, early introduction of ultra-processed sugary drinks, parental time constraints, and toddler food neophobia.",
+      "span": "ultra-processed",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": false
+    },
+    {
+      "sentence_id": "GOLD_CAND_119",
+      "text": "Establishing a predictable daily feeding rhythm comprising 3 small main meals and 2 to 3 nutrient-dense snacks spaced every 2.",
+      "span": "nutrient-dense",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_121",
+      "text": "For infants aged 9 to 11 months, complementary feeding frequency should increase to 3 to 4 meals daily, plus 1 to 2 nutritious snacks offered between meals as desired, while continuing regular breastfeeding.",
+      "predicted": "'infants' [AGE_GROUP at 4:11]",
+      "gold": "'infants aged 9 to 11 months' [AGE_GROUP at 4:31]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_122",
+      "text": "Iron-rich snacks for older infants aged 9 to 11 months can be prepared from traditional Indian staples: soft-cooked poha with mashed peas, sprouted ragi sheera prepared with water or expressed milk and mashed dates, and steamed sweet potato sticks lightly sprinkled with cumin powder.",
+      "predicted": "'infants' [AGE_GROUP at 27:34]",
+      "gold": "'infants aged 9 to 11 months' [AGE_GROUP at 27:54]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_122",
+      "text": "Iron-rich snacks for older infants aged 9 to 11 months can be prepared from traditional Indian staples: soft-cooked poha with mashed peas, sprouted ragi sheera prepared with water or expressed milk and mashed dates, and steamed sweet potato sticks lightly sprinkled with cumin powder.",
+      "span": "cumin powder",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_122",
+      "text": "Iron-rich snacks for older infants aged 9 to 11 months can be prepared from traditional Indian staples: soft-cooked poha with mashed peas, sprouted ragi sheera prepared with water or expressed milk and mashed dates, and steamed sweet potato sticks lightly sprinkled with cumin powder.",
+      "span": "ragi sheera",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_124",
+      "text": "Nutrient-dense snacks for 1 to 2 year old toddlers should bridge energetic gaps between main meals without filling the stomach with empty calories.",
+      "span": "Nutrient-dense",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_125",
+      "text": "Excellent Indian toddler snacks include soft ragi-halwa prepared with pure cow's ghee and mashed banana, soft paneer cubes, vegetable upma, boiled sweet potato mash, and fresh soft papaya cubes.",
+      "predicted": "'mashed banana' [FOOD at 90:103]",
+      "gold": "'banana' [FOOD at 97:103]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_125",
+      "text": "Excellent Indian toddler snacks include soft ragi-halwa prepared with pure cow's ghee and mashed banana, soft paneer cubes, vegetable upma, boiled sweet potato mash, and fresh soft papaya cubes.",
+      "predicted": "'upma' [FOOD at 134:138]",
+      "gold": "'vegetable upma' [FOOD at 124:138]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_125",
+      "text": "Excellent Indian toddler snacks include soft ragi-halwa prepared with pure cow's ghee and mashed banana, soft paneer cubes, vegetable upma, boiled sweet potato mash, and fresh soft papaya cubes.",
+      "span": "ragi-halwa",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_125",
+      "text": "Excellent Indian toddler snacks include soft ragi-halwa prepared with pure cow's ghee and mashed banana, soft paneer cubes, vegetable upma, boiled sweet potato mash, and fresh soft papaya cubes.",
+      "span": "cow's ghee",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_126",
+      "text": "Mid-afternoon snack planning for preschoolers should bridge energetic gaps after active preschool hours.",
+      "predicted": "'Mid-afternoon' [GROWTH_METRIC at 0:13]",
+      "gold": "'Mid-afternoon snack' [MEAL_TYPE at 0:19]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_127",
+      "text": "Wholesome Indian snack options include roasted makhana (fox nuts), boiled sweet corn with lemon juice, steamed vegetable idlis with mild coconut chutney, and fresh seasonal fruit slices.",
+      "span": "sweet corn",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_127",
+      "text": "Wholesome Indian snack options include roasted makhana (fox nuts), boiled sweet corn with lemon juice, steamed vegetable idlis with mild coconut chutney, and fresh seasonal fruit slices.",
+      "span": "fresh seasonal fruit",
+      "label": "FOOD_GROUP",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_127",
+      "text": "Wholesome Indian snack options include roasted makhana (fox nuts), boiled sweet corn with lemon juice, steamed vegetable idlis with mild coconut chutney, and fresh seasonal fruit slices.",
+      "span": "coconut chutney",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_127",
+      "text": "Wholesome Indian snack options include roasted makhana (fox nuts), boiled sweet corn with lemon juice, steamed vegetable idlis with mild coconut chutney, and fresh seasonal fruit slices.",
+      "span": "vegetable idlis",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_127",
+      "text": "Wholesome Indian snack options include roasted makhana (fox nuts), boiled sweet corn with lemon juice, steamed vegetable idlis with mild coconut chutney, and fresh seasonal fruit slices.",
+      "span": "roasted makhana",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_128",
+      "text": "A wholesome breakfast combining complex carbohydrates and protein\u2014such as vegetable upma with boiled egg, or stuffed paneer paratha with homemade curd\u2014improves morning alertness, memory retention, and academic performance.",
+      "predicted": "'upma' [FOOD at 84:88]",
+      "gold": "'vegetable upma' [FOOD at 74:88]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_128",
+      "text": "A wholesome breakfast combining complex carbohydrates and protein\u2014such as vegetable upma with boiled egg, or stuffed paneer paratha with homemade curd\u2014improves morning alertness, memory retention, and academic performance.",
+      "predicted": "'paneer' [FOOD at 117:123]",
+      "gold": "'paneer paratha' [FOOD at 117:131]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_128",
+      "text": "A wholesome breakfast combining complex carbohydrates and protein\u2014such as vegetable upma with boiled egg, or stuffed paneer paratha with homemade curd\u2014improves morning alertness, memory retention, and academic performance.",
+      "predicted": "'complex carbohydrates' [NUTRIENT at 32:53]",
+      "gold": "'carbohydrates' [NUTRIENT at 40:53]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_128",
+      "text": "A wholesome breakfast combining complex carbohydrates and protein\u2014such as vegetable upma with boiled egg, or stuffed paneer paratha with homemade curd\u2014improves morning alertness, memory retention, and academic performance.",
+      "predicted": "'boiled egg' [FOOD at 94:104]",
+      "gold": "'egg' [FOOD at 101:104]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_129",
+      "text": "Nutritious snack choices include roasted makhana (fox nuts), boiled sweet corn with lemon and chaat masala, seasonal fruit chaat with pomegranate and guava, and a glass of plain lassi or warm turmeric milk.",
+      "span": "roasted makhana",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_129",
+      "text": "Nutritious snack choices include roasted makhana (fox nuts), boiled sweet corn with lemon and chaat masala, seasonal fruit chaat with pomegranate and guava, and a glass of plain lassi or warm turmeric milk.",
+      "span": "sweet corn",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_129",
+      "text": "Nutritious snack choices include roasted makhana (fox nuts), boiled sweet corn with lemon and chaat masala, seasonal fruit chaat with pomegranate and guava, and a glass of plain lassi or warm turmeric milk.",
+      "span": "fruit chaat",
+      "label": "FOOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_133",
+      "text": "Mid Arm Circumference (MAC): <12.",
+      "predicted": "'Arm Circumference' [GROWTH_METRIC at 4:21]",
+      "gold": "'Mid Arm Circumference' [GROWTH_METRIC at 0:21]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_134",
+      "text": "Type 2 diabetes risk increases 10-fold once BMI exceeds 30 kg/m2.",
+      "span": "Type 2 diabetes",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_135",
+      "text": "Geriatric BMI Targets: Normal weight status for the elderly is recommended as BMI 21 to 27.",
+      "predicted": "'BMI Targets' [GROWTH_METRIC at 10:21]",
+      "gold": "'BMI' [GROWTH_METRIC at 10:13]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_139",
+      "text": "IOTF Cut-offs: Age-specific child BMI values (males/females) defined to converge at the adult benchmarks of 25 (overweight) and 30 (obese) at age 18.",
+      "predicted": "'BMI' [GROWTH_METRIC at 34:37]",
+      "gold": "'child BMI' [GROWTH_METRIC at 28:37]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_141",
+      "text": "During toddlerhood (1 to 2 years of age), linear growth velocity naturally decelerates compared to the rapid growth of infancy.",
+      "predicted": "'growth velocity' [GROWTH_METRIC at 49:64]",
+      "gold": "'linear growth velocity' [GROWTH_METRIC at 42:64]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_142",
+      "text": "Preadolescence (ages 9 to 12 years) is characterized by accelerated linear growth velocity, increasing skeletal muscle mass in boys, physiological adipose redistribution in girls, and hormonal preparation for puberty.",
+      "predicted": "'growth velocity' [GROWTH_METRIC at 75:90]",
+      "gold": "'accelerated linear growth velocity' [GROWTH_METRIC at 56:90]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_143",
+      "text": "Roasting and finely powdering these seeds allows parents to blend them seamlessly into toddler porridges, atta dough for rotis, or warm milk, delivering bioavailable zinc to support linear height velocity.",
+      "predicted": "'height velocity' [GROWTH_METRIC at 189:204]",
+      "gold": "'linear height velocity' [GROWTH_METRIC at 182:204]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_144",
+      "text": "Evaluating longitudinal growth trajectories and growth velocity across multiple sequential time points is far more clinically informative than any single measurement.",
+      "span": "growth trajectories",
+      "label": "GROWTH_METRIC",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_148",
+      "text": "Sugar and salt should not be added to complementary foods for infants.",
+      "span": "complementary foods",
+      "label": "FEEDING_METHOD",
+      "is_unseen": true
+    }
+  ],
+  "J_dietary_property_errors": [
+    {
+      "sentence_id": "GOLD_CAND_005",
+      "text": "Ultra-processed foods high in fat, sugar, and salt should be avoided for better health.",
+      "span": "Ultra-processed",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": false
+    },
+    {
+      "sentence_id": "GOLD_CAND_024",
+      "text": "Highly processed foods and foods high in sugar, fat, and salt should be avoided during pregnancy.",
+      "span": "Highly processed",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_045",
+      "text": "Preterm milk is nutrient-denser than term milk, containing higher protein, sodium, and IgA to support the baby's needs.",
+      "span": "nutrient-denser",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_067",
+      "text": "High consumption of processed foods rich in sugar, fat, and salt leads to obesity and micronutrient deficiencies.",
+      "span": "processed foods",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_079",
+      "text": "Highly processed foods high in fat, sugar, and salt should be avoided during pregnancy.",
+      "span": "Highly processed",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_102",
+      "text": "Children need nutrient-rich foods for growth, brain development, and cognition.",
+      "span": "nutrient-rich",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": false
+    },
+    {
+      "sentence_id": "GOLD_CAND_118",
+      "text": "Common causes of poor dietary diversity among Indian children include excessive reliance on energy-dense commercial packaged snacks, early introduction of ultra-processed sugary drinks, parental time constraints, and toddler food neophobia.",
+      "span": "ultra-processed",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": false
+    },
+    {
+      "sentence_id": "GOLD_CAND_119",
+      "text": "Establishing a predictable daily feeding rhythm comprising 3 small main meals and 2 to 3 nutrient-dense snacks spaced every 2.",
+      "span": "nutrient-dense",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_124",
+      "text": "Nutrient-dense snacks for 1 to 2 year old toddlers should bridge energetic gaps between main meals without filling the stomach with empty calories.",
+      "span": "Nutrient-dense",
+      "label": "DIETARY_PROPERTY",
+      "is_unseen": true
+    }
+  ],
+  "E_boundary_errors": [
+    {
+      "sentence_id": "GOLD_CAND_019",
+      "text": "Fats provide concentrated energy and help in absorption of fat-soluble vitamins.",
+      "predicted": "'fat' [NUTRIENT at 59:62]",
+      "gold": "'fat-soluble vitamins' [NUTRIENT at 59:79]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_021",
+      "text": "Fat-soluble vitamins can be stored in the body, while water-soluble vitamins need regular intake.",
+      "predicted": "'Fat' [NUTRIENT at 0:3]",
+      "gold": "'Fat-soluble vitamins' [NUTRIENT at 0:20]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_027",
+      "text": "Nuts and seeds are rich in healthy fats, proteins, and micronutrients.",
+      "predicted": "'Nuts and seeds' [FOOD_GROUP at 0:14]",
+      "gold": "'seeds' [FOOD_GROUP at 9:14]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_027",
+      "text": "Nuts and seeds are rich in healthy fats, proteins, and micronutrients.",
+      "predicted": "'Nuts and seeds' [FOOD_GROUP at 0:14]",
+      "gold": "'Nuts' [FOOD_GROUP at 0:4]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_037",
+      "text": "Iron deficiency during pregnancy increases risk of maternal mortality and low birth weight in infants.",
+      "predicted": "'Iron' [NUTRIENT at 0:4]",
+      "gold": "'Iron deficiency' [HEALTH_CONDITION at 0:15]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_038",
+      "text": "Green leafy vegetables, pulses and dry fruits are plant sources of iron.",
+      "predicted": "'fruits' [FOOD_GROUP at 39:45]",
+      "gold": "'dry fruits' [FOOD_GROUP at 35:45]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_040",
+      "text": "Long-chain omega-3 fatty acids support fetal brain development.",
+      "predicted": "'omega-3 fatty acids' [NUTRIENT at 11:30]",
+      "gold": "'Long-chain omega-3 fatty acids' [NUTRIENT at 0:30]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_045",
+      "text": "Preterm milk is nutrient-denser than term milk, containing higher protein, sodium, and IgA to support the baby's needs.",
+      "predicted": "'milk' [FOOD at 8:12]",
+      "gold": "'Preterm milk' [FOOD at 0:12]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_058",
+      "text": "Breast milk is easily digested and better absorbed than formula milk.",
+      "predicted": "'milk' [FOOD at 64:68]",
+      "gold": "'formula milk' [FOOD at 56:68]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_069",
+      "text": "Infants require exclusive breastfeeding in the first six months for optimal growth and development.",
+      "predicted": "'breastfeeding' [HEALTH_CONDITION at 26:39]",
+      "gold": "'exclusive breastfeeding' [FEEDING_METHOD at 16:39]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_071",
+      "text": "Iron deficiency can lead to anemia and reduced oxygen transport in the body.",
+      "predicted": "'Iron' [NUTRIENT at 0:4]",
+      "gold": "'Iron deficiency' [HEALTH_CONDITION at 0:15]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_088",
+      "text": "Soya-Milk Cross Reactivity: Soya protein allergy often develops as a cross-reacting response in infants with cow's milk allergy.",
+      "predicted": "'protein' [NUTRIENT at 33:40]",
+      "gold": "'Soya protein allergy' [ALLERGEN at 28:48]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_088",
+      "text": "Soya-Milk Cross Reactivity: Soya protein allergy often develops as a cross-reacting response in infants with cow's milk allergy.",
+      "predicted": "'milk allergy' [ALLERGEN at 115:127]",
+      "gold": "'cow's milk allergy' [ALLERGEN at 109:127]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_089",
+      "text": "Serving ragi as malted ragi porridge, ragi idlis, ragi dosas, or ragi rotis provides an outstanding plant-based calcium source for lactose-intolerant, vegan, or vegetarian children.",
+      "predicted": "'ragi porridge' [FOOD at 23:36]",
+      "gold": "'malted ragi porridge' [FOOD at 16:36]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_090",
+      "text": "Cow's Milk Protein Allergy (CMPA) is an immunologically mediated adverse reaction to bovine milk proteins (primarily casein fractions alpha-s1, alpha-s2, beta, kappa-casein and whey proteins beta-lactoglobulin and alpha-lactalbumin).",
+      "predicted": "'Milk Protein Allergy' [ALLERGEN at 6:26]",
+      "gold": "'Cow's Milk Protein Allergy' [ALLERGEN at 0:26]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_092",
+      "text": "Cow's Milk Protein Allergy is distinct from Lactose Intolerance.",
+      "predicted": "'Milk Protein Allergy' [ALLERGEN at 6:26]",
+      "gold": "'Cow's Milk Protein Allergy' [ALLERGEN at 0:26]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_093",
+      "text": "Lactose intolerance is a non-immune enzyme deficiency (reduced intestinal mucosal lactase activity) causing osmotic diarrhea, abdominal bloating, and flatulence without systemic allergic manifestations.",
+      "predicted": "'diarrhea' [HEALTH_CONDITION at 116:124]",
+      "gold": "'osmotic diarrhea' [HEALTH_CONDITION at 108:124]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_095",
+      "text": "In managing diagnosed Cow's Milk Protein Allergy in non-breastfed infants, standard mammalian milks (including goat's milk and buffalo's milk) are contraindicated due to high cross-reactivity (>90%).",
+      "predicted": "'milk' [FOOD at 118:122]",
+      "gold": "'goat's milk' [FOOD at 111:122]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_095",
+      "text": "In managing diagnosed Cow's Milk Protein Allergy in non-breastfed infants, standard mammalian milks (including goat's milk and buffalo's milk) are contraindicated due to high cross-reactivity (>90%).",
+      "predicted": "'Milk Protein Allergy' [ALLERGEN at 28:48]",
+      "gold": "'Cow's Milk Protein Allergy' [ALLERGEN at 22:48]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_095",
+      "text": "In managing diagnosed Cow's Milk Protein Allergy in non-breastfed infants, standard mammalian milks (including goat's milk and buffalo's milk) are contraindicated due to high cross-reactivity (>90%).",
+      "predicted": "'milk' [FOOD at 137:141]",
+      "gold": "'buffalo's milk' [FOOD at 127:141]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_096",
+      "text": "For older children with confirmed CMPA transitioning to family diets, alternative non-dairy calcium and protein sources must be systematically incorporated.",
+      "predicted": "'CMPA transitioning' [ALLERGEN at 34:52]",
+      "gold": "'CMPA' [ALLERGEN at 34:38]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_105",
+      "text": "Exclusive breastfeeding for the first six months ensures optimal infant growth.",
+      "predicted": "'breastfeeding' [HEALTH_CONDITION at 10:23]",
+      "gold": "'Exclusive breastfeeding' [FEEDING_METHOD at 0:23]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_111",
+      "text": "Exclusive breastfeeding for six months is essential for infant growth.",
+      "predicted": "'breastfeeding' [HEALTH_CONDITION at 10:23]",
+      "gold": "'Exclusive breastfeeding' [FEEDING_METHOD at 0:23]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_114",
+      "text": "Infants aged 6 to 8 months should be given complementary foods at least twice a day along with breastfeeding.",
+      "predicted": "'Infants' [AGE_GROUP at 0:7]",
+      "gold": "'Infants aged 6 to 8 months' [AGE_GROUP at 0:26]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_115",
+      "text": "Infants aged 9 to 12 months should receive complementary foods at least three times a day.",
+      "predicted": "'Infants' [AGE_GROUP at 0:7]",
+      "gold": "'Infants aged 9 to 12 months' [AGE_GROUP at 0:27]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_118",
+      "text": "Common causes of poor dietary diversity among Indian children include excessive reliance on energy-dense commercial packaged snacks, early introduction of ultra-processed sugary drinks, parental time constraints, and toddler food neophobia.",
+      "predicted": "'energy' [NUTRIENT at 92:98]",
+      "gold": "'energy-dense' [DIETARY_PROPERTY at 92:104]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_121",
+      "text": "For infants aged 9 to 11 months, complementary feeding frequency should increase to 3 to 4 meals daily, plus 1 to 2 nutritious snacks offered between meals as desired, while continuing regular breastfeeding.",
+      "predicted": "'infants' [AGE_GROUP at 4:11]",
+      "gold": "'infants aged 9 to 11 months' [AGE_GROUP at 4:31]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_122",
+      "text": "Iron-rich snacks for older infants aged 9 to 11 months can be prepared from traditional Indian staples: soft-cooked poha with mashed peas, sprouted ragi sheera prepared with water or expressed milk and mashed dates, and steamed sweet potato sticks lightly sprinkled with cumin powder.",
+      "predicted": "'infants' [AGE_GROUP at 27:34]",
+      "gold": "'infants aged 9 to 11 months' [AGE_GROUP at 27:54]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_125",
+      "text": "Excellent Indian toddler snacks include soft ragi-halwa prepared with pure cow's ghee and mashed banana, soft paneer cubes, vegetable upma, boiled sweet potato mash, and fresh soft papaya cubes.",
+      "predicted": "'mashed banana' [FOOD at 90:103]",
+      "gold": "'banana' [FOOD at 97:103]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_125",
+      "text": "Excellent Indian toddler snacks include soft ragi-halwa prepared with pure cow's ghee and mashed banana, soft paneer cubes, vegetable upma, boiled sweet potato mash, and fresh soft papaya cubes.",
+      "predicted": "'upma' [FOOD at 134:138]",
+      "gold": "'vegetable upma' [FOOD at 124:138]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_126",
+      "text": "Mid-afternoon snack planning for preschoolers should bridge energetic gaps after active preschool hours.",
+      "predicted": "'Mid-afternoon' [GROWTH_METRIC at 0:13]",
+      "gold": "'Mid-afternoon snack' [MEAL_TYPE at 0:19]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_128",
+      "text": "A wholesome breakfast combining complex carbohydrates and protein\u2014such as vegetable upma with boiled egg, or stuffed paneer paratha with homemade curd\u2014improves morning alertness, memory retention, and academic performance.",
+      "predicted": "'upma' [FOOD at 84:88]",
+      "gold": "'vegetable upma' [FOOD at 74:88]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_128",
+      "text": "A wholesome breakfast combining complex carbohydrates and protein\u2014such as vegetable upma with boiled egg, or stuffed paneer paratha with homemade curd\u2014improves morning alertness, memory retention, and academic performance.",
+      "predicted": "'paneer' [FOOD at 117:123]",
+      "gold": "'paneer paratha' [FOOD at 117:131]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_128",
+      "text": "A wholesome breakfast combining complex carbohydrates and protein\u2014such as vegetable upma with boiled egg, or stuffed paneer paratha with homemade curd\u2014improves morning alertness, memory retention, and academic performance.",
+      "predicted": "'complex carbohydrates' [NUTRIENT at 32:53]",
+      "gold": "'carbohydrates' [NUTRIENT at 40:53]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_128",
+      "text": "A wholesome breakfast combining complex carbohydrates and protein\u2014such as vegetable upma with boiled egg, or stuffed paneer paratha with homemade curd\u2014improves morning alertness, memory retention, and academic performance.",
+      "predicted": "'boiled egg' [FOOD at 94:104]",
+      "gold": "'egg' [FOOD at 101:104]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_133",
+      "text": "Mid Arm Circumference (MAC): <12.",
+      "predicted": "'Arm Circumference' [GROWTH_METRIC at 4:21]",
+      "gold": "'Mid Arm Circumference' [GROWTH_METRIC at 0:21]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_135",
+      "text": "Geriatric BMI Targets: Normal weight status for the elderly is recommended as BMI 21 to 27.",
+      "predicted": "'BMI Targets' [GROWTH_METRIC at 10:21]",
+      "gold": "'BMI' [GROWTH_METRIC at 10:13]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_139",
+      "text": "IOTF Cut-offs: Age-specific child BMI values (males/females) defined to converge at the adult benchmarks of 25 (overweight) and 30 (obese) at age 18.",
+      "predicted": "'BMI' [GROWTH_METRIC at 34:37]",
+      "gold": "'child BMI' [GROWTH_METRIC at 28:37]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_141",
+      "text": "During toddlerhood (1 to 2 years of age), linear growth velocity naturally decelerates compared to the rapid growth of infancy.",
+      "predicted": "'growth velocity' [GROWTH_METRIC at 49:64]",
+      "gold": "'linear growth velocity' [GROWTH_METRIC at 42:64]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_142",
+      "text": "Preadolescence (ages 9 to 12 years) is characterized by accelerated linear growth velocity, increasing skeletal muscle mass in boys, physiological adipose redistribution in girls, and hormonal preparation for puberty.",
+      "predicted": "'growth velocity' [GROWTH_METRIC at 75:90]",
+      "gold": "'accelerated linear growth velocity' [GROWTH_METRIC at 56:90]"
+    },
+    {
+      "sentence_id": "GOLD_CAND_143",
+      "text": "Roasting and finely powdering these seeds allows parents to blend them seamlessly into toddler porridges, atta dough for rotis, or warm milk, delivering bioavailable zinc to support linear height velocity.",
+      "predicted": "'height velocity' [GROWTH_METRIC at 189:204]",
+      "gold": "'linear height velocity' [GROWTH_METRIC at 182:204]"
+    }
+  ],
+  "F_entity_type_confusion": [
+    {
+      "sentence_id": "GOLD_CAND_023",
+      "text": "Fish and meat can be included as sources of high-quality protein and micronutrients.",
+      "span": "Fish",
+      "predicted_label": "FOOD",
+      "gold_label": "FOOD_GROUP",
+      "offsets": [
+        0,
+        4
+      ]
+    },
+    {
+      "sentence_id": "GOLD_CAND_036",
+      "text": "Fish and seeds like flax and chia are good sources of omega-3 fatty acids.",
+      "span": "Fish",
+      "predicted_label": "FOOD",
+      "gold_label": "FOOD_GROUP",
+      "offsets": [
+        0,
+        4
+      ]
+    },
+    {
+      "sentence_id": "GOLD_CAND_062",
+      "text": "Inadequate breast milk production is often a misconception and should not lead to stopping breastfeeding.",
+      "span": "breastfeeding",
+      "predicted_label": "HEALTH_CONDITION",
+      "gold_label": "FEEDING_METHOD",
+      "offsets": [
+        91,
+        104
+      ]
+    },
+    {
+      "sentence_id": "GOLD_CAND_082",
+      "text": "Breastfeeding supports infant growth and reduces health risks.",
+      "span": "Breastfeeding",
+      "predicted_label": "HEALTH_CONDITION",
+      "gold_label": "FEEDING_METHOD",
+      "offsets": [
+        0,
+        13
+      ]
+    },
+    {
+      "sentence_id": "GOLD_CAND_086",
+      "text": "Lactose intolerance during diarrhea is usually temporary and can be managed by reducing milk intake.",
+      "span": "Lactose intolerance",
+      "predicted_label": "ALLERGEN",
+      "gold_label": "HEALTH_CONDITION",
+      "offsets": [
+        0,
+        19
+      ]
+    },
+    {
+      "sentence_id": "GOLD_CAND_087",
+      "text": "Curd can be used as an alternative to milk in lactose intolerance.",
+      "span": "lactose intolerance",
+      "predicted_label": "ALLERGEN",
+      "gold_label": "HEALTH_CONDITION",
+      "offsets": [
+        46,
+        65
+      ]
+    },
+    {
+      "sentence_id": "GOLD_CAND_089",
+      "text": "Serving ragi as malted ragi porridge, ragi idlis, ragi dosas, or ragi rotis provides an outstanding plant-based calcium source for lactose-intolerant, vegan, or vegetarian children.",
+      "span": "lactose-intolerant",
+      "predicted_label": "ALLERGEN",
+      "gold_label": "HEALTH_CONDITION",
+      "offsets": [
+        131,
+        149
+      ]
+    },
+    {
+      "sentence_id": "GOLD_CAND_091",
+      "text": "It can be IgE-mediated (immediate urticaria, angioedema, wheezing, anaphylaxis) or non-IgE-mediated (delayed proctocolitis with bloody stools, vomiting, severe eczema, failure to thrive).",
+      "span": "anaphylaxis",
+      "predicted_label": "ALLERGEN",
+      "gold_label": "HEALTH_CONDITION",
+      "offsets": [
+        67,
+        78
+      ]
+    },
+    {
+      "sentence_id": "GOLD_CAND_092",
+      "text": "Cow's Milk Protein Allergy is distinct from Lactose Intolerance.",
+      "span": "Lactose Intolerance",
+      "predicted_label": "ALLERGEN",
+      "gold_label": "HEALTH_CONDITION",
+      "offsets": [
+        44,
+        63
+      ]
+    },
+    {
+      "sentence_id": "GOLD_CAND_093",
+      "text": "Lactose intolerance is a non-immune enzyme deficiency (reduced intestinal mucosal lactase activity) causing osmotic diarrhea, abdominal bloating, and flatulence without systemic allergic manifestations.",
+      "span": "Lactose intolerance",
+      "predicted_label": "ALLERGEN",
+      "gold_label": "HEALTH_CONDITION",
+      "offsets": [
+        0,
+        19
+      ]
+    },
+    {
+      "sentence_id": "GOLD_CAND_094",
+      "text": "CMPA requires complete elimination of milk proteins, whereas lactose intolerance allows dairy proteins with lactase enzyme replacement or fermented low-lactose dairy.",
+      "span": "lactose intolerance",
+      "predicted_label": "ALLERGEN",
+      "gold_label": "HEALTH_CONDITION",
+      "offsets": [
+        61,
+        80
+      ]
+    },
+    {
+      "sentence_id": "GOLD_CAND_097",
+      "text": "Lactose intolerance in children commonly occurs as a transient secondary lactase deficiency following acute viral gastroenteritis (such as rotavirus infection), where mucosal brush border enterocytes are temporarily denuded.",
+      "span": "Lactose intolerance",
+      "predicted_label": "ALLERGEN",
+      "gold_label": "HEALTH_CONDITION",
+      "offsets": [
+        0,
+        19
+      ]
+    },
+    {
+      "sentence_id": "GOLD_CAND_098",
+      "text": "Managing secondary lactose intolerance involves continuing breastfeeding, offering curd (which contains endogenous bacterial beta-galactosidase), or temporary low-lactose feeding during mucosal recovery.",
+      "span": "lactose intolerance",
+      "predicted_label": "ALLERGEN",
+      "gold_label": "HEALTH_CONDITION",
+      "offsets": [
+        19,
+        38
+      ]
+    },
+    {
+      "sentence_id": "GOLD_CAND_098",
+      "text": "Managing secondary lactose intolerance involves continuing breastfeeding, offering curd (which contains endogenous bacterial beta-galactosidase), or temporary low-lactose feeding during mucosal recovery.",
+      "span": "breastfeeding",
+      "predicted_label": "HEALTH_CONDITION",
+      "gold_label": "FEEDING_METHOD",
+      "offsets": [
+        59,
+        72
+      ]
+    },
+    {
+      "sentence_id": "GOLD_CAND_106",
+      "text": "Breastfeeding reduces infections and improves immunity in infants.",
+      "span": "Breastfeeding",
+      "predicted_label": "HEALTH_CONDITION",
+      "gold_label": "FEEDING_METHOD",
+      "offsets": [
+        0,
+        13
+      ]
+    },
+    {
+      "sentence_id": "GOLD_CAND_107",
+      "text": "Not breastfeeding increases risk of infections and chronic diseases in children.",
+      "span": "breastfeeding",
+      "predicted_label": "HEALTH_CONDITION",
+      "gold_label": "FEEDING_METHOD",
+      "offsets": [
+        4,
+        17
+      ]
+    },
+    {
+      "sentence_id": "GOLD_CAND_108",
+      "text": "Breastfeeding reduces risk of respiratory and diarrheal infections in infants.",
+      "span": "Breastfeeding",
+      "predicted_label": "HEALTH_CONDITION",
+      "gold_label": "FEEDING_METHOD",
+      "offsets": [
+        0,
+        13
+      ]
+    },
+    {
+      "sentence_id": "GOLD_CAND_109",
+      "text": "Breastfeeding supports cognitive and brain development in children.",
+      "span": "Breastfeeding",
+      "predicted_label": "HEALTH_CONDITION",
+      "gold_label": "FEEDING_METHOD",
+      "offsets": [
+        0,
+        13
+      ]
+    },
+    {
+      "sentence_id": "GOLD_CAND_110",
+      "text": "Not breastfeeding increases risk of obesity, diabetes and infections in children.",
+      "span": "breastfeeding",
+      "predicted_label": "HEALTH_CONDITION",
+      "gold_label": "FEEDING_METHOD",
+      "offsets": [
+        4,
+        17
+      ]
+    },
+    {
+      "sentence_id": "GOLD_CAND_112",
+      "text": "Breastfeeding reduces the risk of obesity, diabetes and infections in children.",
+      "span": "Breastfeeding",
+      "predicted_label": "HEALTH_CONDITION",
+      "gold_label": "FEEDING_METHOD",
+      "offsets": [
+        0,
+        13
+      ]
+    },
+    {
+      "sentence_id": "GOLD_CAND_114",
+      "text": "Infants aged 6 to 8 months should be given complementary foods at least twice a day along with breastfeeding.",
+      "span": "breastfeeding",
+      "predicted_label": "HEALTH_CONDITION",
+      "gold_label": "FEEDING_METHOD",
+      "offsets": [
+        95,
+        108
+      ]
+    },
+    {
+      "sentence_id": "GOLD_CAND_121",
+      "text": "For infants aged 9 to 11 months, complementary feeding frequency should increase to 3 to 4 meals daily, plus 1 to 2 nutritious snacks offered between meals as desired, while continuing regular breastfeeding.",
+      "span": "breastfeeding",
+      "predicted_label": "HEALTH_CONDITION",
+      "gold_label": "FEEDING_METHOD",
+      "offsets": [
+        193,
+        206
+      ]
+    }
+  ],
+  "H_food_vs_food_group": [
+    {
+      "sentence_id": "GOLD_CAND_023",
+      "text": "Fish and meat can be included as sources of high-quality protein and micronutrients.",
+      "span": "Fish",
+      "predicted_label": "FOOD",
+      "gold_label": "FOOD_GROUP",
+      "offsets": [
+        0,
+        4
+      ]
+    },
+    {
+      "sentence_id": "GOLD_CAND_036",
+      "text": "Fish and seeds like flax and chia are good sources of omega-3 fatty acids.",
+      "span": "Fish",
+      "predicted_label": "FOOD",
+      "gold_label": "FOOD_GROUP",
+      "offsets": [
+        0,
+        4
+      ]
+    }
+  ],
+  "C_chemical_nutrient_names": [
+    {
+      "sentence_id": "GOLD_CAND_044",
+      "text": "Breast milk contains Long Chain Polyunsaturated Fatty Acids (LCPUFAs) like DHA and Arachidonic acid for visual and neural development.",
+      "span": "Long Chain Polyunsaturated Fatty Acids",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_044",
+      "text": "Breast milk contains Long Chain Polyunsaturated Fatty Acids (LCPUFAs) like DHA and Arachidonic acid for visual and neural development.",
+      "span": "Arachidonic acid",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_045",
+      "text": "Preterm milk is nutrient-denser than term milk, containing higher protein, sodium, and IgA to support the baby's needs.",
+      "span": "IgA",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_045",
+      "text": "Preterm milk is nutrient-denser than term milk, containing higher protein, sodium, and IgA to support the baby's needs.",
+      "span": "sodium",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_059",
+      "text": "Breast milk contains immunoglobulins, lactoferrin and protective factors against infections.",
+      "span": "immunoglobulins",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_059",
+      "text": "Breast milk contains immunoglobulins, lactoferrin and protective factors against infections.",
+      "span": "lactoferrin",
+      "label": "NUTRIENT",
+      "is_unseen": true
+    }
+  ],
+  "K_health_condition_errors": [
+    {
+      "sentence_id": "GOLD_CAND_066",
+      "text": "India faces a dual burden of malnutrition where undernutrition and obesity coexist in the population.",
+      "span": "undernutrition",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_076",
+      "text": "Undernourished mothers have a higher risk of delivering low birth weight babies.",
+      "span": "Undernourished",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_091",
+      "text": "It can be IgE-mediated (immediate urticaria, angioedema, wheezing, anaphylaxis) or non-IgE-mediated (delayed proctocolitis with bloody stools, vomiting, severe eczema, failure to thrive).",
+      "span": "urticaria",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_091",
+      "text": "It can be IgE-mediated (immediate urticaria, angioedema, wheezing, anaphylaxis) or non-IgE-mediated (delayed proctocolitis with bloody stools, vomiting, severe eczema, failure to thrive).",
+      "span": "vomiting",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_091",
+      "text": "It can be IgE-mediated (immediate urticaria, angioedema, wheezing, anaphylaxis) or non-IgE-mediated (delayed proctocolitis with bloody stools, vomiting, severe eczema, failure to thrive).",
+      "span": "wheezing",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_091",
+      "text": "It can be IgE-mediated (immediate urticaria, angioedema, wheezing, anaphylaxis) or non-IgE-mediated (delayed proctocolitis with bloody stools, vomiting, severe eczema, failure to thrive).",
+      "span": "angioedema",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_091",
+      "text": "It can be IgE-mediated (immediate urticaria, angioedema, wheezing, anaphylaxis) or non-IgE-mediated (delayed proctocolitis with bloody stools, vomiting, severe eczema, failure to thrive).",
+      "span": "severe eczema",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_091",
+      "text": "It can be IgE-mediated (immediate urticaria, angioedema, wheezing, anaphylaxis) or non-IgE-mediated (delayed proctocolitis with bloody stools, vomiting, severe eczema, failure to thrive).",
+      "span": "proctocolitis",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_093",
+      "text": "Lactose intolerance is a non-immune enzyme deficiency (reduced intestinal mucosal lactase activity) causing osmotic diarrhea, abdominal bloating, and flatulence without systemic allergic manifestations.",
+      "span": "flatulence",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_093",
+      "text": "Lactose intolerance is a non-immune enzyme deficiency (reduced intestinal mucosal lactase activity) causing osmotic diarrhea, abdominal bloating, and flatulence without systemic allergic manifestations.",
+      "span": "abdominal bloating",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_097",
+      "text": "Lactose intolerance in children commonly occurs as a transient secondary lactase deficiency following acute viral gastroenteritis (such as rotavirus infection), where mucosal brush border enterocytes are temporarily denuded.",
+      "span": "secondary lactase deficiency",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_097",
+      "text": "Lactose intolerance in children commonly occurs as a transient secondary lactase deficiency following acute viral gastroenteritis (such as rotavirus infection), where mucosal brush border enterocytes are temporarily denuded.",
+      "span": "acute viral gastroenteritis",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_110",
+      "text": "Not breastfeeding increases risk of obesity, diabetes and infections in children.",
+      "span": "diabetes",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_112",
+      "text": "Breastfeeding reduces the risk of obesity, diabetes and infections in children.",
+      "span": "diabetes",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_134",
+      "text": "Type 2 diabetes risk increases 10-fold once BMI exceeds 30 kg/m2.",
+      "span": "Type 2 diabetes",
+      "label": "HEALTH_CONDITION",
+      "is_unseen": true
+    }
+  ],
+  "I_feeding_method_errors": [
+    {
+      "sentence_id": "GOLD_CAND_114",
+      "text": "Infants aged 6 to 8 months should be given complementary foods at least twice a day along with breastfeeding.",
+      "span": "complementary foods",
+      "label": "FEEDING_METHOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_115",
+      "text": "Infants aged 9 to 12 months should receive complementary foods at least three times a day.",
+      "span": "complementary foods",
+      "label": "FEEDING_METHOD",
+      "is_unseen": true
+    },
+    {
+      "sentence_id": "GOLD_CAND_148",
+      "text": "Sugar and salt should not be added to complementary foods for infants.",
+      "span": "complementary foods",
+      "label": "FEEDING_METHOD",
+      "is_unseen": true
+    }
+  ]
+}

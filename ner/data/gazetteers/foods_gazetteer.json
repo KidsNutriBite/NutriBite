@@ -1,0 +1,1906 @@
+[
+  {
+    "surface_form": "vegetables",
+    "canonical_form": "vegetables",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F200",
+    "category": "vegetable",
+    "aliases": [
+      "vegetables"
+    ]
+  },
+  {
+    "surface_form": "fruits",
+    "canonical_form": "fruits",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F201",
+    "category": "fruit",
+    "aliases": [
+      "fruits"
+    ]
+  },
+  {
+    "surface_form": "cereals",
+    "canonical_form": "cereals",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F202",
+    "category": "carbohydrate",
+    "aliases": [
+      "cereals"
+    ]
+  },
+  {
+    "surface_form": "pulses_legumes",
+    "canonical_form": "pulses_legumes",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F203",
+    "category": "protein",
+    "aliases": [
+      "pulses legumes"
+    ]
+  },
+  {
+    "surface_form": "milk_curd",
+    "canonical_form": "milk_curd",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F204",
+    "category": "dairy",
+    "aliases": [
+      "milk curd"
+    ]
+  },
+  {
+    "surface_form": "nuts_seeds",
+    "canonical_form": "nuts_seeds",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F205",
+    "category": "fat",
+    "aliases": [
+      "nuts seeds"
+    ]
+  },
+  {
+    "surface_form": "rice",
+    "canonical_form": "rice",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F300",
+    "category": "cereal",
+    "aliases": [
+      "rice"
+    ]
+  },
+  {
+    "surface_form": "lentils",
+    "canonical_form": "lentils",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F301",
+    "category": "pulse",
+    "aliases": [
+      "lentils"
+    ]
+  },
+  {
+    "surface_form": "milk",
+    "canonical_form": "milk",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F302",
+    "category": "dairy",
+    "aliases": [
+      "milk"
+    ]
+  },
+  {
+    "surface_form": "green_leafy_vegetables",
+    "canonical_form": "green_leafy_vegetables",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F303",
+    "category": "vegetable",
+    "aliases": [
+      "green leafy vegetables"
+    ]
+  },
+  {
+    "surface_form": "nuts",
+    "canonical_form": "nuts",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F304",
+    "category": "fat",
+    "aliases": [
+      "nuts"
+    ]
+  },
+  {
+    "surface_form": "pulses",
+    "canonical_form": "pulses",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F401",
+    "category": "protein",
+    "aliases": [
+      "pulses"
+    ]
+  },
+  {
+    "surface_form": "millets",
+    "canonical_form": "millets",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F500",
+    "category": "cereal",
+    "aliases": [
+      "millets"
+    ]
+  },
+  {
+    "surface_form": "egg",
+    "canonical_form": "egg",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F501",
+    "category": "protein",
+    "aliases": [
+      "egg"
+    ]
+  },
+  {
+    "surface_form": "fish",
+    "canonical_form": "fish",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F502",
+    "category": "protein",
+    "aliases": [
+      "fish"
+    ]
+  },
+  {
+    "surface_form": "dry_spices",
+    "canonical_form": "dry_spices",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F503",
+    "category": "spice",
+    "aliases": [
+      "dry spices"
+    ]
+  },
+  {
+    "surface_form": "cereals_millets_pregnancy",
+    "canonical_form": "cereals_millets_pregnancy",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F600",
+    "category": "carbohydrate",
+    "aliases": [
+      "cereals millets pregnancy"
+    ]
+  },
+  {
+    "surface_form": "pulses_pregnancy",
+    "canonical_form": "pulses_pregnancy",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F601",
+    "category": "protein",
+    "aliases": [
+      "pulses pregnancy"
+    ]
+  },
+  {
+    "surface_form": "vegetables_pregnancy",
+    "canonical_form": "vegetables_pregnancy",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F602",
+    "category": "vegetable",
+    "aliases": [
+      "vegetables pregnancy"
+    ]
+  },
+  {
+    "surface_form": "green_leafy_vegetables_pregnancy",
+    "canonical_form": "green_leafy_vegetables_pregnancy",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F603",
+    "category": "vegetable",
+    "aliases": [
+      "green leafy vegetables pregnancy"
+    ]
+  },
+  {
+    "surface_form": "milk_pregnancy",
+    "canonical_form": "milk_pregnancy",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F604",
+    "category": "dairy",
+    "aliases": [
+      "milk pregnancy"
+    ]
+  },
+  {
+    "surface_form": "iron_rich_foods",
+    "canonical_form": "iron_rich_foods",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F700",
+    "category": "micronutrient",
+    "aliases": [
+      "iron rich foods"
+    ]
+  },
+  {
+    "surface_form": "folate_rich_foods",
+    "canonical_form": "folate_rich_foods",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F701",
+    "category": "micronutrient",
+    "aliases": [
+      "folate rich foods"
+    ]
+  },
+  {
+    "surface_form": "omega3_rich_foods",
+    "canonical_form": "omega3_rich_foods",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F702",
+    "category": "fat",
+    "aliases": [
+      "omega3 rich foods"
+    ]
+  },
+  {
+    "surface_form": "citrus_fruits",
+    "canonical_form": "citrus_fruits",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F802",
+    "category": "fruit",
+    "aliases": [
+      "citrus fruits"
+    ]
+  },
+  {
+    "surface_form": "rice_dal_mix",
+    "canonical_form": "rice_dal_mix",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F900",
+    "category": "infant_food",
+    "aliases": [
+      "rice dal mix"
+    ]
+  },
+  {
+    "surface_form": "khichdi",
+    "canonical_form": "khichdi",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F901",
+    "category": "infant_food",
+    "aliases": [
+      "khichdi"
+    ]
+  },
+  {
+    "surface_form": "fruit_mash",
+    "canonical_form": "fruit_mash",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F902",
+    "category": "fruit",
+    "aliases": [
+      "fruit mash"
+    ]
+  },
+  {
+    "surface_form": "nutri_mix",
+    "canonical_form": "nutri_mix",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F903",
+    "category": "infant_food",
+    "aliases": [
+      "nutri mix"
+    ]
+  },
+  {
+    "surface_form": "amylase_rich_foods",
+    "canonical_form": "amylase_rich_foods",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F950",
+    "category": "infant_food",
+    "aliases": [
+      "amylase rich foods"
+    ]
+  },
+  {
+    "surface_form": "infant_cereal_mix",
+    "canonical_form": "infant_cereal_mix",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F951",
+    "category": "infant_food",
+    "aliases": [
+      "infant cereal mix"
+    ]
+  },
+  {
+    "surface_form": "semi_solid_family_food",
+    "canonical_form": "semi_solid_family_food",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F952",
+    "category": "infant_food",
+    "aliases": [
+      "semi solid family food"
+    ]
+  },
+  {
+    "surface_form": "carrot_puree",
+    "canonical_form": "carrot_puree",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1001",
+    "category": "infant_food",
+    "aliases": [
+      "carrot puree"
+    ]
+  },
+  {
+    "surface_form": "pumpkin_puree",
+    "canonical_form": "pumpkin_puree",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1002",
+    "category": "infant_food",
+    "aliases": [
+      "pumpkin puree"
+    ]
+  },
+  {
+    "surface_form": "spinach_puree",
+    "canonical_form": "spinach_puree",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1003",
+    "category": "infant_food",
+    "aliases": [
+      "spinach puree"
+    ]
+  },
+  {
+    "surface_form": "potato_puree",
+    "canonical_form": "potato_puree",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1004",
+    "category": "infant_food",
+    "aliases": [
+      "potato puree"
+    ]
+  },
+  {
+    "surface_form": "apple_puree",
+    "canonical_form": "apple_puree",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1005",
+    "category": "infant_food",
+    "aliases": [
+      "apple puree"
+    ]
+  },
+  {
+    "surface_form": "grated_boiled_egg",
+    "canonical_form": "grated_boiled_egg",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1006",
+    "category": "protein",
+    "aliases": [
+      "grated boiled egg"
+    ]
+  },
+  {
+    "surface_form": "mashed_fish",
+    "canonical_form": "mashed_fish",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1007",
+    "category": "protein",
+    "aliases": [
+      "mashed fish"
+    ]
+  },
+  {
+    "surface_form": "egg_pudding",
+    "canonical_form": "egg_pudding",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1008",
+    "category": "protein",
+    "aliases": [
+      "egg pudding"
+    ]
+  },
+  {
+    "surface_form": "eggnog",
+    "canonical_form": "eggnog",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1009",
+    "category": "protein",
+    "aliases": [
+      "eggnog"
+    ]
+  },
+  {
+    "surface_form": "amylase_rich_flour",
+    "canonical_form": "amylase_rich_flour",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1101",
+    "category": "infant_food",
+    "aliases": [
+      "amylase rich flour"
+    ]
+  },
+  {
+    "surface_form": "grated_mixed_vegetables",
+    "canonical_form": "grated_mixed_vegetables",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1104",
+    "category": "vegetable",
+    "aliases": [
+      "grated mixed vegetables"
+    ]
+  },
+  {
+    "surface_form": "plain_dalia_boiled_egg",
+    "canonical_form": "plain_dalia_boiled_egg",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1105",
+    "category": "balanced_meal",
+    "aliases": [
+      "plain dalia boiled egg"
+    ]
+  },
+  {
+    "surface_form": "vegetable_khichdi",
+    "canonical_form": "vegetable_khichdi",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1106",
+    "category": "balanced_meal",
+    "aliases": [
+      "vegetable khichdi"
+    ]
+  },
+  {
+    "surface_form": "cowpea_puree",
+    "canonical_form": "cowpea_puree",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1201",
+    "category": "pulse",
+    "aliases": [
+      "cowpea puree"
+    ]
+  },
+  {
+    "surface_form": "green_peas_puree",
+    "canonical_form": "green_peas_puree",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1202",
+    "category": "vegetable",
+    "aliases": [
+      "green peas puree"
+    ]
+  },
+  {
+    "surface_form": "papaya_ripe",
+    "canonical_form": "papaya_ripe",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1203",
+    "category": "fruit",
+    "aliases": [
+      "papaya ripe"
+    ]
+  },
+  {
+    "surface_form": "banana_ripe",
+    "canonical_form": "banana_ripe",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1204",
+    "category": "fruit",
+    "aliases": [
+      "banana ripe"
+    ]
+  },
+  {
+    "surface_form": "curd",
+    "canonical_form": "curd",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1205",
+    "category": "dairy",
+    "aliases": [
+      "curd"
+    ]
+  },
+  {
+    "surface_form": "boiled_egg",
+    "canonical_form": "boiled_egg",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1206",
+    "category": "protein",
+    "aliases": [
+      "boiled egg"
+    ]
+  },
+  {
+    "surface_form": "pomfret_fish_mashed",
+    "canonical_form": "pomfret_fish_mashed",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1207",
+    "category": "protein",
+    "aliases": [
+      "pomfret fish mashed"
+    ]
+  },
+  {
+    "surface_form": "murrel_fish_mashed",
+    "canonical_form": "murrel_fish_mashed",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1208",
+    "category": "protein",
+    "aliases": [
+      "murrel fish mashed"
+    ]
+  },
+  {
+    "surface_form": "rice_raw_milled",
+    "canonical_form": "rice_raw_milled",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1209",
+    "category": "cereal",
+    "aliases": [
+      "rice raw milled"
+    ]
+  },
+  {
+    "surface_form": "wheat_whole",
+    "canonical_form": "wheat_whole",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1210",
+    "category": "cereal",
+    "aliases": [
+      "wheat whole"
+    ]
+  },
+  {
+    "surface_form": "ragi_finger_millet",
+    "canonical_form": "ragi_finger_millet",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1211",
+    "category": "cereal",
+    "aliases": [
+      "ragi finger millet"
+    ]
+  },
+  {
+    "surface_form": "maize_dry",
+    "canonical_form": "maize_dry",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1212",
+    "category": "cereal",
+    "aliases": [
+      "maize dry"
+    ]
+  },
+  {
+    "surface_form": "soya_bean",
+    "canonical_form": "soya_bean",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1213",
+    "category": "legume",
+    "aliases": [
+      "soya bean"
+    ]
+  },
+  {
+    "surface_form": "bengal_gram_whole",
+    "canonical_form": "bengal_gram_whole",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1214",
+    "category": "legume",
+    "aliases": [
+      "bengal gram whole"
+    ]
+  },
+  {
+    "surface_form": "tapioca_cassava_dried",
+    "canonical_form": "tapioca_cassava_dried",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1215",
+    "category": "tuber",
+    "aliases": [
+      "tapioca cassava dried"
+    ]
+  },
+  {
+    "surface_form": "spirulina",
+    "canonical_form": "spirulina",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1216",
+    "category": "superfood",
+    "aliases": [
+      "spirulina"
+    ]
+  },
+  {
+    "surface_form": "chlorella",
+    "canonical_form": "chlorella",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1217",
+    "category": "superfood",
+    "aliases": [
+      "chlorella"
+    ]
+  },
+  {
+    "surface_form": "wheatgrass",
+    "canonical_form": "wheatgrass",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1218",
+    "category": "superfood",
+    "aliases": [
+      "wheatgrass"
+    ]
+  },
+  {
+    "surface_form": "broccoli_sprouts",
+    "canonical_form": "broccoli_sprouts",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1219",
+    "category": "superfood",
+    "aliases": [
+      "broccoli sprouts"
+    ]
+  },
+  {
+    "surface_form": "blueberries",
+    "canonical_form": "blueberries",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1220",
+    "category": "fruit",
+    "aliases": [
+      "blueberries"
+    ]
+  },
+  {
+    "surface_form": "curd_yogurt",
+    "canonical_form": "curd_yogurt",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1221",
+    "category": "dairy",
+    "aliases": [
+      "curd yogurt"
+    ]
+  },
+  {
+    "surface_form": "amla_indian_gooseberry",
+    "canonical_form": "amla_indian_gooseberry",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1222",
+    "category": "fruit",
+    "aliases": [
+      "amla indian gooseberry"
+    ]
+  },
+  {
+    "surface_form": "turmeric",
+    "canonical_form": "turmeric",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1223",
+    "category": "spice",
+    "aliases": [
+      "turmeric"
+    ]
+  },
+  {
+    "surface_form": "soya_milk",
+    "canonical_form": "soya_milk",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1224",
+    "category": "plant_milk",
+    "aliases": [
+      "soya milk"
+    ]
+  },
+  {
+    "surface_form": "moringa_leaf_powder",
+    "canonical_form": "moringa_leaf_powder",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1225",
+    "category": "superfood",
+    "aliases": [
+      "moringa leaf powder"
+    ]
+  },
+  {
+    "surface_form": "breast_milk",
+    "canonical_form": "breast_milk",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1226",
+    "category": "infant_nutrition",
+    "aliases": [
+      "breast milk"
+    ]
+  },
+  {
+    "surface_form": "preterm_milk",
+    "canonical_form": "preterm_milk",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1227",
+    "category": "infant_nutrition",
+    "aliases": [
+      "preterm milk"
+    ]
+  },
+  {
+    "surface_form": "cows_milk",
+    "canonical_form": "cows_milk",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1228",
+    "category": "dairy",
+    "aliases": [
+      "cows milk"
+    ]
+  },
+  {
+    "surface_form": "sat_mix",
+    "canonical_form": "sat_mix",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1229",
+    "category": "therapeutic_food",
+    "aliases": [
+      "sat mix"
+    ]
+  },
+  {
+    "surface_form": "f_75_starter",
+    "canonical_form": "f_75_starter",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1230",
+    "category": "therapeutic_food",
+    "aliases": [
+      "f 75 starter"
+    ]
+  },
+  {
+    "surface_form": "f_100_catch_up",
+    "canonical_form": "f_100_catch_up",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1231",
+    "category": "therapeutic_food",
+    "aliases": [
+      "f 100 catch up"
+    ]
+  },
+  {
+    "surface_form": "resomal",
+    "canonical_form": "resomal",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1232",
+    "category": "rehydration",
+    "aliases": [
+      "resomal"
+    ]
+  },
+  {
+    "surface_form": "isodense_high_energy_milk",
+    "canonical_form": "isodense_high_energy_milk",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1233",
+    "category": "fortified_food",
+    "aliases": [
+      "isodense high energy milk"
+    ]
+  },
+  {
+    "surface_form": "multivitamin_infant_drops",
+    "canonical_form": "multivitamin_infant_drops",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1234",
+    "category": "supplement",
+    "aliases": [
+      "multivitamin infant drops"
+    ]
+  },
+  {
+    "surface_form": "egg_whole",
+    "canonical_form": "egg_whole",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1235",
+    "category": "poultry",
+    "aliases": [
+      "egg whole"
+    ]
+  },
+  {
+    "surface_form": "potato",
+    "canonical_form": "potato",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1236",
+    "category": "tuber",
+    "aliases": [
+      "potato"
+    ]
+  },
+  {
+    "surface_form": "isolyte_p_paediatric",
+    "canonical_form": "isolyte_p_paediatric",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1237",
+    "category": "medical_fluid",
+    "aliases": [
+      "isolyte p paediatric"
+    ]
+  },
+  {
+    "surface_form": "isolyte_e_enteric",
+    "canonical_form": "isolyte_e_enteric",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1238",
+    "category": "medical_fluid",
+    "aliases": [
+      "isolyte e enteric"
+    ]
+  },
+  {
+    "surface_form": "isolyte_g_gastric",
+    "canonical_form": "isolyte_g_gastric",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1239",
+    "category": "medical_fluid",
+    "aliases": [
+      "isolyte g gastric"
+    ]
+  },
+  {
+    "surface_form": "pepti_2000_elemental",
+    "canonical_form": "pepti_2000_elemental",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1240",
+    "category": "medical_formula",
+    "aliases": [
+      "pepti 2000 elemental"
+    ]
+  },
+  {
+    "surface_form": "lactodex_lbw",
+    "canonical_form": "lactodex_lbw",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1241",
+    "category": "infant_formula",
+    "aliases": [
+      "lactodex lbw"
+    ]
+  },
+  {
+    "surface_form": "aminoplasmal_5_10",
+    "canonical_form": "aminoplasmal_5_10",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1242",
+    "category": "parenteral_nutrition",
+    "aliases": [
+      "aminoplasmal 5 10"
+    ]
+  },
+  {
+    "surface_form": "intralipid_10_20",
+    "canonical_form": "intralipid_10_20",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1243",
+    "category": "parenteral_nutrition",
+    "aliases": [
+      "intralipid 10 20"
+    ]
+  },
+  {
+    "surface_form": "chicken_glucose_puree",
+    "canonical_form": "chicken_glucose_puree",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1244",
+    "category": "medical_diet",
+    "aliases": [
+      "chicken glucose puree"
+    ]
+  },
+  {
+    "surface_form": "isomil_soya_formula",
+    "canonical_form": "isomil_soya_formula",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1245",
+    "category": "infant_formula",
+    "aliases": [
+      "isomil soya formula"
+    ]
+  },
+  {
+    "surface_form": "simyl_mct_formula",
+    "canonical_form": "simyl_mct_formula",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1246",
+    "category": "infant_formula",
+    "aliases": [
+      "simyl mct formula"
+    ]
+  },
+  {
+    "surface_form": "nusobee_soya",
+    "canonical_form": "nusobee_soya",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1247",
+    "category": "infant_formula",
+    "aliases": [
+      "nusobee soya"
+    ]
+  },
+  {
+    "surface_form": "sat_mix_therapeutic",
+    "canonical_form": "sat_mix_therapeutic",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1248",
+    "category": "",
+    "aliases": [
+      "sat mix therapeutic"
+    ]
+  },
+  {
+    "surface_form": "ragi_malt_arf",
+    "canonical_form": "ragi_malt_arf",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1249",
+    "category": "",
+    "aliases": [
+      "ragi malt arf"
+    ]
+  },
+  {
+    "surface_form": "panjiri_supplement",
+    "canonical_form": "panjiri_supplement",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1250",
+    "category": "",
+    "aliases": [
+      "panjiri supplement"
+    ]
+  },
+  {
+    "surface_form": "banana_groundnut_mix",
+    "canonical_form": "banana_groundnut_mix",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1251",
+    "category": "",
+    "aliases": [
+      "banana groundnut mix"
+    ]
+  },
+  {
+    "surface_form": "wheat_green_gram_laddoos",
+    "canonical_form": "wheat_green_gram_laddoos",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1252",
+    "category": "",
+    "aliases": [
+      "wheat green gram laddoos"
+    ]
+  },
+  {
+    "surface_form": "idli",
+    "canonical_form": "idli",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1256",
+    "category": "cereal",
+    "aliases": [
+      "idli"
+    ]
+  },
+  {
+    "surface_form": "dosa",
+    "canonical_form": "dosa",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1257",
+    "category": "cereal",
+    "aliases": [
+      "dosa"
+    ]
+  },
+  {
+    "surface_form": "poha",
+    "canonical_form": "poha",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1258",
+    "category": "cereal",
+    "aliases": [
+      "poha"
+    ]
+  },
+  {
+    "surface_form": "upma",
+    "canonical_form": "upma",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1259",
+    "category": "cereal",
+    "aliases": [
+      "upma"
+    ]
+  },
+  {
+    "surface_form": "chapati",
+    "canonical_form": "chapati",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1260",
+    "category": "cereal",
+    "aliases": [
+      "chapati"
+    ]
+  },
+  {
+    "surface_form": "aloo_paratha",
+    "canonical_form": "aloo_paratha",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1261",
+    "category": "balanced_meal",
+    "aliases": [
+      "aloo paratha"
+    ]
+  },
+  {
+    "surface_form": "paneer_butter_masala",
+    "canonical_form": "paneer_butter_masala",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1262",
+    "category": "dairy",
+    "aliases": [
+      "paneer butter masala"
+    ]
+  },
+  {
+    "surface_form": "sambar",
+    "canonical_form": "sambar",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1263",
+    "category": "pulse",
+    "aliases": [
+      "sambar"
+    ]
+  },
+  {
+    "surface_form": "ragi_malt",
+    "canonical_form": "ragi_malt",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1264",
+    "category": "cereal",
+    "aliases": [
+      "ragi malt"
+    ]
+  },
+  {
+    "surface_form": "chicken_biryani",
+    "canonical_form": "chicken_biryani",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1265",
+    "category": "non-veg",
+    "aliases": [
+      "chicken biryani"
+    ]
+  },
+  {
+    "surface_form": "moong_dal_khichdi",
+    "canonical_form": "moong_dal_khichdi",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1266",
+    "category": "balanced_meal",
+    "aliases": [
+      "moong dal khichdi"
+    ]
+  },
+  {
+    "surface_form": "dal_tadka",
+    "canonical_form": "dal_tadka",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1267",
+    "category": "pulse",
+    "aliases": [
+      "dal tadka"
+    ]
+  },
+  {
+    "surface_form": "palak_paneer",
+    "canonical_form": "palak_paneer",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1268",
+    "category": "dairy",
+    "aliases": [
+      "palak paneer"
+    ]
+  },
+  {
+    "surface_form": "dhokla",
+    "canonical_form": "dhokla",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1269",
+    "category": "snack",
+    "aliases": [
+      "dhokla"
+    ]
+  },
+  {
+    "surface_form": "samosa",
+    "canonical_form": "samosa",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1270",
+    "category": "snack",
+    "aliases": [
+      "samosa"
+    ]
+  },
+  {
+    "surface_form": "gulab_jamun",
+    "canonical_form": "gulab_jamun",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F1271",
+    "category": "sweet",
+    "aliases": [
+      "gulab jamun"
+    ]
+  },
+  {
+    "surface_form": "ragi porridge",
+    "canonical_form": "ragi porridge",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_MIL_001",
+    "category": "cereal",
+    "aliases": [
+      "ragi porridge"
+    ]
+  },
+  {
+    "surface_form": "bajra roti",
+    "canonical_form": "bajra roti",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_MIL_002",
+    "category": "cereal",
+    "aliases": [
+      "bajra roti"
+    ]
+  },
+  {
+    "surface_form": "jowar bhakri",
+    "canonical_form": "jowar bhakri",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_MIL_003",
+    "category": "cereal",
+    "aliases": [
+      "jowar bhakri"
+    ]
+  },
+  {
+    "surface_form": "foxtail millet pulao",
+    "canonical_form": "foxtail millet pulao",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_MIL_004",
+    "category": "cereal",
+    "aliases": [
+      "foxtail millet pulao"
+    ]
+  },
+  {
+    "surface_form": "vegetable dalia khichdi",
+    "canonical_form": "vegetable dalia khichdi",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_CER_005",
+    "category": "cereal",
+    "aliases": [
+      "vegetable dalia khichdi"
+    ]
+  },
+  {
+    "surface_form": "poha with vegetables and peanuts",
+    "canonical_form": "poha with vegetables and peanuts",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_CER_006",
+    "category": "cereal",
+    "aliases": [
+      "poha with vegetables and peanuts"
+    ]
+  },
+  {
+    "surface_form": "steamed idli",
+    "canonical_form": "steamed idli",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_CER_007",
+    "category": "cereal",
+    "aliases": [
+      "steamed idli"
+    ]
+  },
+  {
+    "surface_form": "plain dosa",
+    "canonical_form": "plain dosa",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_CER_008",
+    "category": "cereal",
+    "aliases": [
+      "plain dosa"
+    ]
+  },
+  {
+    "surface_form": "moong dal khichdi with ghee",
+    "canonical_form": "moong dal khichdi with ghee",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_CER_009",
+    "category": "balanced_meal",
+    "aliases": [
+      "moong dal khichdi with ghee"
+    ]
+  },
+  {
+    "surface_form": "whole wheat roti",
+    "canonical_form": "whole wheat roti",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_CER_010",
+    "category": "cereal",
+    "aliases": [
+      "whole wheat roti"
+    ]
+  },
+  {
+    "surface_form": "methi thepla",
+    "canonical_form": "methi thepla",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_CER_011",
+    "category": "cereal",
+    "aliases": [
+      "methi thepla"
+    ]
+  },
+  {
+    "surface_form": "pesarattu (green gram dosa)",
+    "canonical_form": "pesarattu (green gram dosa)",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_CER_012",
+    "category": "pulse",
+    "aliases": [
+      "pesarattu (green gram dosa)"
+    ]
+  },
+  {
+    "surface_form": "vegetable ven pongal",
+    "canonical_form": "vegetable ven pongal",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_CER_013",
+    "category": "balanced_meal",
+    "aliases": [
+      "vegetable ven pongal"
+    ]
+  },
+  {
+    "surface_form": "yellow moong dal soup",
+    "canonical_form": "yellow moong dal soup",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_PUL_001",
+    "category": "pulse",
+    "aliases": [
+      "yellow moong dal soup"
+    ]
+  },
+  {
+    "surface_form": "toor dal sambar with vegetables",
+    "canonical_form": "toor dal sambar with vegetables",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_PUL_002",
+    "category": "pulse",
+    "aliases": [
+      "toor dal sambar with vegetables"
+    ]
+  },
+  {
+    "surface_form": "sprouted moong salad with lemon",
+    "canonical_form": "sprouted moong salad with lemon",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_PUL_003",
+    "category": "pulse",
+    "aliases": [
+      "sprouted moong salad with lemon"
+    ]
+  },
+  {
+    "surface_form": "boiled chickpea sundal (chana sundal)",
+    "canonical_form": "boiled chickpea sundal (chana sundal)",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_PUL_004",
+    "category": "pulse",
+    "aliases": [
+      "boiled chickpea sundal (chana sundal)"
+    ]
+  },
+  {
+    "surface_form": "rajma curry (kidney beans)",
+    "canonical_form": "rajma curry (kidney beans)",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_PUL_005",
+    "category": "pulse",
+    "aliases": [
+      "rajma curry (kidney beans)"
+    ]
+  },
+  {
+    "surface_form": "chole (chickpea curry)",
+    "canonical_form": "chole (chickpea curry)",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_PUL_006",
+    "category": "pulse",
+    "aliases": [
+      "chole (chickpea curry)"
+    ]
+  },
+  {
+    "surface_form": "khaman dhokla (steamed besan)",
+    "canonical_form": "khaman dhokla (steamed besan)",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_PUL_007",
+    "category": "pulse",
+    "aliases": [
+      "khaman dhokla (steamed besan)"
+    ]
+  },
+  {
+    "surface_form": "roasted sattu drink (savory)",
+    "canonical_form": "roasted sattu drink (savory)",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_PUL_008",
+    "category": "pulse",
+    "aliases": [
+      "roasted sattu drink (savory)"
+    ]
+  },
+  {
+    "surface_form": "pasteurized whole cow milk",
+    "canonical_form": "pasteurized whole cow milk",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_DAI_001",
+    "category": "dairy",
+    "aliases": [
+      "pasteurized whole cow milk"
+    ]
+  },
+  {
+    "surface_form": "homemade dahi (curd/yogurt)",
+    "canonical_form": "homemade dahi (curd/yogurt)",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_DAI_002",
+    "category": "dairy",
+    "aliases": [
+      "homemade dahi (curd/yogurt)"
+    ]
+  },
+  {
+    "surface_form": "fresh paneer (cottage cheese)",
+    "canonical_form": "fresh paneer (cottage cheese)",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_DAI_003",
+    "category": "dairy",
+    "aliases": [
+      "fresh paneer (cottage cheese)"
+    ]
+  },
+  {
+    "surface_form": "plain chaas (spiced buttermilk)",
+    "canonical_form": "plain chaas (spiced buttermilk)",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_DAI_004",
+    "category": "dairy",
+    "aliases": [
+      "plain chaas (spiced buttermilk)"
+    ]
+  },
+  {
+    "surface_form": "pure cow ghee",
+    "canonical_form": "pure cow ghee",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_DAI_005",
+    "category": "fat",
+    "aliases": [
+      "pure cow ghee"
+    ]
+  },
+  {
+    "surface_form": "steamed palak (spinach puree)",
+    "canonical_form": "steamed palak (spinach puree)",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_VEG_001",
+    "category": "vegetable",
+    "aliases": [
+      "steamed palak (spinach puree)"
+    ]
+  },
+  {
+    "surface_form": "sautéed moringa leaves (drumstick greens)",
+    "canonical_form": "sautéed moringa leaves (drumstick greens)",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_VEG_002",
+    "category": "vegetable",
+    "aliases": [
+      "sautéed moringa leaves (drumstick greens)"
+    ]
+  },
+  {
+    "surface_form": "steamed carrot sticks",
+    "canonical_form": "steamed carrot sticks",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_VEG_003",
+    "category": "vegetable",
+    "aliases": [
+      "steamed carrot sticks"
+    ]
+  },
+  {
+    "surface_form": "mashed orange pumpkin",
+    "canonical_form": "mashed orange pumpkin",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_VEG_004",
+    "category": "vegetable",
+    "aliases": [
+      "mashed orange pumpkin"
+    ]
+  },
+  {
+    "surface_form": "bottle gourd curry (lauki sabzi)",
+    "canonical_form": "bottle gourd curry (lauki sabzi)",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_VEG_005",
+    "category": "vegetable",
+    "aliases": [
+      "bottle gourd curry (lauki sabzi)"
+    ]
+  },
+  {
+    "surface_form": "steamed sweet potato cubes",
+    "canonical_form": "steamed sweet potato cubes",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_VEG_006",
+    "category": "tuber",
+    "aliases": [
+      "steamed sweet potato cubes"
+    ]
+  },
+  {
+    "surface_form": "boiled green peas mash",
+    "canonical_form": "boiled green peas mash",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_VEG_007",
+    "category": "vegetable",
+    "aliases": [
+      "boiled green peas mash"
+    ]
+  },
+  {
+    "surface_form": "steamed beetroot mash",
+    "canonical_form": "steamed beetroot mash",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_VEG_008",
+    "category": "vegetable",
+    "aliases": [
+      "steamed beetroot mash"
+    ]
+  },
+  {
+    "surface_form": "mashed ripe banana",
+    "canonical_form": "mashed ripe banana",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_FRU_001",
+    "category": "fruit",
+    "aliases": [
+      "mashed ripe banana"
+    ]
+  },
+  {
+    "surface_form": "fresh ripe papaya cubes",
+    "canonical_form": "fresh ripe papaya cubes",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_FRU_002",
+    "category": "fruit",
+    "aliases": [
+      "fresh ripe papaya cubes"
+    ]
+  },
+  {
+    "surface_form": "fresh guava slices",
+    "canonical_form": "fresh guava slices",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_FRU_003",
+    "category": "fruit",
+    "aliases": [
+      "fresh guava slices"
+    ]
+  },
+  {
+    "surface_form": "stewed apple puree",
+    "canonical_form": "stewed apple puree",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_FRU_004",
+    "category": "fruit",
+    "aliases": [
+      "stewed apple puree"
+    ]
+  },
+  {
+    "surface_form": "fresh pomegranate arils",
+    "canonical_form": "fresh pomegranate arils",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_FRU_005",
+    "category": "fruit",
+    "aliases": [
+      "fresh pomegranate arils"
+    ]
+  },
+  {
+    "surface_form": "sweet lime (mosambi) slices",
+    "canonical_form": "sweet lime (mosambi) slices",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_FRU_006",
+    "category": "fruit",
+    "aliases": [
+      "sweet lime (mosambi) slices"
+    ]
+  },
+  {
+    "surface_form": "fresh amla (indian gooseberry)",
+    "canonical_form": "fresh amla (indian gooseberry)",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_FRU_007",
+    "category": "fruit",
+    "aliases": [
+      "fresh amla (indian gooseberry)"
+    ]
+  },
+  {
+    "surface_form": "boiled egg (whole)",
+    "canonical_form": "boiled egg (whole)",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_EGG_001",
+    "category": "protein",
+    "aliases": [
+      "boiled egg (whole)"
+    ]
+  },
+  {
+    "surface_form": "vegetable egg bhurji (scramble)",
+    "canonical_form": "vegetable egg bhurji (scramble)",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_EGG_002",
+    "category": "protein",
+    "aliases": [
+      "vegetable egg bhurji (scramble)"
+    ]
+  },
+  {
+    "surface_form": "minced chicken with vegetables",
+    "canonical_form": "minced chicken with vegetables",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_MEA_001",
+    "category": "protein",
+    "aliases": [
+      "minced chicken with vegetables"
+    ]
+  },
+  {
+    "surface_form": "steamed pomfret / rohu fish",
+    "canonical_form": "steamed pomfret / rohu fish",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_FIS_001",
+    "category": "protein",
+    "aliases": [
+      "steamed pomfret / rohu fish"
+    ]
+  },
+  {
+    "surface_form": "soaked and peeled almonds (powdered)",
+    "canonical_form": "soaked and peeled almonds (powdered)",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_NUT_001",
+    "category": "protein",
+    "aliases": [
+      "soaked and peeled almonds (powdered)"
+    ]
+  },
+  {
+    "surface_form": "crushed walnuts",
+    "canonical_form": "crushed walnuts",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_NUT_002",
+    "category": "protein",
+    "aliases": [
+      "crushed walnuts"
+    ]
+  },
+  {
+    "surface_form": "roasted white sesame seeds (til)",
+    "canonical_form": "roasted white sesame seeds (til)",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_SED_001",
+    "category": "protein",
+    "aliases": [
+      "roasted white sesame seeds (til)"
+    ]
+  },
+  {
+    "surface_form": "roasted pumpkin seed powder",
+    "canonical_form": "roasted pumpkin seed powder",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_SED_002",
+    "category": "protein",
+    "aliases": [
+      "roasted pumpkin seed powder"
+    ]
+  },
+  {
+    "surface_form": "roasted makhana (fox nuts)",
+    "canonical_form": "roasted makhana (fox nuts)",
+    "entity_type": "FOOD",
+    "source": "foods.json",
+    "food_id": "F_SED_003",
+    "category": "snack",
+    "aliases": [
+      "roasted makhana (fox nuts)"
+    ]
+  },
+  {
+    "surface_form": "paneer",
+    "canonical_form": "paneer",
+    "entity_type": "FOOD",
+    "source": "rag_data.json / ontology",
+    "food_id": "F_EXTRA_06",
+    "category": "curated_dish",
+    "aliases": [
+      "cottage cheese"
+    ]
+  },
+  {
+    "surface_form": "sundal",
+    "canonical_form": "sundal",
+    "entity_type": "FOOD",
+    "source": "rag_data.json / ontology",
+    "food_id": "F_EXTRA_09",
+    "category": "curated_dish",
+    "aliases": [
+      "boiled legumes sundal",
+      "chana sundal"
+    ]
+  },
+  {
+    "surface_form": "avial",
+    "canonical_form": "avial",
+    "entity_type": "FOOD",
+    "source": "rag_data.json / ontology",
+    "food_id": "F_EXTRA_10",
+    "category": "curated_dish",
+    "aliases": [
+      "kerala avial"
+    ]
+  },
+  {
+    "surface_form": "dalia",
+    "canonical_form": "dalia",
+    "entity_type": "FOOD",
+    "source": "rag_data.json / ontology",
+    "food_id": "F_EXTRA_11",
+    "category": "curated_dish",
+    "aliases": [
+      "broken wheat",
+      "wheat dalia"
+    ]
+  },
+  {
+    "surface_form": "banana",
+    "canonical_form": "banana",
+    "entity_type": "FOOD",
+    "source": "rag_data.json / ontology",
+    "food_id": "F_EXTRA_14",
+    "category": "curated_dish",
+    "aliases": [
+      "bananas",
+      "ripe banana",
+      "mashed banana"
+    ]
+  },
+  {
+    "surface_form": "apple",
+    "canonical_form": "apple",
+    "entity_type": "FOOD",
+    "source": "rag_data.json / ontology",
+    "food_id": "F_EXTRA_15",
+    "category": "curated_dish",
+    "aliases": [
+      "apples",
+      "apple puree",
+      "stewed apple"
+    ]
+  },
+  {
+    "surface_form": "dairy products",
+    "canonical_form": "dairy products",
+    "entity_type": "FOOD",
+    "source": "rag_data.json / ontology",
+    "food_id": "F_EXTRA_19",
+    "category": "curated_dish",
+    "aliases": [
+      "milk products",
+      "milk"
+    ]
+  },
+  {
+    "surface_form": "tubers",
+    "canonical_form": "tubers",
+    "entity_type": "FOOD",
+    "source": "rag_data.json / ontology",
+    "food_id": "F_EXTRA_20",
+    "category": "curated_dish",
+    "aliases": [
+      "roots and tubers",
+      "potato",
+      "sweet potato"
+    ]
+  },
+  {
+    "surface_form": "nuts and seeds",
+    "canonical_form": "nuts and seeds",
+    "entity_type": "FOOD",
+    "source": "rag_data.json / ontology",
+    "food_id": "F_EXTRA_21",
+    "category": "curated_dish",
+    "aliases": [
+      "tree nuts",
+      "walnuts",
+      "almonds",
+      "groundnuts"
+    ]
+  }
+]

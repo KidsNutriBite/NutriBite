@@ -1,0 +1,97 @@
+{
+  "schema_version": "2.0",
+  "model_name": "nutribite_sequence_perceptron_v2",
+  "labels": [
+    "O",
+    "B-FOOD",
+    "I-FOOD",
+    "B-NUTRIENT",
+    "I-NUTRIENT",
+    "B-HEALTH_CONDITION",
+    "I-HEALTH_CONDITION",
+    "B-ALLERGEN",
+    "I-ALLERGEN",
+    "B-AGE_GROUP",
+    "I-AGE_GROUP",
+    "B-MEAL_TYPE",
+    "I-MEAL_TYPE",
+    "B-GROWTH_METRIC",
+    "I-GROWTH_METRIC",
+    "B-FOOD_GROUP",
+    "I-FOOD_GROUP",
+    "B-DIETARY_PROPERTY",
+    "I-DIETARY_PROPERTY",
+    "B-FEEDING_METHOD",
+    "I-FEEDING_METHOD"
+  ],
+  "metrics": {
+    "Micro_P": 94.04,
+    "Micro_R": 91.61,
+    "Micro_F1": 92.81,
+    "Macro_F1": 85.07,
+    "Nutrient_F1": 92.08,
+    "Class_Metrics": {
+      "FOOD": {
+        "P": 91.03,
+        "R": 89.87,
+        "F1": 90.45,
+        "Support": 79
+      },
+      "NUTRIENT": {
+        "P": 92.9,
+        "R": 91.28,
+        "F1": 92.08,
+        "Support": 172
+      },
+      "HEALTH_CONDITION": {
+        "P": 97.3,
+        "R": 87.8,
+        "F1": 92.31,
+        "Support": 41
+      },
+      "ALLERGEN": {
+        "P": 66.67,
+        "R": 40.0,
+        "F1": 50.0,
+        "Support": 5
+      },
+      "AGE_GROUP": {
+        "P": 98.75,
+        "R": 98.75,
+        "F1": 98.75,
+        "Support": 80
+      },
+      "MEAL_TYPE": {
+        "P": 100.0,
+        "R": 85.71,
+        "F1": 92.31,
+        "Support": 7
+      },
+      "GROWTH_METRIC": {
+        "P": 50.0,
+        "R": 37.5,
+        "F1": 42.86,
+        "Support": 8
+      },
+      "FOOD_GROUP": {
+        "P": 98.21,
+        "R": 100.0,
+        "F1": 99.1,
+        "Support": 55
+      },
+      "DIETARY_PROPERTY": {
+        "P": 92.86,
+        "R": 92.86,
+        "F1": 92.86,
+        "Support": 14
+      },
+      "FEEDING_METHOD": {
+        "P": 100.0,
+        "R": 100.0,
+        "F1": 100.0,
+        "Support": 4
+      }
+    }
+  },
+  "seed": 42
+}

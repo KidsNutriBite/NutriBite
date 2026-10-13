@@ -1372,4 +1372,3 @@ export const getTeleconsultationStatus = asyncHandler(async (req, res) => {
         parent: consultation.parentId
     }, 'Status retrieved'));
 });
-

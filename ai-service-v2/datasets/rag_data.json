@@ -988,6 +988,10 @@
       "condition": "breastfeeding"
     }
   },
+<<<<<<< HEAD
+  
+=======
+>>>>>>> origin/main
   {
     "id": "RAG_IRON_4",
     "text": "Iron deficiency during pregnancy increases risk of maternal mortality and low birth weight in infants.",

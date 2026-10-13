@@ -1,0 +1,48 @@
+{
+  "dataset_name": "continual_ner_v1",
+  "task_sequence": [
+    {
+      "task": 0,
+      "name": "Base_Schema_v2",
+      "classes": [
+        "FOOD",
+        "NUTRIENT",
+        "HEALTH_CONDITION",
+        "ALLERGEN",
+        "AGE_GROUP",
+        "MEAL_TYPE",
+        "GROWTH_METRIC",
+        "FOOD_GROUP",
+        "DIETARY_PROPERTY",
+        "FEEDING_METHOD"
+      ],
+      "sentences": 1223
+    },
+    {
+      "task": 1,
+      "name": "+COOKING_METHOD",
+      "classes": [
+        "COOKING_METHOD"
+      ],
+      "sentences": 64
+    },
+    {
+      "task": 2,
+      "name": "+DIET_PATTERN",
+      "classes": [
+        "DIET_PATTERN"
+      ],
+      "sentences": 8
+    },
+    {
+      "task": 3,
+      "name": "+SUPPLEMENT",
+      "classes": [
+        "SUPPLEMENT"
+      ],
+      "sentences": 4
+    }
+  ],
+  "replay_buffer_size": 45,
+  "test_sentences": 263
+}

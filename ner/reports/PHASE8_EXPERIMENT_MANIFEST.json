@@ -1,0 +1,164 @@
+{
+  "phase": 8,
+  "schema_version": "2.0",
+  "project": "NutriBite / NutriKids Pediatric Nutrition NER",
+  "timestamp": "2026-09-19T10:32:00Z",
+  "provenance": {
+    "corpus": "ai-service-v2/datasets/rag_data.json (913 passages)",
+    "evaluation_queries": "ai-service-v2/datasets/eval_fixtures.json & test_cases.json (150 queries)",
+    "normalization_sources": [
+      "backend/data/foods.json (IFCT 2017)",
+      "backend/data/conditions.json",
+      "backend/data/allergies.json",
+      "ICMR-NIN RDA 2020 Tables",
+      "WHO Child Growth Standards 2006"
+    ]
+  },
+  "experiments": [
+    {
+      "id": "EXP-NORM-01",
+      "name": "Knowledge-Grounded Entity Normalization",
+      "script": "ner/scripts/15_build_normalization_resource.py",
+      "resource": "ner/data/entity_normalization.json",
+      "report": "ner/reports/entity_normalization_results.md",
+      "metrics": {
+        "kb_entries": 810,
+        "evaluated_mentions": 2654,
+        "normalized_mentions": 2273,
+        "coverage": "85.6%",
+        "exact_accuracy": "85.6%",
+        "ambiguous_matches": 0,
+        "unmatched": 381
+      }
+    },
+    {
+      "id": "EXP-NER-V2-FULL",
+      "name": "Schema v2 Sequence Perceptron (Full Features)",
+      "script": "ner/scripts/16_schema_v2_and_ablation.py",
+      "dataset": "ner/data/schema_v2/ (train: 1223 sents, val: 262 sents, test: 263 sents)",
+      "model": "Structured Averaged Sequence Perceptron with BIO Transition Masking",
+      "features": "Lexical Unigram, Context Window (w[i-1], w[i+1], Bigrams), Subword Affixes (Pref2/3, Suff2/3), Orthographic Shapes (Title, Upper, Digit, Hyphen, Len), Transition History (prev_tag)",
+      "seed": 42,
+      "epochs": 8,
+      "report": "ner/reports/ablation_results.md",
+      "metrics": {
+        "Micro_P": 93.38,
+        "Micro_R": 92.25,
+        "Micro_F1": 92.81,
+        "Macro_F1": 85.07,
+        "Nutrient_F1": 92.08
+      }
+    },
+    {
+      "id": "EXP-NER-V2-ABL1",
+      "name": "Ablation 1: No Context Window",
+      "script": "ner/scripts/16_schema_v2_and_ablation.py",
+      "removed_features": "w[i-1], w[i+1], prev_w_curr_w, curr_w_next_w, BOS, EOS",
+      "metrics": {
+        "Micro_P": 87.03,
+        "Micro_R": 84.08,
+        "Micro_F1": 85.53,
+        "Macro_F1": 69.93,
+        "Nutrient_F1": 83.98,
+        "Delta_Micro_F1": -7.28
+      }
+    },
+    {
+      "id": "EXP-NER-V2-ABL2",
+      "name": "Ablation 2: No Subword Affixes",
+      "script": "ner/scripts/16_schema_v2_and_ablation.py",
+      "removed_features": "pref2, pref3, suff2, suff3",
+      "metrics": {
+        "Micro_P": 90.99,
+        "Micro_R": 91.07,
+        "Micro_F1": 91.03,
+        "Macro_F1": 85.22,
+        "Nutrient_F1": 89.49,
+        "Delta_Micro_F1": -1.78
+      }
+    },
+    {
+      "id": "EXP-NER-V2-ABL3",
+      "name": "Ablation 3: No Orthographic Shapes",
+      "script": "ner/scripts/16_schema_v2_and_ablation.py",
+      "removed_features": "is_title, is_upper, is_digit, has_hyphen, len",
+      "metrics": {
+        "Micro_P": 94.02,
+        "Micro_R": 93.00,
+        "Micro_F1": 93.51,
+        "Macro_F1": 89.18,
+        "Nutrient_F1": 92.44,
+        "Delta_Micro_F1": 0.70
+      }
+    },
+    {
+      "id": "EXP-NER-V2-ABL4",
+      "name": "Ablation 4: No Transition State History",
+      "script": "ner/scripts/16_schema_v2_and_ablation.py",
+      "removed_features": "prev_tag (dynamic state)",
+      "metrics": {
+        "Micro_P": 93.85,
+        "Micro_R": 92.86,
+        "Micro_F1": 93.35,
+        "Macro_F1": 88.24,
+        "Nutrient_F1": 92.35,
+        "Delta_Micro_F1": 0.54
+      }
+    },
+    {
+      "id": "EXP-NER-V2-ABL5",
+      "name": "Ablation 5: Minimal Lexical Only",
+      "script": "ner/scripts/16_schema_v2_and_ablation.py",
+      "removed_features": "All non-unigram features (retains w[i] and BIAS only)",
+      "metrics": {
+        "Micro_P": 84.34,
+        "Micro_R": 83.86,
+        "Micro_F1": 84.10,
+        "Macro_F1": 65.02,
+        "Nutrient_F1": 84.41,
+        "Delta_Micro_F1": -8.71
+      }
+    },
+    {
+      "id": "EXP-RAG-BASELINE",
+      "name": "System A: Baseline Standard BM25 RAG",
+      "script": "ner/scripts/17_evaluate_rag_impact.py",
+      "corpus_size": 913,
+      "queries_evaluated": 150,
+      "top_k": 10,
+      "report": "ner/reports/rag_impact_results.md",
+      "metrics": {
+        "Recall@1": 54.00,
+        "Recall@3": 74.67,
+        "Recall@5": 79.33,
+        "Recall@10": 84.00,
+        "Precision@3": 49.56,
+        "Precision@5": 44.80,
+        "MRR@5": 0.6399,
+        "MRR@10": 0.6457
+      }
+    },
+    {
+      "id": "EXP-RAG-NER-ENHANCED",
+      "name": "System B: NER-Enhanced Hybrid RAG",
+      "script": "ner/scripts/17_evaluate_rag_impact.py",
+      "corpus_size": 913,
+      "queries_evaluated": 150,
+      "top_k": 10,
+      "report": "ner/reports/rag_impact_results.md",
+      "metrics": {
+        "Recall@1": 59.33,
+        "Recall@3": 72.67,
+        "Recall@5": 75.33,
+        "Recall@10": 81.33,
+        "Precision@3": 54.89,
+        "Precision@5": 51.20,
+        "MRR@5": 0.6608,
+        "MRR@10": 0.6685,
+        "Delta_Recall@1": 5.33,
+        "Delta_Precision@5": 6.40,
+        "Delta_MRR@5": 0.0209
+      }
+    }
+  ]
+}

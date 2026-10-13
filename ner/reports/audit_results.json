@@ -1,0 +1,224 @@
+{
+  "audit_version": "Phase 4 Final",
+  "annotation_nature": "DISTANT_SUPERVISION_SILVER",
+  "human_annotation_performed": false,
+  "iaa_measured": false,
+  "corpus_validation": {
+    "weak_sentences": 1748,
+    "silver_val_sample": 350,
+    "train_sentences": 1223,
+    "val_sentences": 262,
+    "test_sentences": 263,
+    "weak_total_spans": 2711,
+    "train_spans": 1851,
+    "val_spans": 418,
+    "test_spans": 442,
+    "label_counts_weak": {
+      "AGE_GROUP": 535,
+      "FOOD": 681,
+      "HEALTH_CONDITION": 295,
+      "NUTRIENT": 1042,
+      "ALLERGEN": 50,
+      "GROWTH_METRIC": 51,
+      "MEAL_TYPE": 57
+    },
+    "label_counts_train": {
+      "NUTRIENT": 699,
+      "HEALTH_CONDITION": 202,
+      "FOOD": 468,
+      "AGE_GROUP": 360,
+      "GROWTH_METRIC": 46,
+      "MEAL_TYPE": 42,
+      "ALLERGEN": 34
+    },
+    "label_counts_val": {
+      "AGE_GROUP": 91,
+      "ALLERGEN": 11,
+      "NUTRIENT": 169,
+      "FOOD": 90,
+      "HEALTH_CONDITION": 47,
+      "MEAL_TYPE": 7,
+      "GROWTH_METRIC": 3
+    },
+    "label_counts_test": {
+      "NUTRIENT": 174,
+      "HEALTH_CONDITION": 46,
+      "AGE_GROUP": 84,
+      "FOOD": 123,
+      "ALLERGEN": 5,
+      "GROWTH_METRIC": 2,
+      "MEAL_TYPE": 8
+    }
+  },
+  "claimed_vs_actual": {
+    "total_annotated_sentences": {
+      "claimed": 1748,
+      "actual": 1748,
+      "verified": true
+    },
+    "total_entity_spans": {
+      "claimed": 2711,
+      "actual": 2711,
+      "verified": true
+    },
+    "train_sentences": {
+      "claimed": 1223,
+      "actual": 1223,
+      "verified": true
+    },
+    "val_sentences": {
+      "claimed": 262,
+      "actual": 262,
+      "verified": true
+    },
+    "test_sentences": {
+      "claimed": 263,
+      "actual": 263,
+      "verified": true
+    },
+    "train_spans": {
+      "claimed": 1921,
+      "actual": 1851,
+      "verified": false
+    },
+    "val_spans": {
+      "claimed": 386,
+      "actual": 418,
+      "verified": false
+    },
+    "test_spans": {
+      "claimed": 404,
+      "actual": 442,
+      "verified": false
+    },
+    "NUTRIENT": {
+      "claimed": 1042,
+      "actual": 1042,
+      "verified": true
+    },
+    "FOOD": {
+      "claimed": 681,
+      "actual": 681,
+      "verified": true
+    },
+    "AGE_GROUP": {
+      "claimed": 535,
+      "actual": 535,
+      "verified": true
+    },
+    "HEALTH_CONDITION": {
+      "claimed": 295,
+      "actual": 295,
+      "verified": true
+    },
+    "MEAL_TYPE": {
+      "claimed": 57,
+      "actual": 57,
+      "verified": true
+    },
+    "GROWTH_METRIC": {
+      "claimed": 51,
+      "actual": 51,
+      "verified": true
+    },
+    "ALLERGEN": {
+      "claimed": 50,
+      "actual": 50,
+      "verified": true
+    }
+  },
+  "leakage_audit": {
+    "exact_sentence_leakage": {
+      "train_val": 0,
+      "train_test": 0,
+      "val_test": 0
+    },
+    "passage_id_leakage": {
+      "train_val": 0,
+      "train_test": 0,
+      "val_test": 0
+    },
+    "leakage_free": true
+  },
+  "bio_integrity": {
+    "total_errors": 0,
+    "errors": []
+  },
+  "seen_unseen_analysis": {
+    "FOOD": {
+      "seen_in_train": 120,
+      "unseen_in_train": 3,
+      "seen_pct": 97.6
+    },
+    "NUTRIENT": {
+      "seen_in_train": 172,
+      "unseen_in_train": 2,
+      "seen_pct": 98.9
+    },
+    "HEALTH_CONDITION": {
+      "seen_in_train": 43,
+      "unseen_in_train": 3,
+      "seen_pct": 93.5
+    },
+    "ALLERGEN": {
+      "seen_in_train": 3,
+      "unseen_in_train": 2,
+      "seen_pct": 60.0
+    },
+    "AGE_GROUP": {
+      "seen_in_train": 84,
+      "unseen_in_train": 0,
+      "seen_pct": 100.0
+    },
+    "MEAL_TYPE": {
+      "seen_in_train": 8,
+      "unseen_in_train": 0,
+      "seen_pct": 100.0
+    },
+    "GROWTH_METRIC": {
+      "seen_in_train": 2,
+      "unseen_in_train": 0,
+      "seen_pct": 100.0
+    }
+  },
+  "gazetteer_only_baseline": {
+    "note": "Same gazetteer used to generate training data \u2014 circular; high performance expected",
+    "precision": 99.54,
+    "recall": 98.19,
+    "micro_f1": 98.86,
+    "tp": 434,
+    "fp": 2,
+    "fn": 8
+  },
+  "heuristic_5word_baseline": {
+    "note": "5-word food keyword lookup \u2014 demonstrates domain coverage failure, not general NER",
+    "words": [
+      "milk",
+      "rice",
+      "apple",
+      "banana",
+      "curd"
+    ],
+    "precision": 91.89,
+    "recall": 7.69,
+    "micro_f1": 14.2
+  },
+  "evaluation_methodology": {
+    "type": "Exact entity span-level [token_start, token_end, label]",
+    "scope": "Held-out silver/distant-supervision test partition",
+    "human_gold_validation": false,
+    "evaluation_includes_O_label": false,
+    "span_matching": "Strict exact match \u2014 all three of (start, end, label) must match",
+    "micro_f1_description": "Weighted by support across all non-O labels"
+  },
+  "low_support_warnings": {
+    "ALLERGEN": {
+      "test_spans": 5,
+      "warning": "F1 estimate is statistically unreliable \u2014 wide confidence interval"
+    },
+    "GROWTH_METRIC": {
+      "test_spans": 2,
+      "warning": "F1 estimate is statistically unreliable \u2014 wide confidence interval"
+    }
+  }
+}

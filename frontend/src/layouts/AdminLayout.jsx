@@ -67,6 +67,7 @@ const AdminLayout = ({ children }) => {
         { label: 'Parents', path: '/admin/parents', icon: 'escalator_warning' },
         { label: 'Doctors', path: '/admin/doctors', icon: 'stethoscope' },
         { label: 'Activity Logs', path: '/admin/activity', icon: 'history' },
+        { label: 'Nutrition Intelligence', path: '/dynamic-ner', icon: 'memory' },
         { label: 'Security Settings', path: '/admin/security', icon: 'shield' },
     ];
 

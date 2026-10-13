@@ -1,0 +1,115 @@
+{
+  "schema_version": "2.1.0",
+  "entity_classes": [
+    "FOOD",
+    "NUTRIENT",
+    "HEALTH_CONDITION",
+    "ALLERGEN",
+    "AGE_GROUP",
+    "MEAL_TYPE",
+    "GROWTH_METRIC",
+    "FOOD_GROUP",
+    "DIETARY_PROPERTY",
+    "FEEDING_METHOD",
+    "COOKING_METHOD",
+    "SUPPLEMENT",
+    "DIET_PATTERN"
+  ],
+  "accepted_candidates_used": 165,
+  "splits": {
+    "train": {
+      "num_sentences": 1223,
+      "num_tokens": 26653,
+      "matched_candidates": 105,
+      "added_dynamic_entities": {
+        "SUPPLEMENT": 5,
+        "COOKING_METHOD": 79,
+        "DIET_PATTERN": 8
+      },
+      "total_entities_by_class": {
+        "HEALTH_CONDITION": 223,
+        "FOOD": 303,
+        "AGE_GROUP": 371,
+        "NUTRIENT": 742,
+        "COOKING_METHOD": 79,
+        "FOOD_GROUP": 182,
+        "DIET_PATTERN": 8,
+        "GROWTH_METRIC": 37,
+        "FEEDING_METHOD": 6,
+        "MEAL_TYPE": 38,
+        "DIETARY_PROPERTY": 46,
+        "ALLERGEN": 37,
+        "SUPPLEMENT": 5
+      },
+      "total_entities": 2077
+    },
+    "validation": {
+      "num_sentences": 262,
+      "num_tokens": 6017,
+      "matched_candidates": 32,
+      "added_dynamic_entities": {
+        "SUPPLEMENT": 2,
+        "COOKING_METHOD": 20,
+        "DIET_PATTERN": 7
+      },
+      "total_entities_by_class": {
+        "NUTRIENT": 128,
+        "AGE_GROUP": 84,
+        "FOOD": 83,
+        "COOKING_METHOD": 20,
+        "FOOD_GROUP": 61,
+        "DIETARY_PROPERTY": 12,
+        "MEAL_TYPE": 12,
+        "ALLERGEN": 8,
+        "HEALTH_CONDITION": 31,
+        "DIET_PATTERN": 7,
+        "SUPPLEMENT": 2,
+        "FEEDING_METHOD": 6,
+        "GROWTH_METRIC": 6
+      },
+      "total_entities": 460
+    },
+    "test": {
+      "num_sentences": 263,
+      "num_tokens": 5991,
+      "matched_candidates": 28,
+      "added_dynamic_entities": {
+        "SUPPLEMENT": 1,
+        "COOKING_METHOD": 23,
+        "DIET_PATTERN": 4
+      },
+      "total_entities_by_class": {
+        "NUTRIENT": 172,
+        "FOOD_GROUP": 55,
+        "COOKING_METHOD": 23,
+        "FOOD": 79,
+        "DIETARY_PROPERTY": 14,
+        "AGE_GROUP": 80,
+        "HEALTH_CONDITION": 41,
+        "GROWTH_METRIC": 8,
+        "SUPPLEMENT": 1,
+        "DIET_PATTERN": 4,
+        "MEAL_TYPE": 7,
+        "FEEDING_METHOD": 4,
+        "ALLERGEN": 5
+      },
+      "total_entities": 493
+    }
+  },
+  "totals": {
+    "HEALTH_CONDITION": 295,
+    "FOOD": 465,
+    "AGE_GROUP": 535,
+    "NUTRIENT": 1042,
+    "COOKING_METHOD": 122,
+    "FOOD_GROUP": 298,
+    "DIET_PATTERN": 19,
+    "GROWTH_METRIC": 51,
+    "FEEDING_METHOD": 16,
+    "MEAL_TYPE": 57,
+    "DIETARY_PROPERTY": 72,
+    "ALLERGEN": 50,
+    "SUPPLEMENT": 8
+  },
+  "total_entities": 3030
+}

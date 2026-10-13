@@ -1,0 +1,1900 @@
+[
+  {
+    "surface_form": "malnutrition",
+    "canonical_form": "malnutrition",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "malnutrition",
+    "aliases": [
+      "malnutrition",
+      "malnutrition"
+    ]
+  },
+  {
+    "surface_form": "micronutrient deficiency",
+    "canonical_form": "micronutrient deficiency",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "micronutrient_deficiency",
+    "aliases": [
+      "micronutrient_deficiency",
+      "micronutrient deficiency"
+    ]
+  },
+  {
+    "surface_form": "overweight obesity",
+    "canonical_form": "overweight obesity",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "overweight_obesity",
+    "aliases": [
+      "overweight_obesity",
+      "overweight obesity"
+    ]
+  },
+  {
+    "surface_form": "anemia",
+    "canonical_form": "anemia",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "anemia",
+    "aliases": [
+      "anemia",
+      "anemia"
+    ]
+  },
+  {
+    "surface_form": "unhealthy diet pattern",
+    "canonical_form": "unhealthy diet pattern",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "unhealthy_diet_pattern",
+    "aliases": [
+      "unhealthy_diet_pattern",
+      "unhealthy diet pattern"
+    ]
+  },
+  {
+    "surface_form": "nutrient deficiency risk",
+    "canonical_form": "nutrient deficiency risk",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "nutrient_deficiency_risk",
+    "aliases": [
+      "nutrient_deficiency_risk",
+      "nutrient deficiency risk"
+    ]
+  },
+  {
+    "surface_form": "imbalanced diet",
+    "canonical_form": "imbalanced diet",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "imbalanced_diet",
+    "aliases": [
+      "imbalanced_diet",
+      "imbalanced diet"
+    ]
+  },
+  {
+    "surface_form": "low nutrient intake",
+    "canonical_form": "low nutrient intake",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "low_nutrient_intake",
+    "aliases": [
+      "low_nutrient_intake",
+      "low nutrient intake"
+    ]
+  },
+  {
+    "surface_form": "poor nutrient absorption",
+    "canonical_form": "poor nutrient absorption",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "poor_nutrient_absorption",
+    "aliases": [
+      "poor_nutrient_absorption",
+      "poor nutrient absorption"
+    ]
+  },
+  {
+    "surface_form": "poor growth",
+    "canonical_form": "poor growth",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "poor_growth",
+    "aliases": [
+      "poor_growth",
+      "poor growth"
+    ]
+  },
+  {
+    "surface_form": "pregnancy",
+    "canonical_form": "pregnancy",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "pregnancy",
+    "aliases": [
+      "pregnancy",
+      "pregnancy"
+    ]
+  },
+  {
+    "surface_form": "lactation",
+    "canonical_form": "lactation",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "lactation",
+    "aliases": [
+      "lactation",
+      "lactation"
+    ]
+  },
+  {
+    "surface_form": "low birth weight risk",
+    "canonical_form": "low birth weight risk",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "low_birth_weight_risk",
+    "aliases": [
+      "low_birth_weight_risk",
+      "low birth weight risk"
+    ]
+  },
+  {
+    "surface_form": "undernourished pregnant woman",
+    "canonical_form": "undernourished pregnant woman",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "undernourished_pregnant_woman",
+    "aliases": [
+      "undernourished_pregnant_woman",
+      "undernourished pregnant woman"
+    ]
+  },
+  {
+    "surface_form": "overweight pregnant woman",
+    "canonical_form": "overweight pregnant woman",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "overweight_pregnant_woman",
+    "aliases": [
+      "overweight_pregnant_woman",
+      "overweight pregnant woman"
+    ]
+  },
+  {
+    "surface_form": "breastfeeding",
+    "canonical_form": "breastfeeding",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "breastfeeding",
+    "aliases": [
+      "breastfeeding",
+      "breastfeeding"
+    ]
+  },
+  {
+    "surface_form": "infant 6 8 months",
+    "canonical_form": "infant 6 8 months",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "infant_6_8_months",
+    "aliases": [
+      "infant_6_8_months",
+      "infant 6 8 months"
+    ]
+  },
+  {
+    "surface_form": "infant 9 12 months",
+    "canonical_form": "infant 9 12 months",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "infant_9_12_months",
+    "aliases": [
+      "infant_9_12_months",
+      "infant 9 12 months"
+    ]
+  },
+  {
+    "surface_form": "infant diarrhea",
+    "canonical_form": "infant diarrhea",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "infant_diarrhea",
+    "aliases": [
+      "infant_diarrhea",
+      "infant diarrhea"
+    ]
+  },
+  {
+    "surface_form": "infant 6 12 months",
+    "canonical_form": "infant 6 12 months",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "infant_6_12_months",
+    "aliases": [
+      "infant_6_12_months",
+      "infant 6 12 months"
+    ]
+  },
+  {
+    "surface_form": "child above 1 year",
+    "canonical_form": "child above 1 year",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "child_above_1_year",
+    "aliases": [
+      "child_above_1_year",
+      "child above 1 year"
+    ]
+  },
+  {
+    "surface_form": "lactose intolerance",
+    "canonical_form": "lactose intolerance",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "lactose_intolerance",
+    "aliases": [
+      "lactose_intolerance",
+      "lactose intolerance"
+    ]
+  },
+  {
+    "surface_form": "infection or diarrhea",
+    "canonical_form": "infection or diarrhea",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "infection_or_diarrhea",
+    "aliases": [
+      "infection_or_diarrhea",
+      "infection or diarrhea"
+    ]
+  },
+  {
+    "surface_form": "infant feeding",
+    "canonical_form": "infant feeding",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "infant_feeding",
+    "aliases": [
+      "infant_feeding",
+      "infant feeding"
+    ]
+  },
+  {
+    "surface_form": "infant complementary feeding",
+    "canonical_form": "infant complementary feeding",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "infant_complementary_feeding",
+    "aliases": [
+      "infant_complementary_feeding",
+      "infant complementary feeding"
+    ]
+  },
+  {
+    "surface_form": "food safety infants",
+    "canonical_form": "food safety infants",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "food_safety_infants",
+    "aliases": [
+      "food_safety_infants",
+      "food safety infants"
+    ]
+  },
+  {
+    "surface_form": "complementary feeding post 6 months",
+    "canonical_form": "complementary feeding post 6 months",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "complementary_feeding_post_6_months",
+    "aliases": [
+      "complementary_feeding_post_6_months",
+      "complementary feeding post 6 months"
+    ]
+  },
+  {
+    "surface_form": "infant hygiene feeding",
+    "canonical_form": "infant hygiene feeding",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "infant_hygiene_feeding",
+    "aliases": [
+      "infant_hygiene_feeding",
+      "infant hygiene feeding"
+    ]
+  },
+  {
+    "surface_form": "infant illness feeding",
+    "canonical_form": "infant illness feeding",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "infant_illness_feeding",
+    "aliases": [
+      "infant_illness_feeding",
+      "infant illness feeding"
+    ]
+  },
+  {
+    "surface_form": "breast engorgement",
+    "canonical_form": "breast engorgement",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "breast_engorgement",
+    "aliases": [
+      "breast_engorgement",
+      "breast engorgement"
+    ]
+  },
+  {
+    "surface_form": "mastitis",
+    "canonical_form": "mastitis",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "mastitis",
+    "aliases": [
+      "mastitis",
+      "mastitis"
+    ]
+  },
+  {
+    "surface_form": "cleft palate",
+    "canonical_form": "cleft palate",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "cleft_palate",
+    "aliases": [
+      "cleft_palate",
+      "cleft palate"
+    ]
+  },
+  {
+    "surface_form": "tuberculosis maternal",
+    "canonical_form": "tuberculosis maternal",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "tuberculosis_maternal",
+    "aliases": [
+      "tuberculosis_maternal",
+      "tuberculosis maternal"
+    ]
+  },
+  {
+    "surface_form": "hepatitis b maternal",
+    "canonical_form": "hepatitis b maternal",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "hepatitis_b_maternal",
+    "aliases": [
+      "hepatitis_b_maternal",
+      "hepatitis b maternal"
+    ]
+  },
+  {
+    "surface_form": "congenital lactose intolerance",
+    "canonical_form": "congenital lactose intolerance",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "congenital_lactose_intolerance",
+    "aliases": [
+      "congenital_lactose_intolerance",
+      "congenital lactose intolerance"
+    ]
+  },
+  {
+    "surface_form": "galactosaemia",
+    "canonical_form": "galactosaemia",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "galactosaemia",
+    "aliases": [
+      "galactosaemia",
+      "galactosaemia"
+    ]
+  },
+  {
+    "surface_form": "congestive heart failure infant",
+    "canonical_form": "congestive heart failure infant",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "congestive_heart_failure_infant",
+    "aliases": [
+      "congestive_heart_failure_infant",
+      "congestive heart failure infant"
+    ]
+  },
+  {
+    "surface_form": "preterm infant",
+    "canonical_form": "preterm infant",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "preterm_infant",
+    "aliases": [
+      "preterm_infant",
+      "preterm infant"
+    ]
+  },
+  {
+    "surface_form": "low birth weight",
+    "canonical_form": "low birth weight",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "low_birth_weight",
+    "aliases": [
+      "low_birth_weight",
+      "low birth weight"
+    ]
+  },
+  {
+    "surface_form": "sga malnourished",
+    "canonical_form": "sga malnourished",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "sga_malnourished",
+    "aliases": [
+      "sga_malnourished",
+      "sga malnourished"
+    ]
+  },
+  {
+    "surface_form": "sga hypoplastic",
+    "canonical_form": "sga hypoplastic",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "sga_hypoplastic",
+    "aliases": [
+      "sga_hypoplastic",
+      "sga hypoplastic"
+    ]
+  },
+  {
+    "surface_form": "failure to thrive organic",
+    "canonical_form": "failure to thrive organic",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "failure_to_thrive_organic",
+    "aliases": [
+      "failure_to_thrive_organic",
+      "failure to thrive organic"
+    ]
+  },
+  {
+    "surface_form": "normal growth norms",
+    "canonical_form": "normal growth norms",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "normal_growth_norms",
+    "aliases": [
+      "normal_growth_norms",
+      "normal growth norms"
+    ]
+  },
+  {
+    "surface_form": "short stature",
+    "canonical_form": "short stature",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "short_stature",
+    "aliases": [
+      "short_stature",
+      "short stature"
+    ]
+  },
+  {
+    "surface_form": "iodine deficiency",
+    "canonical_form": "iodine deficiency",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "iodine_deficiency",
+    "aliases": [
+      "iodine_deficiency",
+      "iodine deficiency"
+    ]
+  },
+  {
+    "surface_form": "zinc deficiency signs",
+    "canonical_form": "zinc deficiency signs",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "zinc_deficiency_signs",
+    "aliases": [
+      "zinc_deficiency_signs",
+      "zinc deficiency signs"
+    ]
+  },
+  {
+    "surface_form": "selenium deficiency signs",
+    "canonical_form": "selenium deficiency signs",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "selenium_deficiency_signs",
+    "aliases": [
+      "selenium_deficiency_signs",
+      "selenium deficiency signs"
+    ]
+  },
+  {
+    "surface_form": "fluorosis",
+    "canonical_form": "fluorosis",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "fluorosis",
+    "aliases": [
+      "fluorosis",
+      "fluorosis"
+    ]
+  },
+  {
+    "surface_form": "hypocalcaemia infantile",
+    "canonical_form": "hypocalcaemia infantile",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "hypocalcaemia_infantile",
+    "aliases": [
+      "hypocalcaemia_infantile",
+      "hypocalcaemia infantile"
+    ]
+  },
+  {
+    "surface_form": "william syndrome",
+    "canonical_form": "william syndrome",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "william_syndrome",
+    "aliases": [
+      "william_syndrome",
+      "william syndrome"
+    ]
+  },
+  {
+    "surface_form": "potassium imbalance",
+    "canonical_form": "potassium imbalance",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "potassium_imbalance",
+    "aliases": [
+      "potassium_imbalance",
+      "potassium imbalance"
+    ]
+  },
+  {
+    "surface_form": "hypomagnesaemia",
+    "canonical_form": "hypomagnesaemia",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "hypomagnesaemia",
+    "aliases": [
+      "hypomagnesaemia",
+      "hypomagnesaemia"
+    ]
+  },
+  {
+    "surface_form": "iron deficiency anaemia",
+    "canonical_form": "iron deficiency anaemia",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "iron_deficiency_anaemia",
+    "aliases": [
+      "iron_deficiency_anaemia",
+      "iron deficiency anaemia"
+    ]
+  },
+  {
+    "surface_form": "rickets nutritional",
+    "canonical_form": "rickets nutritional",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "rickets_nutritional",
+    "aliases": [
+      "rickets_nutritional",
+      "rickets nutritional"
+    ]
+  },
+  {
+    "surface_form": "scurvy",
+    "canonical_form": "scurvy",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "scurvy",
+    "aliases": [
+      "scurvy",
+      "scurvy"
+    ]
+  },
+  {
+    "surface_form": "pellagra",
+    "canonical_form": "pellagra",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "pellagra",
+    "aliases": [
+      "pellagra",
+      "pellagra"
+    ]
+  },
+  {
+    "surface_form": "hypercholesterolemia risk",
+    "canonical_form": "hypercholesterolemia risk",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "hypercholesterolemia_risk",
+    "aliases": [
+      "hypercholesterolemia_risk",
+      "hypercholesterolemia risk"
+    ]
+  },
+  {
+    "surface_form": "beriberi",
+    "canonical_form": "beriberi",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "beriberi",
+    "aliases": [
+      "beriberi",
+      "beriberi"
+    ]
+  },
+  {
+    "surface_form": "lathyrism",
+    "canonical_form": "lathyrism",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "lathyrism",
+    "aliases": [
+      "lathyrism",
+      "lathyrism"
+    ]
+  },
+  {
+    "surface_form": "aflatoxin poisoning",
+    "canonical_form": "aflatoxin poisoning",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "aflatoxin_poisoning",
+    "aliases": [
+      "aflatoxin_poisoning",
+      "aflatoxin poisoning"
+    ]
+  },
+  {
+    "surface_form": "coeliac sprue",
+    "canonical_form": "coeliac sprue",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "coeliac_sprue",
+    "aliases": [
+      "coeliac_sprue",
+      "coeliac sprue"
+    ]
+  },
+  {
+    "surface_form": "indian childhood cirrhosis",
+    "canonical_form": "indian childhood cirrhosis",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "indian_childhood_cirrhosis",
+    "aliases": [
+      "indian_childhood_cirrhosis",
+      "indian childhood cirrhosis"
+    ]
+  },
+  {
+    "surface_form": "wilson disease",
+    "canonical_form": "wilson disease",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "wilson_disease",
+    "aliases": [
+      "wilson_disease",
+      "wilson disease"
+    ]
+  },
+  {
+    "surface_form": "short bowel syndrome",
+    "canonical_form": "short bowel syndrome",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "short_bowel_syndrome",
+    "aliases": [
+      "short_bowel_syndrome",
+      "short bowel syndrome"
+    ]
+  },
+  {
+    "surface_form": "glaucoma",
+    "canonical_form": "glaucoma",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "glaucoma",
+    "aliases": [
+      "glaucoma",
+      "glaucoma"
+    ]
+  },
+  {
+    "surface_form": "hunger pangs excessive",
+    "canonical_form": "hunger pangs excessive",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "hunger_pangs_excessive",
+    "aliases": [
+      "hunger_pangs_excessive",
+      "hunger pangs excessive"
+    ]
+  },
+  {
+    "surface_form": "persistent diarrhoea recovery",
+    "canonical_form": "persistent diarrhoea recovery",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "persistent_diarrhoea_recovery",
+    "aliases": [
+      "persistent_diarrhoea_recovery",
+      "persistent diarrhoea recovery"
+    ]
+  },
+  {
+    "surface_form": "atopic dermatitis eczema",
+    "canonical_form": "atopic dermatitis eczema",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "atopic_dermatitis_eczema",
+    "aliases": [
+      "atopic_dermatitis_eczema",
+      "atopic dermatitis eczema"
+    ]
+  },
+  {
+    "surface_form": "rotavirus diarrhoea",
+    "canonical_form": "rotavirus diarrhoea",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "rotavirus_diarrhoea",
+    "aliases": [
+      "rotavirus_diarrhoea",
+      "rotavirus diarrhoea"
+    ]
+  },
+  {
+    "surface_form": "clostridium difficile diarrhoea",
+    "canonical_form": "clostridium difficile diarrhoea",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "clostridium_difficile_diarrhoea",
+    "aliases": [
+      "clostridium_difficile_diarrhoea",
+      "clostridium difficile diarrhoea"
+    ]
+  },
+  {
+    "surface_form": "ulcerative colitis",
+    "canonical_form": "ulcerative colitis",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "ulcerative_colitis",
+    "aliases": [
+      "ulcerative_colitis",
+      "ulcerative colitis"
+    ]
+  },
+  {
+    "surface_form": "crohn disease",
+    "canonical_form": "crohn disease",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "crohn_disease",
+    "aliases": [
+      "crohn_disease",
+      "crohn disease"
+    ]
+  },
+  {
+    "surface_form": "helicobacter pylori infection",
+    "canonical_form": "helicobacter pylori infection",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "helicobacter_pylori_infection",
+    "aliases": [
+      "helicobacter_pylori_infection",
+      "helicobacter pylori infection"
+    ]
+  },
+  {
+    "surface_form": "cystic fibrosis respiratory",
+    "canonical_form": "cystic fibrosis respiratory",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "cystic_fibrosis_respiratory",
+    "aliases": [
+      "cystic_fibrosis_respiratory",
+      "cystic fibrosis respiratory"
+    ]
+  },
+  {
+    "surface_form": "severe acute malnutrition sam",
+    "canonical_form": "severe acute malnutrition sam",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "severe_acute_malnutrition_sam",
+    "aliases": [
+      "severe_acute_malnutrition_sam",
+      "severe acute malnutrition sam"
+    ]
+  },
+  {
+    "surface_form": "kwashiorkor",
+    "canonical_form": "kwashiorkor",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "kwashiorkor",
+    "aliases": [
+      "kwashiorkor",
+      "kwashiorkor"
+    ]
+  },
+  {
+    "surface_form": "marasmus",
+    "canonical_form": "marasmus",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "marasmus",
+    "aliases": [
+      "marasmus",
+      "marasmus"
+    ]
+  },
+  {
+    "surface_form": "nutritional dwarfing",
+    "canonical_form": "nutritional dwarfing",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "nutritional_dwarfing",
+    "aliases": [
+      "nutritional_dwarfing",
+      "nutritional dwarfing"
+    ]
+  },
+  {
+    "surface_form": "early lactation failure elf syndrome",
+    "canonical_form": "early lactation failure elf syndrome",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "early_lactation_failure_elf_syndrome",
+    "aliases": [
+      "early_lactation_failure_elf_syndrome",
+      "early lactation failure elf syndrome"
+    ]
+  },
+  {
+    "surface_form": "invisible malnutrition",
+    "canonical_form": "invisible malnutrition",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "invisible_malnutrition",
+    "aliases": [
+      "invisible_malnutrition",
+      "invisible malnutrition"
+    ]
+  },
+  {
+    "surface_form": "kwashi shake tremors",
+    "canonical_form": "kwashi shake tremors",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "kwashi_shake_tremors",
+    "aliases": [
+      "kwashi_shake_tremors",
+      "kwashi shake tremors"
+    ]
+  },
+  {
+    "surface_form": "nutritionally acquired immunodeficiency syndrome naids",
+    "canonical_form": "nutritionally acquired immunodeficiency syndrome naids",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "nutritionally_acquired_immunodeficiency_syndrome_naids",
+    "aliases": [
+      "nutritionally_acquired_immunodeficiency_syndrome_naids",
+      "nutritionally acquired immunodeficiency syndrome naids"
+    ]
+  },
+  {
+    "surface_form": "kwashiorkor myelopathy",
+    "canonical_form": "kwashiorkor myelopathy",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "kwashiorkor_myelopathy",
+    "aliases": [
+      "kwashiorkor_myelopathy",
+      "kwashiorkor myelopathy"
+    ]
+  },
+  {
+    "surface_form": "transient autism malnutrition",
+    "canonical_form": "transient autism malnutrition",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "transient_autism_malnutrition",
+    "aliases": [
+      "transient_autism_malnutrition",
+      "transient autism malnutrition"
+    ]
+  },
+  {
+    "surface_form": "nutritional cardiomyopathy",
+    "canonical_form": "nutritional cardiomyopathy",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "nutritional_cardiomyopathy",
+    "aliases": [
+      "nutritional_cardiomyopathy",
+      "nutritional cardiomyopathy"
+    ]
+  },
+  {
+    "surface_form": "nutrition recovery syndrome",
+    "canonical_form": "nutrition recovery syndrome",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "nutrition_recovery_syndrome",
+    "aliases": [
+      "nutrition_recovery_syndrome",
+      "nutrition recovery syndrome"
+    ]
+  },
+  {
+    "surface_form": "refeeding syndrome",
+    "canonical_form": "refeeding syndrome",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "refeeding_syndrome",
+    "aliases": [
+      "refeeding_syndrome",
+      "refeeding syndrome"
+    ]
+  },
+  {
+    "surface_form": "childhood obesity",
+    "canonical_form": "childhood obesity",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "childhood_obesity",
+    "aliases": [
+      "childhood_obesity",
+      "childhood obesity"
+    ]
+  },
+  {
+    "surface_form": "metabolic syndrome obesity",
+    "canonical_form": "metabolic syndrome obesity",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "metabolic_syndrome_obesity",
+    "aliases": [
+      "metabolic_syndrome_obesity",
+      "metabolic syndrome obesity"
+    ]
+  },
+  {
+    "surface_form": "insulin resistance ffa induced",
+    "canonical_form": "insulin resistance ffa induced",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "insulin_resistance_ffa_induced",
+    "aliases": [
+      "insulin_resistance_ffa_induced",
+      "insulin resistance ffa induced"
+    ]
+  },
+  {
+    "surface_form": "prader willi syndrome",
+    "canonical_form": "prader willi syndrome",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "prader_willi_syndrome",
+    "aliases": [
+      "prader_willi_syndrome",
+      "prader willi syndrome"
+    ]
+  },
+  {
+    "surface_form": "beckwith widemann syndrome",
+    "canonical_form": "beckwith widemann syndrome",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "beckwith_widemann_syndrome",
+    "aliases": [
+      "beckwith_widemann_syndrome",
+      "beckwith widemann syndrome"
+    ]
+  },
+  {
+    "surface_form": "lawrence moon biedl bardet syndrome",
+    "canonical_form": "lawrence moon biedl bardet syndrome",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "lawrence_moon_biedl_bardet_syndrome",
+    "aliases": [
+      "lawrence_moon_biedl_bardet_syndrome",
+      "lawrence moon biedl bardet syndrome"
+    ]
+  },
+  {
+    "surface_form": "constitutional obesity",
+    "canonical_form": "constitutional obesity",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "constitutional_obesity",
+    "aliases": [
+      "constitutional_obesity",
+      "constitutional obesity"
+    ]
+  },
+  {
+    "surface_form": "cushing syndrome obesity",
+    "canonical_form": "cushing syndrome obesity",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "cushing_syndrome_obesity",
+    "aliases": [
+      "cushing_syndrome_obesity",
+      "cushing syndrome obesity"
+    ]
+  },
+  {
+    "surface_form": "polycystic ovarian syndrome pcos",
+    "canonical_form": "polycystic ovarian syndrome pcos",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "polycystic_ovarian_syndrome_pcos",
+    "aliases": [
+      "polycystic_ovarian_syndrome_pcos",
+      "polycystic ovarian syndrome pcos"
+    ]
+  },
+  {
+    "surface_form": "iron deficiency anaemia ida",
+    "canonical_form": "iron deficiency anaemia ida",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "iron_deficiency_anaemia_ida",
+    "aliases": [
+      "iron_deficiency_anaemia_ida",
+      "iron deficiency anaemia ida"
+    ]
+  },
+  {
+    "surface_form": "vitamin a deficiency vad",
+    "canonical_form": "vitamin a deficiency vad",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "vitamin_a_deficiency_vad",
+    "aliases": [
+      "vitamin_a_deficiency_vad",
+      "vitamin a deficiency vad"
+    ]
+  },
+  {
+    "surface_form": "iodine deficiency disorder idd",
+    "canonical_form": "iodine deficiency disorder idd",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "iodine_deficiency_disorder_idd",
+    "aliases": [
+      "iodine_deficiency_disorder_idd",
+      "iodine deficiency disorder idd"
+    ]
+  },
+  {
+    "surface_form": "hypervitaminosis a gulf syndrome",
+    "canonical_form": "hypervitaminosis a gulf syndrome",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "hypervitaminosis_a_gulf_syndrome",
+    "aliases": [
+      "hypervitaminosis_a_gulf_syndrome",
+      "hypervitaminosis a gulf syndrome"
+    ]
+  },
+  {
+    "surface_form": "hypovolaemia shock continuum",
+    "canonical_form": "hypovolaemia shock continuum",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "hypovolaemia_shock_continuum",
+    "aliases": [
+      "hypovolaemia_shock_continuum",
+      "hypovolaemia shock continuum"
+    ]
+  },
+  {
+    "surface_form": "dehydration spectrum",
+    "canonical_form": "dehydration spectrum",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "dehydration_spectrum",
+    "aliases": [
+      "dehydration_spectrum",
+      "dehydration spectrum"
+    ]
+  },
+  {
+    "surface_form": "potassium imbalance critical",
+    "canonical_form": "potassium imbalance critical",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "potassium_imbalance_critical",
+    "aliases": [
+      "potassium_imbalance_critical",
+      "potassium imbalance critical"
+    ]
+  },
+  {
+    "surface_form": "siadh critical care",
+    "canonical_form": "siadh critical care",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "siadh_critical_care",
+    "aliases": [
+      "siadh_critical_care",
+      "siadh critical care"
+    ]
+  },
+  {
+    "surface_form": "tpn induced cholestasis",
+    "canonical_form": "tpn induced cholestasis",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "tpn_induced_cholestasis",
+    "aliases": [
+      "tpn_induced_cholestasis",
+      "tpn induced cholestasis"
+    ]
+  },
+  {
+    "surface_form": "tpn sepsis risk",
+    "canonical_form": "tpn sepsis risk",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "tpn_sepsis_risk",
+    "aliases": [
+      "tpn_sepsis_risk",
+      "tpn sepsis risk"
+    ]
+  },
+  {
+    "surface_form": "enteral feeding complications",
+    "canonical_form": "enteral feeding complications",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "enteral_feeding_complications",
+    "aliases": [
+      "enteral_feeding_complications",
+      "enteral feeding complications"
+    ]
+  },
+  {
+    "surface_form": "acute diarrhoeal disease add",
+    "canonical_form": "acute diarrhoeal disease add",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "acute_diarrhoeal_disease_add",
+    "aliases": [
+      "acute_diarrhoeal_disease_add",
+      "acute diarrhoeal disease add"
+    ]
+  },
+  {
+    "surface_form": "persistent diarrhoea pd",
+    "canonical_form": "persistent diarrhoea pd",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "persistent_diarrhoea_pd",
+    "aliases": [
+      "persistent_diarrhoea_pd",
+      "persistent diarrhoea pd"
+    ]
+  },
+  {
+    "surface_form": "acute nephritic syndrome agn",
+    "canonical_form": "acute nephritic syndrome agn",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "acute_nephritic_syndrome_agn",
+    "aliases": [
+      "acute_nephritic_syndrome_agn",
+      "acute nephritic syndrome agn"
+    ]
+  },
+  {
+    "surface_form": "chronic renal failure crf",
+    "canonical_form": "chronic renal failure crf",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "chronic_renal_failure_crf",
+    "aliases": [
+      "chronic_renal_failure_crf",
+      "chronic renal failure crf"
+    ]
+  },
+  {
+    "surface_form": "hepatic encephalopathy",
+    "canonical_form": "hepatic encephalopathy",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "hepatic_encephalopathy",
+    "aliases": [
+      "hepatic_encephalopathy",
+      "hepatic encephalopathy"
+    ]
+  },
+  {
+    "surface_form": "short bowel syndrome sbs",
+    "canonical_form": "short bowel syndrome sbs",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "short_bowel_syndrome_sbs",
+    "aliases": [
+      "short_bowel_syndrome_sbs",
+      "short bowel syndrome sbs"
+    ]
+  },
+  {
+    "surface_form": "pancreatic insufficiency cystic fibrosis",
+    "canonical_form": "pancreatic insufficiency cystic fibrosis",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "pancreatic_insufficiency_cystic_fibrosis",
+    "aliases": [
+      "pancreatic_insufficiency_cystic_fibrosis",
+      "pancreatic insufficiency cystic fibrosis"
+    ]
+  },
+  {
+    "surface_form": "diabetes mellitus type 1",
+    "canonical_form": "diabetes mellitus type 1",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "diabetes_mellitus_type_1",
+    "aliases": [
+      "diabetes_mellitus_type_1",
+      "diabetes mellitus type 1"
+    ]
+  },
+  {
+    "surface_form": "pickwickian syndrome",
+    "canonical_form": "pickwickian syndrome",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "pickwickian_syndrome",
+    "aliases": [
+      "pickwickian_syndrome",
+      "pickwickian syndrome"
+    ]
+  },
+  {
+    "surface_form": "genetic dyslipidaemias",
+    "canonical_form": "genetic dyslipidaemias",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "genetic_dyslipidaemias",
+    "aliases": [
+      "genetic_dyslipidaemias",
+      "genetic dyslipidaemias"
+    ]
+  },
+  {
+    "surface_form": "secondary hyperlipidaemia",
+    "canonical_form": "secondary hyperlipidaemia",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "secondary_hyperlipidaemia",
+    "aliases": [
+      "secondary_hyperlipidaemia",
+      "secondary hyperlipidaemia"
+    ]
+  },
+  {
+    "surface_form": "phenylketonuria pku",
+    "canonical_form": "phenylketonuria pku",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "phenylketonuria_pku",
+    "aliases": [
+      "phenylketonuria_pku",
+      "phenylketonuria pku"
+    ]
+  },
+  {
+    "surface_form": "homocystinuria",
+    "canonical_form": "homocystinuria",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "homocystinuria",
+    "aliases": [
+      "homocystinuria",
+      "homocystinuria"
+    ]
+  },
+  {
+    "surface_form": "maple syrup urine disease msud",
+    "canonical_form": "maple syrup urine disease msud",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "maple_syrup_urine_disease_msud",
+    "aliases": [
+      "maple_syrup_urine_disease_msud",
+      "maple syrup urine disease msud"
+    ]
+  },
+  {
+    "surface_form": "organic acidaemias",
+    "canonical_form": "organic acidaemias",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "organic_acidaemias",
+    "aliases": [
+      "organic_acidaemias",
+      "organic acidaemias"
+    ]
+  },
+  {
+    "surface_form": "glycogen storage disorders gsd",
+    "canonical_form": "glycogen storage disorders gsd",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "glycogen_storage_disorders_gsd",
+    "aliases": [
+      "glycogen_storage_disorders_gsd",
+      "glycogen storage disorders gsd"
+    ]
+  },
+  {
+    "surface_form": "staphylococcal food poisoning",
+    "canonical_form": "staphylococcal food poisoning",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "staphylococcal_food_poisoning",
+    "aliases": [
+      "staphylococcal_food_poisoning",
+      "staphylococcal food poisoning"
+    ]
+  },
+  {
+    "surface_form": "botulism",
+    "canonical_form": "botulism",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "botulism",
+    "aliases": [
+      "botulism",
+      "botulism"
+    ]
+  },
+  {
+    "surface_form": "scombroid poisoning",
+    "canonical_form": "scombroid poisoning",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "scombroid_poisoning",
+    "aliases": [
+      "scombroid_poisoning",
+      "scombroid poisoning"
+    ]
+  },
+  {
+    "surface_form": "food allergy type 1",
+    "canonical_form": "food allergy type 1",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "food_allergy_type_1",
+    "aliases": [
+      "food_allergy_type_1",
+      "food allergy type 1"
+    ]
+  },
+  {
+    "surface_form": "food allergy type 3",
+    "canonical_form": "food allergy type 3",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "food_allergy_type_3",
+    "aliases": [
+      "food_allergy_type_3",
+      "food allergy type 3"
+    ]
+  },
+  {
+    "surface_form": "food intolerance",
+    "canonical_form": "food intolerance",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "food_intolerance",
+    "aliases": [
+      "food_intolerance",
+      "food intolerance"
+    ]
+  },
+  {
+    "surface_form": "foetal origins of adult disease foad",
+    "canonical_form": "foetal origins of adult disease foad",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "foetal_origins_of_adult_disease_foad",
+    "aliases": [
+      "foetal_origins_of_adult_disease_foad",
+      "foetal origins of adult disease foad"
+    ]
+  },
+  {
+    "surface_form": "anorexia nervosa bulimia",
+    "canonical_form": "anorexia nervosa bulimia",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "anorexia_nervosa_bulimia",
+    "aliases": [
+      "anorexia_nervosa_bulimia",
+      "anorexia nervosa bulimia"
+    ]
+  },
+  {
+    "surface_form": "precocious puberty",
+    "canonical_form": "precocious puberty",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "precocious_puberty",
+    "aliases": [
+      "precocious_puberty",
+      "precocious puberty"
+    ]
+  },
+  {
+    "surface_form": "chronic energy deficiency ced",
+    "canonical_form": "chronic energy deficiency ced",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "chronic_energy_deficiency_ced",
+    "aliases": [
+      "chronic_energy_deficiency_ced",
+      "chronic energy deficiency ced"
+    ]
+  },
+  {
+    "surface_form": "acne vulgaris",
+    "canonical_form": "acne vulgaris",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "acne_vulgaris",
+    "aliases": [
+      "acne_vulgaris",
+      "acne vulgaris"
+    ]
+  },
+  {
+    "surface_form": "sarcopenia",
+    "canonical_form": "sarcopenia",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "sarcopenia",
+    "aliases": [
+      "sarcopenia",
+      "sarcopenia"
+    ]
+  },
+  {
+    "surface_form": "pernicious anaemia geriatric",
+    "canonical_form": "pernicious anaemia geriatric",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "pernicious_anaemia_geriatric",
+    "aliases": [
+      "pernicious_anaemia_geriatric",
+      "pernicious anaemia geriatric"
+    ]
+  },
+  {
+    "surface_form": "dysphagia geriatric",
+    "canonical_form": "dysphagia geriatric",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "dysphagia_geriatric",
+    "aliases": [
+      "dysphagia_geriatric",
+      "dysphagia geriatric"
+    ]
+  },
+  {
+    "surface_form": "pressure ulcers decubitus",
+    "canonical_form": "pressure ulcers decubitus",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "pressure_ulcers_decubitus",
+    "aliases": [
+      "pressure_ulcers_decubitus",
+      "pressure ulcers decubitus"
+    ]
+  },
+  {
+    "surface_form": "xerostomia",
+    "canonical_form": "xerostomia",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "xerostomia",
+    "aliases": [
+      "xerostomia",
+      "xerostomia"
+    ]
+  },
+  {
+    "surface_form": "neonatal bacterial infection imnci",
+    "canonical_form": "neonatal bacterial infection imnci",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "neonatal_bacterial_infection_imnci",
+    "aliases": [
+      "neonatal_bacterial_infection_imnci",
+      "neonatal bacterial infection imnci"
+    ]
+  },
+  {
+    "surface_form": "malaria imnci risk",
+    "canonical_form": "malaria imnci risk",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "malaria_imnci_risk",
+    "aliases": [
+      "malaria_imnci_risk",
+      "malaria imnci risk"
+    ]
+  },
+  {
+    "surface_form": "rabies exposure classes",
+    "canonical_form": "rabies exposure classes",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "rabies_exposure_classes",
+    "aliases": [
+      "rabies_exposure_classes",
+      "rabies exposure classes"
+    ]
+  },
+  {
+    "surface_form": "ascariasis roundworm",
+    "canonical_form": "ascariasis roundworm",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "ascariasis_roundworm",
+    "aliases": [
+      "ascariasis_roundworm",
+      "ascariasis roundworm"
+    ]
+  },
+  {
+    "surface_form": "ancylostomiasis hookworm",
+    "canonical_form": "ancylostomiasis hookworm",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "ancylostomiasis_hookworm",
+    "aliases": [
+      "ancylostomiasis_hookworm",
+      "ancylostomiasis hookworm"
+    ]
+  },
+  {
+    "surface_form": "scarabiasis dung beetle disease",
+    "canonical_form": "scarabiasis dung beetle disease",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "scarabiasis_dung_beetle_disease",
+    "aliases": [
+      "scarabiasis_dung_beetle_disease",
+      "scarabiasis dung beetle disease"
+    ]
+  },
+  {
+    "surface_form": "tuberculosis pediatric",
+    "canonical_form": "tuberculosis pediatric",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "tuberculosis_pediatric",
+    "aliases": [
+      "tuberculosis_pediatric",
+      "tuberculosis pediatric"
+    ]
+  },
+  {
+    "surface_form": "multidrug resistant tb mdr",
+    "canonical_form": "multidrug resistant tb mdr",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "multidrug_resistant_tb_mdr",
+    "aliases": [
+      "multidrug_resistant_tb_mdr",
+      "multidrug resistant tb mdr"
+    ]
+  },
+  {
+    "surface_form": "water intoxication hyponatraemia",
+    "canonical_form": "water intoxication hyponatraemia",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "water_intoxication_hyponatraemia",
+    "aliases": [
+      "water_intoxication_hyponatraemia",
+      "water intoxication hyponatraemia"
+    ]
+  },
+  {
+    "surface_form": "diverticulosis",
+    "canonical_form": "diverticulosis",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "diverticulosis",
+    "aliases": [
+      "diverticulosis",
+      "diverticulosis"
+    ]
+  },
+  {
+    "surface_form": "heat exhaustion stroke",
+    "canonical_form": "heat exhaustion stroke",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "heat_exhaustion_stroke",
+    "aliases": [
+      "heat_exhaustion_stroke",
+      "heat exhaustion stroke"
+    ]
+  },
+  {
+    "surface_form": "foot strike haemolysis",
+    "canonical_form": "foot strike haemolysis",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "foot_strike_haemolysis",
+    "aliases": [
+      "foot_strike_haemolysis",
+      "foot strike haemolysis"
+    ]
+  },
+  {
+    "surface_form": "glycogen depletion bonking",
+    "canonical_form": "glycogen depletion bonking",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "glycogen_depletion_bonking",
+    "aliases": [
+      "glycogen_depletion_bonking",
+      "glycogen depletion bonking"
+    ]
+  },
+  {
+    "surface_form": "rapid infancy catch up growth",
+    "canonical_form": "rapid infancy catch up growth",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "rapid_infancy_catch_up_growth",
+    "aliases": [
+      "rapid_infancy_catch_up_growth",
+      "rapid infancy catch up growth"
+    ]
+  },
+  {
+    "surface_form": "early adiposity rebound",
+    "canonical_form": "early adiposity rebound",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "early_adiposity_rebound",
+    "aliases": [
+      "early_adiposity_rebound",
+      "early adiposity rebound"
+    ]
+  },
+  {
+    "surface_form": "global developmental retardation nutritional",
+    "canonical_form": "global developmental retardation nutritional",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "global_developmental_retardation_nutritional",
+    "aliases": [
+      "global_developmental_retardation_nutritional",
+      "global developmental retardation nutritional"
+    ]
+  },
+  {
+    "surface_form": "nutritional brain growth faltering",
+    "canonical_form": "nutritional brain growth faltering",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "nutritional_brain_growth_faltering",
+    "aliases": [
+      "nutritional_brain_growth_faltering",
+      "nutritional brain growth faltering"
+    ]
+  },
+  {
+    "surface_form": "stranger anxiety",
+    "canonical_form": "stranger anxiety",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "stranger_anxiety",
+    "aliases": [
+      "stranger_anxiety",
+      "stranger anxiety"
+    ]
+  },
+  {
+    "surface_form": "intellectual retardation spectrum",
+    "canonical_form": "intellectual retardation spectrum",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "intellectual_retardation_spectrum",
+    "aliases": [
+      "intellectual_retardation_spectrum",
+      "intellectual retardation spectrum"
+    ]
+  },
+  {
+    "surface_form": "omega 6 lipid toxicity",
+    "canonical_form": "omega 6 lipid toxicity",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "omega_6_lipid_toxicity",
+    "aliases": [
+      "omega_6_lipid_toxicity",
+      "omega 6 lipid toxicity"
+    ]
+  },
+  {
+    "surface_form": "functional isolation nutritional",
+    "canonical_form": "functional isolation nutritional",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "conditions.json",
+    "condition_name": "functional_isolation_nutritional",
+    "aliases": [
+      "functional_isolation_nutritional",
+      "functional isolation nutritional"
+    ]
+  },
+  {
+    "surface_form": "stunting",
+    "canonical_form": "stunting",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "WHO/IAP Pediatric Standards",
+    "condition_name": "stunting",
+    "aliases": [
+      "stunted",
+      "chronic malnutrition",
+      "low height-for-age"
+    ]
+  },
+  {
+    "surface_form": "wasting",
+    "canonical_form": "wasting",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "WHO/IAP Pediatric Standards",
+    "condition_name": "wasting",
+    "aliases": [
+      "wasted",
+      "acute malnutrition",
+      "low weight-for-height"
+    ]
+  },
+  {
+    "surface_form": "severe acute malnutrition",
+    "canonical_form": "severe acute malnutrition",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "WHO/IAP Pediatric Standards",
+    "condition_name": "severe_acute_malnutrition",
+    "aliases": [
+      "SAM",
+      "severe wasting"
+    ]
+  },
+  {
+    "surface_form": "moderate acute malnutrition",
+    "canonical_form": "moderate acute malnutrition",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "WHO/IAP Pediatric Standards",
+    "condition_name": "moderate_acute_malnutrition",
+    "aliases": [
+      "MAM"
+    ]
+  },
+  {
+    "surface_form": "underweight",
+    "canonical_form": "underweight",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "WHO/IAP Pediatric Standards",
+    "condition_name": "underweight",
+    "aliases": [
+      "under-weight",
+      "low weight-for-age"
+    ]
+  },
+  {
+    "surface_form": "obesity",
+    "canonical_form": "obesity",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "WHO/IAP Pediatric Standards",
+    "condition_name": "obesity",
+    "aliases": [
+      "obese",
+      "childhood obesity",
+      "overweight"
+    ]
+  },
+  {
+    "surface_form": "rickets",
+    "canonical_form": "rickets",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "WHO/IAP Pediatric Standards",
+    "condition_name": "rickets",
+    "aliases": [
+      "nutritional rickets",
+      "vitamin D deficiency rickets"
+    ]
+  },
+  {
+    "surface_form": "diarrhea",
+    "canonical_form": "diarrhea",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "WHO/IAP Pediatric Standards",
+    "condition_name": "diarrhea",
+    "aliases": [
+      "diarrhoea",
+      "loose stools",
+      "acute gastroenteritis"
+    ]
+  },
+  {
+    "surface_form": "constipation",
+    "canonical_form": "constipation",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "WHO/IAP Pediatric Standards",
+    "condition_name": "constipation",
+    "aliases": [
+      "constipated",
+      "hard stools"
+    ]
+  },
+  {
+    "surface_form": "fever",
+    "canonical_form": "fever",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "WHO/IAP Pediatric Standards",
+    "condition_name": "fever",
+    "aliases": [
+      "pyrexia",
+      "high fever",
+      "febrile illness"
+    ]
+  },
+  {
+    "surface_form": "growth faltering",
+    "canonical_form": "growth faltering",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "WHO/IAP Pediatric Standards",
+    "condition_name": "growth_faltering",
+    "aliases": [
+      "faltering growth",
+      "failure to thrive",
+      "FTT"
+    ]
+  },
+  {
+    "surface_form": "xerophthalmia",
+    "canonical_form": "xerophthalmia",
+    "entity_type": "HEALTH_CONDITION",
+    "source": "WHO/IAP Pediatric Standards",
+    "condition_name": "xerophthalmia",
+    "aliases": [
+      "nutritional blindness",
+      "night blindness",
+      "Bitot spots"
+    ]
+  }
+]

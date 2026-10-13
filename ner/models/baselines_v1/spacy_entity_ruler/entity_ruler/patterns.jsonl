@@ -1,0 +1,265 @@
+{"label":"HEALTH_CONDITION","pattern":"Pregnancy"}
+{"label":"HEALTH_CONDITION","pattern":"growth faltering"}
+{"label":"HEALTH_CONDITION","pattern":"malnutrition"}
+{"label":"HEALTH_CONDITION","pattern":"diarrhea"}
+{"label":"HEALTH_CONDITION","pattern":"Kwashiorkor"}
+{"label":"HEALTH_CONDITION","pattern":"infant feeding"}
+{"label":"HEALTH_CONDITION","pattern":"Underweight"}
+{"label":"HEALTH_CONDITION","pattern":"Overweight"}
+{"label":"HEALTH_CONDITION","pattern":"Obese"}
+{"label":"HEALTH_CONDITION","pattern":"breastfeeding"}
+{"label":"HEALTH_CONDITION","pattern":"Foot Strike Haemolysis"}
+{"label":"HEALTH_CONDITION","pattern":"anemia"}
+{"label":"HEALTH_CONDITION","pattern":"stunted"}
+{"label":"HEALTH_CONDITION","pattern":"wasted"}
+{"label":"HEALTH_CONDITION","pattern":"Diarrhoea"}
+{"label":"HEALTH_CONDITION","pattern":"lactation"}
+{"label":"HEALTH_CONDITION","pattern":"scurvy"}
+{"label":"HEALTH_CONDITION","pattern":"Wasting"}
+{"label":"HEALTH_CONDITION","pattern":"acute malnutrition"}
+{"label":"HEALTH_CONDITION","pattern":"Stunting"}
+{"label":"HEALTH_CONDITION","pattern":"Severe Acute Malnutrition"}
+{"label":"HEALTH_CONDITION","pattern":"SAM"}
+{"label":"HEALTH_CONDITION","pattern":"obesity"}
+{"label":"HEALTH_CONDITION","pattern":"Breast engorgement"}
+{"label":"HEALTH_CONDITION","pattern":"failure to thrive"}
+{"label":"HEALTH_CONDITION","pattern":"constipation"}
+{"label":"HEALTH_CONDITION","pattern":"Night Blindness"}
+{"label":"HEALTH_CONDITION","pattern":"rickets"}
+{"label":"HEALTH_CONDITION","pattern":"fever"}
+{"label":"HEALTH_CONDITION","pattern":"iodine deficiency"}
+{"label":"HEALTH_CONDITION","pattern":"Marasmus"}
+{"label":"HEALTH_CONDITION","pattern":"invisible malnutrition"}
+{"label":"HEALTH_CONDITION","pattern":"low birth weight"}
+{"label":"HEALTH_CONDITION","pattern":"Moderate Acute Malnutrition"}
+{"label":"HEALTH_CONDITION","pattern":"MAM"}
+{"label":"HEALTH_CONDITION","pattern":"Childhood obesity"}
+{"label":"HEALTH_CONDITION","pattern":"rotavirus diarrhoea"}
+{"label":"HEALTH_CONDITION","pattern":"fluorosis"}
+{"label":"HEALTH_CONDITION","pattern":"Nutritional rickets"}
+{"label":"HEALTH_CONDITION","pattern":"high fever"}
+{"label":"HEALTH_CONDITION","pattern":"botulism"}
+{"label":"HEALTH_CONDITION","pattern":"xerophthalmia"}
+{"label":"HEALTH_CONDITION","pattern":"short stature"}
+{"label":"HEALTH_CONDITION","pattern":"Congenital lactose intolerance"}
+{"label":"HEALTH_CONDITION","pattern":"galactosaemia"}
+{"label":"HEALTH_CONDITION","pattern":"iron deficiency anaemia"}
+{"label":"HEALTH_CONDITION","pattern":"Micronutrient Deficiency"}
+{"label":"HEALTH_CONDITION","pattern":"low height-for-age"}
+{"label":"HEALTH_CONDITION","pattern":"low weight-for-height"}
+{"label":"HEALTH_CONDITION","pattern":"low weight-for-age"}
+{"label":"FOOD","pattern":"Amylase rich foods"}
+{"label":"FOOD","pattern":"rice"}
+{"label":"FOOD","pattern":"fish"}
+{"label":"FOOD","pattern":"milk"}
+{"label":"FOOD","pattern":"almonds"}
+{"label":"FOOD","pattern":"bananas"}
+{"label":"FOOD","pattern":"khichdi"}
+{"label":"FOOD","pattern":"curd"}
+{"label":"FOOD","pattern":"boiled egg"}
+{"label":"FOOD","pattern":"stewed apple"}
+{"label":"FOOD","pattern":"moong dal khichdi"}
+{"label":"FOOD","pattern":"dalia"}
+{"label":"FOOD","pattern":"paneer"}
+{"label":"FOOD","pattern":"poha"}
+{"label":"FOOD","pattern":"ragi porridge"}
+{"label":"FOOD","pattern":"citrus fruits"}
+{"label":"FOOD","pattern":"cottage cheese"}
+{"label":"FOOD","pattern":"Breast milk"}
+{"label":"FOOD","pattern":"lentils"}
+{"label":"FOOD","pattern":"egg"}
+{"label":"FOOD","pattern":"SAT Mix"}
+{"label":"FOOD","pattern":"turmeric"}
+{"label":"FOOD","pattern":"ragi malt"}
+{"label":"FOOD","pattern":"dhokla"}
+{"label":"FOOD","pattern":"apples"}
+{"label":"FOOD","pattern":"walnuts"}
+{"label":"FOOD","pattern":"Potato"}
+{"label":"FOOD","pattern":"Apple"}
+{"label":"FOOD","pattern":"broken wheat"}
+{"label":"FOOD","pattern":"Tubers"}
+{"label":"FOOD","pattern":"mashed banana"}
+{"label":"FOOD","pattern":"upma"}
+{"label":"FOOD","pattern":"sweet potato"}
+{"label":"FOOD","pattern":"Sambar"}
+{"label":"FOOD","pattern":"Idli"}
+{"label":"FOOD","pattern":"dosa"}
+{"label":"FOOD","pattern":"banana"}
+{"label":"FOOD","pattern":"Mashed ripe banana"}
+{"label":"FOOD","pattern":"jowar bhakri"}
+{"label":"FOOD","pattern":"Sundal"}
+{"label":"FOOD","pattern":"ripe banana"}
+{"label":"FOOD","pattern":"tree nuts"}
+{"label":"FOOD","pattern":"ReSoMal"}
+{"label":"FOOD","pattern":"fresh pomegranate arils"}
+{"label":"FOOD","pattern":"vegetable dalia khichdi"}
+{"label":"FOOD","pattern":"vegetable egg bhurji (scramble)"}
+{"label":"FOOD","pattern":"bajra roti"}
+{"label":"AGE_GROUP","pattern":"infant"}
+{"label":"AGE_GROUP","pattern":"child"}
+{"label":"AGE_GROUP","pattern":"children"}
+{"label":"AGE_GROUP","pattern":"infants"}
+{"label":"AGE_GROUP","pattern":"baby"}
+{"label":"AGE_GROUP","pattern":"toddlers"}
+{"label":"AGE_GROUP","pattern":"preschoolers"}
+{"label":"AGE_GROUP","pattern":"Adolescent"}
+{"label":"AGE_GROUP","pattern":"school children"}
+{"label":"AGE_GROUP","pattern":"adolescents"}
+{"label":"AGE_GROUP","pattern":"toddler"}
+{"label":"AGE_GROUP","pattern":"babies"}
+{"label":"AGE_GROUP","pattern":"school-age"}
+{"label":"AGE_GROUP","pattern":"6 to 8 months"}
+{"label":"AGE_GROUP","pattern":"puberty"}
+{"label":"AGE_GROUP","pattern":"newborns"}
+{"label":"AGE_GROUP","pattern":"first 1000 days"}
+{"label":"AGE_GROUP","pattern":"toddlerhood"}
+{"label":"AGE_GROUP","pattern":"infancy"}
+{"label":"AGE_GROUP","pattern":"teens"}
+{"label":"AGE_GROUP","pattern":"newborn"}
+{"label":"AGE_GROUP","pattern":"teenagers"}
+{"label":"AGE_GROUP","pattern":"adolescence"}
+{"label":"AGE_GROUP","pattern":"9 to 12 months"}
+{"label":"AGE_GROUP","pattern":"3yo"}
+{"label":"AGE_GROUP","pattern":"2yo"}
+{"label":"NUTRIENT","pattern":"Folate"}
+{"label":"NUTRIENT","pattern":"Vit C"}
+{"label":"NUTRIENT","pattern":"Vit A"}
+{"label":"NUTRIENT","pattern":"Vit D"}
+{"label":"NUTRIENT","pattern":"Zinc"}
+{"label":"NUTRIENT","pattern":"protein"}
+{"label":"NUTRIENT","pattern":"DHA"}
+{"label":"NUTRIENT","pattern":"iodine"}
+{"label":"NUTRIENT","pattern":"magnesium"}
+{"label":"NUTRIENT","pattern":"dietary fiber"}
+{"label":"NUTRIENT","pattern":"fats"}
+{"label":"NUTRIENT","pattern":"iron"}
+{"label":"NUTRIENT","pattern":"vitamin B12"}
+{"label":"NUTRIENT","pattern":"omega-3"}
+{"label":"NUTRIENT","pattern":"energy"}
+{"label":"NUTRIENT","pattern":"fat"}
+{"label":"NUTRIENT","pattern":"calcium"}
+{"label":"NUTRIENT","pattern":"complex carbohydrates"}
+{"label":"NUTRIENT","pattern":"soluble fiber"}
+{"label":"NUTRIENT","pattern":"non-heme iron"}
+{"label":"NUTRIENT","pattern":"vitamin C"}
+{"label":"NUTRIENT","pattern":"Vitamin A"}
+{"label":"NUTRIENT","pattern":"retinol"}
+{"label":"NUTRIENT","pattern":"beta-carotene"}
+{"label":"NUTRIENT","pattern":"ascorbic acid"}
+{"label":"NUTRIENT","pattern":"vitamin D"}
+{"label":"NUTRIENT","pattern":"kcal"}
+{"label":"NUTRIENT","pattern":"fiber"}
+{"label":"NUTRIENT","pattern":"heme iron"}
+{"label":"NUTRIENT","pattern":"proteins"}
+{"label":"NUTRIENT","pattern":"omega-3 fatty acids"}
+{"label":"NUTRIENT","pattern":"EPA"}
+{"label":"NUTRIENT","pattern":"dietary calcium"}
+{"label":"NUTRIENT","pattern":"essential fatty acids"}
+{"label":"NUTRIENT","pattern":"carbohydrate"}
+{"label":"NUTRIENT","pattern":"Insoluble fiber"}
+{"label":"NUTRIENT","pattern":"lipids"}
+{"label":"NUTRIENT","pattern":"potassium"}
+{"label":"NUTRIENT","pattern":"Ferrous iron"}
+{"label":"NUTRIENT","pattern":"folic acid"}
+{"label":"NUTRIENT","pattern":"elemental iron"}
+{"label":"NUTRIENT","pattern":"cobalamin"}
+{"label":"NUTRIENT","pattern":"Carbohydrates"}
+{"label":"NUTRIENT","pattern":"calories"}
+{"label":"NUTRIENT","pattern":"dietary fat"}
+{"label":"NUTRIENT","pattern":"Phosphate"}
+{"label":"NUTRIENT","pattern":"Vit B12"}
+{"label":"NUTRIENT","pattern":"vitamin B9"}
+{"label":"NUTRIENT","pattern":"phosphorus"}
+{"label":"NUTRIENT","pattern":"dietary protein"}
+{"label":"NUTRIENT","pattern":"iodide"}
+{"label":"NUTRIENT","pattern":"ALA"}
+{"label":"NUTRIENT","pattern":"cholecalciferol"}
+{"label":"COOKING_METHOD","pattern":"sprouted"}
+{"label":"COOKING_METHOD","pattern":"mashed"}
+{"label":"COOKING_METHOD","pattern":"steamed"}
+{"label":"COOKING_METHOD","pattern":"germination"}
+{"label":"COOKING_METHOD","pattern":"steaming"}
+{"label":"COOKING_METHOD","pattern":"boiled"}
+{"label":"COOKING_METHOD","pattern":"Soaking"}
+{"label":"COOKING_METHOD","pattern":"pressure cooking"}
+{"label":"COOKING_METHOD","pattern":"fermented"}
+{"label":"COOKING_METHOD","pattern":"boiling"}
+{"label":"COOKING_METHOD","pattern":"Roasting"}
+{"label":"COOKING_METHOD","pattern":"fermentation"}
+{"label":"COOKING_METHOD","pattern":"pureed"}
+{"label":"FOOD_GROUP","pattern":"millets"}
+{"label":"FOOD_GROUP","pattern":"pulses"}
+{"label":"FOOD_GROUP","pattern":"nuts and seeds"}
+{"label":"FOOD_GROUP","pattern":"seeds"}
+{"label":"FOOD_GROUP","pattern":"green leafy vegetables"}
+{"label":"FOOD_GROUP","pattern":"vegetables"}
+{"label":"FOOD_GROUP","pattern":"legumes"}
+{"label":"FOOD_GROUP","pattern":"fruits"}
+{"label":"FOOD_GROUP","pattern":"whole grains"}
+{"label":"FOOD_GROUP","pattern":"cereals"}
+{"label":"FOOD_GROUP","pattern":"nuts"}
+{"label":"FOOD_GROUP","pattern":"dairy products"}
+{"label":"DIET_PATTERN","pattern":"vegetarian diets"}
+{"label":"DIET_PATTERN","pattern":"Vegan diets"}
+{"label":"DIET_PATTERN","pattern":"balanced diet"}
+{"label":"DIET_PATTERN","pattern":"Dietary diversity"}
+{"label":"DIET_PATTERN","pattern":"vegetarian diet"}
+{"label":"GROWTH_METRIC","pattern":"BMI"}
+{"label":"GROWTH_METRIC","pattern":"Weight-for-Height"}
+{"label":"GROWTH_METRIC","pattern":"Z-score"}
+{"label":"GROWTH_METRIC","pattern":"Mid-Upper Arm Circumference"}
+{"label":"GROWTH_METRIC","pattern":"growth velocity"}
+{"label":"GROWTH_METRIC","pattern":"BMI-for-age"}
+{"label":"GROWTH_METRIC","pattern":"height velocity"}
+{"label":"GROWTH_METRIC","pattern":"MUAC"}
+{"label":"GROWTH_METRIC","pattern":"WFH"}
+{"label":"GROWTH_METRIC","pattern":"Weight-for-Length"}
+{"label":"GROWTH_METRIC","pattern":"WFL"}
+{"label":"GROWTH_METRIC","pattern":"Body Mass Index"}
+{"label":"GROWTH_METRIC","pattern":"BMI percentile"}
+{"label":"GROWTH_METRIC","pattern":"Z-scores"}
+{"label":"GROWTH_METRIC","pattern":"Arm Circumference"}
+{"label":"GROWTH_METRIC","pattern":"growth chart"}
+{"label":"GROWTH_METRIC","pattern":"Head circumference"}
+{"label":"GROWTH_METRIC","pattern":"occipitofrontal circumference"}
+{"label":"GROWTH_METRIC","pattern":"OFC"}
+{"label":"FEEDING_METHOD","pattern":"complementary feeding"}
+{"label":"FEEDING_METHOD","pattern":"Responsive feeding"}
+{"label":"FEEDING_METHOD","pattern":"finger foods"}
+{"label":"MEAL_TYPE","pattern":"snacks"}
+{"label":"MEAL_TYPE","pattern":"dinner"}
+{"label":"MEAL_TYPE","pattern":"snack"}
+{"label":"MEAL_TYPE","pattern":"breakfast"}
+{"label":"MEAL_TYPE","pattern":"lunch"}
+{"label":"MEAL_TYPE","pattern":"morning meal"}
+{"label":"MEAL_TYPE","pattern":"evening snack"}
+{"label":"MEAL_TYPE","pattern":"healthy snacks"}
+{"label":"DIETARY_PROPERTY","pattern":"fortified"}
+{"label":"DIETARY_PROPERTY","pattern":"bioavailable"}
+{"label":"DIETARY_PROPERTY","pattern":"nutrient-rich"}
+{"label":"DIETARY_PROPERTY","pattern":"semi-solid"}
+{"label":"DIETARY_PROPERTY","pattern":"easily digestible"}
+{"label":"DIETARY_PROPERTY","pattern":"ultra-processed"}
+{"label":"DIETARY_PROPERTY","pattern":"Digestible"}
+{"label":"ALLERGEN","pattern":"lactose-intolerant"}
+{"label":"ALLERGEN","pattern":"milk allergy"}
+{"label":"ALLERGEN","pattern":"peanut allergic"}
+{"label":"ALLERGEN","pattern":"anaphylaxis"}
+{"label":"ALLERGEN","pattern":"Celiac Disease"}
+{"label":"ALLERGEN","pattern":"Non-Celiac Gluten Sensitivity"}
+{"label":"ALLERGEN","pattern":"NCGS"}
+{"label":"ALLERGEN","pattern":"gluten intolerance"}
+{"label":"ALLERGEN","pattern":"milk protein allergy"}
+{"label":"ALLERGEN","pattern":"Cow's Milk Protein Allergy"}
+{"label":"ALLERGEN","pattern":"CMPA"}
+{"label":"ALLERGEN","pattern":"Soy allergy"}
+{"label":"ALLERGEN","pattern":"Lactose Intolerance"}
+{"label":"ALLERGEN","pattern":"Egg allergy"}
+{"label":"ALLERGEN","pattern":"peanut allergy"}
+{"label":"ALLERGEN","pattern":"egg protein allergy"}
+{"label":"ALLERGEN","pattern":"Fish allergy"}
+{"label":"SUPPLEMENT","pattern":"Therapeutic Foods"}
+{"label":"SUPPLEMENT","pattern":"RUTF"}
+{"label":"SUPPLEMENT","pattern":"Probiotics"}
+{"label":"SUPPLEMENT","pattern":"probiotic"}
+{"label":"SUPPLEMENT","pattern":"ORS"}

@@ -1,0 +1,136 @@
+{
+  "model_name": "NutriBite_Domain_NER_Classifier",
+  "architecture": "Structured_Averaged_Sequence_Perceptron_BIO_Classifier",
+  "dataset_splits": {
+    "train_sentences": 1223,
+    "val_sentences": 262,
+    "test_sentences": 263
+  },
+  "test_evaluation": {
+    "Overall_Precision": 95.86,
+    "Overall_Recall": 94.34,
+    "Overall_F1_Micro": 95.1,
+    "Overall_F1_Macro": 86.94,
+    "Total_Gold_Spans": 442,
+    "Total_Predicted_Spans": 435,
+    "True_Positives": 417,
+    "False_Positives": 18,
+    "False_Negatives": 25,
+    "Per_Class_Metrics": {
+      "FOOD": {
+        "TP": 112,
+        "FP": 5,
+        "FN": 11,
+        "Precision": 95.73,
+        "Recall": 91.06,
+        "F1": 93.33,
+        "Gold_Count": 123
+      },
+      "NUTRIENT": {
+        "TP": 172,
+        "FP": 8,
+        "FN": 2,
+        "Precision": 95.56,
+        "Recall": 98.85,
+        "F1": 97.18,
+        "Gold_Count": 174
+      },
+      "HEALTH_CONDITION": {
+        "TP": 40,
+        "FP": 3,
+        "FN": 6,
+        "Precision": 93.02,
+        "Recall": 86.96,
+        "F1": 89.89,
+        "Gold_Count": 46
+      },
+      "ALLERGEN": {
+        "TP": 2,
+        "FP": 1,
+        "FN": 3,
+        "Precision": 66.67,
+        "Recall": 40.0,
+        "F1": 50.0,
+        "Gold_Count": 5
+      },
+      "AGE_GROUP": {
+        "TP": 81,
+        "FP": 0,
+        "FN": 3,
+        "Precision": 100.0,
+        "Recall": 96.43,
+        "F1": 98.18,
+        "Gold_Count": 84
+      },
+      "MEAL_TYPE": {
+        "TP": 8,
+        "FP": 0,
+        "FN": 0,
+        "Precision": 100.0,
+        "Recall": 100.0,
+        "F1": 100.0,
+        "Gold_Count": 8
+      },
+      "GROWTH_METRIC": {
+        "TP": 2,
+        "FP": 1,
+        "FN": 0,
+        "Precision": 66.67,
+        "Recall": 100.0,
+        "F1": 80.0,
+        "Gold_Count": 2
+      }
+    }
+  },
+  "baseline_comparison": {
+    "Overall_Precision": 91.89,
+    "Overall_Recall": 7.69,
+    "Overall_F1": 14.2,
+    "Per_Class_Metrics": {
+      "FOOD": {
+        "Precision": 91.89,
+        "Recall": 27.64,
+        "F1": 42.5,
+        "Gold_Count": 123
+      },
+      "NUTRIENT": {
+        "Precision": 0.0,
+        "Recall": 0.0,
+        "F1": 0.0,
+        "Gold_Count": 174
+      },
+      "HEALTH_CONDITION": {
+        "Precision": 0.0,
+        "Recall": 0.0,
+        "F1": 0.0,
+        "Gold_Count": 46
+      },
+      "ALLERGEN": {
+        "Precision": 0.0,
+        "Recall": 0.0,
+        "F1": 0.0,
+        "Gold_Count": 5
+      },
+      "AGE_GROUP": {
+        "Precision": 0.0,
+        "Recall": 0.0,
+        "F1": 0.0,
+        "Gold_Count": 84
+      },
+      "MEAL_TYPE": {
+        "Precision": 0.0,
+        "Recall": 0.0,
+        "F1": 0.0,
+        "Gold_Count": 8
+      },
+      "GROWTH_METRIC": {
+        "Precision": 0.0,
+        "Recall": 0.0,
+        "F1": 0.0,
+        "Gold_Count": 2
+      }
+    }
+  },
+  "ambiguity_accuracy": 60.0,
+  "multiword_accuracy": 58.333333333333336
+}

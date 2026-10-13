@@ -157,6 +157,14 @@ const DietitianLayout = ({ children }) => {
                     >
                         Dashboard
                     </Link>
+                    <Link
+                        href="/dynamic-ner"
+                        className={isActive('/dynamic-ner')
+                            ? "bg-primary text-white text-sm font-bold px-5 py-2.5 rounded-full shadow-lg shadow-primary/30 transition-all"
+                            : "text-slate-600 dark:text-slate-400 text-sm font-medium hover:text-primary px-5 py-2.5 transition-colors"}
+                    >
+                        Nutrition Intelligence
+                    </Link>
                 </nav>
 
                 <div className="flex items-center gap-4">
@@ -294,6 +302,16 @@ const DietitianLayout = ({ children }) => {
                             <div className="flex items-center gap-3">
                                 <span className="material-symbols-outlined">dashboard</span>
                                 Dashboard
+                            </div>
+                        </Link>
+                        <Link
+                            href="/dynamic-ner"
+                            onClick={() => setShowMobileMenu(false)}
+                            className={isActive('/dynamic-ner') ? "bg-primary/10 text-primary font-bold px-4 py-3 rounded-xl" : "text-slate-600 dark:text-slate-400 font-medium px-4 py-3 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"}
+                        >
+                            <div className="flex items-center gap-3">
+                                <span className="material-symbols-outlined">memory</span>
+                                Nutrition Intelligence
                             </div>
                         </Link>
                     </nav>

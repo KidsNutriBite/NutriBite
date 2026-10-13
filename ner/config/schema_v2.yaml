@@ -1,0 +1,102 @@
+schema_version: "2.0"
+schema_name: "NutriBite_Pediatric_Nutrition_NER_Schema_v2"
+date_frozen: "2026-09-19"
+num_entity_classes: 10
+flagship_entity: "NUTRIENT"
+
+precedence_hierarchy:
+  - "HEALTH_CONDITION"
+  - "ALLERGEN"
+  - "FEEDING_METHOD"
+  - "GROWTH_METRIC"
+  - "NUTRIENT"
+  - "DIETARY_PROPERTY"
+  - "FOOD_GROUP"
+  - "FOOD"
+  - "MEAL_TYPE"
+  - "AGE_GROUP"
+
+entities:
+  NUTRIENT:
+    id: 1
+    flagship: true
+    description: "Specific nutritional chemicals, vitamins, minerals, macronutrients, fatty acids, or dietary fiber."
+    examples: ["iron", "calcium", "vitamin D", "vitamin B12", "zinc", "protein", "omega-3 fatty acids", "dietary fiber"]
+    normalize: true
+    canonical_source: "ICMR-NIN RDA 2020 / IFCT"
+    downstream_rag_use: "RDA deficit calculation, micronutrient filtering, biochemical gap analysis"
+
+  FOOD:
+    id: 2
+    description: "Specific edible dishes, ingredients, beverages, and individual food preparations."
+    examples: ["ragi porridge", "moong dal khichdi", "curd", "paneer", "apple", "egg", "idli"]
+    normalize: true
+    canonical_source: "IFCT 2017 / foods.json"
+    downstream_rag_use: "Recipe matching, meal planning, caloric estimation"
+
+  FOOD_GROUP:
+    id: 3
+    is_new: true
+    description: "Broad collective dietary categories and food pyramid classifications."
+    examples: ["pulses", "whole grains", "cereals", "millets", "green leafy vegetables", "dairy products", "fruits"]
+    normalize: true
+    canonical_source: "WHO IYCF 8 Food Groups / ICMR Food Groups"
+    downstream_rag_use: "Minimum Dietary Diversity (MDD) scoring, dietary balance validation"
+
+  DIETARY_PROPERTY:
+    id: 4
+    is_new: true
+    description: "Specific nutritional, physical, or culinary characteristics and texture traits of food."
+    examples: ["energy-dense", "nutrient-rich", "easily digestible", "fortified", "semi-solid", "soft textured", "bioavailable"]
+    normalize: true
+    canonical_source: "Clinical Dietary Properties Taxonomy"
+    downstream_rag_use: "Texture progression verification, calorie density boost for faltering growth"
+
+  FEEDING_METHOD:
+    id: 5
+    is_new: true
+    description: "Specific pediatric infant and young child feeding practices and delivery modalities."
+    examples: ["exclusive breastfeeding", "complementary feeding", "spoon feeding", "responsive feeding", "finger foods"]
+    normalize: true
+    canonical_source: "WHO IYCF Core Indicators"
+    downstream_rag_use: "Developmental feeding milestone checks, weaning schedule advice"
+
+  HEALTH_CONDITION:
+    id: 6
+    description: "Named pediatric diseases, clinical deficiency syndromes, malnutrition states, or acute symptoms."
+    examples: ["iron deficiency anemia", "severe acute malnutrition", "stunting", "wasting", "diarrhea", "rickets"]
+    normalize: true
+    canonical_source: "conditions.json / ICD-11 Pediatric"
+    downstream_rag_use: "Clinical contraindication checks, therapeutic nutrition protocol retrieval"
+
+  ALLERGEN:
+    id: 7
+    description: "Dietary substances and antigenic triggers causing immunologically mediated hypersensitivity."
+    examples: ["cow's milk protein allergy", "peanut allergy", "egg white allergy", "soy allergy", "wheat gluten"]
+    normalize: true
+    canonical_source: "allergies.json / Top 8 Pediatric Allergens"
+    downstream_rag_use: "Zero-tolerance allergen blacklisting, safe food substitution"
+
+  AGE_GROUP:
+    id: 8
+    description: "Pediatric age cohorts, developmental life stages, and age intervals."
+    examples: ["infants", "toddlers", "preschool children", "6 to 12 months", "first 1000 days", "neonates"]
+    normalize: true
+    canonical_source: "ICMR Age Categorization"
+    downstream_rag_use: "Age-stratified guideline retrieval, developmental safety filtering"
+
+  MEAL_TYPE:
+    id: 9
+    description: "Specific diurnal meal occasions and feeding schedule slots."
+    examples: ["breakfast", "lunch", "dinner", "morning snack", "evening snack"]
+    normalize: false
+    canonical_source: "Diurnal Meal Schedule"
+    downstream_rag_use: "Time-of-day meal scheduling, diurnal distribution"
+
+  GROWTH_METRIC:
+    id: 10
+    description: "Anthropometric indices, somatic growth parameters, and growth velocity metrics."
+    examples: ["height", "weight", "length-for-age", "weight-for-height", "MUAC", "BMI", "head circumference"]
+    normalize: true
+    canonical_source: "WHO Child Growth Standards"
+    downstream_rag_use: "Z-score tracking, growth faltering detection"

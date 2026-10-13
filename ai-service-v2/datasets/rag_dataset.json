@@ -1,0 +1,46 @@
+[
+  {
+    "id": "rag_chunk_egg_digestibility",
+    "text": "Boiled egg is easy to digest and suitable during illness, while fried egg is higher in fat and harder to digest.",
+    "metadata": {
+      "type": "food",
+      "food_name": "egg",
+      "condition": null,
+      "goal": null,
+      "tags": ["easy_digest", "high_fat"]
+    }
+  },
+  {
+    "id": "rag_chunk_fever_diet",
+    "text": "During fever, children should consume soft, easily digestible foods and avoid oily or spicy meals.",
+    "metadata": {
+      "type": "condition",
+      "food_name": null,
+      "condition": "fever",
+      "goal": null,
+      "tags": ["easy_digest", "soft_food"]
+    }
+  },
+  {
+    "id": "rag_chunk_fever_hydration",
+    "text": "During viral recovery or fever, hydration and high protein intake are extremely important to support the immune system.",
+    "metadata": {
+      "type": "condition",
+      "food_name": null,
+      "condition": "fever",
+      "goal": null,
+      "tags": ["hydration", "high_protein"]
+    }
+  },
+  {
+    "id": "rag_chunk_weight_gain_protein",
+    "text": "For healthy weight gain in kids, protein-dense and calorie-rich foods like whole eggs, nuts, and lentils should be incorporated daily into balanced meals.",
+    "metadata": {
+      "type": "goal",
+      "food_name": null,
+      "condition": null,
+      "goal": "weight_gain",
+      "tags": ["high_calorie", "protein_rich"]
+    }
+  }
+]

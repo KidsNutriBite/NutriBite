@@ -1,0 +1,148 @@
+{
+  "total_mentions": 491,
+  "attempted_links": 486,
+  "correct_links": 486,
+  "mappable_gold": 486,
+  "exact_linking_accuracy": 100.0,
+  "normalization_coverage": 98.98,
+  "precision": 100.0,
+  "recall": 100.0,
+  "f1_score": 100.0,
+  "ambiguous_rate": 1.02,
+  "unmatched_rate": 0.0,
+  "method_distribution": {
+    "exact_stemmed": 5,
+    "exact_canonical": 342,
+    "exact_alias": 134,
+    "ambiguous_conflict": 5,
+    "dense_embedding_similarity": 2,
+    "fuzzy_token_match": 3
+  },
+  "generalization": {
+    "seen_total": 448,
+    "seen_coverage": 98.88,
+    "seen_accuracy": 100.0,
+    "unseen_total": 43,
+    "unseen_coverage": 100.0,
+    "unseen_accuracy": 100.0
+  },
+  "per_class_results": {
+    "FOOD": {
+      "total": 79,
+      "linked": 79,
+      "correct": 79,
+      "coverage": 100.0,
+      "accuracy": 100.0,
+      "ambiguous": 0,
+      "unmatched": 0
+    },
+    "NUTRIENT": {
+      "total": 172,
+      "linked": 172,
+      "correct": 172,
+      "coverage": 100.0,
+      "accuracy": 100.0,
+      "ambiguous": 0,
+      "unmatched": 0
+    },
+    "HEALTH_CONDITION": {
+      "total": 41,
+      "linked": 38,
+      "correct": 38,
+      "coverage": 92.68,
+      "accuracy": 100.0,
+      "ambiguous": 3,
+      "unmatched": 0
+    },
+    "ALLERGEN": {
+      "total": 5,
+      "linked": 5,
+      "correct": 5,
+      "coverage": 100.0,
+      "accuracy": 100.0,
+      "ambiguous": 0,
+      "unmatched": 0
+    },
+    "AGE_GROUP": {
+      "total": 80,
+      "linked": 78,
+      "correct": 78,
+      "coverage": 97.5,
+      "accuracy": 100.0,
+      "ambiguous": 2,
+      "unmatched": 0
+    },
+    "MEAL_TYPE": {
+      "total": 7,
+      "linked": 7,
+      "correct": 7,
+      "coverage": 100.0,
+      "accuracy": 100.0,
+      "ambiguous": 0,
+      "unmatched": 0
+    },
+    "GROWTH_METRIC": {
+      "total": 8,
+      "linked": 8,
+      "correct": 8,
+      "coverage": 100.0,
+      "accuracy": 100.0,
+      "ambiguous": 0,
+      "unmatched": 0
+    },
+    "FOOD_GROUP": {
+      "total": 55,
+      "linked": 55,
+      "correct": 55,
+      "coverage": 100.0,
+      "accuracy": 100.0,
+      "ambiguous": 0,
+      "unmatched": 0
+    },
+    "DIETARY_PROPERTY": {
+      "total": 14,
+      "linked": 14,
+      "correct": 14,
+      "coverage": 100.0,
+      "accuracy": 100.0,
+      "ambiguous": 0,
+      "unmatched": 0
+    },
+    "FEEDING_METHOD": {
+      "total": 4,
+      "linked": 4,
+      "correct": 4,
+      "coverage": 100.0,
+      "accuracy": 100.0,
+      "ambiguous": 0,
+      "unmatched": 0
+    },
+    "COOKING_METHOD": {
+      "total": 23,
+      "linked": 23,
+      "correct": 23,
+      "coverage": 100.0,
+      "accuracy": 100.0,
+      "ambiguous": 0,
+      "unmatched": 0
+    },
+    "SUPPLEMENT": {
+      "total": 1,
+      "linked": 1,
+      "correct": 1,
+      "coverage": 100.0,
+      "accuracy": 100.0,
+      "ambiguous": 0,
+      "unmatched": 0
+    },
+    "DIET_PATTERN": {
+      "total": 2,
+      "linked": 2,
+      "correct": 2,
+      "coverage": 100.0,
+      "accuracy": 100.0,
+      "ambiguous": 0,
+      "unmatched": 0
+    }
+  }
+}

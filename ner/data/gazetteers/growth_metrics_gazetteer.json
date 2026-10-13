@@ -1,0 +1,120 @@
+[
+  {
+    "surface_form": "growth velocity",
+    "canonical_form": "growth velocity",
+    "entity_type": "GROWTH_METRIC",
+    "source": "WHO / IAP Growth Standards",
+    "metric_id": "METRIC_VELOCITY",
+    "aliases": [
+      "height velocity",
+      "weight velocity",
+      "growth rate",
+      "velocity curve"
+    ]
+  },
+  {
+    "surface_form": "height-for-age",
+    "canonical_form": "height-for-age",
+    "entity_type": "GROWTH_METRIC",
+    "source": "WHO / IAP Growth Standards",
+    "metric_id": "METRIC_HFA",
+    "aliases": [
+      "Height-for-Age",
+      "height for age",
+      "HFA",
+      "length-for-age",
+      "Length-for-Age",
+      "LFA"
+    ]
+  },
+  {
+    "surface_form": "weight-for-age",
+    "canonical_form": "weight-for-age",
+    "entity_type": "GROWTH_METRIC",
+    "source": "WHO / IAP Growth Standards",
+    "metric_id": "METRIC_WFA",
+    "aliases": [
+      "Weight-for-Age",
+      "weight for age",
+      "WFA"
+    ]
+  },
+  {
+    "surface_form": "weight-for-height",
+    "canonical_form": "weight-for-height",
+    "entity_type": "GROWTH_METRIC",
+    "source": "WHO / IAP Growth Standards",
+    "metric_id": "METRIC_WFH",
+    "aliases": [
+      "Weight-for-Height",
+      "weight for height",
+      "WFH",
+      "weight-for-length",
+      "Weight-for-Length",
+      "WFL"
+    ]
+  },
+  {
+    "surface_form": "BMI",
+    "canonical_form": "bmi",
+    "entity_type": "GROWTH_METRIC",
+    "source": "WHO / IAP Growth Standards",
+    "metric_id": "METRIC_BMI",
+    "aliases": [
+      "body mass index",
+      "BMI-for-age",
+      "BMI percentile",
+      "BMI z-score"
+    ]
+  },
+  {
+    "surface_form": "Z-score",
+    "canonical_form": "z-score",
+    "entity_type": "GROWTH_METRIC",
+    "source": "WHO / IAP Growth Standards",
+    "metric_id": "METRIC_ZSCORE",
+    "aliases": [
+      "z-score",
+      "Z-scores",
+      "standard deviation score",
+      "SD score",
+      "Z score"
+    ]
+  },
+  {
+    "surface_form": "Mid-Upper Arm Circumference",
+    "canonical_form": "mid-upper arm circumference",
+    "entity_type": "GROWTH_METRIC",
+    "source": "WHO / IAP Growth Standards",
+    "metric_id": "METRIC_MUAC",
+    "aliases": [
+      "MUAC",
+      "mid-upper arm circumference",
+      "arm circumference"
+    ]
+  },
+  {
+    "surface_form": "head circumference",
+    "canonical_form": "head circumference",
+    "entity_type": "GROWTH_METRIC",
+    "source": "WHO / IAP Growth Standards",
+    "metric_id": "METRIC_HC",
+    "aliases": [
+      "occipitofrontal circumference",
+      "OFC",
+      "HC-for-age"
+    ]
+  },
+  {
+    "surface_form": "growth chart",
+    "canonical_form": "growth chart",
+    "entity_type": "GROWTH_METRIC",
+    "source": "WHO / IAP Growth Standards",
+    "metric_id": "METRIC_CHART",
+    "aliases": [
+      "Road to Health chart",
+      "IAP Growth Chart",
+      "WHO growth standard curves"
+    ]
+  }
+]

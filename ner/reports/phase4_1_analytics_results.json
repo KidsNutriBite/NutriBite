@@ -1,0 +1,163 @@
+{
+  "total_candidates": 1500,
+  "reviewed_count": 281,
+  "pending_count": 1219,
+  "accepted_count": 156,
+  "rejected_count": 111,
+  "skipped_count": 14,
+  "acceptance_rate": 55.52,
+  "rejection_rate": 39.5,
+  "candidates_per_entity": {
+    "SUPPLEMENT": {
+      "total": 500,
+      "accepted": 9,
+      "rejected": 47,
+      "skipped": 5,
+      "pending": 439
+    },
+    "COOKING_METHOD": {
+      "total": 500,
+      "accepted": 131,
+      "rejected": 35,
+      "skipped": 2,
+      "pending": 332
+    },
+    "DIET_PATTERN": {
+      "total": 500,
+      "accepted": 16,
+      "rejected": 29,
+      "skipped": 7,
+      "pending": 448
+    }
+  },
+  "candidates_per_discovery_method": {
+    "exact_match": {
+      "total": 181,
+      "accepted": 152,
+      "rejected": 0,
+      "skipped": 0,
+      "pending": 29
+    },
+    "embedding_similarity": {
+      "total": 1244,
+      "accepted": 3,
+      "rejected": 106,
+      "skipped": 14,
+      "pending": 1121
+    },
+    "fuzzy_match": {
+      "total": 75,
+      "accepted": 1,
+      "rejected": 5,
+      "skipped": 0,
+      "pending": 69
+    }
+  },
+  "confidence_distribution": {
+    "[0.90 - 1.00] (High)": 443,
+    "[0.80 - 0.89] (Medium-High)": 1057,
+    "[0.70 - 0.79] (Moderate)": 0,
+    "< 0.70 (Low)": 0
+  },
+  "unique_surface_forms_count": 680,
+  "validated_dataset_path": "C:\\Users\\LENOVO\\Desktop\\project-phase\\ai-service-v2\\datasets\\validated_candidates.json",
+  "group_analytics": {
+    "unique_surface_forms": 680,
+    "total_occurrences": 1500,
+    "reviewed_groups": 121,
+    "accepted_groups": 22,
+    "rejected_groups": 85,
+    "skipped_groups": 14,
+    "pending_groups": 559,
+    "group_acceptance_rate": 18.18,
+    "group_rejection_rate": 70.25,
+    "occurrences_covered_by_accepted_groups": 156,
+    "occurrences_covered_by_rejected_groups": 111,
+    "occurrences_covered_by_skipped_groups": 14
+  },
+  "effort_metrics": {
+    "reviewed_candidate_count": 281,
+    "reviewed_group_count": 121,
+    "average_review_time_seconds": 15.0,
+    "total_review_effort_seconds": 1815.0,
+    "total_review_effort_minutes": 30.25,
+    "estimated_individual_effort_seconds": 4215.0,
+    "estimated_individual_effort_minutes": 70.25,
+    "effort_reduction_percentage": 56.94,
+    "candidate_coverage_percentage": 18.73,
+    "group_coverage_percentage": 17.79
+  },
+  "rejection_reasons_breakdown": {
+    "AMBIGUOUS_POLYSEMOUS": 0,
+    "WRONG_ENTITY_TYPE": 0,
+    "OUT_OF_DOMAIN": 0,
+    "SPAN_BOUNDARY_ERROR": 111,
+    "DUPLICATE": 0,
+    "OTHER": 0
+  },
+  "embedding_analysis": {
+    "total_embedding_candidates": 1244,
+    "reviewed_embedding_candidates": 123,
+    "accepted_embedding_candidates": 3,
+    "current_acceptance_rate": 2.44,
+    "boundary_flaw_count": 419,
+    "boundary_flaw_percentage": 33.68,
+    "threshold_evaluations": [
+      {
+        "threshold": 0.8,
+        "total_matching_candidates": 1244,
+        "coverage_percentage": 100.0,
+        "reviewed_candidates": 123,
+        "accepted_candidates": 3,
+        "acceptance_rate": 2.44
+      },
+      {
+        "threshold": 0.85,
+        "total_matching_candidates": 1019,
+        "coverage_percentage": 81.91,
+        "reviewed_candidates": 96,
+        "accepted_candidates": 3,
+        "acceptance_rate": 3.12
+      },
+      {
+        "threshold": 0.9,
+        "total_matching_candidates": 250,
+        "coverage_percentage": 20.1,
+        "reviewed_candidates": 30,
+        "accepted_candidates": 0,
+        "acceptance_rate": 0.0
+      },
+      {
+        "threshold": 0.92,
+        "total_matching_candidates": 196,
+        "coverage_percentage": 15.76,
+        "reviewed_candidates": 22,
+        "accepted_candidates": 0,
+        "acceptance_rate": 0.0
+      },
+      {
+        "threshold": 0.95,
+        "total_matching_candidates": 119,
+        "coverage_percentage": 9.57,
+        "reviewed_candidates": 15,
+        "accepted_candidates": 0,
+        "acceptance_rate": 0.0
+      },
+      {
+        "threshold": 0.97,
+        "total_matching_candidates": 54,
+        "coverage_percentage": 4.34,
+        "reviewed_candidates": 10,
+        "accepted_candidates": 0,
+        "acceptance_rate": 0.0
+      }
+    ],
+    "root_cause_summary": "Dense SentenceTransformer (E5-small-v2) embeddings capture sentence-level semantic similarity, assigning high cosine scores (>=0.95) to sliding window n-grams containing the target entity plus grammatical stopwords (e.g. 'Zinc supplementation in', 'so dietary diversity', 'boiling and'). Consequently, higher similarity thresholds fail to improve precision (0.00% acceptance for score >= 0.90) because the top scores represent contaminated boundary spans rather than clean entity mentions.",
+    "recommendations": [
+      "Implement grammatical boundary trimming (stripping leading/trailing functional stopwords and punctuation).",
+      "Incorporate POS tagging / syntactic chunking gates (e.g. spaCy noun chunks) before embedding scoring.",
+      "Apply contrastive boundary ranking to penalize n-grams that extend beyond syntactic head phrases.",
+      "Do NOT unilaterally purge existing candidate records; preserve registry integrity while applying post-filters."
+    ]
+  }
+}

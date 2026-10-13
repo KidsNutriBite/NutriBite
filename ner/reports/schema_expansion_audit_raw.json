@@ -1,0 +1,862 @@
+{
+  "current_schema": {
+    "FOOD": {
+      "total_mentions": 681,
+      "unique_forms": 62,
+      "passages": 327,
+      "sentences": 388,
+      "multiword_count": 111,
+      "multiword_pct": 16.3,
+      "top_examples": [
+        [
+          "milk",
+          82
+        ],
+        [
+          "rice",
+          59
+        ],
+        [
+          "vegetables",
+          53
+        ],
+        [
+          "pulses",
+          46
+        ],
+        [
+          "fish",
+          37
+        ],
+        [
+          "fruits",
+          32
+        ],
+        [
+          "paneer",
+          31
+        ],
+        [
+          "curd",
+          29
+        ]
+      ]
+    },
+    "NUTRIENT": {
+      "total_mentions": 1042,
+      "unique_forms": 56,
+      "passages": 454,
+      "sentences": 574,
+      "multiword_count": 267,
+      "multiword_pct": 25.6,
+      "top_examples": [
+        [
+          "protein",
+          121
+        ],
+        [
+          "iron",
+          118
+        ],
+        [
+          "calcium",
+          77
+        ],
+        [
+          "kcal",
+          76
+        ],
+        [
+          "energy",
+          71
+        ],
+        [
+          "zinc",
+          54
+        ],
+        [
+          "fat",
+          42
+        ],
+        [
+          "vitamin c",
+          37
+        ]
+      ]
+    },
+    "HEALTH_CONDITION": {
+      "total_mentions": 295,
+      "unique_forms": 54,
+      "passages": 219,
+      "sentences": 233,
+      "multiword_count": 48,
+      "multiword_pct": 16.3,
+      "top_examples": [
+        [
+          "breastfeeding",
+          42
+        ],
+        [
+          "anemia",
+          28
+        ],
+        [
+          "pregnancy",
+          25
+        ],
+        [
+          "obesity",
+          24
+        ],
+        [
+          "malnutrition",
+          19
+        ],
+        [
+          "diarrhea",
+          13
+        ],
+        [
+          "stunting",
+          9
+        ],
+        [
+          "diarrhoea",
+          8
+        ]
+      ]
+    },
+    "ALLERGEN": {
+      "total_mentions": 50,
+      "unique_forms": 19,
+      "passages": 37,
+      "sentences": 42,
+      "multiword_count": 43,
+      "multiword_pct": 86.0,
+      "top_examples": [
+        [
+          "lactose intolerance",
+          8
+        ],
+        [
+          "peanut allergy",
+          7
+        ],
+        [
+          "egg allergy",
+          4
+        ],
+        [
+          "celiac disease",
+          4
+        ],
+        [
+          "cow's milk protein allergy",
+          3
+        ],
+        [
+          "cmpa",
+          3
+        ],
+        [
+          "anaphylaxis",
+          3
+        ],
+        [
+          "soy allergy",
+          3
+        ]
+      ]
+    },
+    "AGE_GROUP": {
+      "total_mentions": 535,
+      "unique_forms": 27,
+      "passages": 430,
+      "sentences": 468,
+      "multiword_count": 26,
+      "multiword_pct": 4.9,
+      "top_examples": [
+        [
+          "children",
+          164
+        ],
+        [
+          "child",
+          92
+        ],
+        [
+          "infants",
+          68
+        ],
+        [
+          "infant",
+          51
+        ],
+        [
+          "toddlers",
+          32
+        ],
+        [
+          "baby",
+          19
+        ],
+        [
+          "toddler",
+          19
+        ],
+        [
+          "babies",
+          15
+        ]
+      ]
+    },
+    "MEAL_TYPE": {
+      "total_mentions": 57,
+      "unique_forms": 9,
+      "passages": 49,
+      "sentences": 55,
+      "multiword_count": 4,
+      "multiword_pct": 7.0,
+      "top_examples": [
+        [
+          "snacks",
+          17
+        ],
+        [
+          "breakfast",
+          13
+        ],
+        [
+          "snack",
+          12
+        ],
+        [
+          "dinner",
+          6
+        ],
+        [
+          "lunch",
+          5
+        ],
+        [
+          "mid-afternoon snack",
+          1
+        ],
+        [
+          "evening snack",
+          1
+        ],
+        [
+          "morning meal",
+          1
+        ]
+      ]
+    },
+    "GROWTH_METRIC": {
+      "total_mentions": 51,
+      "unique_forms": 26,
+      "passages": 27,
+      "sentences": 32,
+      "multiword_count": 34,
+      "multiword_pct": 66.7,
+      "top_examples": [
+        [
+          "growth velocity",
+          8
+        ],
+        [
+          "bmi",
+          8
+        ],
+        [
+          "bmi-for-age",
+          4
+        ],
+        [
+          "z-score",
+          4
+        ],
+        [
+          "wfa",
+          2
+        ],
+        [
+          "height-for-age",
+          2
+        ],
+        [
+          "weight-for-height",
+          2
+        ],
+        [
+          "wfh",
+          2
+        ]
+      ]
+    }
+  },
+  "candidate_schema": {
+    "FOOD_GROUP": {
+      "total_occurrences": 374,
+      "unique_forms": 15,
+      "doc_count": 171,
+      "sentence_count": 197,
+      "multiword_count": 51,
+      "multiword_pct": 13.6,
+      "top_mentions": [
+        [
+          "vegetables",
+          72
+        ],
+        [
+          "seeds",
+          49
+        ],
+        [
+          "pulses",
+          46
+        ],
+        [
+          "dairy",
+          37
+        ],
+        [
+          "fruits",
+          36
+        ],
+        [
+          "nuts",
+          23
+        ]
+      ]
+    },
+    "FEEDING_METHOD": {
+      "total_occurrences": 66,
+      "unique_forms": 6,
+      "doc_count": 56,
+      "sentence_count": 57,
+      "multiword_count": 24,
+      "multiword_pct": 36.4,
+      "top_mentions": [
+        [
+          "breastfeeding",
+          42
+        ],
+        [
+          "complementary feeding",
+          9
+        ],
+        [
+          "exclusive breastfeeding",
+          6
+        ],
+        [
+          "responsive feeding",
+          4
+        ],
+        [
+          "finger foods",
+          3
+        ],
+        [
+          "demand feeding",
+          2
+        ]
+      ]
+    },
+    "DIETARY_PROPERTY": {
+      "total_occurrences": 129,
+      "unique_forms": 15,
+      "doc_count": 93,
+      "sentence_count": 100,
+      "multiword_count": 48,
+      "multiword_pct": 37.2,
+      "top_mentions": [
+        [
+          "bioavailable",
+          27
+        ],
+        [
+          "fortified",
+          20
+        ],
+        [
+          "mashed",
+          16
+        ],
+        [
+          "digestible",
+          13
+        ],
+        [
+          "processed foods",
+          11
+        ],
+        [
+          "easily digestible",
+          10
+        ]
+      ]
+    },
+    "DEFICIENCY": {
+      "total_occurrences": 50,
+      "unique_forms": 10,
+      "doc_count": 42,
+      "sentence_count": 44,
+      "multiword_count": 50,
+      "multiword_pct": 100.0,
+      "top_mentions": [
+        [
+          "iron deficiency",
+          24
+        ],
+        [
+          "b12 deficiency",
+          6
+        ],
+        [
+          "iodine deficiency",
+          5
+        ],
+        [
+          "folate deficiency",
+          4
+        ],
+        [
+          "vitamin d deficiency",
+          3
+        ],
+        [
+          "vitamin a deficiency",
+          2
+        ]
+      ]
+    },
+    "NUTRITION_GOAL": {
+      "total_occurrences": 22,
+      "unique_forms": 6,
+      "doc_count": 20,
+      "sentence_count": 21,
+      "multiword_count": 22,
+      "multiword_pct": 100.0,
+      "top_mentions": [
+        [
+          "linear growth",
+          7
+        ],
+        [
+          "brain development",
+          5
+        ],
+        [
+          "catch-up growth",
+          4
+        ],
+        [
+          "cognitive development",
+          4
+        ],
+        [
+          "rapid growth",
+          1
+        ],
+        [
+          "muscle accretion",
+          1
+        ]
+      ]
+    },
+    "RECOMMENDATION": {
+      "total_occurrences": 26,
+      "unique_forms": 5,
+      "doc_count": 22,
+      "sentence_count": 24,
+      "multiword_count": 8,
+      "multiword_pct": 30.8,
+      "top_mentions": [
+        [
+          "rda",
+          18
+        ],
+        [
+          "recommended dietary allowance",
+          4
+        ],
+        [
+          "energy requirement",
+          2
+        ],
+        [
+          "minimum dietary diversity",
+          1
+        ],
+        [
+          "feeding frequency",
+          1
+        ]
+      ]
+    },
+    "SUPPLEMENT": {
+      "total_occurrences": 6,
+      "unique_forms": 3,
+      "doc_count": 5,
+      "sentence_count": 6,
+      "multiword_count": 2,
+      "multiword_pct": 33.3,
+      "top_mentions": [
+        [
+          "ors",
+          3
+        ],
+        [
+          "zinc supplementation",
+          2
+        ],
+        [
+          "rutf",
+          1
+        ]
+      ]
+    },
+    "DIETARY_RESTRICTION": {
+      "total_occurrences": 43,
+      "unique_forms": 5,
+      "doc_count": 34,
+      "sentence_count": 39,
+      "multiword_count": 15,
+      "multiword_pct": 34.9,
+      "top_mentions": [
+        [
+          "vegetarian",
+          19
+        ],
+        [
+          "gluten-free",
+          12
+        ],
+        [
+          "vegan",
+          9
+        ],
+        [
+          "non-dairy",
+          2
+        ],
+        [
+          "lactose-free",
+          1
+        ]
+      ]
+    },
+    "PORTION": {
+      "total_occurrences": 20,
+      "unique_forms": 4,
+      "doc_count": 18,
+      "sentence_count": 20,
+      "multiword_count": 1,
+      "multiword_pct": 5.0,
+      "top_mentions": [
+        [
+          "teaspoon",
+          11
+        ],
+        [
+          "100g",
+          6
+        ],
+        [
+          "tablespoon",
+          2
+        ],
+        [
+          "small bowl",
+          1
+        ]
+      ]
+    },
+    "COOKING_METHOD": {
+      "total_occurrences": 33,
+      "unique_forms": 7,
+      "doc_count": 24,
+      "sentence_count": 29,
+      "multiword_count": 2,
+      "multiword_pct": 6.1,
+      "top_mentions": [
+        [
+          "fermentation",
+          9
+        ],
+        [
+          "boiling",
+          8
+        ],
+        [
+          "steaming",
+          6
+        ],
+        [
+          "germination",
+          4
+        ],
+        [
+          "sprouting",
+          2
+        ],
+        [
+          "pressure cooking",
+          2
+        ]
+      ]
+    },
+    "ANTHROPOMETRIC_MEASURE": {
+      "total_occurrences": 29,
+      "unique_forms": 10,
+      "doc_count": 18,
+      "sentence_count": 21,
+      "multiword_count": 28,
+      "multiword_pct": 96.6,
+      "top_mentions": [
+        [
+          "growth velocity",
+          8
+        ],
+        [
+          "bmi-for-age",
+          4
+        ],
+        [
+          "z-score",
+          4
+        ],
+        [
+          "height-for-age",
+          3
+        ],
+        [
+          "weight-for-height",
+          3
+        ],
+        [
+          "weight-for-age",
+          2
+        ]
+      ]
+    },
+    "BODY_MEASURE": {
+      "total_occurrences": 9,
+      "unique_forms": 3,
+      "doc_count": 9,
+      "sentence_count": 9,
+      "multiword_count": 9,
+      "multiword_pct": 100.0,
+      "top_mentions": [
+        [
+          "birth weight",
+          7
+        ],
+        [
+          "recumbent length",
+          1
+        ],
+        [
+          "head circumference",
+          1
+        ]
+      ]
+    },
+    "FOOD_PREPARATION": {
+      "total_occurrences": 199,
+      "unique_forms": 12,
+      "doc_count": 115,
+      "sentence_count": 126,
+      "multiword_count": 0,
+      "multiword_pct": 0.0,
+      "top_mentions": [
+        [
+          "cooked",
+          40
+        ],
+        [
+          "roasted",
+          30
+        ],
+        [
+          "sprouted",
+          24
+        ],
+        [
+          "steamed",
+          23
+        ],
+        [
+          "boiled",
+          20
+        ],
+        [
+          "mashed",
+          16
+        ]
+      ]
+    },
+    "AGE_RANGE": {
+      "total_occurrences": 26,
+      "unique_forms": 8,
+      "doc_count": 23,
+      "sentence_count": 24,
+      "multiword_count": 26,
+      "multiword_pct": 100.0,
+      "top_mentions": [
+        [
+          "1 to 2 years",
+          5
+        ],
+        [
+          "first 1000 days",
+          4
+        ],
+        [
+          "9 to 11 months",
+          4
+        ],
+        [
+          "6 to 8 months",
+          3
+        ],
+        [
+          "6-12 months",
+          3
+        ],
+        [
+          "0-6 months",
+          3
+        ]
+      ]
+    },
+    "DIET_PATTERN": {
+      "total_occurrences": 6,
+      "unique_forms": 2,
+      "doc_count": 6,
+      "sentence_count": 6,
+      "multiword_count": 6,
+      "multiword_pct": 100.0,
+      "top_mentions": [
+        [
+          "balanced diet",
+          5
+        ],
+        [
+          "vegetarian diet",
+          1
+        ]
+      ]
+    }
+  },
+  "relation_stats": [
+    {
+      "relation": "FOOD -> CONTAINS -> NUTRIENT",
+      "description": "Food rich in or providing specific nutrient",
+      "count": 70,
+      "examples": [
+        {
+          "sentence": "Combining cereals and pulses provides better quality protein due to complementary amino acids.",
+          "match_groups": [
+            "Combining cereals and pulses",
+            "better quality protein due to complementary amino acids"
+          ]
+        },
+        {
+          "sentence": "Colostrum is rich in nutrients and antibodies and should not be discarded.",
+          "match_groups": [
+            "Colostrum",
+            "nutrients and antibodies and should not be discarded"
+          ]
+        },
+        {
+          "sentence": "Breastfeeding also provides long-term health benefits including reduced risk of obesity and diabetes.",
+          "match_groups": [
+            "Breastfeeding also",
+            "long"
+          ]
+        },
+        {
+          "sentence": "Breast milk contains antibodies that protect infants from infections.",
+          "match_groups": [
+            "Breast milk",
+            "antibodies that protect infants from infections"
+          ]
+        }
+      ]
+    },
+    {
+      "relation": "FOOD -> SUITABLE_FOR -> AGE_GROUP",
+      "description": "Food suitability for age cohort",
+      "count": 335,
+      "examples": [
+        {
+          "sentence": "A balanced diet containing all essential nutrients is necessary for maintaining good health throughout life.",
+          "match_groups": [
+            "A balanced diet containing all essential nutrients is necessary",
+            "maintaining good health throughout life"
+          ]
+        },
+        {
+          "sentence": "Appropriate dietary habits and physical activity are essential for maintaining overall health.",
+          "match_groups": [
+            "Appropriate dietary habits and physical activity are essential",
+            "maintaining overall health"
+          ]
+        },
+        {
+          "sentence": "Vegetables and fruits provide vitamins, minerals, fiber, and antioxidants essential for health.",
+          "match_groups": [
+            "and antioxidants essential",
+            "health"
+          ]
+        },
+        {
+          "sentence": "Ultra-processed foods high in fat, sugar, and salt should be avoided for better health.",
+          "match_groups": [
+            "and salt should be avoided",
+            "better health"
+          ]
+        }
+      ]
+    },
+    {
+      "relation": "FOOD -> TRIGGERS -> ALLERGEN",
+      "description": "Food causing allergic reaction or intolerance",
+      "count": 0,
+      "examples": []
+    },
+    {
+      "relation": "HEALTH_CONDITION -> ASSOCIATED_WITH -> NUTRIENT",
+      "description": "Clinical condition linked to nutrient deficit",
+      "count": 0,
+      "examples": []
+    },
+    {
+      "relation": "NUTRITION_GOAL -> SUPPORTED_BY -> FOOD",
+      "description": "Nutritional goal achieved via specific dietary intervention",
+      "count": 0,
+      "examples": []
+    },
+    {
+      "relation": "MEAL_TYPE -> INCLUDES -> FOOD",
+      "description": "Meal slot comprising specific foods",
+      "count": 0,
+      "examples": []
+    },
+    {
+      "relation": "FEEDING_METHOD -> SUITABLE_FOR -> AGE_GROUP",
+      "description": "Feeding practice aligned with developmental stage",
+      "count": 0,
+      "examples": []
+    }
+  ],
+  "structured_db_counts": {
+    "foods_json_records": 175,
+    "conditions_json_records": 172,
+    "allergies_json_records": 17,
+    "goals_json_records": 148
+  }
+}

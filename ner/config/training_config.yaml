@@ -1,0 +1,38 @@
+experiment_name: "NutriBite_Domain_NER"
+seed: 42
+model_type: "crf_token_classifier"
+base_encoder: "feature_weighted_linear_crf"
+
+labels:
+  - "O"
+  - "B-FOOD"
+  - "I-FOOD"
+  - "B-NUTRIENT"
+  - "I-NUTRIENT"
+  - "B-HEALTH_CONDITION"
+  - "I-HEALTH_CONDITION"
+  - "B-ALLERGEN"
+  - "I-ALLERGEN"
+  - "B-AGE_GROUP"
+  - "I-AGE_GROUP"
+  - "B-MEAL_TYPE"
+  - "I-MEAL_TYPE"
+  - "B-GROWTH_METRIC"
+  - "I-GROWTH_METRIC"
+
+training:
+  num_epochs: 10
+  learning_rate: 0.001
+  batch_size: 16
+  max_length: 128
+  weight_decay: 0.0001
+  warmup_ratio: 0.05
+  evaluation_strategy: "epoch"
+  save_strategy: "best_f1"
+
+paths:
+  train_data: "ner/data/train.jsonl"
+  validation_data: "ner/data/validation.jsonl"
+  test_data: "ner/data/test.jsonl"
+  output_model_dir: "ner/models/nutribite_ner"
+  reports_dir: "ner/reports"
