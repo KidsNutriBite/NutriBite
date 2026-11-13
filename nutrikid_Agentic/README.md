@@ -32,7 +32,7 @@ OPENROUTER_API_KEY="your_api_key_for_open_source_models"
 ## Usage (CLI)
 
 1. **Build the RAG Database:**
-```bash
+```bash`
 python main.py --index
 ```
 2. **Test Semantic Retrieval:**

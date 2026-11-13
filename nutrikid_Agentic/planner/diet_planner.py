@@ -247,6 +247,27 @@ class DietPlanner:
                 required_tags.update(goal_rec.get("required_tags", []))
                 avoid_tags.update(goal_rec.get("avoid_tags", []))
                 
+        # 2b. Map focus nutrients (e.g. from nutrition deficiency analysis) to required tags
+        focus_nutrients = profile.get("focus_nutrients", [])
+        nutrient_tag_map = {
+            "iron": ["iron_rich", "plant_protein"],
+            "calcium": ["calcium_rich"],
+            "protein": ["protein_rich", "plant_protein"],
+            "fiber": ["fiber_rich", "fiber"],
+            "vitamin_a": ["vitamin_rich", "antioxidant"],
+            "vitamina": ["vitamin_rich", "antioxidant"],
+            "vitamin_c": ["vitamin_rich"],
+            "vitaminc": ["vitamin_rich"],
+            "vitamin_d": ["calcium_rich"],
+            "vitamind": ["calcium_rich"],
+            "energy": ["energy_source", "energy_dense", "staple_food"],
+            "calories": ["energy_source", "energy_dense", "staple_food"]
+        }
+        for fn in focus_nutrients:
+            clean_fn = str(fn).strip().lower().replace(" ", "_")
+            if clean_fn in nutrient_tag_map:
+                required_tags.update(nutrient_tag_map[clean_fn])
+
         # 3. Gather allergy exclusions
         for allergy in allergies:
             alg_rec = self.db.get_allergy(allergy)
@@ -468,6 +489,27 @@ class DietPlanner:
                 required_tags.update(goal_rec.get("required_tags", []))
                 avoid_tags.update(goal_rec.get("avoid_tags", []))
                 
+        # 2b. Map focus nutrients (e.g. from nutrition deficiency analysis) to required tags
+        focus_nutrients = profile.get("focus_nutrients", [])
+        nutrient_tag_map = {
+            "iron": ["iron_rich", "plant_protein"],
+            "calcium": ["calcium_rich"],
+            "protein": ["protein_rich", "plant_protein"],
+            "fiber": ["fiber_rich", "fiber"],
+            "vitamin_a": ["vitamin_rich", "antioxidant"],
+            "vitamina": ["vitamin_rich", "antioxidant"],
+            "vitamin_c": ["vitamin_rich"],
+            "vitaminc": ["vitamin_rich"],
+            "vitamin_d": ["calcium_rich"],
+            "vitamind": ["calcium_rich"],
+            "energy": ["energy_source", "energy_dense", "staple_food"],
+            "calories": ["energy_source", "energy_dense", "staple_food"]
+        }
+        for fn in focus_nutrients:
+            clean_fn = str(fn).strip().lower().replace(" ", "_")
+            if clean_fn in nutrient_tag_map:
+                required_tags.update(nutrient_tag_map[clean_fn])
+
         # 3. Gather allergy exclusions
         allergy_check = "No allergies"
         if allergies:

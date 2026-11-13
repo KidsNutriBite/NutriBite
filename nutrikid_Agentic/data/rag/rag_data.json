@@ -5956,5 +5956,14 @@
       ],
       "source": "BSACI Guideline for the diagnosis and management of cow's milk allergy (Luyt et al., Clin Exp Allergy 2014;44:642-672), IgE/non-IgE diagnostic framework. Accessed 2026-08-31."
     }
+  },
+  {
+    "id": "RAG_DYNAMIC_1794571347_95008",
+    "text": "Moringa leaves (drumstick greens) are exceptionally dense in bioavailable calcium, providing over 300mg per 100g serving for growing children.",
+    "source": "pediatric_update_2026",
+    "metadata": {
+      "source": "pediatric_update_2026",
+      "type": "dynamic_rag"
+    }
   }
 ]

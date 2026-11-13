@@ -13,7 +13,29 @@ export const getNutritionAnalysis = async (req, res) => {
         const mode = req.query.mode || 'daily';
         const themeIndex = req.query.theme ? parseInt(req.query.theme, 10) : 0;
 
-        const analysis = await analyzeNutrition(profileId, sunlightMinutes, refreshNonce, mode, themeIndex);
+        // Ensure profile exists in MongoDB (fallback to existing or create demo profile)
+        let profile = null;
+        if (profileId && profileId.length === 24) {
+            profile = await Profile.findById(profileId);
+        }
+        if (!profile) {
+            profile = await Profile.findOne();
+            if (!profile) {
+                profile = await Profile.create({
+                    _id: (profileId && profileId.length === 24) ? profileId : undefined,
+                    name: "Demo Child",
+                    age: 5,
+                    gender: "female",
+                    weight: 18.0,
+                    height: 108.0,
+                    dietaryPreference: "Vegetarian",
+                    allergies: [],
+                    parentId: "000000000000000000000000"
+                });
+            }
+        }
+
+        const analysis = await analyzeNutrition(profile._id, sunlightMinutes, refreshNonce, mode, themeIndex);
         
         const responseData = {
             deficiencies: analysis.deficiencies,

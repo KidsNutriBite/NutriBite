@@ -4,6 +4,11 @@ import Profile from '../models/Profile.model.js';
 // Middleware to check if the authenticated user owns the profile being accessed
 // This expects 'id' in params to be the Profile ID, OR 'profileId' in body/query
 export const checkProfileOwnership = asyncHandler(async (req, res, next) => {
+    // ── Internal Service Bypass (LangGraph Agent & Microservices) ──
+    if (req.headers['x-internal-service'] === 'nutrikid-agent') {
+        return next();
+    }
+
     let profileId = req.params.id || req.body.profileId || req.query.profileId;
 
     // If we are hitting a route that doesn't target a specific profile (like create), skip

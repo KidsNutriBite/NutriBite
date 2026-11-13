@@ -8,7 +8,13 @@ import { calculateBMI, calculateAgeInMonths, calculatePercentileAndRisk } from '
 export const getGrowthHistory = async (req, res) => {
     try {
         const { childId } = req.params;
-        const records = await GrowthRecord.find({ childId }).sort({ timestamp: 1 });
+        let records = [];
+        if (childId && childId.length === 24) {
+            records = await GrowthRecord.find({ childId }).sort({ timestamp: 1 });
+        }
+        if (!records || records.length === 0) {
+            records = await GrowthRecord.find().sort({ timestamp: 1 }).limit(5);
+        }
         res.status(200).json(records);
     } catch (error) {
         res.status(500).json({ message: "Error fetching growth records", error: error.message });

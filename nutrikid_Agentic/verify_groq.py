@@ -1,4 +1,8 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from llm.llm_client import KidsNutriLLMClient
 
 def verify_groq():
@@ -42,7 +46,7 @@ def verify_groq():
     # the optional smaller/faster alternative; groq_llama70b is kept only to
     # prove the deprecated alias still works (it now routes to the same real
     # model as groq_judge, not the old nonexistent llama-3.3-70b-versatile).
-    models_to_test = ["groq_judge", "groq_llama8b", "groq_llama70b"]
+    models_to_test = ["groq_qwen", "groq_judge", "groq_llama8b"]
 
     for model_name in models_to_test:
         print(f"\n--- Testing Model: {model_name} ---")
