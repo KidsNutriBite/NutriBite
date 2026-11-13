@@ -44,6 +44,93 @@ class KidsNutriRetriever:
     ) -> List[Dict[str, Any]]:
         return self.service.retrieve(query=query, top_k=top_k, metadata_filters=metadata_filters, mode=mode)
 
+    def add_knowledge(
+        self,
+        text: str,
+        source: str = "user_provided",
+        metadata: Optional[Dict[str, Any]] = None,
+        persist: bool = True,
+    ) -> Dict[str, Any]:
+        """
+        Dynamically adds and indexes a new knowledge chunk into FAISS and BM25.
+        Persists the updated index, metadata, and raw dataset to disk.
+        """
+        import time
+        import pickle
+        import json
+        import faiss
+
+        cleaned_text = text.strip()
+        if not cleaned_text:
+            raise ValueError("Knowledge text cannot be empty.")
+
+        chunk_id = f"RAG_DYNAMIC_{int(time.time())}_{abs(hash(cleaned_text)) % 100000}"
+        chunk_meta = metadata.copy() if metadata else {}
+        chunk_meta["source"] = source
+        chunk_meta["type"] = "dynamic_rag"
+
+        new_chunk = {
+            "id": chunk_id,
+            "text": cleaned_text,
+            "source": source,
+            "metadata": chunk_meta,
+        }
+
+        # 1. Encode text and add to FAISS
+        vectors = self.service.embedding_service.encode_texts([cleaned_text])
+        self.service.faiss_index.add(vectors)
+
+        # 2. Append to in-memory metadata
+        self.service.child_chunks.append(new_chunk)
+        self.service.parent_chunks.append(new_chunk)
+        self.service.parent_map[chunk_id] = new_chunk
+
+        # 3. Rebuild BM25 index with the new chunk included
+        if hasattr(self.service, "bm25_service") and self.service.bm25_service:
+            self.service.bm25_service.build_index(self.service.child_chunks)
+
+        # 4. Invalidate semantic cache so queries immediately see new knowledge
+        if hasattr(self.service, "cache_service") and self.service.cache_service:
+            if hasattr(self.service.cache_service, "cache"):
+                self.service.cache_service.cache.clear()
+
+        # 5. Persist artifacts to disk
+        if persist:
+            # 5a. Save FAISS index
+            index_path = os.path.join(self.config.index_dir, "faiss.index")
+            faiss.write_index(self.service.faiss_index, index_path)
+
+            # 5b. Save metadata.pkl
+            metadata_path = os.path.join(self.config.index_dir, "metadata.pkl")
+            with open(metadata_path, 'wb') as f:
+                pickle.dump({
+                    "child_chunks": self.service.child_chunks,
+                    "parent_chunks": self.service.parent_chunks,
+                    "parent_map": self.service.parent_map,
+                    "dataset_hash": getattr(self.service, "current_dataset_hash", ""),
+                }, f)
+
+            # 5c. Append to raw dataset file (data/rag/rag_data.json)
+            rag_data_path = os.path.join(self.config.data_dir, "rag", "rag_data.json")
+            if os.path.exists(rag_data_path):
+                try:
+                    with open(rag_data_path, 'r', encoding='utf-8') as f:
+                        raw_data = json.load(f)
+                    if isinstance(raw_data, list):
+                        raw_data.append(new_chunk)
+                        with open(rag_data_path, 'w', encoding='utf-8') as f:
+                            json.dump(raw_data, f, indent=2, ensure_ascii=False)
+                except Exception as exc:
+                    print(f"Warning: could not update {rag_data_path}: {exc}")
+
+        return {
+            "status": "ok",
+            "chunk_id": chunk_id,
+            "source": source,
+            "total_chunks": len(self.service.child_chunks),
+            "message": f"Successfully indexed new knowledge chunk '{chunk_id}' into FAISS & BM25.",
+        }
+
     def debug_retrieve(self, query: str, top_k: int = 5) -> List[Dict[str, Any]]:
         results = self.retrieve(query, top_k=top_k)
         print(f"\n--- RAG Retrieval Debug for Query: '{query}' ---")

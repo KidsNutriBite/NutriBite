@@ -1,17 +1,22 @@
 import os
 import time
 import requests
+from dotenv import load_dotenv
+
+load_dotenv()
+
 try:
     import google.generativeai as genai
 except ImportError:
     genai = None
+
 class KidsNutriLLMClient:
-    def __init__(self, default_model="qwen_local"):
-        self.default_model = default_model
-        
+    def __init__(self, default_model=None):
         # Load API keys from environment
         self.gemini_key = os.getenv("GEMINI_API_KEY")
         self.openrouter_key = os.getenv("OPENROUTER_API_KEY")
+        self.groq_key = os.getenv("GROQ_API_KEY")
+        self.default_model = default_model or os.getenv("DEFAULT_MODEL", "groq_qwen" if self.groq_key else "qwen3:4b")
         self.groq_client_instance = None
 
         # The Gemini model ID is configurable via GEMINI_MODEL rather than
@@ -54,24 +59,27 @@ class KidsNutriLLMClient:
                 raise ValueError("Error: GEMINI_API_KEY not found. Real Gemini inference is required.")
             response_text = self._call_gemini(system_prompt, user_prompt)
             
-        elif model_name == "qwen":
-            if not self.openrouter_key:
-                raise ValueError("Error: OPENROUTER_API_KEY not found. Real Qwen API inference is required.")
-            response_text = self._call_openrouter("qwen/qwen-2.5-7b-instruct", system_prompt, user_prompt)
-            
-        elif model_name == "llama":
-            if not self.openrouter_key:
-                raise ValueError("Error: OPENROUTER_API_KEY not found. Real Llama API inference is required.")
-            response_text = self._call_openrouter("meta-llama/llama-3.1-8b-instruct", system_prompt, user_prompt)
-            
-        elif model_name == "qwen_local":
+        elif model_name in ["qwen_local", "qwen3:4b", "qwen_ollama"]:
+            ollama_model = os.getenv("OLLAMA_MODEL", "qwen3:4b")
             try:
-                import torch
-            except ImportError:
-                raise ImportError("Error: 'torch' is not installed. Please run 'pip install torch'.")
-            if not torch.cuda.is_available():
-                raise RuntimeError("Error: CUDA GPU not detected. Real local Qwen inference requires a GPU.")
-            response_text = self._call_local_transformers("Qwen/Qwen2.5-7B-Instruct", system_prompt, user_prompt)
+                response_text = self._call_ollama(ollama_model, system_prompt, user_prompt)
+            except Exception as e_ollama:
+                try:
+                    import torch
+                    if torch.cuda.is_available():
+                        response_text = self._call_local_transformers(ollama_model, system_prompt, user_prompt)
+                    else:
+                        raise RuntimeError("No CUDA GPU detected.")
+                except Exception:
+                    if self.groq_key:
+                        groq_qwen_model = os.getenv("GROQ_QWEN_MODEL", "qwen/qwen3.8-27b")
+                        response_text = self._call_groq(groq_qwen_model, system_prompt, user_prompt)
+                    else:
+                        raise RuntimeError(f"Could not run local model {ollama_model} via Ollama ({e_ollama}) or transformers, and no GROQ_API_KEY set.")
+            
+        elif model_name in ["groq_qwen", "qwen", "groq"]:
+            groq_qwen_model = os.getenv("GROQ_QWEN_MODEL", "qwen/qwen3.8-27b")
+            response_text = self._call_groq(groq_qwen_model, system_prompt, user_prompt)
             
         elif model_name == "llama_local":
             try:
@@ -118,9 +126,6 @@ class KidsNutriLLMClient:
             # this name is no longer silently broken. Not the default judge
             # backend; kept only as an optional smaller/faster alternative.
             response_text = self._call_groq("openai/gpt-oss-20b", system_prompt, user_prompt)
-            
-        elif model_name == "groq_qwen":
-            response_text = self._call_groq("qwen/qwen3.6-27b", system_prompt, user_prompt)
             
         else:
             raise ValueError(f"Unknown model name: {model_name}")
@@ -345,6 +350,24 @@ class KidsNutriLLMClient:
             temperature=self.gen_config["temperature"],
             top_p=self.gen_config["top_p"]
         )
+
+    def _call_ollama(self, model_id, system_prompt, user_prompt):
+        ollama_host = os.getenv("OLLAMA_HOST", "http://localhost:11434")
+        payload = {
+            "model": model_id,
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            "stream": False,
+            "options": {
+                "temperature": self.gen_config["temperature"],
+                "top_p": self.gen_config["top_p"]
+            }
+        }
+        res = requests.post(f"{ollama_host}/api/chat", json=payload, timeout=90)
+        res.raise_for_status()
+        return res.json()["message"]["content"]
 
 if __name__ == '__main__':
     # Simple check

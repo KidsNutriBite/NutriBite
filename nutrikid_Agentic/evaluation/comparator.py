@@ -92,7 +92,7 @@ class KidsNutriComparator:
             "skipped_cases": skipped_count
         }
 
-    def run_comparison(self, models=["qwen_local"], sample_limit=None, run_diagnostic_experiment=False):
+    def run_comparison(self, models=["groq_qwen"], sample_limit=None, run_diagnostic_experiment=False):
         dataset = EVALUATION_DATA
         if sample_limit:
             # Take a balanced subset across categories

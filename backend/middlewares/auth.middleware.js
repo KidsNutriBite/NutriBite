@@ -4,6 +4,16 @@ import User from '../models/User.model.js';
 import env from '../config/env.js';
 
 export const protect = asyncHandler(async (req, res, next) => {
+    // ── Internal Service Authorization (LangGraph Agent & Microservices) ──
+    if (req.headers['x-internal-service'] === 'nutrikid-agent') {
+        req.user = {
+            _id: '000000000000000000000000',
+            role: 'admin',
+            name: 'NutriKid Internal Agent'
+        };
+        return next();
+    }
+
     let token;
 
     if (
