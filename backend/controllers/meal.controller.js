@@ -473,7 +473,7 @@ export const analyzeMealImage = asyncHandler(async (req, res) => {
 
     let result = null;
 
-    // Strategy 1: Attempt local python food-recognition microservice if available
+    // Strategy 1: Attempt local python food-recognition microservice (YOLO bestV6.pt) if available
     const aiUrl = process.env.FOOD_RECOGNITION_SERVICE_URL || 'http://localhost:8001';
     try {
         const formData = new FormData();
@@ -483,15 +483,15 @@ export const analyzeMealImage = asyncHandler(async (req, res) => {
             formData.append('corrections', JSON.stringify(pastCorrections));
         }
 
-        const response = await axios.post(`${aiUrl}/api/food-recognition`, formData, { timeout: 1500 });
-        if (response.data && response.data.foods) {
+        const response = await axios.post(`${aiUrl}/api/food-recognition`, formData, { timeout: 10000 });
+        if (response.data && response.data.foods && response.data.foods.length > 0) {
             const data = response.data;
             const foods = data.foods || [];
             const confidenceScores = data.confidence_scores || [];
             const portionEstimates = data.portion_estimates || {};
 
             const analyzedFoods = foods.map((food, index) => {
-                const qty = portionEstimates[food] || "1 serving";
+                const qty = portionEstimates[food] || portionEstimates[food.toLowerCase()] || "1 serving";
                 const nutrition = calculateFoodNutrition(food, qty);
                 return {
                     name: food,
@@ -524,8 +524,11 @@ export const analyzeMealImage = asyncHandler(async (req, res) => {
                 totals,
                 confidence_scores: confidenceScores,
                 portion_estimates: portionEstimates,
-                provider: 'local_food_model'
+                detected_boxes: data.detected_boxes || [],
+                has_masks: data.has_masks || false,
+                provider: data.provider || 'bestV6_yolo_segmentation'
             };
+            console.log(`[Backend] Local YOLO food recognition succeeded with ${analyzedFoods.length} items (${result.provider}).`);
         }
     } catch (localErr) {
         console.log(`[Backend] Local food recognition service unavailable (${localErr.message}), activating Gemini Vision fallback...`);
