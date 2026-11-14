@@ -1,6 +1,6 @@
 @echo off
 if "%1"=="project" (
-    echo Starting frontend, backend, and nutrikid_Agentic AI...
+    echo Starting frontend, backend, nutrikid_Agentic AI, and food vision AI...
     npm run start-project
 ) else if "%1"=="frontend" (
     echo Starting frontend...
@@ -11,10 +11,14 @@ if "%1"=="project" (
 ) else if "%1"=="ai" (
     echo Starting nutrikid_Agentic AI...
     npm run start-ai
+) else if "%1"=="vision" (
+    echo Starting food recognition vision AI...
+    npm run start-vision
 ) else (
     echo Usage:
-    echo   .\start project   - Start frontend, backend, and AI together
-    echo   .\start ai        - Start only nutrikid_Agentic AI
+    echo   .\start project   - Start frontend, backend, and all AI services together
+    echo   .\start vision    - Start only food recognition YOLO model (port 8001)
+    echo   .\start ai        - Start only nutrikid_Agentic AI (port 8000)
     echo   .\start frontend  - Start only frontend
     echo   .\start backend   - Start only backend
 )

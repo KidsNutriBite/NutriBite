@@ -62,4 +62,5 @@ scratch/
 *.safetensors
 *.bin
 *.pt
+!ai-services/food-recognition/models/bestV6.pt
 *.onnx

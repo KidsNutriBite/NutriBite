@@ -384,7 +384,7 @@ const MealLogForm = ({ profileId, initialData, onSuccess, onCancel }) => {
             }
         } catch (err) {
             console.error("AI Meal detection failed:", err);
-            setError(err.response?.data?.message || err.message || "Failed to analyze image with Ateeqq/food-analysis model.");
+            setError(err.response?.data?.message || err.message || "Failed to analyze image with food recognition model.");
         } finally {
             setAiLoading(false);
         }
@@ -806,7 +806,7 @@ const MealLogForm = ({ profileId, initialData, onSuccess, onCancel }) => {
                                         </div>
                                         <div>
                                             <h4 className="font-black text-blue-900 dark:text-blue-300 text-sm uppercase tracking-widest">Food plate analysis</h4>
-                                            <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">Ateeqq/food-analysis model is detecting food items and estimating nutrition...</p>
+                                            <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">YOLO food recognition model is detecting food items and estimating nutrition...</p>
                                         </div>
                                     </div>
                                 )}

@@ -73,7 +73,7 @@ export default function TestModel() {
                     </span>
                     <h1 className="text-3xl font-extrabold tracking-tight">Food Recognition Model Playground</h1>
                     <p className="text-blue-100 max-w-2xl text-sm md:text-base">
-                        Test the newly integrated <code className="bg-black/25 px-2 py-0.5 rounded font-mono text-sm font-bold text-white">BinhQuocNguyen/food-recognition-model</code>. Upload a plate image to retrieve detected foods, model confidence ratings, portion estimates, and detailed nutritional breakdowns.
+                        Test the newly integrated <code className="bg-black/25 px-2 py-0.5 rounded font-mono text-sm font-bold text-white">bestV6.pt (YOLOv8 Segmentation)</code> model. Upload a plate image to retrieve detected foods, model confidence ratings, portion estimates, and detailed nutritional breakdowns across 68 food categories.
                     </p>
                 </div>
             </div>
@@ -84,7 +84,7 @@ export default function TestModel() {
                 <div>
                     <h3 className="font-bold uppercase tracking-wider text-xs">Pipeline Mechanism</h3>
                     <p className="mt-1 leading-relaxed text-xs">
-                        This test playground runs plate images through our multi-stage pipeline: Local Hugging Face ViT classifier checks for Food-101 Western dishes. If confidence is low or an Indian plate is recognized, the system triggers our Cloud Vision Pediatric AI parser, or falls back to rule-based pediatric plate defaults.
+                        This test playground runs plate images through our local custom-trained YOLOv8 segmentation model (bestV6.pt) supporting 68 food categories, with automatic portion estimation, bounding box localization, and fallback to multimodal vision if needed.
                     </p>
                 </div>
             </div>
