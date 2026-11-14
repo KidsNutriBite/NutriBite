@@ -48,6 +48,7 @@ MODEL_PATH = os.getenv(
     "FOOD_MODEL_PATH",
     os.path.join(os.path.dirname(__file__), "models", "bestV6.pt")
 )
+DEFAULT_CONF_THRESHOLD = float(os.getenv("CONFIDENCE_THRESHOLD", "0.012"))
 
 yolo_model = None
 device = "cpu"
@@ -228,18 +229,21 @@ INDIAN_FOODS_NUTRITION = {
 # -------------------------------------------------------------
 # Inference Helpers
 # -------------------------------------------------------------
-def run_yolo_inference(image: Image.Image, conf_threshold: float = 0.25) -> Dict[str, Any]:
+def run_yolo_inference(image: Image.Image, conf_threshold: float = DEFAULT_CONF_THRESHOLD) -> Dict[str, Any]:
     """Runs YOLOv8/v11 segmentation on a PIL Image and structures the output."""
     if yolo_model is None:
         raise ValueError("YOLO model is not initialized.")
 
-    results = yolo_model.predict(image, conf=conf_threshold, verbose=False)
+    results = yolo_model.predict(image, conf=conf_threshold, iou=0.5, verbose=False)
     
     detected_counts: Dict[str, int] = {}
     detected_max_conf: Dict[str, float] = {}
     raw_predictions: List[Dict[str, Any]] = []
     detected_boxes: List[Dict[str, Any]] = []
     has_masks = False
+
+    img_w, img_h = image.size
+    img_area = max(1.0, float(img_w * img_h))
 
     for r in results:
         if r.masks is not None and len(r.masks) > 0:
@@ -250,6 +254,13 @@ def run_yolo_inference(image: Image.Image, conf_threshold: float = 0.25) -> Dict
             conf = float(box.conf[0])
             class_name = yolo_model.names[cls_id]
             coords = [round(float(c), 2) for c in box.xyxy[0].tolist()]
+
+            # Discard tiny artifacts (less than 0.2% of image area) unless high confidence
+            box_w = max(0.0, coords[2] - coords[0])
+            box_h = max(0.0, coords[3] - coords[1])
+            box_area = box_w * box_h
+            if (box_area / img_area < 0.002) and conf < 0.15:
+                continue
 
             # Count occurrences
             detected_counts[class_name] = detected_counts.get(class_name, 0) + 1
@@ -397,7 +408,8 @@ async def health_check():
 @app.post("/api/food-recognition")
 async def food_recognition_endpoint(
     file: UploadFile = File(...),
-    corrections: Optional[str] = Form(None)
+    corrections: Optional[str] = Form(None),
+    conf_threshold: Optional[float] = Form(None)
 ):
     """
     Main endpoint for meal logging image recognition.
@@ -407,20 +419,21 @@ async def food_recognition_endpoint(
         contents = await file.read()
         print(f"[FoodRecognitionAI] Received image: {file.filename} ({len(contents)} bytes)")
 
+        effective_conf = float(conf_threshold) if conf_threshold is not None else DEFAULT_CONF_THRESHOLD
         result = None
 
         # 1. Primary: Run YOLO bestV6.pt
         if yolo_model is not None:
             try:
                 img = Image.open(io.BytesIO(contents)).convert("RGB")
-                print(f"[FoodRecognitionAI] Running YOLO segmentation inference on image size {img.size}...")
-                yolo_result = run_yolo_inference(img, conf_threshold=0.20)
+                print(f"[FoodRecognitionAI] Running YOLO segmentation inference (conf={effective_conf}) on image size {img.size}...")
+                yolo_result = run_yolo_inference(img, conf_threshold=effective_conf)
                 
                 if len(yolo_result.get("foods", [])) > 0:
                     result = yolo_result
                     print(f"[FoodRecognitionAI] YOLO detected foods: {result['foods']}")
                 else:
-                    print("[FoodRecognitionAI] YOLO detected no food above confidence threshold.")
+                    print(f"[FoodRecognitionAI] YOLO detected no food above confidence threshold ({effective_conf}).")
             except Exception as yolo_err:
                 print(f"[FoodRecognitionAI] YOLO inference error: {yolo_err}")
 
@@ -456,7 +469,8 @@ async def food_recognition_endpoint(
 @app.post("/api/debug-food-analysis")
 async def debug_food_analysis_endpoint(
     file: UploadFile = File(...),
-    corrections: Optional[str] = Form(None)
+    corrections: Optional[str] = Form(None),
+    conf_threshold: Optional[float] = Form(None)
 ):
     """
     Debug endpoint for Model Playground with detailed timing and prediction metrics.
@@ -466,7 +480,7 @@ async def debug_food_analysis_endpoint(
         contents = await file.read()
         
         await file.seek(0)
-        res = await food_recognition_endpoint(file, corrections=corrections)
+        res = await food_recognition_endpoint(file, corrections=corrections, conf_threshold=conf_threshold)
         
         inference_time_ms = round((time.time() - start_time) * 1000, 2)
         raw_predictions = res.get("raw_predictions", [])
