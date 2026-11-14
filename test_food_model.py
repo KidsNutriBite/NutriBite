@@ -50,10 +50,11 @@ def run_verification():
         print(f"⚠️ Sample image not found at {sample_img}, skipping plate inference test.")
         return True
 
-    print(f"\n📸 Running plate image inference on: {os.path.basename(sample_img)}...")
+    conf_threshold = float(os.getenv("CONFIDENCE_THRESHOLD", "0.012"))
+    print(f"\n📸 Running plate image inference (conf={conf_threshold}) on: {os.path.basename(sample_img)}...")
     start_infer = time.time()
     img = Image.open(sample_img).convert("RGB")
-    results = model.predict(img, conf=0.20, verbose=False)
+    results = model.predict(img, conf=conf_threshold, verbose=False)
     infer_time = (time.time() - start_infer) * 1000
 
     detected_items = []
