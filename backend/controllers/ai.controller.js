@@ -59,6 +59,7 @@ export const askNutriGuide = async (req, res) => {
             query: textQuery,
             profileId,
             parentId,
+            conversationId: activeConversation?._id?.toString(),
             history: history || []
         });
 

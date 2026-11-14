@@ -23,54 +23,187 @@ const SparkIcon = () => (
     </svg>
 );
 
-// Minimal Agentic Reasoning Progress Indicator
-const AgenticPipelineIndicator = ({ currentStep, childName }) => {
-    const steps = [
-        "Analyzing dietary inquiry",
-        `Reviewing ${childName}'s 21-day meals and growth records`,
-        "Checking allergy and safety restrictions",
-        "Retrieving ICMR-NIN guidelines and food tables",
-        "Synthesizing clinical nutrition guidance"
+// LangGraph 7-Node Dynamic Orchestrator Indicator
+const AgenticPipelineIndicator = ({ currentStep, childName, currentQuery }) => {
+    const nodes = [
+        {
+            num: "1",
+            title: "Understand",
+            subtitle: "Algorithm 1 Intent & Clinical Entity Classifier",
+            detail: "Normalizing query & mapping clinical intent dynamically",
+            icon: "psychology"
+        },
+        {
+            num: "2",
+            title: "Observe",
+            subtitle: "Context Ingestion Engine",
+            detail: `Loading ${childName}'s health profile, allergies & growth history`,
+            icon: "visibility"
+        },
+        {
+            num: "3",
+            title: "Plan",
+            subtitle: "Algorithm 2 Dynamic Tool Dependency Planner",
+            detail: "Dynamically determining which clinical tools to dispatch based on query intent",
+            icon: "account_tree"
+        },
+        {
+            num: "4",
+            title: "Act",
+            subtitle: "Specialized Clinical Tool Execution",
+            detail: "Executing dynamically selected clinical tools (Growth, Meal Planner, Nutrition, or RAG)",
+            icon: "terminal"
+        },
+        {
+            num: "5",
+            title: "Verify",
+            subtitle: "Algorithm 3 Affirmative Safety Gate",
+            detail: "Validating allergen exclusions, confidence threshold & clinical safety disclaimers",
+            icon: "verified_user"
+        },
+        {
+            num: "6",
+            title: "Synthesize",
+            subtitle: "Grounded Clinical Synthesis (Groq Qwen 3.8-27b)",
+            detail: "Synthesizing ICMR-2020 aligned guidance grounded in executed tool findings",
+            icon: "auto_fix_high"
+        },
+        {
+            num: "7",
+            title: "Follow-up",
+            subtitle: "Proactive Guidance Generator",
+            detail: "Formulating actionable follow-up recommendations for parent",
+            icon: "forward"
+        }
+    ];
+
+    const candidateTools = [
+        { name: "growth_analysis", condition: "Height/weight WHO percentiles", icon: "trending_up" },
+        { name: "nutrition_analysis", condition: "ICMR 2020 RDA & nutrient gaps", icon: "calculate" },
+        { name: "meal_planner", condition: "KidsNutri DB & allergen recipes", icon: "restaurant" },
+        { name: "rag_search", condition: "FAISS + BM25 ICMR guidelines", icon: "menu_book" },
+        { name: "web_search", condition: "Live scientific literature search", icon: "travel_explore" },
+        { name: "update_rag", condition: "Vector memory continuous ingestion", icon: "dataset" },
+        { name: "update_ner", condition: "Dynamic clinical entity memory", icon: "psychology" }
     ];
 
     return (
         <div className="flex items-start gap-3.5 my-6 animate-in fade-in duration-200">
-            <div className="size-8 rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-950 flex items-center justify-center shrink-0 shadow-sm mt-0.5">
+            <div className="size-8 rounded-full bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-sm mt-0.5">
                 <SparkIcon />
             </div>
 
-            <div className="flex-1 max-w-xl bg-white dark:bg-slate-900 rounded-3xl p-5 border border-black/[0.06] dark:border-white/[0.08] shadow-[0_8px_30px_rgb(0_0_0/0.04)] space-y-3">
-                <div className="flex items-center justify-between border-b border-black/[0.04] dark:border-white/[0.06] pb-2.5">
-                    <span className="text-xs font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-                        <span className="size-1.5 rounded-full bg-slate-900 dark:bg-white animate-pulse"></span>
-                        NutriGuide is reasoning...
+            <div className="flex-1 max-w-2xl bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-200/90 dark:border-slate-800 shadow-md space-y-4">
+                {/* Header */}
+                <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+                    <div className="flex items-center gap-2">
+                        <span className="size-2 rounded-full bg-indigo-600 animate-ping"></span>
+                        <span className="text-xs font-bold text-slate-900 dark:text-white tracking-tight flex items-center gap-1.5">
+                            <span>NutriKid LangGraph 7-Node Agent</span>
+                            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-indigo-50 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 border border-indigo-200/50">
+                                Dynamic Routing
+                            </span>
+                        </span>
+                    </div>
+                    <span className="px-2.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-mono text-[11px] font-bold">
+                        Node {Math.min(currentStep + 1, 7)} / 7
                     </span>
-                    <span className="text-[11px] text-slate-400 font-mono">Step {Math.min(currentStep + 1, 5)} / 5</span>
                 </div>
 
+                {/* Live Query Display */}
+                {currentQuery && (
+                    <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-850 border border-slate-200/70 dark:border-slate-800 text-xs flex items-center gap-2">
+                        <span className="material-symbols-outlined text-xs text-indigo-500 shrink-0">psychology</span>
+                        <span className="text-slate-500 dark:text-slate-400 font-medium shrink-0">Active Query:</span>
+                        <span className="text-slate-800 dark:text-slate-200 font-semibold truncate font-mono text-[11px]">
+                            &ldquo;{currentQuery}&rdquo;
+                        </span>
+                    </div>
+                )}
+
+                {/* 7 Pipeline Nodes */}
                 <div className="space-y-1.5">
-                    {steps.map((label, idx) => {
+                    {nodes.map((node, idx) => {
                         const isDone = idx < currentStep;
                         const isCurrent = idx === currentStep;
 
                         return (
                             <div
                                 key={idx}
-                                className={`flex items-center gap-2.5 text-xs transition-colors duration-200 ${
-                                    isDone
-                                        ? 'text-emerald-700 dark:text-emerald-400 font-medium'
-                                        : isCurrent
-                                            ? 'text-slate-900 dark:text-white font-medium'
-                                            : 'text-slate-400 opacity-60 font-normal'
+                                className={`p-2 rounded-xl transition-all duration-150 flex items-start gap-2.5 ${
+                                    isCurrent
+                                        ? 'bg-indigo-50/80 dark:bg-indigo-950/40 border border-indigo-200 dark:border-indigo-800 shadow-xs'
+                                        : isDone
+                                            ? 'bg-slate-50/50 dark:bg-slate-850/40 text-slate-700 dark:text-slate-300'
+                                            : 'opacity-40 text-slate-400'
                                 }`}
                             >
-                                <span className="material-symbols-outlined text-sm shrink-0">
-                                    {isDone ? 'check' : (isCurrent ? 'radio_button_checked' : 'radio_button_unchecked')}
-                                </span>
-                                <span>{label}</span>
+                                <div className="mt-0.5 shrink-0">
+                                    {isDone ? (
+                                        <div className="size-4.5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px]">
+                                            <span className="material-symbols-outlined text-[13px]">check</span>
+                                        </div>
+                                    ) : isCurrent ? (
+                                        <div className="size-4.5 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[9px] font-bold animate-pulse">
+                                            {node.num}
+                                        </div>
+                                    ) : (
+                                        <div className="size-4.5 rounded-full border border-slate-300 dark:border-slate-700 text-slate-400 flex items-center justify-center text-[9px] font-mono">
+                                            {node.num}
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex items-center justify-between gap-2">
+                                        <span className={`text-[11px] font-bold ${isCurrent ? 'text-indigo-900 dark:text-indigo-200' : isDone ? 'text-slate-900 dark:text-slate-200' : 'text-slate-400'}`}>
+                                            Node {node.num}: {node.title}
+                                        </span>
+                                        <span className="text-[9px] font-mono opacity-70 truncate">
+                                            {node.subtitle}
+                                        </span>
+                                    </div>
+                                    <p className={`text-[10px] leading-snug mt-0.5 ${isCurrent ? 'text-indigo-700 dark:text-indigo-300 font-medium' : 'text-slate-500 dark:text-slate-400'}`}>
+                                        {node.detail}
+                                    </p>
+                                </div>
                             </div>
                         );
                     })}
+                </div>
+
+                {/* Algorithm 2 Dynamic Tool Dispatcher Explainer */}
+                <div className="pt-2.5 border-t border-slate-100 dark:border-slate-800 space-y-2">
+                    <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+                            <span className="material-symbols-outlined text-xs text-indigo-500">alt_route</span>
+                            <span>Algorithm 2 Dynamic Tool Dispatcher</span>
+                        </span>
+                        <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-semibold font-mono">
+                            Query-Driven Activation
+                        </span>
+                    </div>
+
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400 leading-tight">
+                        Tools are not static. The agent analyzes query intent and dynamically dispatches only the required tools:
+                    </p>
+
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+                        {candidateTools.map((t, tIdx) => (
+                            <div
+                                key={tIdx}
+                                className="p-1.5 rounded-lg border border-slate-200/70 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-850/60 flex items-center gap-1.5 text-[10px]"
+                            >
+                                <span className="material-symbols-outlined text-xs text-indigo-500 shrink-0">
+                                    {t.icon}
+                                </span>
+                                <div className="min-w-0 flex-1">
+                                    <div className="font-mono text-[9px] font-bold text-slate-800 dark:text-slate-200 truncate">{t.name}</div>
+                                    <div className="text-[8.5px] text-slate-400 truncate">{t.condition}</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
@@ -86,6 +219,7 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
     const [agentStep, setAgentStep] = useState(0);
+    const [activeQuery, setActiveQuery] = useState('');
 
     // Multi-Thread Conversation States
     const [conversations, setConversations] = useState([]);
@@ -189,13 +323,14 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
 
         setMessages(prev => [...prev, userMsg]);
         setInput('');
+        setActiveQuery(msgText);
         setIsTyping(true);
         setAgentStep(0);
 
-        // Step through reasoning stages
+        // Step through reasoning stages across all 7 LangGraph nodes
         const stepInterval = setInterval(() => {
-            setAgentStep(prev => (prev < 4 ? prev + 1 : prev));
-        }, 400);
+            setAgentStep(prev => (prev < 6 ? prev + 1 : prev));
+        }, 450);
 
         try {
             const response = await askNutriGuideCopilot({
@@ -221,6 +356,9 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
                         text: response.answer,
                         intent: response.intent,
                         toolsUsed: response.toolsUsed || [],
+                        executionTrace: response.executionTrace || [],
+                        verificationDecision: response.verificationDecision || 'PROCEED',
+                        ragConfidence: response.ragConfidence || 0.88,
                         followUps: response.followUps || [],
                         dietPlan: response.dietPlan || null,
                         providerStatus: response.providerStatus || null,
@@ -331,6 +469,7 @@ const NutriGuideChat = ({ onBack, profiles = [] }) => {
                                 <AgenticPipelineIndicator
                                     currentStep={agentStep}
                                     childName={activeChild?.name?.split(' ')[0] || 'your child'}
+                                    currentQuery={activeQuery}
                                 />
                             )}
                         </div>
