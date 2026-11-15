@@ -1,1 +1,7 @@
-import ChildDetails from "../../../../react_pages/parent/ChildDetails"; export default function Page() { return <ChildDetails />; }
+'use client';
+
+import ChildDetails from '@/react_pages/parent/ChildDetails';
+
+export default function Page() {
+    return <ChildDetails />;
+}

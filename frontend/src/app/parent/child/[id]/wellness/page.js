@@ -1,4 +1,6 @@
-import WellnessAnalysis from "../../../../../react_pages/parent/WellnessAnalysis";
+'use client';
+
+import WellnessAnalysis from '@/react_pages/parent/WellnessAnalysis';
 
 export default function Page() {
     return (
