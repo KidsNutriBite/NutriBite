@@ -1814,7 +1814,284 @@ export const NUTRITION_DB = {
         iron: 1,
         calcium: 20,
         vitaminC: 1
+    },
+    // BestV6 Model Additions
+    "biryani": {
+        name: "Biryani",
+        servingSize: "1 bowl",
+        calories: 350,
+        protein: 9,
+        carbs: 52,
+        fat: 12,
+        fiber: 3,
+        iron: 2,
+        calcium: 30,
+        vitaminC: 4
+    },
+    "chicken biryani": {
+        name: "Chicken Biryani",
+        servingSize: "1 plate",
+        calories: 450,
+        protein: 26,
+        carbs: 54,
+        fat: 14,
+        fiber: 2.5,
+        iron: 2.8,
+        calcium: 35,
+        vitaminC: 5
+    },
+    "mushroom biryani": {
+        name: "Mushroom Biryani",
+        servingSize: "1 bowl",
+        calories: 320,
+        protein: 8,
+        carbs: 52,
+        fat: 9,
+        fiber: 4,
+        iron: 2.2,
+        calcium: 25,
+        vitaminC: 3
+    },
+    "avocado toast": {
+        name: "Avocado Toast",
+        servingSize: "1 slice",
+        calories: 190,
+        protein: 4,
+        carbs: 18,
+        fat: 12,
+        fiber: 5,
+        iron: 1,
+        calcium: 25,
+        vitaminC: 6
+    },
+    "blueberries": {
+        name: "Blueberries",
+        servingSize: "1 cup",
+        calories: 84,
+        protein: 1.1,
+        carbs: 21,
+        fat: 0.5,
+        fiber: 3.6,
+        iron: 0.4,
+        calcium: 9,
+        vitaminC: 14
+    },
+    "boondi raita": {
+        name: "Boondi Raita",
+        servingSize: "1 small cup",
+        calories: 130,
+        protein: 4,
+        carbs: 11,
+        fat: 8,
+        fiber: 0.5,
+        iron: 0.5,
+        calcium: 120,
+        vitaminC: 1
+    },
+    "cucumber raita": {
+        name: "Cucumber Raita",
+        servingSize: "1 small cup",
+        calories: 80,
+        protein: 3.5,
+        carbs: 6,
+        fat: 4,
+        fiber: 1,
+        iron: 0.3,
+        calcium: 110,
+        vitaminC: 3
+    },
+    "bread roll": {
+        name: "Bread Roll",
+        servingSize: "1 piece",
+        calories: 160,
+        protein: 4,
+        carbs: 24,
+        fat: 6,
+        fiber: 1.5,
+        iron: 1,
+        calcium: 15,
+        vitaminC: 2
+    },
+    "chopped red onion": {
+        name: "Chopped Red Onion",
+        servingSize: "2 tbsp",
+        calories: 15,
+        protein: 0.4,
+        carbs: 3.5,
+        fat: 0.1,
+        fiber: 0.6,
+        iron: 0.1,
+        calcium: 8,
+        vitaminC: 2.5
+    },
+    "coconut chutney": {
+        name: "Coconut Chutney",
+        servingSize: "2 tbsp",
+        calories: 75,
+        protein: 1,
+        carbs: 3,
+        fat: 7,
+        fiber: 1.5,
+        iron: 0.4,
+        calcium: 8,
+        vitaminC: 1
+    },
+    "cooked meat": {
+        name: "Cooked Meat",
+        servingSize: "1 serving",
+        calories: 220,
+        protein: 24,
+        carbs: 0,
+        fat: 13,
+        fiber: 0,
+        iron: 2.5,
+        calcium: 15,
+        vitaminC: 0
+    },
+    "dal rice": {
+        name: "Dal Rice",
+        servingSize: "1 plate",
+        calories: 280,
+        protein: 8,
+        carbs: 50,
+        fat: 5,
+        fiber: 4,
+        iron: 1.8,
+        calcium: 25,
+        vitaminC: 2
+    },
+    "egg fried rice": {
+        name: "Egg Fried Rice",
+        servingSize: "1 bowl",
+        calories: 310,
+        protein: 10,
+        carbs: 45,
+        fat: 10,
+        fiber: 2,
+        iron: 1.8,
+        calcium: 30,
+        vitaminC: 2
+    },
+    "fried red chili": {
+        name: "Fried Red Chili",
+        servingSize: "1 piece",
+        calories: 10,
+        protein: 0.2,
+        carbs: 1,
+        fat: 0.7,
+        fiber: 0.3,
+        iron: 0.1,
+        calcium: 2,
+        vitaminC: 1
+    },
+    "kathi roll": {
+        name: "Kathi Roll",
+        servingSize: "1 roll",
+        calories: 280,
+        protein: 9,
+        carbs: 38,
+        fat: 11,
+        fiber: 3,
+        iron: 2,
+        calcium: 40,
+        vitaminC: 3
+    },
+    "meal maker fry": {
+        name: "Meal Maker Fry",
+        servingSize: "1 cup",
+        calories: 190,
+        protein: 18,
+        carbs: 14,
+        fat: 7,
+        fiber: 5,
+        iron: 4.5,
+        calcium: 90,
+        vitaminC: 2
+    },
+    "naan": {
+        name: "Naan",
+        servingSize: "1 piece",
+        calories: 260,
+        protein: 7,
+        carbs: 45,
+        fat: 5,
+        fiber: 2,
+        iron: 1.5,
+        calcium: 20,
+        vitaminC: 0
+    },
+    "paniyaram": {
+        name: "Paniyaram",
+        servingSize: "4 pieces",
+        calories: 180,
+        protein: 4,
+        carbs: 32,
+        fat: 4,
+        fiber: 2,
+        iron: 1,
+        calcium: 15,
+        vitaminC: 0
+    },
+    "podi": {
+        name: "Podi",
+        servingSize: "1 tbsp",
+        calories: 45,
+        protein: 1.5,
+        carbs: 4,
+        fat: 2.5,
+        fiber: 1,
+        iron: 0.6,
+        calcium: 20,
+        vitaminC: 0
+    },
+    "sambar rice": {
+        name: "Sambar Rice",
+        servingSize: "1 plate",
+        calories: 290,
+        protein: 7,
+        carbs: 52,
+        fat: 6,
+        fiber: 4.5,
+        iron: 1.8,
+        calcium: 35,
+        vitaminC: 4
     }
+};
+
+export const FOOD_CLASS_ALIASES = {
+    "dosa": "plain dosa",
+    "rice": "white rice",
+    "biryani rice": "biryani",
+    "curry rice": "vegetable rice",
+    "green rice": "vegetable rice",
+    "yellow rice": "lemon rice",
+    "carrot rice": "vegetable rice",
+    "dal": "toor dal",
+    "dal curry": "dal fry",
+    "curry": "mixed vegetable curry",
+    "dry vegetable curry": "mixed vegetable curry",
+    "vegetable curry": "mixed vegetable curry",
+    "vegetable fry": "mixed vegetable curry",
+    "vegetable sabzi": "mixed vegetable curry",
+    "fry": "mixed vegetable curry",
+    "saag bhaji": "palak paneer",
+    "spinach fry": "palak paneer",
+    "beetroot fry": "beetroot curry",
+    "beetroot poriyal": "beetroot curry",
+    "ladies finger fry": "ladies finger curry",
+    "lentil curry": "toor dal",
+    "chicken piece": "chicken roast",
+    "cooked chicken": "chicken curry",
+    "apple slices": "apple",
+    "sliced fruit": "fruit bowl",
+    "roti": "chapati",
+    "raita": "cucumber raita",
+    "chutney": "coconut chutney",
+    "green chutney": "mint chutney",
+    "bread": "bread butter",
+    "roll": "kathi roll",
+    "rice with sambar": "sambar rice",
+    "pongal": "ven pongal"
 };
 
 /**
@@ -1826,7 +2103,11 @@ export const NUTRITION_DB = {
 export const calculateQuantityMultiplier = (quantityStr, foodName) => {
     if (!quantityStr) return 1.0;
     
-    const dbItem = NUTRITION_DB[foodName.toLowerCase().trim()];
+    let key = foodName.toLowerCase().trim();
+    if (!NUTRITION_DB[key] && FOOD_CLASS_ALIASES[key]) {
+        key = FOOD_CLASS_ALIASES[key];
+    }
+    const dbItem = NUTRITION_DB[key];
     if (!dbItem) return 1.0;
 
     const qtyLower = quantityStr.toLowerCase();
@@ -1853,7 +2134,10 @@ export const calculateQuantityMultiplier = (quantityStr, foodName) => {
  * @returns {object} Nutritional breakdown
  */
 export const calculateFoodNutrition = (foodName, quantity = "") => {
-    const key = foodName.toLowerCase().trim();
+    let key = foodName.toLowerCase().trim();
+    if (!NUTRITION_DB[key] && FOOD_CLASS_ALIASES[key]) {
+        key = FOOD_CLASS_ALIASES[key];
+    }
     const dbItem = NUTRITION_DB[key];
     
     // Default fallback values if food is not recognized
