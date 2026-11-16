@@ -148,15 +148,21 @@ def node_understand(state: AgentState, config: RunnableConfig) -> dict[str, Any]
     Understand Node
     ---------------
     Responsibilities:
-    1. Apply Algorithm 1 (IntentClassification) to the raw user_query.
+    1. Apply Algorithm 1 (Hybrid Semantic Intent Classification) to the raw user_query.
     2. Store the normalized query and classified intent in state.
     3. Append the user's raw query as a HumanMessage to messages.
     """
-    logger.info("[Understand] Classifying intent for query: %s", state["user_query"])
+    logger.info("[Understand] Semantically classifying intent for query: %s", state["user_query"])
 
-    intent, normalized = classify_intent(state["user_query"])
+    llm = None
+    try:
+        llm = _build_llm()
+    except Exception as e:
+        logger.debug("[Understand] LLM unavailable for semantic routing fallback: %s", e)
 
-    logger.info("[Understand] Intent=%s | Normalized=%s", intent, normalized)
+    intent, normalized = classify_intent(state["user_query"], llm=llm)
+
+    logger.info("[Understand] Classified Intent=%s | Normalized=%s", intent, normalized)
 
     return {
         "normalized_query": normalized,

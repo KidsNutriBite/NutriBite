@@ -72,62 +72,302 @@ _AFFIRMATIVE_SAFETY_PATTERNS: list[str] = [
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
-# ── ALGORITHM 1: IntentClassification ─────────────────────────────────────────
+# ── ALGORITHM 1: Semantic Intent Classification ──────────────────────────────
 # ═══════════════════════════════════════════════════════════════════════════════
 
-def classify_intent(raw_query: str) -> tuple[str, str]:
+# Rich semantic prototypes for each of the 7 clinical pediatric intents
+SEMANTIC_INTENT_PROTOTYPES: dict[str, dict[str, Any]] = {
+    "MEAL_PLANNING": {
+        "description": "Formulating daily or weekly meal schedules, recipes, complementary feeding, balanced menus, and dietary routines for children.",
+        "anchors": {
+            "plan", "meal plan", "diet plan", "weekly plan", "daily plan", "food timetable",
+            "menu", "recipe", "recipes", "what should i feed", "what to cook", "suggest meals",
+            "breakfast", "lunch", "dinner", "snack", "feeding routine", "food schedule",
+            "meal ideas", "dish recommendations", "complementary feeding", "weaning diet",
+            "toddler meals", "eating timetable", "portion size", "balanced diet", "schedule",
+        },
+        "weight": 1.25,
+    },
+    "GROWTH_ANALYSIS": {
+        "description": "Evaluating pediatric anthropometrics, height, weight, WHO growth percentiles, stunting, wasting, failure to thrive, and developmental curves.",
+        "anchors": {
+            "growth", "height", "weight", "percentile", "who chart", "growth chart", "z score",
+            "is my child growing", "stunted", "stunting", "wasted", "wasting", "underweight",
+            "failure to thrive", "short stature", "not gaining weight", "weight loss",
+            "growth curve", "lagging in height", "body mass", "bmi", "milestone",
+            "too thin", "too small", "skinny", "developmental delay", "frail",
+        },
+        "weight": 1.25,
+    },
+    "ALLERGY_CHECK": {
+        "description": "Screening for adverse food reactions, allergen exclusion, anaphylaxis risks, food safety, and allergen-free ingredient alternatives.",
+        "anchors": {
+            "allergy", "allergic", "intolerant", "intolerance", "reaction", "can he eat",
+            "safe to give", "safe to eat", "rash", "hives", "urticaria", "swelling", "itching",
+            "eczema", "peanut allergy", "lactose intolerant", "dairy free", "egg allergy",
+            "gluten sensitivity", "celiac", "anaphylaxis", "adverse reaction", "vomiting after food",
+            "hypersensitivity", "wheezing", "food safety", "is it safe", "can i give",
+        },
+        "weight": 1.30,
+    },
+    "NUTRITION_ANALYSIS": {
+        "description": "Analyzing micronutrient and macronutrient adequacy, dietary deficiencies, RDA targets, vitamin/mineral requirements, and caloric metrics.",
+        "anchors": {
+            "nutrient", "nutrition", "vitamin", "vitamins", "iron", "calcium", "protein",
+            "zinc", "fiber", "mineral", "minerals", "deficient", "deficiency", "how much",
+            "hemoglobin", "anemia", "anemic", "rickets", "scurvy", "rda", "daily allowance",
+            "macronutrients", "micronutrients", "calories", "nutritional value", "omega 3",
+        },
+        "weight": 1.15,
+    },
+    "KNOWLEDGE_QUERY": {
+        "description": "Answering evidence-based pediatric clinical guidelines, ICMR-NIN recommendations, food science, and general nutritional inquiries.",
+        "anchors": {
+            "what is", "explain", "tell me about", "benefits of", "is good for",
+            "icmr", "nin guideline", "why does a child need", "nutritional science",
+            "health benefits", "evidence", "clinical guideline", "superfood", "facts about",
+            "is it healthy", "scientific reason", "recommended age", "guideline",
+        },
+        "weight": 1.00,
+    },
+    "NER_UPDATE": {
+        "description": "Registering new food entities, expanding dynamic domain vocabularies, updating local/regional dishes in the clinical ontology.",
+        "anchors": {
+            "update", "new concept", "add entity", "learn this", "dynamic ner",
+            "add food item", "register dish", "update dictionary", "expand vocabulary",
+            "new ingredient", "save entity", "teach",
+        },
+        "weight": 1.35,
+    },
+    "GENERAL_NUTRITION_CHAT": {
+        "description": "Conversational dialogue, general greetings, empathetic parental reassurance, and open-ended pediatric wellness guidance.",
+        "anchors": {
+            "hello", "hi", "hey", "help", "advice", "talk", "chat", "general tips",
+            "parenting tips", "healthy habits", "good habits", "picky eater", "fussy eater",
+        },
+        "weight": 0.80,
+    },
+}
+
+
+class DenseVectorIntentClassifier:
     """
-    Algorithm 1 — IntentClassification
-    ------------------------------------
-    Input  : raw query q  (str)
+    Dense Vector Embedding Semantic Intent Classifier
+    --------------------------------------------------
+    1. Converts each of the 7 clinical tools/intents into dense vector embeddings (R^384)
+       using an embedding model (e.g. BAAI/bge-small-en-v1.5 or all-MiniLM-L6-v2).
+    2. Encodes incoming user query q into a dense vector q_vec.
+    3. Computes cosine similarity (dot product of L2-normalized vectors) between q_vec
+       and all 7 tool vectors.
+    4. Routes the query to the tool/intent with highest semantic vector alignment.
+    """
+    _instance = None
+    _model = None
+    _tool_vectors = None
+    _intent_keys = list(SEMANTIC_INTENT_PROTOTYPES.keys())
+
+    @classmethod
+    def get_instance(cls):
+        if cls._instance is None:
+            cls._instance = cls()
+        return cls._instance
+
+    def __init__(self):
+        self._initialized = False
+
+    def _lazy_init(self):
+        if self._initialized:
+            return
+        try:
+            # Try loading SentenceTransformer model from nutrikid_Agentic or system
+            from sentence_transformers import SentenceTransformer
+            import numpy as np
+
+            model_name = "BAAI/bge-small-en-v1.5"
+            self._model = SentenceTransformer(model_name)
+
+            # Pre-compute and L2-normalize vectors for all 7 tools/intents
+            texts = [
+                f"{k}: {SEMANTIC_INTENT_PROTOTYPES[k]['description']} Keywords: {', '.join(list(SEMANTIC_INTENT_PROTOTYPES[k]['anchors'])[:10])}"
+                for k in self._intent_keys
+            ]
+            raw_vecs = self._model.encode(texts, convert_to_numpy=True)
+            # Normalize vectors (L2 norm = 1.0) so dot product equals cosine similarity
+            norms = np.linalg.norm(raw_vecs, axis=1, keepdims=True)
+            self._tool_vectors = raw_vecs / np.maximum(norms, 1e-12)
+            self._initialized = True
+        except Exception:
+            # Fallback if sentence_transformers is not loaded in current process
+            self._model = None
+            self._tool_vectors = None
+
+    def match(self, query: str) -> tuple[str, float] | None:
+        """Encode query into a vector and find highest cosine similarity tool vector."""
+        self._lazy_init()
+        if self._model is None or self._tool_vectors is None:
+            return None
+
+        try:
+            import numpy as np
+            q_vec = self._model.encode([query], convert_to_numpy=True)
+            q_norm = np.linalg.norm(q_vec, axis=1, keepdims=True)
+            q_vec = q_vec / np.maximum(q_norm, 1e-12)
+
+            # Cosine similarity is the dot product of normalized vectors
+            scores = np.dot(self._tool_vectors, q_vec.T).flatten()
+            best_idx = int(np.argmax(scores))
+            return self._intent_keys[best_idx], float(scores[best_idx])
+        except Exception:
+            return None
+
+
+def _extract_ngrams(text: str) -> set[str]:
+    """Extract unigrams and bigrams from normalized text for semantic matching."""
+    cleaned = re.sub(r"[^\w\s]", " ", text)
+    tokens = [w for w in cleaned.split() if len(w) > 1]
+    ngrams = set(tokens)
+    for i in range(len(tokens) - 1):
+        ngrams.add(f"{tokens[i]} {tokens[i+1]}")
+    return ngrams
+
+
+def _cosine_similarity(query_ngrams: set[str], anchor_set: set[str]) -> float:
+    """Compute normalized cosine similarity between query n-grams and intent semantic anchors."""
+    if not query_ngrams or not anchor_set:
+        return 0.0
+    intersection = query_ngrams.intersection(anchor_set)
+    if not intersection:
+        # Partial stem/substring fallback for compound clinical terms
+        partial_matches = 0
+        for q in query_ngrams:
+            for a in anchor_set:
+                if len(q) >= 4 and (q in a or a in q):
+                    partial_matches += 0.5
+                    break
+        if partial_matches > 0:
+            return partial_matches / ((len(query_ngrams) ** 0.5) * (len(anchor_set) ** 0.5))
+        return 0.0
+
+    return len(intersection) / ((len(query_ngrams) ** 0.5) * (len(anchor_set) ** 0.5))
+
+
+def classify_intent_llm(raw_query: str, llm: Any) -> str | None:
+    """
+    Zero-shot LLM Semantic Router for ambiguous or conversational queries.
+    Returns the exact intent enum if recognized, or None on failure.
+    """
+    if llm is None:
+        return None
+
+    try:
+        from langchain_core.messages import SystemMessage, HumanMessage
+
+        prompt = (
+            "You are a clinical pediatric intent classifier for NutriKid.\n"
+            "Classify the query into exactly ONE of these 7 intent labels:\n"
+            "- MEAL_PLANNING: Daily/weekly food schedules, menus, recipes, meal ideas, complementary feeding.\n"
+            "- GROWTH_ANALYSIS: Child height, weight, WHO percentiles, stunting, wasting, growth tracking.\n"
+            "- ALLERGY_CHECK: Food allergies, hives, rash, itching, adverse reactions, dietary safety.\n"
+            "- NUTRITION_ANALYSIS: Nutrients, vitamins, iron, calcium, protein, deficiency, RDA metrics.\n"
+            "- KNOWLEDGE_QUERY: Evidence-based pediatric guidelines, ICMR-NIN nutritional science.\n"
+            "- NER_UPDATE: Registering new food entities, expanding pediatric clinical vocabulary.\n"
+            "- GENERAL_NUTRITION_CHAT: General greetings, casual dialogue, open-ended nutrition advice.\n\n"
+            "Rules:\n"
+            "Return ONLY the exact intent label (e.g. MEAL_PLANNING). No punctuation, no explanation."
+        )
+
+        response = llm.invoke([
+            SystemMessage(content=prompt),
+            HumanMessage(content=f"Query: {raw_query}")
+        ])
+
+        output = response.content.strip().upper() if hasattr(response, "content") else str(response).strip().upper()
+        # Clean any extra characters
+        for intent_key in SEMANTIC_INTENT_PROTOTYPES:
+            if intent_key in output:
+                return intent_key
+    except Exception:
+        pass
+
+    return None
+
+
+def classify_intent_semantic(
+    raw_query: str,
+    llm: Any = None,
+    threshold: float = 0.12,
+) -> tuple[str, str, float]:
+    """
+    Semantic Intent Classification with 3 Tiers:
+    1. Lexical Fast-Path (0ms exact anchor match)
+    2. Semantic Vector Cosine Similarity (evaluates against clinical prototypes)
+    3. Zero-Shot LLM Semantic Router (for subtle or compound conversational queries)
+    """
+    normalized: str = re.sub(r"\s+", " ", raw_query.lower().strip())
+    query_ngrams = _extract_ngrams(normalized)
+
+    # ── Tier 1: Lexical Fast-Path (Immediate match for unambiguous triggers) ──
+    fast_path_rules = [
+        ("MEAL_PLANNING", {"meal plan", "diet plan", "food timetable", "weekly plan", "daily plan", "what to cook", "suggest meals"}),
+        ("GROWTH_ANALYSIS", {"who chart", "growth chart", "percentile", "z score", "is my child growing", "stunted", "wasted"}),
+        ("ALLERGY_CHECK", {"allergic", "allergy", "intolerant", "hives", "anaphylaxis", "safe to give", "safe to eat"}),
+        ("NUTRITION_ANALYSIS", {"deficient", "deficiency", "rda", "hemoglobin", "how much iron", "calcium deficiency"}),
+        ("NER_UPDATE", {"update ner", "add entity", "register dish", "dynamic ner", "new concept"}),
+        ("KNOWLEDGE_QUERY", {"icmr", "nin guideline", "clinical guideline", "nutritional science"}),
+    ]
+
+    for intent_name, anchor_triggers in fast_path_rules:
+        if any(trigger in normalized for trigger in anchor_triggers):
+            return intent_name, normalized, 1.0
+
+    # ── Tier 2: Dense Embedding Vector Cosine Similarity ─────────────────────
+    dense_classifier = DenseVectorIntentClassifier.get_instance()
+    dense_match = dense_classifier.match(raw_query)
+    if dense_match is not None:
+        matched_intent, vector_sim = dense_match
+        if vector_sim >= 0.55:
+            return matched_intent, normalized, vector_sim
+
+    # ── Tier 2B: Semantic Prototype Cosine Similarity (Lightweight Fallback) ──
+    best_intent = "GENERAL_NUTRITION_CHAT"
+    best_score = 0.0
+
+    for intent_name, proto in SEMANTIC_INTENT_PROTOTYPES.items():
+        anchors = proto["anchors"]
+        weight = proto.get("weight", 1.0)
+        sim = _cosine_similarity(query_ngrams, anchors) * weight
+        if sim > best_score:
+            best_score = sim
+            best_intent = intent_name
+
+    # If semantic similarity has high confidence, return immediately
+    if best_score >= threshold and best_intent != "GENERAL_NUTRITION_CHAT":
+        return best_intent, normalized, best_score
+
+    # ── Tier 3: Zero-Shot LLM Semantic Router ─────────────────────────────────
+    if llm is not None:
+        llm_intent = classify_intent_llm(raw_query, llm)
+        if llm_intent:
+            return llm_intent, normalized, 0.95
+
+    # Fallback to top scored semantic intent or default general chat
+    final_intent = best_intent if best_score > 0.05 else "GENERAL_NUTRITION_CHAT"
+    return final_intent, normalized, best_score
+
+
+def classify_intent(raw_query: str, llm: Any = None) -> tuple[str, str]:
+    """
+    Algorithm 1 — IntentClassification (Paper-Faithful Hybrid Semantic Version)
+    --------------------------------------------------------------------------
+    Input  : raw query q (str), optional LLM instance
     Output : (intent: str, normalized_query: str)
 
-    Steps
-    -----
-    1. Normalize q  (lowercase, strip, collapse whitespace).
-    2. Keyword-rule matching in priority order (MEAL_PLANNING first → GENERAL last).
-    3. Return the matched intent label and the normalized query.
+    Upgraded from pure lexical keyword matching to Hybrid Semantic Intent
+    Classification. Preserves full backward-compatibility with existing nodes,
+    APIs, and evaluation scripts while recognizing clinical synonyms and paraphrases.
     """
-    # Step 1 — Normalize
-    normalized: str = re.sub(r"\s+", " ", raw_query.lower().strip())
-
-    # Step 2 — Keyword matching (priority order)
-    if any(kw in normalized for kw in {
-        "plan", "meal plan", "diet plan", "weekly plan", "daily plan",
-        "what should", "suggest meals",
-    }):
-        return "MEAL_PLANNING", normalized
-
-    if any(kw in normalized for kw in {
-        "growth", "height", "weight", "percentile", "who chart",
-        "is my child growing",
-    }):
-        return "GROWTH_ANALYSIS", normalized
-
-    if any(kw in normalized for kw in {
-        "allergy", "allergic", "intolerant", "reaction",
-        "can he eat", "safe to give",
-    }):
-        return "ALLERGY_CHECK", normalized
-
-    if any(kw in normalized for kw in {
-        "nutrient", "vitamin", "iron", "calcium", "protein",
-        "deficient", "how much",
-    }):
-        return "NUTRITION_ANALYSIS", normalized
-
-    if any(kw in normalized for kw in {
-        "what is", "explain", "tell me about", "benefits of", "is good for",
-    }):
-        return "KNOWLEDGE_QUERY", normalized
-
-    if any(kw in normalized for kw in {
-        "update", "new concept", "add entity", "learn this",
-    }):
-        return "NER_UPDATE", normalized
-
-    # Step 3 — Default fallback
-    return "GENERAL_NUTRITION_CHAT", normalized
+    intent, normalized, _ = classify_intent_semantic(raw_query, llm=llm)
+    return intent, normalized
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
